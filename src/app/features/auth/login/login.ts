@@ -1,5 +1,11 @@
-import { Component } from '@angular/core';
-import { RouterLink, } from '@angular/router';
+import {
+  Component,
+} from '@angular/core';
+
+import {
+  RouterLink,
+  Router,
+} from '@angular/router';
 
 import {
   FormBuilder,
@@ -8,130 +14,311 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { Router } from '@angular/router';
+import {
+  AuthService,
+} from '../../../core/services/auth';
 
-import { AuthService } from '../../../core/services/auth';
-
-import { TokenService } from '../../../core/services/token';
+import {
+  TokenService,
+} from '../../../core/services/token';
 
 @Component({
-  selector: 'app-login',
+  selector:
+    'app-login',
 
-  imports: [ReactiveFormsModule, RouterLink],
+  standalone: true,
 
-  templateUrl: './login.html',
+  imports: [
 
-  styleUrl: './login.css',
+    ReactiveFormsModule,
+
+    RouterLink,
+  ],
+
+  templateUrl:
+    './login.html',
+
+  styleUrl:
+    './login.css',
 })
 export class Login {
 
-  loginForm: FormGroup;
+  loginForm:
+  FormGroup;
 
-  isSubmitting = false;
+  isSubmitting =
+    false;
 
-  errorMessage = '';
+  errorMessage =
+    '';
 
   constructor(
-    private fb: FormBuilder,
 
-    private authService: AuthService,
+    private fb:
+      FormBuilder,
 
-    private tokenService: TokenService,
+    private authService:
+      AuthService,
 
-    private router: Router,
+    private tokenService:
+      TokenService,
+
+    private router:
+      Router,
   ) {
 
-    this.loginForm = this.fb.group({
-      loginId: ['', Validators.required],
+    this.loginForm =
 
-      password: ['', Validators.required],
-    });
+      this.fb.group({
+
+        loginId: [
+
+          '',
+
+          Validators.required,
+        ],
+
+        password: [
+
+          '',
+
+          Validators.required,
+        ],
+      });
   }
 
-  onSubmit(): void {
+  /*
+  |--------------------------------------------------------------------------
+  | Submit
+  |--------------------------------------------------------------------------
+  */
+  onSubmit():
+  void {
 
-    console.log('Login button clicked');
+    console.log(
+      'Login button clicked',
+    );
 
-    if (this.loginForm.invalid) {
+    if (
+      this.loginForm.invalid
+    ) {
 
-      console.log('Form invalid');
+      console.log(
+        'Form invalid',
+      );
 
-      this.loginForm.markAllAsTouched();
+      this.loginForm
+        .markAllAsTouched();
 
       return;
     }
 
-    console.log('Calling login API');
+    this.isSubmitting =
+      true;
+
+    this.errorMessage =
+      '';
+
+    console.log(
+      'Calling login API',
+    );
+
     console.log(
       this.loginForm.value,
     );
 
+    this.authService
+      .login(
+        this.loginForm.value,
+      )
 
-    this.authService.login(
-      this.loginForm.value,
-    ).subscribe({
+      .subscribe({
 
-      next: (response) => {
+        next: (
+          response: any,
+        ) => {
 
-        console.log('API SUCCESS');
+          console.log(
+            'API SUCCESS',
+          );
 
-        console.log(response);
+          console.log(
+            response,
+          );
 
-        const token =
-          response?.data?.token;
+          const token =
 
-        console.log('TOKEN:', token);
+            response
+            ?.data
+            ?.token;
 
-        if (!token) {
+          console.log(
+            'TOKEN:',
+            token,
+          );
 
-          console.log('Token missing');
+          if (!token) {
 
-          return;
-        }
+            console.log(
+              'Token missing',
+            );
 
-        this.tokenService.setToken(token);
-        localStorage.setItem(
+            return;
+          }
 
-          'role',
+          /*
+          |--------------------------------------------------------------------------
+          | Save Token
+          |--------------------------------------------------------------------------
+          */
+          this.tokenService
+            .setToken(
+              token,
+            );
 
-          response.data.user
-            .roles[0],
-        );
-        localStorage.setItem(
-          'loginId',
-          this.loginForm.value.loginId,
-        );
+          /*
+          |--------------------------------------------------------------------------
+          | Save Role
+          |--------------------------------------------------------------------------
+          */
+          localStorage
+            .setItem(
 
-        console.log('Navigating dashboard');
+              'role',
 
-        const isFirstLogin =
-          response.data.user
-            .isFirstLogin;
+              response.data
+                .user
+                .roles?.[0],
+            );
 
-        if (isFirstLogin) {
+          /*
+          |--------------------------------------------------------------------------
+          | Save Login ID
+          |--------------------------------------------------------------------------
+          */
+          localStorage
+            .setItem(
 
-          this.router.navigate([
-            '/create-password',
-          ]);
+              'loginId',
 
-          return;
-        }
+              this.loginForm
+                .value
+                .loginId,
+            );
 
-        this.router.navigate([
-          '/dashboard',
-        ]);
-      },
+          /*
+          |--------------------------------------------------------------------------
+          | First Login
+          |--------------------------------------------------------------------------
+          */
+          const isFirstLogin =
 
-      error: (error) => {
+            response.data
+              .user
+              .isFirstLogin;
 
-        console.log('API ERROR');
+          if (
+            isFirstLogin
+          ) {
 
-        console.log(error);
+            this.router.navigate([
+              '/create-password',
+            ]);
 
-        this.errorMessage =
-          error?.error?.message ||
-          'Login failed';
-      },
-    });
+            return;
+          }
+
+          /*
+          |--------------------------------------------------------------------------
+          | Role Based Redirect
+          |--------------------------------------------------------------------------
+          */
+          const role =
+
+            response.data
+              .user
+              .roles?.[0];
+
+          /*
+          |--------------------------------------------------------------------------
+          | Admin
+          |--------------------------------------------------------------------------
+          */
+          if (
+            role === 'ADMIN'
+          ) {
+
+            this.router.navigate([
+              '/dashboard/admin',
+            ]);
+          }
+
+          /*
+          |--------------------------------------------------------------------------
+          | Doctor
+          |--------------------------------------------------------------------------
+          */
+          else if (
+            role === 'DOCTOR'
+          ) {
+
+            this.router.navigate([
+              '/dashboard/doctor',
+            ]);
+          }
+
+          /*
+          |--------------------------------------------------------------------------
+          | Receptionist
+          |--------------------------------------------------------------------------
+          */
+          else if (
+            role === 'RECEPTIONIST'
+          ) {
+
+            this.router.navigate([
+              '/dashboard/receptionist',
+            ]);
+          }
+
+          /*
+          |--------------------------------------------------------------------------
+          | Default
+          |--------------------------------------------------------------------------
+          */
+          else {
+
+            this.router.navigate([
+              '/login',
+            ]);
+          }
+
+          this.isSubmitting =
+            false;
+        },
+
+        error: (
+          error,
+        ) => {
+
+          console.log(
+            'API ERROR',
+          );
+
+          console.log(
+            error,
+          );
+
+          this.errorMessage =
+
+            error?.error
+              ?.message ||
+
+            'Login failed';
+
+          this.isSubmitting =
+            false;
+        },
+      });
   }
 }

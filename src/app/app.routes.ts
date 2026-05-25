@@ -33,6 +33,17 @@ import {
 import {
   DashboardHome,
 } from './features/dashboard/dashboard-home/dashboard-home';
+import {
+  AdminDashboard,
+} from './features/dashboard/admin-dashboard/admin-dashboard';
+
+import {
+  DoctorDashboard,
+} from './features/dashboard/doctor-dashboard/doctor-dashboard';
+
+import {
+  ReceptionistDashboard,
+} from './features/dashboard/receptionist-dashboard/receptionist-dashboard';
 
 import {
   EmployeeList,
@@ -198,17 +209,42 @@ export const routes:
             'full',
         },
 
-        /*
-        |--------------------------------------------------------------------------
-        | Dashboard
-        |--------------------------------------------------------------------------
-        */
-        {
-          path: 'dashboard',
+      /*
+|--------------------------------------------------------------------------
+| Admin Dashboard
+|--------------------------------------------------------------------------
+*/
+{
+  path: 'dashboard/admin',
 
-          component:
-            DashboardHome,
-        },
+  component:
+    AdminDashboard,
+
+},
+
+/*
+|--------------------------------------------------------------------------
+| Doctor Dashboard
+|--------------------------------------------------------------------------
+*/
+{
+  path: 'dashboard/doctor',
+
+  component:
+    DoctorDashboard,
+},
+
+/*
+|--------------------------------------------------------------------------
+| Receptionist Dashboard
+|--------------------------------------------------------------------------
+*/
+{
+  path: 'dashboard/receptionist',
+
+  component:
+    ReceptionistDashboard,
+},
 
         /*
         |--------------------------------------------------------------------------

@@ -38,17 +38,60 @@ export class DashboardService {
       `${this.apiUrl}/admin-stats`,
     );
   }
+
   /*
-|--------------------------------------------------------------------------
-| Recent Employees
-|--------------------------------------------------------------------------
-*/
-getRecentEmployees():
-Observable<any> {
+  |--------------------------------------------------------------------------
+  | Recent Employees
+  |--------------------------------------------------------------------------
+  */
+  getRecentEmployees():
+  Observable<any> {
 
-  return this.http.get(
+    return this.http.get(
 
-    `${this.apiUrl}/recent-employees`,
-  );
-}
+      `${this.apiUrl}/recent-employees`,
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Doctor Stats
+  |--------------------------------------------------------------------------
+  */
+  getDoctorStats():
+  Observable<any> {
+
+    return this.http.get(
+
+      `${this.apiUrl}/doctor-stats`,
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Receptionist Stats
+  |--------------------------------------------------------------------------
+  */
+  getReceptionistStats():
+  Observable<any> {
+
+    return this.http.get(
+
+      `${this.apiUrl}/receptionist-stats`,
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Today Appointments
+  |--------------------------------------------------------------------------
+  */
+  getTodayAppointments():
+  Observable<any> {
+
+    return this.http.get(
+
+      `${this.apiUrl}/today-appointments`,
+    );
+  }
 }
