@@ -1,0 +1,220 @@
+import {
+  Component,
+  OnInit,
+} from '@angular/core';
+
+import {
+  CommonModule,
+} from '@angular/common';
+
+import {
+  FormsModule,
+} from '@angular/forms';
+
+import {
+  RouterLink,
+} from '@angular/router';
+
+import {
+  AppointmentService,
+} from '../../../core/services/appointment';
+
+import {
+  AuthService,
+} from '../../../core/services/auth';
+
+@Component({
+  selector:
+    'app-appointment-list',
+
+  standalone: true,
+
+  imports: [
+
+    CommonModule,
+
+    FormsModule,
+
+    RouterLink,
+  ],
+
+  templateUrl:
+    './appointment-list.html',
+
+  styleUrls: [
+    './appointment-list.css',
+  ],
+})
+export class AppointmentList
+implements OnInit {
+
+  appointments:
+  any[] = [];
+
+  filteredAppointments:
+  any[] = [];
+
+  searchTerm = '';
+
+  selectedStatus =
+    '';
+
+  constructor(
+
+    private appointmentService:
+      AppointmentService,
+
+    public authService:
+      AuthService,
+  ) {}
+
+  ngOnInit(): void {
+
+    this.loadAppointments();
+  }
+
+  loadAppointments():
+  void {
+
+    this.appointmentService
+      .getAppointments()
+
+      .subscribe({
+
+        next: (
+          response,
+        ) => {
+
+          this.appointments =
+            response.data;
+
+          this.filteredAppointments =
+            response.data;
+        },
+
+        error: (
+          error,
+        ) => {
+
+          console.log(
+            error,
+          );
+        },
+      });
+  }
+
+  filterAppointments():
+  void {
+
+    this.filteredAppointments =
+
+      this.appointments.filter(
+
+        (
+          appointment,
+        ) => {
+
+          const patientName =
+
+            `${
+
+              appointment
+                ?.patientId
+                ?.firstName
+
+            } ${
+
+              appointment
+                ?.patientId
+                ?.lastName
+
+            }`
+              .toLowerCase();
+
+          const doctorName =
+
+            appointment
+              ?.doctorEmployeeId
+              ?.name
+              ?.toLowerCase();
+
+          const matchesSearch =
+
+            patientName.includes(
+
+              this.searchTerm
+                .toLowerCase(),
+            )
+
+            ||
+
+            doctorName.includes(
+
+              this.searchTerm
+                .toLowerCase(),
+            );
+
+          const matchesStatus =
+
+            this.selectedStatus
+              === ''
+
+            ||
+
+            appointment.status
+              === this.selectedStatus;
+
+          return (
+
+            matchesSearch
+
+            &&
+
+            matchesStatus
+          );
+        },
+      );
+  }
+
+  deleteAppointment(
+    id: string,
+  ): void {
+
+    const confirmDelete =
+
+      confirm(
+        'Delete this appointment?',
+      );
+
+    if (
+      !confirmDelete
+    ) {
+
+      return;
+    }
+
+    this.appointmentService
+      .deleteAppointment(id)
+
+      .subscribe({
+
+        next: () => {
+
+          alert(
+            'Appointment deleted successfully',
+          );
+
+          this.loadAppointments();
+        },
+
+        error: (
+          error,
+        ) => {
+
+          console.log(
+            error,
+          );
+        },
+      });
+  }
+}

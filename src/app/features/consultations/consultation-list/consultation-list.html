@@ -1,0 +1,159 @@
+<div class="consultation-list-container">
+
+    <!-- Header -->
+
+    <div class="top-section">
+
+        <h1>
+            Consultations
+        </h1>
+
+    </div>
+
+    <!-- Loading -->
+
+    @if(isLoading){
+
+    <div class="loading">
+
+        Loading...
+
+    </div>
+
+    }
+
+    @else {
+
+    <!-- Table -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Patient
+                    </th>
+
+                    <th>
+                        Doctor
+                    </th>
+
+                    <th>
+                        Diagnosis
+                    </th>
+
+                    <th>
+                        Date
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @for(
+                consultation of consultations;
+                track consultation._id
+                ){
+
+                <tr>
+
+                    <!-- Patient -->
+
+                    <td>
+
+                        {{
+                        consultation
+                        ?.patientId
+                        ?.firstName
+                        }}
+
+                        {{
+
+                        consultation
+                        ?.patientId
+                        ?.lastName
+                        }}
+
+                    </td>
+
+                    <!-- Doctor -->
+
+                    <td>
+
+                        {{
+                        consultation
+                        ?.doctorEmployeeId
+                        ?.name
+                        }}
+
+                    </td>
+
+                    <!-- Diagnosis -->
+
+                    <td>
+
+                        {{
+                        consultation
+                        ?.diagnosis
+                        }}
+
+                    </td>
+
+                    <!-- Date -->
+
+                    <td>
+
+                        {{
+                        consultation
+                        ?.createdAt
+                        | date
+                        }}
+
+                    </td>
+
+                    <!-- Actions -->
+
+                    <td>
+
+                        <button
+
+                            class="
+                            download-btn
+                            "
+
+                            (click)="
+                            downloadPdf(
+                              consultation._id
+                            )
+                            "
+                        >
+
+                            Download PDF
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    }
+
+</div>

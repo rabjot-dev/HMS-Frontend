@@ -1,0 +1,471 @@
+<div class="register-page">
+
+    <!-- Left Side -->
+
+    <div class="register-left">
+
+        <div class="brand-badge">
+
+            BootStrap HMS
+
+        </div>
+
+        <h1>
+
+            Join the
+            Smart Healthcare
+            Workspace
+
+        </h1>
+
+        <p class="left-subtitle">
+
+            Create your employee account
+            to access hospital operations,
+            appointments, patient records
+            and real-time management tools.
+
+        </p>
+
+        <div class="feature-list">
+
+            <div class="feature-card">
+
+                <span>
+                    🏥
+                </span>
+
+                Smart Hospital Management
+
+            </div>
+
+            <div class="feature-card">
+
+                <span>
+                    🔒
+                </span>
+
+                Secure Employee Access
+
+            </div>
+
+            <div class="feature-card">
+
+                <span>
+                    ⚡
+                </span>
+
+                Real-time Workflow System
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Right Side -->
+
+    <div class="register-right glass-card">
+
+        <div class="register-card">
+
+            <h2>
+                Employee Register
+            </h2>
+
+            <p class="subtitle">
+
+                Create your HMS account
+
+            </p>
+
+            @if(successMessage){
+
+            <div class="success-message">
+
+                {{ successMessage }}
+
+            </div>
+
+            }
+
+            @if(errorMessage){
+
+            <div class="error-message">
+
+                {{ errorMessage }}
+
+            </div>
+
+            }
+
+            <form
+                [formGroup]="registerForm"
+                (ngSubmit)="onSubmit()"
+            >
+
+                <!-- Name -->
+
+                <div class="form-group">
+
+                    <label>
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="name"
+                        placeholder="Enter full name"
+                    />
+
+                </div>
+
+                <!-- Gender -->
+
+                <div class="form-group">
+
+                    <label>
+                        Gender
+                    </label>
+
+                    <select formControlName="gender">
+
+                        <option value="">
+                            Select Gender
+                        </option>
+
+                        <option value="MALE">
+                            Male
+                        </option>
+
+                        <option value="FEMALE">
+                            Female
+                        </option>
+
+                        <option value="OTHER">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- Email -->
+
+                <div class="form-group">
+
+                    <label>
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        formControlName="email"
+                        placeholder="Enter email"
+                    />
+
+                </div>
+
+                <!-- Phone -->
+
+                <div class="form-group">
+
+                    <label>
+                        Phone Number
+                    </label>
+
+                    <div class="phone-group">
+
+                        <select formControlName="countryCode">
+
+                            <option value="+91">
+                                +91 🇮🇳
+                            </option>
+
+                            <option value="+1">
+                                +1 🇺🇸
+                            </option>
+
+                            <option value="+44">
+                                +44 🇬🇧
+                            </option>
+
+                        </select>
+
+                        <input
+                            type="text"
+                            formControlName="phone"
+                            placeholder="9876543210"
+                            maxlength="10"
+                        />
+
+                    </div>
+
+                    @if(
+                    registerForm
+                    .get('phone')
+                    ?.touched
+
+                    &&
+
+                    registerForm
+                    .get('phone')
+                    ?.invalid
+                    ){
+
+                    <p class="error-text">
+
+                        Enter valid
+                        10 digit phone number
+
+                    </p>
+
+                    }
+
+                </div>
+
+                <!-- Department -->
+
+                <div class="form-group">
+
+                    <label>
+                        Department
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="department"
+                        placeholder="Enter department"
+                    />
+
+                </div>
+
+                <!-- Designation -->
+
+                <div class="form-group">
+
+                    <label>
+                        Designation
+                    </label>
+
+                    <select formControlName="designation">
+
+                        <option value="">
+                            Select Designation
+                        </option>
+
+                        <option value="DOCTOR">
+                            Doctor
+                        </option>
+
+                        <option value="NURSE">
+                            Nurse
+                        </option>
+
+                        <option value="RECEPTIONIST">
+                            Receptionist
+                        </option>
+
+                        <option value="LAB_TECHNICIAN">
+                            Lab Technician
+                        </option>
+
+                        <option value="PHARMACIST">
+                            Pharmacist
+                        </option>
+
+                        <option value="ACCOUNTANT">
+                            Accountant
+                        </option>
+
+                    </select>
+
+                </div>
+
+                @if(isDoctor()){
+
+                <!-- Specialization -->
+
+                <div class="form-group">
+
+                    <label>
+                        Specialization
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="specialization"
+                        placeholder="Enter specialization"
+                    />
+
+                </div>
+
+                <!-- Qualification -->
+
+                <div class="form-group">
+
+                    <label>
+                        Qualification
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="qualification"
+                        placeholder="Enter qualification"
+                    />
+
+                </div>
+
+                <!-- Registration -->
+
+                <div class="form-group">
+
+                    <label>
+                        Medical Registration No
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="medicalRegistrationNo"
+                        placeholder="Enter registration number"
+                    />
+
+                </div>
+
+                }
+
+                <!-- Joining Date -->
+
+                <div class="form-group">
+
+                    <label>
+                        Joining Date
+                    </label>
+
+                    <input
+                        type="date"
+                        formControlName="joiningDate"
+                    />
+
+                </div>
+
+                <!-- Password -->
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        formControlName="password"
+                        placeholder="Enter password"
+                    />
+
+                </div>
+
+                <!-- Confirm Password -->
+
+                <div class="form-group">
+
+                    <label>
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        formControlName="confirmPassword"
+                        placeholder="Confirm password"
+                    />
+
+                </div>
+
+                <!-- Security Question -->
+
+                <div class="form-group">
+
+                    <label>
+                        Security Question
+                    </label>
+
+                    <select formControlName="securityQuestion">
+
+                        <option value="">
+                            Select Question
+                        </option>
+
+                        @for(
+                        question of securityQuestions;
+                        track question
+                        ){
+
+                        <option [value]="question">
+
+                            {{ question }}
+
+                        </option>
+
+                        }
+
+                    </select>
+
+                </div>
+
+                <!-- Security Answer -->
+
+                <div class="form-group">
+
+                    <label>
+                        Security Answer
+                    </label>
+
+                    <input
+                        type="text"
+                        formControlName="securityAnswer"
+                        placeholder="Enter answer"
+                    />
+
+                </div>
+
+                <!-- Submit -->
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    [disabled]="isSubmitting"
+                >
+
+                    @if(isSubmitting){
+
+                        Registering...
+
+                    }
+
+                    @else {
+
+                        Register
+
+                    }
+
+                </button>
+
+            </form>
+
+            <p class="login-link">
+
+                Already have an account?
+
+                <a routerLink="/login">
+
+                    Login
+
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
