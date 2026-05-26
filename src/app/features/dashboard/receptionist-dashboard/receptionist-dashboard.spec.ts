@@ -8,7 +8,7 @@ describe('ReceptionistDashboard', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReceptionistDashboard],
+      imports: [ReceptionistDashboard]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ReceptionistDashboard);

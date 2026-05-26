@@ -1,44 +1,23 @@
-import {
-  Component,
-} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  PatientService,
-} from '../../../core/services/patient';
+import { PatientService } from '../../../core/services/patient';
 
 @Component({
-  selector:
-    'app-add-patient',
+  selector: 'app-add-patient',
 
   standalone: true,
 
-  imports: [
+  imports: [ReactiveFormsModule, CommonModule],
 
-    ReactiveFormsModule,
+  templateUrl: './add-patient.html',
 
-    CommonModule,
-  ],
-
-  templateUrl:
-    './add-patient.html',
-
-  styleUrls: [
-    './add-patient.css',
-  ],
+  styleUrls: ['./add-patient.css']
 })
 export class AddPatient {
-
   /*
   |--------------------------------------------------------------------------
   | Current Step
@@ -61,150 +40,99 @@ export class AddPatient {
   patientForm!: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
 
-    private fb:
-      FormBuilder,
-
-    private patientService:
-      PatientService,
+    private patientService: PatientService
   ) {
-
-    this.patientForm =
-      this.fb.group({
-
-        /*
+    this.patientForm = this.fb.group({
+      /*
         |--------------------------------------------------------------------------
         | Basic Information
         |--------------------------------------------------------------------------
         */
-        firstName: [
+      firstName: ['', Validators.required],
 
-          '',
+      lastName: ['', Validators.required],
 
-          Validators.required,
-        ],
+      dateOfBirth: ['', Validators.required],
 
-        lastName: [
+      gender: ['', Validators.required],
 
-          '',
+      bloodGroup: [''],
 
-          Validators.required,
-        ],
+      maritalStatus: [''],
 
-        dateOfBirth: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        gender: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        bloodGroup: [''],
-
-        maritalStatus: [''],
-
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Contact Information
         |--------------------------------------------------------------------------
         */
-        countryCode: [
+      countryCode: ['+91', Validators.required],
 
-          '+91',
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
 
-          Validators.required,
-        ],
+      email: [''],
 
-        phone: [
+      address: [''],
 
-          '',
+      city: [''],
 
-          [
+      state: [''],
 
-            Validators.required,
+      pincode: [''],
 
-            Validators.pattern(
-              '^[0-9]{10}$'
-            ),
-          ],
-        ],
+      country: ['India'],
 
-        email: [''],
-
-        address: [''],
-
-        city: [''],
-
-        state: [''],
-
-        pincode: [''],
-
-        country: ['India'],
-
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Emergency Contact
         |--------------------------------------------------------------------------
         */
-        emergencyContactName:
-          [''],
+      emergencyContactName: [''],
 
-        emergencyContactPhone:
-          [''],
+      emergencyContactPhone: [''],
 
-        relationship: [''],
+      relationship: [''],
 
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Medical Information
         |--------------------------------------------------------------------------
         */
-        medicalHistory: [''],
+      medicalHistory: [''],
 
-        allergies: [''],
+      allergies: [''],
 
-        chronicDiseases: [''],
+      chronicDiseases: [''],
 
-        currentMedications:
-          [''],
+      currentMedications: [''],
 
-        pastSurgeries: [''],
+      pastSurgeries: [''],
 
-        familyMedicalHistory:
-          [''],
+      familyMedicalHistory: [''],
 
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Insurance Information
         |--------------------------------------------------------------------------
         */
-        insuranceProvider:
-          [''],
+      insuranceProvider: [''],
 
-        insurancePolicyNumber:
-          [''],
+      insurancePolicyNumber: [''],
 
-        insuranceExpiryDate:
-          [''],
+      insuranceExpiryDate: [''],
 
-        insuranceCoverageAmount:
-          [''],
+      insuranceCoverageAmount: [''],
 
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Hospital Information
         |--------------------------------------------------------------------------
         */
-        department: [''],
+      department: [''],
 
-        patientType: ['OPD'],
-      });
+      patientType: ['OPD']
+    });
   }
 
   /*
@@ -213,11 +141,7 @@ export class AddPatient {
   |--------------------------------------------------------------------------
   */
   nextStep(): void {
-
-    if (
-      this.currentStep < 4
-    ) {
-
+    if (this.currentStep < 4) {
       this.currentStep++;
     }
   }
@@ -228,11 +152,7 @@ export class AddPatient {
   |--------------------------------------------------------------------------
   */
   previousStep(): void {
-
-    if (
-      this.currentStep > 1
-    ) {
-
+    if (this.currentStep > 1) {
       this.currentStep--;
     }
   }
@@ -243,123 +163,76 @@ export class AddPatient {
   |--------------------------------------------------------------------------
   */
   onSubmit(): void {
+    console.log('Register Patient Clicked');
 
-    console.log(
-      'Register Patient Clicked',
-    );
+    console.log(this.patientForm.value);
 
-    console.log(
-      this.patientForm.value,
-    );
+    if (this.patientForm.invalid) {
+      console.log('FORM INVALID');
 
-    if (
-      this.patientForm.invalid
-    ) {
+      Object.keys(this.patientForm.controls).forEach((key) => {
+        const control = this.patientForm.get(key);
 
-      console.log(
-        'FORM INVALID',
-      );
-
-      Object.keys(
-        this.patientForm.controls
-      ).forEach(key => {
-
-        const control =
-
-          this.patientForm
-            .get(key);
-
-        if (
-          control?.invalid
-        ) {
-
+        if (control?.invalid) {
           console.log(
-
             key,
 
-            control.errors,
+            control.errors
           );
         }
       });
 
-      this.patientForm
-        .markAllAsTouched();
+      this.patientForm.markAllAsTouched();
 
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
 
     this.patientService
-      .createPatient(
-
-        this.patientForm.value,
-      )
+      .createPatient(this.patientForm.value)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          alert(
-            'Patient Registered Successfully',
-          );
+          alert('Patient Registered Successfully');
 
           /*
           |--------------------------------------------------------------------------
           | Reset Form
           |--------------------------------------------------------------------------
           */
-          this.patientForm
-            .reset();
+          this.patientForm.reset();
 
           /*
           |--------------------------------------------------------------------------
           | Default Values After Reset
           |--------------------------------------------------------------------------
           */
-          this.patientForm
-            .patchValue({
+          this.patientForm.patchValue({
+            countryCode: '+91',
 
-              countryCode:
-                '+91',
+            country: 'India',
 
-              country:
-                'India',
-
-              patientType:
-                'OPD',
-            });
+            patientType: 'OPD'
+          });
 
           /*
           |--------------------------------------------------------------------------
           | Reset UI
           |--------------------------------------------------------------------------
           */
-          this.currentStep =
-            1;
+          this.currentStep = 1;
 
-          this.isSubmitting =
-            false;
+          this.isSubmitting = false;
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isSubmitting =
-            false;
-        },
+          this.isSubmitting = false;
+        }
       });
   }
 }

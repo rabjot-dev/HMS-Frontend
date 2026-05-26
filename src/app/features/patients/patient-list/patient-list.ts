@@ -1,49 +1,25 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  FormsModule,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import {
-  RouterLink,
-} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
-import {
-  PatientService,
-} from '../../../core/services/patient';
+import { PatientService } from '../../../core/services/patient';
 
 @Component({
-  selector:
-    'app-patient-list',
+  selector: 'app-patient-list',
 
   standalone: true,
 
-  imports: [
+  imports: [CommonModule, FormsModule, RouterLink],
 
-    CommonModule,
+  templateUrl: './patient-list.html',
 
-    FormsModule,
-
-    RouterLink,
-  ],
-
-  templateUrl:
-    './patient-list.html',
-
-  styleUrls: [
-    './patient-list.css',
-  ],
+  styleUrls: ['./patient-list.css']
 })
-export class PatientList
-implements OnInit {
-
+export class PatientList implements OnInit {
   /*
   |--------------------------------------------------------------------------
   | Patients
@@ -51,8 +27,7 @@ implements OnInit {
   */
   patients: any[] = [];
 
-  filteredPatients:
-  any[] = [];
+  filteredPatients: any[] = [];
 
   /*
   |--------------------------------------------------------------------------
@@ -68,11 +43,7 @@ implements OnInit {
   */
   userRole = '';
 
-  constructor(
-
-    private patientService:
-      PatientService,
-  ) {}
+  constructor(private patientService: PatientService) {}
 
   /*
   |--------------------------------------------------------------------------
@@ -80,22 +51,14 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
-
     /*
     |--------------------------------------------------------------------------
     | Get Role
     |--------------------------------------------------------------------------
     */
-    this.userRole =
+    this.userRole = localStorage.getItem('role') || '';
 
-      localStorage.getItem(
-        'role',
-      ) || '';
-
-    console.log(
-      'ROLE:',
-      this.userRole,
-    );
+    console.log('ROLE:', this.userRole);
 
     /*
     |--------------------------------------------------------------------------
@@ -111,35 +74,21 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   loadPatients(): void {
-
     this.patientService
       .getPatients()
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          this.patients = response.data;
 
-          console.log(
-            response,
-          );
-
-          this.patients =
-            response.data;
-
-          this.filteredPatients =
-            response.data;
+          this.filteredPatients = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -149,42 +98,15 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   searchPatients(): void {
+    const search = this.searchTerm.toLowerCase();
 
-    const search =
-
-      this.searchTerm
-        .toLowerCase();
-
-    this.filteredPatients =
-
-      this.patients.filter(
-
-        (patient) => {
-
-          return (
-
-            patient.firstName
-              ?.toLowerCase()
-              .includes(search)
-
-            ||
-
-            patient.lastName
-              ?.toLowerCase()
-              .includes(search)
-
-            ||
-
-            patient.patientId
-              ?.toLowerCase()
-              .includes(search)
-
-            ||
-
-            patient.phone
-              ?.includes(search)
-          );
-        },
+    this.filteredPatients = this.patients.filter((patient) => {
+      return (
+        patient.firstName?.toLowerCase().includes(search) ||
+        patient.lastName?.toLowerCase().includes(search) ||
+        patient.patientId?.toLowerCase().includes(search) ||
+        patient.phone?.includes(search)
       );
+    });
   }
 }

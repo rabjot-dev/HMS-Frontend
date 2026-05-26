@@ -1,53 +1,32 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  RouterOutlet,
-} from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
-import { AuthService }
-from './core/services/auth';
+import { AuthService } from './core/services/auth';
 
-import { TokenService }
-from './core/services/token';
+import { TokenService } from './core/services/token';
 
 @Component({
   selector: 'app-root',
 
-  imports: [
-    RouterOutlet,
-  ],
+  imports: [RouterOutlet],
 
   templateUrl: './app.html',
 
-  styleUrl: './app.css',
+  styleUrl: './app.css'
 })
-export class App
-implements OnInit {
-
+export class App implements OnInit {
   constructor(
+    private authService: AuthService,
 
-    private authService:
-      AuthService,
-
-    private tokenService:
-      TokenService,
+    private tokenService: TokenService
   ) {}
 
   ngOnInit(): void {
-
-    const token =
-      this.tokenService.getToken();
+    const token = this.tokenService.getToken();
 
     if (token) {
-
-      this.authService
-        .loadCurrentUser();
+      this.authService.loadCurrentUser();
     }
   }
 }
-
-
-

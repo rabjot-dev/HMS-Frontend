@@ -8,7 +8,7 @@ describe('EditAppointment', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditAppointment],
+      imports: [EditAppointment]
     }).compileComponents();
 
     fixture = TestBed.createComponent(EditAppointment);

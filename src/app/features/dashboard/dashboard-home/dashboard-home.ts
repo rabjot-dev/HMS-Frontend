@@ -1,14 +1,8 @@
-import {
-  Component,
-} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {
-  AsyncPipe,
-} from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 
-import {
-  AuthService,
-} from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth';
 
 /*
 |------------------------------------------------------------------
@@ -16,56 +10,28 @@ import {
 |------------------------------------------------------------------
 */
 
-import {
-  AdminDashboard,
-} from '../admin-dashboard/admin-dashboard';
+import { AdminDashboard } from '../admin-dashboard/admin-dashboard';
 
-import {
-  DoctorDashboard,
-} from '../doctor-dashboard/doctor-dashboard';
+import { DoctorDashboard } from '../doctor-dashboard/doctor-dashboard';
 
-import {
-  NurseDashboard,
-} from '../nurse-dashboard/nurse-dashboard';
+import { NurseDashboard } from '../nurse-dashboard/nurse-dashboard';
 
-import {
-  ReceptionistDashboard,
-} from '../receptionist-dashboard/receptionist-dashboard';
+import { ReceptionistDashboard } from '../receptionist-dashboard/receptionist-dashboard';
 
 @Component({
-  selector:
-    'app-dashboard-home',
+  selector: 'app-dashboard-home',
 
   standalone: true,
 
-  imports: [
+  imports: [AsyncPipe, AdminDashboard, DoctorDashboard, NurseDashboard, ReceptionistDashboard],
 
-    AsyncPipe,
+  templateUrl: './dashboard-home.html',
 
-    AdminDashboard,
-
-    DoctorDashboard,
-
-    NurseDashboard,
-
-    ReceptionistDashboard,
-  ],
-
-  templateUrl:
-    './dashboard-home.html',
-
-  styleUrl:
-    './dashboard-home.css',
+  styleUrl: './dashboard-home.css'
 })
 export class DashboardHome {
-
-  constructor(
-
-    public authService:
-      AuthService,
-  ) {}
+  constructor(public authService: AuthService) {}
 }
-
 
 // import {
 //   Component,

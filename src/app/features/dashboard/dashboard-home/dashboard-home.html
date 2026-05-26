@@ -1,55 +1,33 @@
-@if(
-authService.currentUser
-| async;
-as user
-){
+@if( authService.currentUser | async; as user ){
 
-  <!-- ADMIN -->
+<!-- ADMIN -->
 
-  @if(
-  user?.roles?.includes(
-  'ADMIN'
-  )
-  ){
+@if( user?.roles?.includes( 'ADMIN' ) ){
 
-    <app-admin-dashboard />
-
-  }
-
-  <!-- DOCTOR -->
-
-  @if(
-  user?.roles?.includes(
-  'DOCTOR'
-  )
-  ){
-
-    <app-doctor-dashboard />
-
-  }
-
-  <!-- NURSE -->
-
-  @if(
-  user?.roles?.includes(
-  'NURSE'
-  )
-  ){
-
-    <app-nurse-dashboard />
-
-  }
-
-  <!-- RECEPTIONIST -->
-
-  @if(
-  user?.roles?.includes(
-  'RECEPTIONIST'
-  )
-  ){
-
-    <app-receptionist-dashboard />
-
-  }
+<app-admin-dashboard />
 
 }
+
+<!-- DOCTOR -->
+
+@if( user?.roles?.includes( 'DOCTOR' ) ){
+
+<app-doctor-dashboard />
+
+}
+
+<!-- NURSE -->
+
+@if( user?.roles?.includes( 'NURSE' ) ){
+
+<app-nurse-dashboard />
+
+}
+
+<!-- RECEPTIONIST -->
+
+@if( user?.roles?.includes( 'RECEPTIONIST' ) ){
+
+<app-receptionist-dashboard />
+
+} }

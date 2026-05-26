@@ -1,195 +1,91 @@
 <div class="login-page">
+  <!-- Left Side -->
 
-    <!-- Left Side -->
+  <div class="login-left">
+    <div class="overlay">
+      <div class="brand-content">
+        <div class="logo-box">B</div>
 
-    <div class="login-left">
+        <h1>BootStrap HMS</h1>
 
-        <div class="overlay">
+        <p>Modern Smart Healthcare Workspace</p>
 
-            <div class="brand-content">
+        <div class="feature-list">
+          <div class="feature-item">
+            <span> ✨ </span>
 
-                <div class="logo-box">
+            Digitalized Hospital Management
+          </div>
 
-                    B
+          <div class="feature-item">
+            <span> 📅 </span>
 
-                </div>
+            Smart Appointment Scheduling
+          </div>
 
-                <h1>
-                    BootStrap HMS
-                </h1>
+          <div class="feature-item">
+            <span> 🩺 </span>
 
-                <p>
-                    Modern Smart Healthcare Workspace
-                </p>
-
-                <div class="feature-list">
-
-                    <div class="feature-item">
-
-                        <span>
-                            ✨
-                        </span>
-
-                        Digitalized Hospital Management
-
-                    </div>
-
-                    <div class="feature-item">
-
-                        <span>
-                            📅
-                        </span>
-
-                        Smart Appointment Scheduling
-
-                    </div>
-
-                    <div class="feature-item">
-
-                        <span>
-                            🩺
-                        </span>
-
-                        Advanced Doctor Workflow
-
-                    </div>
-
-                </div>
-
-            </div>
-
+            Advanced Doctor Workflow
+          </div>
         </div>
-
+      </div>
     </div>
+  </div>
 
-    <!-- Right Side -->
+  <!-- Right Side -->
 
-    <div class="login-right">
+  <div class="login-right">
+    <form class="login-card" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="login-header">
+        <h2>Welcome Back</h2>
 
-        <form
-          class="login-card"
+        <p>Login to continue your workspace</p>
+      </div>
 
-          [formGroup]="loginForm"
+      <!-- Login ID -->
 
-          (ngSubmit)="onSubmit()"
-        >
+      <div class="input-group">
+        <label> Email or Employee Code </label>
 
-            <div class="login-header">
+        <input type="text" placeholder="Enter your login ID" formControlName="loginId" />
+      </div>
 
-                <h2>
-                    Welcome Back
-                </h2>
+      <!-- Password -->
 
-                <p>
-                    Login to continue your workspace
-                </p>
+      <div class="input-group">
+        <label> Password </label>
 
-            </div>
+        <input type="password" placeholder="Enter your password" formControlName="password" />
+      </div>
 
-            <!-- Login ID -->
+      <!-- Forgot -->
 
-            <div class="input-group">
+      <div class="forgot-row">
+        <a routerLink="/forgot-password"> Forgot Password? </a>
+      </div>
 
-                <label>
-                    Email or Employee Code
-                </label>
+      <!-- Error -->
 
-                <input
-                  type="text"
+      @if(errorMessage){
 
-                  placeholder="Enter your login ID"
+      <div class="error-box">{{ errorMessage }}</div>
 
-                  formControlName="loginId"
-                />
+      }
 
-            </div>
+      <!-- Button -->
 
-            <!-- Password -->
+      <button type="submit" class="login-btn" [disabled]="isSubmitting">
+        @if(isSubmitting){ Logging in... } @else { Login }
+      </button>
 
-            <div class="input-group">
+      <!-- Register -->
 
-                <label>
-                    Password
-                </label>
+      <div class="register-text">
+        Don’t have an account?
 
-                <input
-                  type="password"
-
-                  placeholder="Enter your password"
-
-                  formControlName="password"
-                />
-
-            </div>
-
-            <!-- Forgot -->
-
-            <div class="forgot-row">
-
-                <a
-                  routerLink="/forgot-password"
-                >
-
-                    Forgot Password?
-
-                </a>
-
-            </div>
-
-            <!-- Error -->
-
-            @if(errorMessage){
-
-            <div class="error-box">
-
-                {{ errorMessage }}
-
-            </div>
-
-            }
-
-            <!-- Button -->
-
-            <button
-              type="submit"
-
-              class="login-btn"
-
-              [disabled]="isSubmitting"
-            >
-
-                @if(isSubmitting){
-
-                Logging in...
-
-                }
-
-                @else {
-
-                Login
-
-                }
-
-            </button>
-
-            <!-- Register -->
-
-            <div class="register-text">
-
-                Don’t have an account?
-
-                <a
-                  routerLink="/register"
-                >
-
-                    Register
-
-                </a>
-
-            </div>
-
-        </form>
-
-    </div>
-
+        <a routerLink="/register"> Register </a>
+      </div>
+    </form>
+  </div>
 </div>

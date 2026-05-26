@@ -1,46 +1,27 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import { EmployeeService }
-from '../../../core/services/employee';
+import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
-  selector:
-    'app-pending-employees',
+  selector: 'app-pending-employees',
 
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
 
-  templateUrl:
-    './pending-employees.html',
+  templateUrl: './pending-employees.html',
 
-  styleUrl:
-    './pending-employees.css',
+  styleUrl: './pending-employees.css'
 })
-export class PendingEmployees
-implements OnInit {
+export class PendingEmployees implements OnInit {
+  pendingEmployees: any[] = [];
 
-  pendingEmployees:
-    any[] = [];
-
-  generatedPassword =
-    '';
+  generatedPassword = '';
 
   constructor(
+    private employeeService: EmployeeService,
 
-    private employeeService:
-      EmployeeService,
-
-    private cdr:
-      ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {}
 
   /*
@@ -49,7 +30,6 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
-
     this.loadPendingEmployees();
   }
 
@@ -59,33 +39,21 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   loadPendingEmployees(): void {
-
     this.employeeService
       .getPendingEmployees()
 
       .subscribe({
+        next: (response: any) => {
+          console.log(response);
 
-        next: (
-          response: any,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          this.pendingEmployees =
-
-            response.data;
+          this.pendingEmployees = response.data;
 
           this.cdr.detectChanges();
         },
 
         error: (error) => {
-
-          console.log(
-            error,
-          );
-        },
+          console.log(error);
+        }
       });
   }
 
@@ -94,44 +62,24 @@ implements OnInit {
   | Approve Employee
   |--------------------------------------------------------------------------
   */
-  approveEmployee(
-    employeeId: string,
-  ): void {
-
+  approveEmployee(employeeId: string): void {
     this.employeeService
-      .approveEmployee(
-        employeeId,
-      )
+      .approveEmployee(employeeId)
 
       .subscribe({
+        next: (response: any) => {
+          console.log(response);
 
-        next: (
-          response: any,
-        ) => {
+          this.generatedPassword = response.temporaryPassword;
 
-          console.log(
-            response,
-          );
-
-          this.generatedPassword =
-
-            response
-              .temporaryPassword;
-
-          alert(
-
-            `Employee Approved\n\nTemporary Password: ${this.generatedPassword}`,
-          );
+          alert(`Employee Approved\n\nTemporary Password: ${this.generatedPassword}`);
 
           this.loadPendingEmployees();
         },
 
         error: (error) => {
-
-          console.log(
-            error,
-          );
-        },
+          console.log(error);
+        }
       });
   }
 
@@ -140,38 +88,22 @@ implements OnInit {
   | Reject Employee
   |--------------------------------------------------------------------------
   */
-  rejectEmployee(
-    employeeId: string,
-  ): void {
-
+  rejectEmployee(employeeId: string): void {
     this.employeeService
-      .rejectEmployee(
-        employeeId,
-      )
+      .rejectEmployee(employeeId)
 
       .subscribe({
+        next: (response: any) => {
+          console.log(response);
 
-        next: (
-          response: any,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          alert(
-            'Employee Rejected',
-          );
+          alert('Employee Rejected');
 
           this.loadPendingEmployees();
         },
 
         error: (error) => {
-
-          console.log(
-            error,
-          );
-        },
+          console.log(error);
+        }
       });
   }
 }

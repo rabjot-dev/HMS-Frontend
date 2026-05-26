@@ -1,167 +1,94 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  FormsModule,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import {
-  RouterLink,
-} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
-import { EmployeeService }
-from '../../../core/services/employee';
+import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
-  selector:
-    'app-employee-list',
+  selector: 'app-employee-list',
 
-  imports: [
-    CommonModule,
-    RouterLink,
-    FormsModule,
-  ],
+  imports: [CommonModule, RouterLink, FormsModule],
 
-  templateUrl:
-    './employee-list.html',
+  templateUrl: './employee-list.html',
 
-  styleUrl:
-    './employee-list.css',
+  styleUrl: './employee-list.css'
 })
-export class EmployeeList
-implements OnInit {
-
+export class EmployeeList implements OnInit {
   employees: any[] = [];
 
-  filteredEmployees:
-  any[] = [];
+  filteredEmployees: any[] = [];
 
   searchText = '';
 
   constructor(
+    private employeeService: EmployeeService,
 
-    private employeeService:
-      EmployeeService,
-
-    private cdr:
-      ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-
     this.loadEmployees();
   }
 
   loadEmployees(): void {
+    this.employeeService.getEmployees().subscribe({
+      next: (response: any) => {
+        console.log(response);
 
-    this.employeeService
-      .getEmployees()
-      .subscribe({
+        this.employees = response.data;
 
-        next: (response: any) => {
+        this.filteredEmployees = [...response.data];
 
-          console.log(response);
+        this.cdr.detectChanges();
+      },
 
-          this.employees =
-            response.data;
-
-          this.filteredEmployees =
-            [...response.data];
-
-          this.cdr.detectChanges();
-        },
-
-        error: (error) => {
-
-          console.log(error);
-        },
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
   onSearch(): void {
+    const search = this.searchText.toLowerCase();
 
-    const search =
-      this.searchText
-        .toLowerCase();
-
-    this.filteredEmployees =
-      this.employees.filter(
-        (employee) => {
-
-          return (
-
-            employee.name
-              .toLowerCase()
-              .includes(search)
-
-            ||
-
-            employee.employeeCode
-              .toLowerCase()
-              .includes(search)
-
-            ||
-
-            employee.designation
-              .toLowerCase()
-              .includes(search)
-          );
-        },
+    this.filteredEmployees = this.employees.filter((employee) => {
+      return (
+        employee.name.toLowerCase().includes(search) ||
+        employee.employeeCode.toLowerCase().includes(search) ||
+        employee.designation.toLowerCase().includes(search)
       );
+    });
   }
-deactivateEmployee(
-  id: string,
-): void {
+  deactivateEmployee(id: string): void {
+    console.log(id);
 
-  console.log(id);
-
-  this.employeeService
-    .deactivateEmployee(id)
-    .subscribe({
-
+    this.employeeService.deactivateEmployee(id).subscribe({
       next: () => {
-
-        console.log(
-          'Employee deactivated',
-        );
+        console.log('Employee deactivated');
 
         this.loadEmployees();
       },
 
       error: (error) => {
-
         console.log(error);
-      },
+      }
     });
-}
-activateEmployee(
-  id: string,
-): void {
-
-  this.employeeService
-    .activateEmployee(id)
-    .subscribe({
-
+  }
+  activateEmployee(id: string): void {
+    this.employeeService.activateEmployee(id).subscribe({
       next: () => {
-
-        console.log(
-          'Employee activated',
-        );
+        console.log('Employee activated');
 
         this.loadEmployees();
       },
 
       error: (error) => {
-
         console.log(error);
-      },
+      }
     });
-}
+  }
 }

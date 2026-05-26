@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-nurse-dashboard',
   imports: [],
   templateUrl: './nurse-dashboard.html',
-  styleUrl: './nurse-dashboard.css',
+  styleUrl: './nurse-dashboard.css'
 })
 export class NurseDashboard {}

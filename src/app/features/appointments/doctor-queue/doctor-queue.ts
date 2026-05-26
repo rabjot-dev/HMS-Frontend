@@ -1,60 +1,34 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
-import {
-  RouterLink,
-} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
-import {
-  AppointmentService,
-} from '../../../core/services/appointment';
+import { AppointmentService } from '../../../core/services/appointment';
 
-import {
-  AuthService,
-} from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector:
-    'app-doctor-queue',
+  selector: 'app-doctor-queue',
 
   standalone: true,
 
-  imports: [
-    CommonModule,
-    RouterLink,
-  ],
+  imports: [CommonModule, RouterLink],
 
-  templateUrl:
-    './doctor-queue.html',
+  templateUrl: './doctor-queue.html',
 
-  styleUrls: [
-    './doctor-queue.css',
-  ],
+  styleUrls: ['./doctor-queue.css']
 })
-export class DoctorQueue
-implements OnInit {
+export class DoctorQueue implements OnInit {
+  appointments: any[] = [];
 
-  appointments:
-  any[] = [];
+  isLoading = false;
 
-  isLoading =
-    false;
-
-  doctorEmployeeId =
-    '';
+  doctorEmployeeId = '';
 
   constructor(
+    private appointmentService: AppointmentService,
 
-    private appointmentService:
-      AppointmentService,
-
-    public authService:
-      AuthService,
+    public authService: AuthService
   ) {}
 
   /*
@@ -63,32 +37,17 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
+    this.authService.currentUser.subscribe({
+      next: (user: any) => {
+        console.log(user);
 
-    this.authService
-      .currentUser
+        this.doctorEmployeeId = user?.employeeId?._id;
 
-      .subscribe({
-
-        next: (
-          user: any,
-        ) => {
-
-          console.log(
-            user,
-          );
-
-          this.doctorEmployeeId =
-
-            user?.employeeId?._id;
-
-          if (
-            this.doctorEmployeeId
-          ) {
-
-            this.loadQueue();
-          }
-        },
-      });
+        if (this.doctorEmployeeId) {
+          this.loadQueue();
+        }
+      }
+    });
   }
 
   /*
@@ -97,44 +56,25 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   loadQueue(): void {
-
-    this.isLoading =
-      true;
+    this.isLoading = true;
 
     this.appointmentService
-      .getDoctorQueue(
-
-        this.doctorEmployeeId,
-      )
+      .getDoctorQueue(this.doctorEmployeeId)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          this.appointments = response.data;
 
-          console.log(
-            response,
-          );
-
-          this.appointments =
-            response.data;
-
-          this.isLoading =
-            false;
+          this.isLoading = false;
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isLoading =
-            false;
-        },
+          this.isLoading = false;
+        }
       });
   }
 
@@ -143,51 +83,32 @@ implements OnInit {
   | Mark Completed
   |--------------------------------------------------------------------------
   */
-  markCompleted(
-    appointment: any,
-  ): void {
-
+  markCompleted(appointment: any): void {
     const updatedData = {
-
       ...appointment,
 
-      status:
-        'COMPLETED',
+      status: 'COMPLETED'
     };
 
     this.appointmentService
       .updateAppointment(
-
         appointment._id,
 
-        updatedData,
+        updatedData
       )
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          alert(
-            'Consultation completed',
-          );
+          alert('Consultation completed');
 
           this.loadQueue();
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -196,51 +117,32 @@ implements OnInit {
   | Start Consultation
   |--------------------------------------------------------------------------
   */
-  startConsultation(
-    appointment: any,
-  ): void {
-
+  startConsultation(appointment: any): void {
     const updatedData = {
-
       ...appointment,
 
-      status:
-        'IN_CONSULTATION',
+      status: 'IN_CONSULTATION'
     };
 
     this.appointmentService
       .updateAppointment(
-
         appointment._id,
 
-        updatedData,
+        updatedData
       )
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          alert(
-            'Consultation started',
-          );
+          alert('Consultation started');
 
           this.loadQueue();
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 }

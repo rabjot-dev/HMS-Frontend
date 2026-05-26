@@ -1,432 +1,297 @@
-import {
-  Routes,
-} from '@angular/router';
+import { Routes } from '@angular/router';
 
-import {
-  AuthLayout,
-} from './layouts/auth-layout/auth-layout';
+import { AuthLayout } from './layouts/auth-layout/auth-layout';
 
-import {
-  DashboardLayout,
-} from './layouts/dashboard-layout/dashboard-layout';
+import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 
-import {
-  adminGuard,
-} from './core/guards/admin-guard';
+import { adminGuard } from './core/guards/admin-guard';
 
-import {
-  authGuard,
-} from './core/guards/auth-guard';
+import { authGuard } from './core/guards/auth-guard';
 
-import {
-  Login,
-} from './features/auth/login/login';
+import { Login } from './features/auth/login/login';
 
-import {
-  Register,
-} from './features/auth/register/register';
+import { Register } from './features/auth/register/register';
 
-import {
-  CreatePassword,
-} from './features/auth/create-password/create-password';
+import { CreatePassword } from './features/auth/create-password/create-password';
 
-import {
-  DashboardHome,
-} from './features/dashboard/dashboard-home/dashboard-home';
-import {
-  AdminDashboard,
-} from './features/dashboard/admin-dashboard/admin-dashboard';
+import { DashboardHome } from './features/dashboard/dashboard-home/dashboard-home';
+import { AdminDashboard } from './features/dashboard/admin-dashboard/admin-dashboard';
 
-import {
-  DoctorDashboard,
-} from './features/dashboard/doctor-dashboard/doctor-dashboard';
+import { DoctorDashboard } from './features/dashboard/doctor-dashboard/doctor-dashboard';
 
-import {
-  ReceptionistDashboard,
-} from './features/dashboard/receptionist-dashboard/receptionist-dashboard';
+import { ReceptionistDashboard } from './features/dashboard/receptionist-dashboard/receptionist-dashboard';
 
-import {
-  EmployeeList,
-} from './features/employees/employee-list/employee-list';
-import {
-  PatientList,
-} from './features/patients/patient-list/patient-list';
+import { EmployeeList } from './features/employees/employee-list/employee-list';
+import { PatientList } from './features/patients/patient-list/patient-list';
 
-import {
-  AddEmployee,
-} from './features/employees/add-employee/add-employee';
+import { AddEmployee } from './features/employees/add-employee/add-employee';
 
-import {
-  EmployeeDetails,
-} from './features/employees/employee-details/employee-details';
+import { EmployeeDetails } from './features/employees/employee-details/employee-details';
 
-import {
-  EditEmployee,
-} from './features/employees/edit-employee/edit-employee';
+import { EditEmployee } from './features/employees/edit-employee/edit-employee';
 
-import {
-  PendingEmployees,
-} from './features/employees/pending-employees/pending-employees';
+import { PendingEmployees } from './features/employees/pending-employees/pending-employees';
 
-import {
-  AddPatient,
-} from './features/patients/add-patient/add-patient';
-import {
-  EditPatient,
-} from './features/patients/edit-patient/edit-patient';
+import { AddPatient } from './features/patients/add-patient/add-patient';
+import { EditPatient } from './features/patients/edit-patient/edit-patient';
 
-import {
-  PatientDetails,
-} from './features/patients/patient-details/patient-details';
-import {
-  BookAppointment,
-} from './features/appointments/book-appointment/book-appointment';
-import {
-  AppointmentList,
-} from './features/appointments/appointment-list/appointment-list';
-import {
-  EditAppointment,
-} from './features/appointments/edit-appointment/edit-appointment';
-import {
-  DoctorQueue,
-} from './features/appointments/doctor-queue/doctor-queue';
-import {
-  ConsultationForm,
-} from './features/consultations/consultation-form/consultation-form';
-import {
-  ConsultationList,
-} from './features/consultations/consultation-list/consultation-list';
-import {
-  DoctorAvailability,
-} from './features/doctor/doctor-availability/doctor-availability';
-import {
-  ForgotPassword,
-} from './features/auth/forgot-password/forgot-password';
+import { PatientDetails } from './features/patients/patient-details/patient-details';
+import { BookAppointment } from './features/appointments/book-appointment/book-appointment';
+import { AppointmentList } from './features/appointments/appointment-list/appointment-list';
+import { EditAppointment } from './features/appointments/edit-appointment/edit-appointment';
+import { DoctorQueue } from './features/appointments/doctor-queue/doctor-queue';
+import { ConsultationForm } from './features/consultations/consultation-form/consultation-form';
+import { ConsultationList } from './features/consultations/consultation-list/consultation-list';
+import { DoctorAvailability } from './features/doctor/doctor-availability/doctor-availability';
+import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
 
-import {
-  ResetPassword,
-} from './features/auth/reset-password/reset-password';
-import {
-  MyProfile,
-} from './features/profile/my-profile/my-profile';
-import {
-  Home,
-} from './features/floater/home/home';
+import { ResetPassword } from './features/auth/reset-password/reset-password';
+import { MyProfile } from './features/profile/my-profile/my-profile';
+import { Home } from './features/floater/home/home';
 
-export const routes:
-  Routes = [
-
-    /*
+export const routes: Routes = [
+  /*
     |--------------------------------------------------------------------------
     | Home Route
     |--------------------------------------------------------------------------
     */
-    {
-      path: '',
+  {
+    path: '',
 
-      component:
-        Home,
-    },
+    component: Home
+  },
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Auth Routes
     |--------------------------------------------------------------------------
     */
-    {
-      path: '',
+  {
+    path: '',
 
-      component:
-        AuthLayout,
+    component: AuthLayout,
 
-      children: [
+    children: [
+      {
+        path: 'login',
 
-        {
-          path: 'login',
+        component: Login
+      },
 
-          component:
-            Login,
-        },
+      {
+        path: 'register',
 
-        {
-          path: 'register',
+        component: Register
+      },
 
-          component:
-            Register,
-        },
+      {
+        path: 'create-password',
 
-        {
-          path:
-            'create-password',
+        component: CreatePassword
+      },
+      {
+        path: 'forgot-password',
 
-          component:
-            CreatePassword,
-        },
-        {
-          path:
-            'forgot-password',
+        component: ForgotPassword
+      },
 
-          component:
-            ForgotPassword,
-        },
+      {
+        path: 'reset-password',
 
-        {
-          path:
-            'reset-password',
+        component: ResetPassword
+      }
+    ]
+  },
 
-          component:
-            ResetPassword,
-        },
-      ],
-    },
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Protected Dashboard Routes
     |--------------------------------------------------------------------------
     */
-    {
-      path: '',
+  {
+    path: '',
 
-      component:
-        DashboardLayout,
+    component: DashboardLayout,
 
-      canActivate: [
-        authGuard,
-      ],
+    canActivate: [authGuard],
 
-      children: [
-
-        /*
+    children: [
+      /*
         |--------------------------------------------------------------------------
         | Default Redirect
         |--------------------------------------------------------------------------
         */
-        {
-          path: '',
+      {
+        path: '',
 
-          redirectTo:
-            'dashboard',
+        redirectTo: 'dashboard',
 
-          pathMatch:
-            'full',
-        },
+        pathMatch: 'full'
+      },
 
-        /*
+      /*
   |--------------------------------------------------------------------------
   | Admin Dashboard
   |--------------------------------------------------------------------------
   */
-        {
-          path: 'dashboard/admin',
+      {
+        path: 'dashboard/admin',
 
-          component:
-            AdminDashboard,
+        component: AdminDashboard
+      },
 
-        },
-
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Doctor Dashboard
         |--------------------------------------------------------------------------
         */
-        {
-          path: 'dashboard/doctor',
+      {
+        path: 'dashboard/doctor',
 
-          component:
-            DoctorDashboard,
-        },
+        component: DoctorDashboard
+      },
 
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Receptionist Dashboard
         |--------------------------------------------------------------------------
         */
-        {
-          path: 'dashboard/receptionist',
+      {
+        path: 'dashboard/receptionist',
 
-          component:
-            ReceptionistDashboard,
-        },
+        component: ReceptionistDashboard
+      },
 
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Employees
         |--------------------------------------------------------------------------
         */
-        {
-          path: 'employees',
+      {
+        path: 'employees',
 
-          component:
-            EmployeeList,
+        component: EmployeeList,
 
-          canActivate: [
-            adminGuard,
-          ],
-        },
+        canActivate: [adminGuard]
+      },
 
-        {
-          path:
-            'employees/create',
+      {
+        path: 'employees/create',
 
-          component:
-            AddEmployee,
+        component: AddEmployee,
 
-          canActivate: [
-            adminGuard,
-          ],
-        },
+        canActivate: [adminGuard]
+      },
 
-        {
-          path:
-            'employees/pending',
+      {
+        path: 'employees/pending',
 
-          component:
-            PendingEmployees,
+        component: PendingEmployees,
 
-          canActivate: [
-            adminGuard,
-          ],
-        },
+        canActivate: [adminGuard]
+      },
 
-        {
-          path:
-            'employees/:id',
+      {
+        path: 'employees/:id',
 
-          component:
-            EmployeeDetails,
+        component: EmployeeDetails,
 
-          canActivate: [
-            adminGuard,
-          ],
-        },
+        canActivate: [adminGuard]
+      },
 
-        {
-          path:
-            'employees/edit/:id',
+      {
+        path: 'employees/edit/:id',
 
-          component:
-            EditEmployee,
+        component: EditEmployee,
 
-          canActivate: [
-            adminGuard,
-          ],
-        },
+        canActivate: [adminGuard]
+      },
 
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Patients
         |--------------------------------------------------------------------------
         */
-        {
-          path:
-            'patients/create',
+      {
+        path: 'patients/create',
 
-          component:
-            AddPatient,
-        },
-        {
-          path:
-            'patients',
+        component: AddPatient
+      },
+      {
+        path: 'patients',
 
-          component:
-            PatientList,
-        },
-        {
-          path:
-            'patients/edit/:id',
+        component: PatientList
+      },
+      {
+        path: 'patients/edit/:id',
 
-          component:
-            EditPatient,
-          canActivate: [adminGuard],
-        },
-        {
-          path:
-            'patients/:id',
+        component: EditPatient,
+        canActivate: [adminGuard]
+      },
+      {
+        path: 'patients/:id',
 
-          component:
-            PatientDetails,
-        },
-        {
-          path:
-            'appointments/book',
+        component: PatientDetails
+      },
+      {
+        path: 'appointments/book',
 
-          component:
-            BookAppointment,
-        },
-        {
-          path:
-            'appointments',
+        component: BookAppointment
+      },
+      {
+        path: 'appointments',
 
-          component:
-            AppointmentList,
-        },
-        {
-          path:
-            'appointments/edit/:id',
+        component: AppointmentList
+      },
+      {
+        path: 'appointments/edit/:id',
 
-          component:
-            EditAppointment,
-        },
-        {
-          path:
-            'doctor-queue',
+        component: EditAppointment
+      },
+      {
+        path: 'doctor-queue',
 
-          component:
-            DoctorQueue,
-        },
-        {
-          path:
-            'consultation/:appointmentId',
+        component: DoctorQueue
+      },
+      {
+        path: 'consultation/:appointmentId',
 
-          component:
-            ConsultationForm,
-        },
-        {
-          path:
-            'consultations',
+        component: ConsultationForm
+      },
+      {
+        path: 'consultations',
 
-          component:
-            ConsultationList,
-        },
-        {
-          path:
-            'doctor-availability',
+        component: ConsultationList
+      },
+      {
+        path: 'doctor-availability',
 
-          component:
-            DoctorAvailability,
-        },
-        {
-          path:
-            'my-profile',
+        component: DoctorAvailability
+      },
+      {
+        path: 'my-profile',
 
-          component:
-            MyProfile,
-        },
-        {
-          path:
-            'consultations/:id',
+        component: MyProfile
+      },
+      {
+        path: 'consultations/:id',
 
-          loadComponent: () =>
-            import(
-              './features/consultations/consultation-details/consultation-details'
-            ).then(
-              m => m.ConsultationDetails
-            ),
-        },
+        loadComponent: () =>
+          import('./features/consultations/consultation-details/consultation-details').then(
+            (m) => m.ConsultationDetails
+          )
+      }
+    ]
+  },
 
-      ],
-    },
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Wildcard Route
     |--------------------------------------------------------------------------
     */
-    {
-      path: '**',
+  {
+    path: '**',
 
-      redirectTo:
-        'login',
-    },
-  ];
+    redirectTo: 'login'
+  }
+];

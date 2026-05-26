@@ -4,12 +4,11 @@
 |--------------------------------------------------------------------------
 */
 .profile-page {
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
-
-    gap: 28px;
+  gap: 28px;
 }
 
 /*
@@ -18,59 +17,47 @@
 |--------------------------------------------------------------------------
 */
 .profile-hero {
+  display: flex;
 
-    display: flex;
+  justify-content: space-between;
 
-    justify-content: space-between;
+  align-items: center;
 
-    align-items: center;
+  padding: 36px;
 
-    padding: 36px;
+  border-radius: 30px;
 
-    border-radius: 30px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.45));
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,0.7),
-            rgba(255,255,255,0.45)
-        );
+  position: relative;
 
-    position: relative;
-
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .profile-hero::before {
+  content: '';
 
-    content: '';
+  position: absolute;
 
-    position: absolute;
+  top: -100px;
 
-    top: -100px;
+  right: -100px;
 
-    right: -100px;
+  width: 260px;
 
-    width: 260px;
+  height: 260px;
 
-    height: 260px;
+  border-radius: 50%;
 
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            rgba(59,130,246,0.18),
-            transparent
-        );
+  background: radial-gradient(rgba(59, 130, 246, 0.18), transparent);
 }
 
 .profile-left {
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
-
-    gap: 24px;
+  gap: 24px;
 }
 
 /*
@@ -79,63 +66,49 @@
 |--------------------------------------------------------------------------
 */
 .profile-avatar {
+  width: 90px;
 
-    width: 90px;
+  height: 90px;
 
-    height: 90px;
+  border-radius: 28px;
 
-    border-radius: 28px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #8b5cf6
-        );
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
+  justify-content: center;
 
-    justify-content: center;
+  color: white;
 
-    color: white;
+  font-size: 34px;
 
-    font-size: 34px;
+  font-weight: 700;
 
-    font-weight: 700;
-
-    box-shadow:
-        0 15px 35px rgba(
-            59,
-            130,
-            246,
-            0.3
-        );
+  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
 }
 
 .profile-label {
+  color: #3b82f6;
 
-    color: #3b82f6;
+  font-size: 13px;
 
-    font-size: 13px;
+  font-weight: 700;
 
-    font-weight: 700;
+  text-transform: uppercase;
 
-    text-transform: uppercase;
+  letter-spacing: 1px;
 
-    letter-spacing: 1px;
-
-    margin-bottom: 12px;
+  margin-bottom: 12px;
 }
 
 .profile-hero h1 {
+  font-size: 40px;
 
-    font-size: 40px;
+  margin-bottom: 14px;
 
-    margin-bottom: 14px;
-
-    color: #0f172a;
+  color: #0f172a;
 }
 
 /*
@@ -144,40 +117,34 @@
 |--------------------------------------------------------------------------
 */
 .badge-group {
+  display: flex;
 
-    display: flex;
+  gap: 12px;
 
-    gap: 12px;
-
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .role-badge,
 .department-badge {
+  padding: 10px 16px;
 
-    padding: 10px 16px;
+  border-radius: 999px;
 
-    border-radius: 999px;
+  font-size: 13px;
 
-    font-size: 13px;
-
-    font-weight: 700;
+  font-weight: 700;
 }
 
 .role-badge {
+  background: rgba(59, 130, 246, 0.12);
 
-    background:
-        rgba(59,130,246,0.12);
-
-    color: #2563eb;
+  color: #2563eb;
 }
 
 .department-badge {
+  background: rgba(139, 92, 246, 0.12);
 
-    background:
-        rgba(139,92,246,0.12);
-
-    color: #7c3aed;
+  color: #7c3aed;
 }
 
 /*
@@ -186,41 +153,31 @@
 |--------------------------------------------------------------------------
 */
 .status-card {
+  background: rgba(255, 255, 255, 0.7);
 
-    background:
-        rgba(255,255,255,0.7);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 
-    border:
-        1px solid rgba(
-            255,
-            255,
-            255,
-            0.4
-        );
+  padding: 18px 24px;
 
-    padding: 18px 24px;
+  border-radius: 22px;
 
-    border-radius: 22px;
+  text-align: center;
 
-    text-align: center;
-
-    min-width: 160px;
+  min-width: 160px;
 }
 
 .status-card span {
+  color: #64748b;
 
-    color: #64748b;
-
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .status-card h3 {
+  margin-top: 10px;
 
-    margin-top: 10px;
+  color: #16a34a;
 
-    color: #16a34a;
-
-    font-size: 24px;
+  font-size: 24px;
 }
 
 /*
@@ -229,16 +186,11 @@
 |--------------------------------------------------------------------------
 */
 .profile-grid {
+  display: grid;
 
-    display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
 
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(340px,1fr)
-        );
-
-    gap: 24px;
+  gap: 24px;
 }
 
 /*
@@ -247,17 +199,15 @@
 |--------------------------------------------------------------------------
 */
 .profile-card {
+  padding: 28px;
 
-    padding: 28px;
-
-    border-radius: 28px;
+  border-radius: 28px;
 }
 
 .profile-card h2 {
+  margin-bottom: 24px;
 
-    margin-bottom: 24px;
-
-    color: #0f172a;
+  color: #0f172a;
 }
 
 /*
@@ -266,58 +216,47 @@
 |--------------------------------------------------------------------------
 */
 .info-list {
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
-
-    gap: 22px;
+  gap: 22px;
 }
 
 .info-item {
+  padding-bottom: 16px;
 
-    padding-bottom: 16px;
-
-    border-bottom:
-        1px solid rgba(
-            148,
-            163,
-            184,
-            0.18
-        );
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
 }
 
 .info-item:last-child {
+  border-bottom: none;
 
-    border-bottom: none;
-
-    padding-bottom: 0;
+  padding-bottom: 0;
 }
 
 .info-item label {
+  display: block;
 
-    display: block;
+  margin-bottom: 8px;
 
-    margin-bottom: 8px;
+  color: #64748b;
 
-    color: #64748b;
+  font-size: 13px;
 
-    font-size: 13px;
+  font-weight: 700;
 
-    font-weight: 700;
+  text-transform: uppercase;
 
-    text-transform: uppercase;
-
-    letter-spacing: 0.5px;
+  letter-spacing: 0.5px;
 }
 
 .info-item p {
+  color: #0f172a;
 
-    color: #0f172a;
+  font-size: 16px;
 
-    font-size: 16px;
-
-    font-weight: 600;
+  font-weight: 600;
 }
 
 /*
@@ -326,28 +265,13 @@
 |--------------------------------------------------------------------------
 */
 .glass-card {
+  background: rgba(255, 255, 255, 0.6);
 
-    background:
-        rgba(255,255,255,0.6);
+  backdrop-filter: blur(18px);
 
-    backdrop-filter:
-        blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
 
-    border:
-        1px solid rgba(
-            255,
-            255,
-            255,
-            0.35
-        );
-
-    box-shadow:
-        0 15px 40px rgba(
-            15,
-            23,
-            42,
-            0.06
-        );
+  box-shadow: 0 15px 40px rgba(15, 23, 42, 0.06);
 }
 
 /*
@@ -355,52 +279,40 @@
 | Responsive
 |--------------------------------------------------------------------------
 */
-@media (
-max-width: 900px
-) {
+@media (max-width: 900px) {
+  .profile-hero {
+    flex-direction: column;
 
-    .profile-hero {
+    align-items: flex-start;
 
-        flex-direction: column;
+    gap: 24px;
+  }
 
-        align-items: flex-start;
+  .profile-left {
+    flex-direction: column;
 
-        gap: 24px;
-    }
+    align-items: flex-start;
+  }
 
-    .profile-left {
-
-        flex-direction: column;
-
-        align-items: flex-start;
-    }
-
-    .profile-hero h1 {
-
-        font-size: 32px;
-    }
+  .profile-hero h1 {
+    font-size: 32px;
+  }
 }
 
-@media (
-max-width: 600px
-) {
+@media (max-width: 600px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
 
-    .profile-grid {
+  .profile-card {
+    padding: 22px;
+  }
 
-        grid-template-columns: 1fr;
-    }
+  .profile-avatar {
+    width: 74px;
 
-    .profile-card {
+    height: 74px;
 
-        padding: 22px;
-    }
-
-    .profile-avatar {
-
-        width: 74px;
-
-        height: 74px;
-
-        font-size: 28px;
-    }
+    font-size: 28px;
+  }
 }

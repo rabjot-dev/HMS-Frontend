@@ -1,46 +1,27 @@
-import {
-  Injectable,
-} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {
-  HttpClient,
-} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
-import {
-  Observable,
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
-
-  providedIn:
-  'root',
+  providedIn: 'root'
 })
 export class ConsultationService {
+  private apiUrl = 'http://localhost:5000/api/consultations';
 
-  private apiUrl =
-
-    'http://localhost:5000/api/consultations';
-
-  constructor(
-
-    private http:
-      HttpClient,
-  ) {}
+  constructor(private http: HttpClient) {}
 
   /*
   |--------------------------------------------------------------------------
   | Create Consultation
   |--------------------------------------------------------------------------
   */
-  createConsultation(
-    data: any,
-  ): Observable<any> {
-
+  createConsultation(data: any): Observable<any> {
     return this.http.post(
-
       this.apiUrl,
 
-      data,
+      data
     );
   }
 
@@ -49,13 +30,8 @@ export class ConsultationService {
   | Get All Consultations
   |--------------------------------------------------------------------------
   */
-  getConsultations():
-  Observable<any> {
-
-    return this.http.get(
-
-      this.apiUrl,
-    );
+  getConsultations(): Observable<any> {
+    return this.http.get(this.apiUrl);
   }
 
   /*
@@ -63,23 +39,8 @@ export class ConsultationService {
   | Get Consultation By Appointment
   |--------------------------------------------------------------------------
   */
-  getConsultationByAppointment(
-    appointmentId:
-    string,
-  ): Observable<any> {
-
-    return this.http.get(
-
-      `${
-
-        this.apiUrl
-
-      }/appointment/${
-
-        appointmentId
-
-      }`,
-    );
+  getConsultationByAppointment(appointmentId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/appointment/${appointmentId}`);
   }
 
   /*
@@ -88,25 +49,14 @@ export class ConsultationService {
   |--------------------------------------------------------------------------
   */
   updateConsultation(
-
     id: string,
 
-    data: any,
+    data: any
   ): Observable<any> {
-
     return this.http.put(
+      `${this.apiUrl}/${id}`,
 
-      `${
-
-        this.apiUrl
-
-      }/${
-
-        id
-
-      }`,
-
-      data,
+      data
     );
   }
   /*
@@ -114,50 +64,21 @@ export class ConsultationService {
 | Download Prescription PDF
 |--------------------------------------------------------------------------
 */
-downloadPrescriptionPdf(
-  consultationId:
-  string,
-) {
+  downloadPrescriptionPdf(consultationId: string) {
+    return this.http.get(
+      `${this.apiUrl}/prescription/${consultationId}`,
 
-  return this.http.get(
-
-    `${
-
-      this.apiUrl
-
-    }/prescription/${
-
-      consultationId
-
-    }`,
-
-    {
-
-      responseType:
-      'blob',
-    },
-  );
-}
-/*
+      {
+        responseType: 'blob'
+      }
+    );
+  }
+  /*
 |--------------------------------------------------------------------------
 | Get Consultation By Id
 |--------------------------------------------------------------------------
 */
-getConsultationById(
-  id: string,
-): Observable<any> {
-
-  return this.http.get(
-
-    `${
-
-      this.apiUrl
-
-    }/${
-
-      id
-
-    }`,
-  );
-}
+  getConsultationById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
 }

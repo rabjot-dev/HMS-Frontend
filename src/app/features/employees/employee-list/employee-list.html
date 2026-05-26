@@ -1,322 +1,179 @@
 <div class="employees-page">
+  <!-- Header -->
 
-    <!-- Header -->
+  <div class="employees-header glass-card">
+    <div>
+      <p class="page-label">Workforce Management</p>
 
-    <div class="employees-header glass-card">
+      <h1>Employees</h1>
 
-        <div>
-
-            <p class="page-label">
-                Workforce Management
-            </p>
-
-            <h1>
-                Employees
-            </h1>
-
-            <p class="page-subtitle">
-
-                Manage doctors, nurses
-                and hospital staff.
-
-            </p>
-
-        </div>
-
-        <div class="employee-count">
-
-            {{
-            filteredEmployees.length
-            }}
-
-            Employees
-
-        </div>
-
+      <p class="page-subtitle">Manage doctors, nurses and hospital staff.</p>
     </div>
 
-    <!-- Search -->
+    <div class="employee-count">{{ filteredEmployees.length }} Employees</div>
+  </div>
 
-    <div class="filters-wrapper glass-card">
+  <!-- Search -->
 
-        <div class="search-box">
+  <div class="filters-wrapper glass-card">
+    <div class="search-box">
+      <span> 🔍 </span>
 
-            <span>
-                🔍
-            </span>
-
-            <input
-              type="text"
-
-              placeholder="
+      <input
+        type="text"
+        placeholder="
               Search employee...
               "
-
-              [(ngModel)]="
+        [(ngModel)]="
               searchText
               "
-
-              (input)="
+        (input)="
               onSearch()
               "
-            />
-
-        </div>
-
+      />
     </div>
+  </div>
 
-    <!-- Table -->
+  <!-- Table -->
 
-    <div class="table-wrapper glass-card">
+  <div class="table-wrapper glass-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Employee</th>
 
-        <table>
+          <th>Employee Code</th>
 
-            <thead>
+          <th>Designation</th>
 
-                <tr>
+          <th>Department</th>
 
-                    <th>
-                        Employee
-                    </th>
+          <th>Status</th>
 
-                    <th>
-                        Employee Code
-                    </th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-                    <th>
-                        Designation
-                    </th>
-
-                    <th>
-                        Department
-                    </th>
-
-                    <th>
-                        Status
-                    </th>
-
-                    <th>
-                        Actions
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                <tr
-                  *ngFor="
+      <tbody>
+        <tr
+          *ngFor="
                   let employee
                   of filteredEmployees
                   "
-                >
+        >
+          <!-- Employee -->
 
-                    <!-- Employee -->
+          <td>
+            <div class="employee-info">
+              <div class="avatar">{{ employee.name ?.charAt(0) }}</div>
 
-                    <td>
+              <div>
+                <h4>{{ employee.name }}</h4>
 
-                        <div class="employee-info">
+                <span> {{ employee.email }} </span>
+              </div>
+            </div>
+          </td>
 
-                            <div class="avatar">
+          <!-- Employee Code -->
 
-                                {{
+          <td>
+            <div class="employee-code">{{ employee.employeeCode }}</div>
+          </td>
 
-                                employee.name
-                                ?.charAt(0)
+          <!-- Designation -->
 
-                                }}
+          <td>
+            <span class="designation-badge"> {{ employee.designation }} </span>
+          </td>
 
-                            </div>
+          <!-- Department -->
 
-                            <div>
+          <td>
+            <span class="department-badge"> {{ employee.department }} </span>
+          </td>
 
-                                <h4>
+          <!-- Status -->
 
-                                    {{
-                                    employee.name
-                                    }}
-
-                                </h4>
-
-                                <span>
-
-                                    {{
-                                    employee.email
-                                    }}
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </td>
-
-                    <!-- Employee Code -->
-
-                    <td>
-
-                        <div class="employee-code">
-
-                            {{
-                            employee.employeeCode
-                            }}
-
-                        </div>
-
-                    </td>
-
-                    <!-- Designation -->
-
-                    <td>
-
-                        <span
-                          class="designation-badge"
-                        >
-
-                            {{
-                            employee.designation
-                            }}
-
-                        </span>
-
-                    </td>
-
-                    <!-- Department -->
-
-                    <td>
-
-                        <span
-                          class="department-badge"
-                        >
-
-                            {{
-                            employee.department
-                            }}
-
-                        </span>
-
-                    </td>
-
-                    <!-- Status -->
-
-                    <td>
-
-                        <span
-
-                          class="status-badge"
-
-                          [class.active]="
+          <td>
+            <span
+              class="status-badge"
+              [class.active]="
                           employee.status
                           === 'ACTIVE'
                           "
-
-                          [class.inactive]="
+              [class.inactive]="
                           employee.status
                           === 'INACTIVE'
                           "
-
-                          [class.pending]="
+              [class.pending]="
                           employee.status
                           === 'PENDING'
                           "
-                        >
+            >
+              {{ employee.status }}
+            </span>
+          </td>
 
-                            {{
-                            employee.status
-                            }}
+          <!-- Actions -->
 
-                        </span>
+          <td>
+            <div class="actions">
+              <!-- View -->
 
-                    </td>
-
-                    <!-- Actions -->
-
-                    <td>
-
-                        <div class="actions">
-
-                            <!-- View -->
-
-                            <a
-
-                              [routerLink]="[
+              <a
+                [routerLink]="[
                                 '/employees',
                                 employee._id
                               ]"
+                class="action-btn view"
+              >
+                View
+              </a>
 
-                              class="action-btn view"
-                            >
+              <!-- Edit -->
 
-                                View
-
-                            </a>
-
-                            <!-- Edit -->
-
-                            <a
-
-                              [routerLink]="[
+              <a
+                [routerLink]="[
                                 '/employees/edit',
                                 employee._id
                               ]"
+                class="action-btn edit"
+              >
+                Edit
+              </a>
 
-                              class="action-btn edit"
-                            >
+              <!-- Deactivate -->
 
-                                Edit
-
-                            </a>
-
-                            <!-- Deactivate -->
-
-                            <button
-
-                              type="button"
-
-                              (click)="
+              <button
+                type="button"
+                (click)="
                               deactivateEmployee(
                                 employee._id
                               )
                               "
+                class="action-btn deactivate"
+              >
+                Deactivate
+              </button>
 
-                              class="action-btn deactivate"
-                            >
+              <!-- Activate -->
 
-                                Deactivate
-
-                            </button>
-
-                            <!-- Activate -->
-
-                            <button
-
-                              type="button"
-
-                              (click)="
+              <button
+                type="button"
+                (click)="
                               activateEmployee(
                                 employee._id
                               )
                               "
-
-                              class="action-btn activate"
-                            >
-
-                                Activate
-
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
+                class="action-btn activate"
+              >
+                Activate
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

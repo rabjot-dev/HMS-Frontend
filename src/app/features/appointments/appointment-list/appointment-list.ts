@@ -1,195 +1,85 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  FormsModule,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import {
-  RouterLink,
-} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
-import {
-  AppointmentService,
-} from '../../../core/services/appointment';
+import { AppointmentService } from '../../../core/services/appointment';
 
-import {
-  AuthService,
-} from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector:
-    'app-appointment-list',
+  selector: 'app-appointment-list',
 
   standalone: true,
 
-  imports: [
+  imports: [CommonModule, FormsModule, RouterLink],
 
-    CommonModule,
+  templateUrl: './appointment-list.html',
 
-    FormsModule,
-
-    RouterLink,
-  ],
-
-  templateUrl:
-    './appointment-list.html',
-
-  styleUrls: [
-    './appointment-list.css',
-  ],
+  styleUrls: ['./appointment-list.css']
 })
-export class AppointmentList
-implements OnInit {
+export class AppointmentList implements OnInit {
+  appointments: any[] = [];
 
-  appointments:
-  any[] = [];
-
-  filteredAppointments:
-  any[] = [];
+  filteredAppointments: any[] = [];
 
   searchTerm = '';
 
-  selectedStatus =
-    '';
+  selectedStatus = '';
 
   constructor(
+    private appointmentService: AppointmentService,
 
-    private appointmentService:
-      AppointmentService,
-
-    public authService:
-      AuthService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
-
     this.loadAppointments();
   }
 
-  loadAppointments():
-  void {
-
+  loadAppointments(): void {
     this.appointmentService
       .getAppointments()
 
       .subscribe({
+        next: (response) => {
+          this.appointments = response.data;
 
-        next: (
-          response,
-        ) => {
-
-          this.appointments =
-            response.data;
-
-          this.filteredAppointments =
-            response.data;
+          this.filteredAppointments = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
-  filterAppointments():
-  void {
+  filterAppointments(): void {
+    this.filteredAppointments = this.appointments.filter((appointment) => {
+      const patientName = `${appointment?.patientId?.firstName} ${
+        appointment?.patientId?.lastName
+      }`.toLowerCase();
 
-    this.filteredAppointments =
+      const doctorName = appointment?.doctorEmployeeId?.name?.toLowerCase();
 
-      this.appointments.filter(
+      const matchesSearch =
+        patientName.includes(this.searchTerm.toLowerCase()) ||
+        doctorName.includes(this.searchTerm.toLowerCase());
 
-        (
-          appointment,
-        ) => {
+      const matchesStatus =
+        this.selectedStatus === '' || appointment.status === this.selectedStatus;
 
-          const patientName =
-
-            `${
-
-              appointment
-                ?.patientId
-                ?.firstName
-
-            } ${
-
-              appointment
-                ?.patientId
-                ?.lastName
-
-            }`
-              .toLowerCase();
-
-          const doctorName =
-
-            appointment
-              ?.doctorEmployeeId
-              ?.name
-              ?.toLowerCase();
-
-          const matchesSearch =
-
-            patientName.includes(
-
-              this.searchTerm
-                .toLowerCase(),
-            )
-
-            ||
-
-            doctorName.includes(
-
-              this.searchTerm
-                .toLowerCase(),
-            );
-
-          const matchesStatus =
-
-            this.selectedStatus
-              === ''
-
-            ||
-
-            appointment.status
-              === this.selectedStatus;
-
-          return (
-
-            matchesSearch
-
-            &&
-
-            matchesStatus
-          );
-        },
-      );
+      return matchesSearch && matchesStatus;
+    });
   }
 
-  deleteAppointment(
-    id: string,
-  ): void {
+  deleteAppointment(id: string): void {
+    const confirmDelete = confirm('Delete this appointment?');
 
-    const confirmDelete =
-
-      confirm(
-        'Delete this appointment?',
-      );
-
-    if (
-      !confirmDelete
-    ) {
-
+    if (!confirmDelete) {
       return;
     }
 
@@ -197,24 +87,15 @@ implements OnInit {
       .deleteAppointment(id)
 
       .subscribe({
-
         next: () => {
-
-          alert(
-            'Appointment deleted successfully',
-          );
+          alert('Appointment deleted successfully');
 
           this.loadAppointments();
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 }

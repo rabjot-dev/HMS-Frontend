@@ -1,67 +1,38 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  ActivatedRoute,
-} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
-import {
-  ConsultationService,
-} from '../../../core/services/consultation';
+import { ConsultationService } from '../../../core/services/consultation';
 
 @Component({
-  selector:
-    'app-consultation-details',
+  selector: 'app-consultation-details',
 
   standalone: true,
 
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
 
-  templateUrl:
-    './consultation-details.html',
+  templateUrl: './consultation-details.html',
 
-  styleUrls: [
-    './consultation-details.css',
-  ],
+  styleUrls: ['./consultation-details.css']
 })
-export class ConsultationDetails
-implements OnInit {
-
+export class ConsultationDetails implements OnInit {
   consultation: any;
 
-  isLoading =
-    true;
+  isLoading = true;
 
   constructor(
+    private route: ActivatedRoute,
 
-    private route:
-      ActivatedRoute,
-
-    private consultationService:
-      ConsultationService,
+    private consultationService: ConsultationService
   ) {}
 
   ngOnInit(): void {
-
-    const id =
-
-      this.route.snapshot
-        .paramMap
-        .get('id');
+    const id = this.route.snapshot.paramMap.get('id');
 
     if (id) {
-
-      this.loadConsultation(
-        id,
-      );
+      this.loadConsultation(id);
     }
   }
 
@@ -70,43 +41,24 @@ implements OnInit {
   | Load Consultation
   |--------------------------------------------------------------------------
   */
-  loadConsultation(
-    id: string,
-  ): void {
-
+  loadConsultation(id: string): void {
     this.consultationService
-      .getConsultationById(
-        id,
-      )
+      .getConsultationById(id)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          this.consultation = response.data;
 
-          console.log(
-            response,
-          );
-
-          this.consultation =
-            response.data;
-
-          this.isLoading =
-            false;
+          this.isLoading = false;
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isLoading =
-            false;
-        },
+          this.isLoading = false;
+        }
       });
   }
 
@@ -116,7 +68,6 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   printPage(): void {
-
     window.print();
   }
 
@@ -126,31 +77,15 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   downloadPdf(): void {
-
     this.consultationService
-      .downloadPrescriptionPdf(
-
-        this.consultation._id,
-      )
+      .downloadPrescriptionPdf(this.consultation._id)
 
       .subscribe({
+        next: (response: Blob) => {
+          const fileURL = window.URL.createObjectURL(response);
 
-        next: (
-          response:
-          Blob,
-        ) => {
-
-          const fileURL =
-
-            window.URL
-              .createObjectURL(
-                response,
-              );
-
-          window.open(
-            fileURL,
-          );
-        },
+          window.open(fileURL);
+        }
       });
   }
 }

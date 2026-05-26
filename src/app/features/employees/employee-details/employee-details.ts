@@ -1,77 +1,47 @@
-import {
-  Component,
-  OnInit,ChangeDetectorRef
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  ActivatedRoute,
-} from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
-import { EmployeeService }
-from '../../../core/services/employee';
+import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
-  selector:
-    'app-employee-details',
-    standalone: true,
+  selector: 'app-employee-details',
+  standalone: true,
 
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
 
-  templateUrl:
-    './employee-details.html',
+  templateUrl: './employee-details.html',
 
-  styleUrl:
-    './employee-details.css',
+  styleUrl: './employee-details.css'
 })
-export class EmployeeDetails
-implements OnInit {
-
+export class EmployeeDetails implements OnInit {
   employee: any = null;
 
   constructor(
+    private route: ActivatedRoute,
 
-    private route:
-      ActivatedRoute,
-
-    private employeeService:
-      EmployeeService,
-      private cdr: ChangeDetectorRef,
+    private employeeService: EmployeeService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-
-    const id =
-      this.route.snapshot
-        .paramMap
-        .get('id');
+    const id = this.route.snapshot.paramMap.get('id');
 
     if (id) {
+      this.employeeService.getEmployeeById(id).subscribe({
+        next: (response: any) => {
+          console.log(response);
 
-      this.employeeService
-        .getEmployeeById(id)
-        .subscribe({
+          this.employee = response.data;
+          this.cdr.markForCheck();
+        },
 
-          next: (
-            response: any,
-          ) => {
-            console.log(response);
-
-            this.employee =
-              response.data;
-              this.cdr.markForCheck();
-          },
-
-          error: (error) => {
-
-            console.log(error);
-          },
-        });
+        error: (error) => {
+          console.log(error);
+        }
+      });
     }
   }
 }

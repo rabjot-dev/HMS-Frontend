@@ -1,6 +1,5 @@
 .consultation-details-page {
-
-    padding: 24px;
+  padding: 24px;
 }
 
 /*
@@ -9,30 +8,15 @@
 |--------------------------------------------------------------------------
 */
 .glass-card {
+  background: rgba(255, 255, 255, 0.72);
 
-    background:
-        rgba(255,255,255,0.72);
+  border: 1px solid rgba(255, 255, 255, 0.35);
 
-    border:
-        1px solid rgba(
-            255,
-            255,
-            255,
-            0.35
-        );
+  backdrop-filter: blur(18px);
 
-    backdrop-filter:
-        blur(18px);
+  border-radius: 26px;
 
-    border-radius: 26px;
-
-    box-shadow:
-        0 12px 40px rgba(
-            15,
-            23,
-            42,
-            0.08
-        );
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
 }
 
 /*
@@ -41,47 +25,43 @@
 |--------------------------------------------------------------------------
 */
 .details-header {
+  padding: 28px 32px;
 
-    padding: 28px 32px;
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
+  justify-content: space-between;
 
-    justify-content: space-between;
-
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .page-label {
+  color: #3b82f6;
 
-    color: #3b82f6;
+  font-size: 13px;
 
-    font-size: 13px;
+  font-weight: 700;
 
-    font-weight: 700;
+  margin-bottom: 8px;
 
-    margin-bottom: 8px;
+  text-transform: uppercase;
 
-    text-transform: uppercase;
-
-    letter-spacing: 1px;
+  letter-spacing: 1px;
 }
 
 .details-header h1 {
+  font-size: 34px;
 
-    font-size: 34px;
+  color: #0f172a;
 
-    color: #0f172a;
-
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .page-subtitle {
+  color: #64748b;
 
-    color: #64748b;
-
-    font-size: 15px;
+  font-size: 15px;
 }
 
 /*
@@ -90,54 +70,43 @@
 |--------------------------------------------------------------------------
 */
 .header-actions {
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
-
-    gap: 14px;
+  gap: 14px;
 }
 
 .print-btn,
 .pdf-btn {
+  border: none;
 
-    border: none;
+  padding: 14px 22px;
 
-    padding: 14px 22px;
+  border-radius: 16px;
 
-    border-radius: 16px;
+  cursor: pointer;
 
-    cursor: pointer;
+  font-weight: 600;
 
-    font-weight: 600;
-
-    transition: 0.3s ease;
+  transition: 0.3s ease;
 }
 
 .print-btn {
+  background: #e2e8f0;
 
-    background: #e2e8f0;
-
-    color: #0f172a;
+  color: #0f172a;
 }
 
 .pdf-btn {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #8b5cf6
-        );
-
-    color: white;
+  color: white;
 }
 
 .print-btn:hover,
 .pdf-btn:hover {
-
-    transform:
-        translateY(-2px);
+  transform: translateY(-2px);
 }
 
 /*
@@ -146,8 +115,7 @@
 |--------------------------------------------------------------------------
 */
 .consultation-card {
-
-    padding: 32px;
+  padding: 32px;
 }
 
 /*
@@ -156,39 +124,33 @@
 |--------------------------------------------------------------------------
 */
 .top-grid {
+  display: grid;
 
-    display: grid;
+  grid-template-columns: repeat(2, 1fr);
 
-    grid-template-columns:
-        repeat(2,1fr);
+  gap: 24px;
 
-    gap: 24px;
-
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .info-box {
+  background: rgba(248, 250, 252, 0.9);
 
-    background:
-        rgba(248,250,252,0.9);
+  padding: 24px;
 
-    padding: 24px;
-
-    border-radius: 22px;
+  border-radius: 22px;
 }
 
 .info-box h3 {
+  margin-bottom: 18px;
 
-    margin-bottom: 18px;
-
-    color: #0f172a;
+  color: #0f172a;
 }
 
 .info-box p {
+  margin-bottom: 12px;
 
-    margin-bottom: 12px;
-
-    color: #475569;
+  color: #475569;
 }
 
 /*
@@ -197,31 +159,27 @@
 |--------------------------------------------------------------------------
 */
 .section-box {
+  background: rgba(248, 250, 252, 0.9);
 
-    background:
-        rgba(248,250,252,0.9);
+  padding: 26px;
 
-    padding: 26px;
+  border-radius: 24px;
 
-    border-radius: 24px;
-
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .section-box h2 {
+  margin-bottom: 18px;
 
-    margin-bottom: 18px;
+  color: #0f172a;
 
-    color: #0f172a;
-
-    font-size: 22px;
+  font-size: 22px;
 }
 
 .section-box p {
+  color: #475569;
 
-    color: #475569;
-
-    line-height: 1.7;
+  line-height: 1.7;
 }
 
 /*
@@ -230,40 +188,35 @@
 |--------------------------------------------------------------------------
 */
 .vitals-grid {
+  display: grid;
 
-    display: grid;
+  grid-template-columns: repeat(4, 1fr);
 
-    grid-template-columns:
-        repeat(4,1fr);
-
-    gap: 18px;
+  gap: 18px;
 }
 
 .vital-card {
+  background: white;
 
-    background: white;
+  border-radius: 18px;
 
-    border-radius: 18px;
+  padding: 20px;
 
-    padding: 20px;
-
-    text-align: center;
+  text-align: center;
 }
 
 .vital-card span {
+  display: block;
 
-    display: block;
+  margin-bottom: 10px;
 
-    margin-bottom: 10px;
+  color: #64748b;
 
-    color: #64748b;
-
-    font-size: 13px;
+  font-size: 13px;
 }
 
 .vital-card h3 {
-
-    color: #0f172a;
+  color: #0f172a;
 }
 
 /*
@@ -272,33 +225,29 @@
 |--------------------------------------------------------------------------
 */
 .prescription-list {
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
-
-    gap: 18px;
+  gap: 18px;
 }
 
 .medicine-card {
+  background: white;
 
-    background: white;
+  border-radius: 20px;
 
-    border-radius: 20px;
-
-    padding: 22px;
+  padding: 22px;
 }
 
 .medicine-card h3 {
+  margin-bottom: 14px;
 
-    margin-bottom: 14px;
-
-    color: #2563eb;
+  color: #2563eb;
 }
 
 .medicine-card p {
-
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 /*
@@ -307,18 +256,17 @@
 |--------------------------------------------------------------------------
 */
 .loading-card {
+  background: white;
 
-    background: white;
+  padding: 40px;
 
-    padding: 40px;
+  border-radius: 24px;
 
-    border-radius: 24px;
+  text-align: center;
 
-    text-align: center;
+  font-size: 18px;
 
-    font-size: 18px;
-
-    color: #64748b;
+  color: #64748b;
 }
 
 /*
@@ -326,47 +274,36 @@
 | Responsive
 |--------------------------------------------------------------------------
 */
-@media(max-width: 992px){
+@media (max-width: 992px) {
+  .top-grid {
+    grid-template-columns: 1fr;
+  }
 
-    .top-grid {
+  .vitals-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-        grid-template-columns:
-            1fr;
-    }
+  .details-header {
+    flex-direction: column;
 
-    .vitals-grid {
+    align-items: flex-start;
 
-        grid-template-columns:
-            repeat(2,1fr);
-    }
-
-    .details-header {
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 20px;
-    }
+    gap: 20px;
+  }
 }
 
-@media(max-width: 600px){
+@media (max-width: 600px) {
+  .vitals-grid {
+    grid-template-columns: 1fr;
+  }
 
-    .vitals-grid {
+  .consultation-card {
+    padding: 20px;
+  }
 
-        grid-template-columns:
-            1fr;
-    }
-
-    .consultation-card {
-
-        padding: 20px;
-    }
-
-    .details-header {
-
-        padding: 24px;
-    }
+  .details-header {
+    padding: 24px;
+  }
 }
 
 /*
@@ -375,23 +312,19 @@
 |--------------------------------------------------------------------------
 */
 @media print {
+  .header-actions {
+    display: none;
+  }
 
-    .header-actions {
+  body {
+    background: white;
+  }
 
-        display: none;
-    }
+  .glass-card {
+    box-shadow: none;
 
-    body {
-
-        background: white;
-    }
-
-    .glass-card {
-
-        box-shadow: none;
-
-        border: none;
-    }
+    border: none;
+  }
 }
 /*
 |--------------------------------------------------------------------------
@@ -399,43 +332,37 @@
 |--------------------------------------------------------------------------
 */
 .table-wrapper {
-
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
 .medicine-table {
+  width: 100%;
 
-    width: 100%;
+  border-collapse: collapse;
 
-    border-collapse: collapse;
-
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .medicine-table th {
+  background: #eff6ff;
 
-    background:
-        #eff6ff;
+  color: #1e3a8a;
 
-    color: #1e3a8a;
+  padding: 16px;
 
-    padding: 16px;
+  text-align: left;
 
-    text-align: left;
-
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .medicine-table td {
+  padding: 16px;
 
-    padding: 16px;
+  border-bottom: 1px solid #e2e8f0;
 
-    border-bottom:
-        1px solid #e2e8f0;
+  color: #475569;
 
-    color: #475569;
-
-    font-size: 14px;
+  font-size: 14px;
 }
 
 /*
@@ -444,43 +371,37 @@
 |--------------------------------------------------------------------------
 */
 .prescription-footer {
+  margin-top: 50px;
 
-    margin-top: 50px;
+  display: flex;
 
-    display: flex;
-
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
 
 .signature-section {
+  width: 250px;
 
-    width: 250px;
-
-    text-align: center;
+  text-align: center;
 }
 
 .signature-line {
+  border-top: 2px solid #0f172a;
 
-    border-top:
-        2px solid #0f172a;
-
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .signature-section p {
+  font-weight: 700;
 
-    font-weight: 700;
+  color: #0f172a;
 
-    color: #0f172a;
-
-    margin-bottom: 4px;
+  margin-bottom: 4px;
 }
 
 .signature-section span {
+  color: #64748b;
 
-    color: #64748b;
-
-    font-size: 13px;
+  font-size: 13px;
 }
 
 /*
@@ -489,36 +410,28 @@
 |--------------------------------------------------------------------------
 */
 @media print {
+  body {
+    background: white;
+  }
 
-    body {
+  .details-header {
+    margin-bottom: 10px;
+  }
 
-        background: white;
-    }
+  .consultation-card {
+    padding: 0;
+  }
 
-    .details-header {
+  .section-box {
+    break-inside: avoid;
+  }
 
-        margin-bottom: 10px;
-    }
+  .medicine-table th {
+    background: #f1f5f9 !important;
+  }
 
-    .consultation-card {
-
-        padding: 0;
-    }
-
-    .section-box {
-
-        break-inside: avoid;
-    }
-
-    .medicine-table th {
-
-        background:
-            #f1f5f9 !important;
-    }
-
-    .pdf-btn,
-    .print-btn {
-
-        display: none;
-    }
+  .pdf-btn,
+  .print-btn {
+    display: none;
+  }
 }

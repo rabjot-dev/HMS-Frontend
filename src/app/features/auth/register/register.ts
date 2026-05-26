@@ -1,61 +1,32 @@
-import {
-  Component,
-} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import {
-  Router,
-  RouterLink,
-} from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
-import {
-  AuthService,
-} from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector:
-    'app-register',
+  selector: 'app-register',
 
   standalone: true,
 
-  imports: [
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
 
-    CommonModule,
+  templateUrl: './register.html',
 
-    ReactiveFormsModule,
-
-    RouterLink,
-  ],
-
-  templateUrl:
-    './register.html',
-
-  styleUrl:
-    './register.css',
+  styleUrl: './register.css'
 })
 export class Register {
+  registerForm: FormGroup;
 
-  registerForm:
-    FormGroup;
+  isSubmitting = false;
 
-  isSubmitting =
-    false;
+  successMessage = '';
 
-  successMessage =
-    '';
-
-  errorMessage =
-    '';
+  errorMessage = '';
 
   /*
   |--------------------------------------------------------------------------
@@ -63,7 +34,6 @@ export class Register {
   |--------------------------------------------------------------------------
   */
   securityQuestions = [
-
     'What is your favourite color?',
 
     'What is your pet name?',
@@ -72,148 +42,67 @@ export class Register {
 
     'What is your favourite food?',
 
-    'What is your school name?',
+    'What is your school name?'
   ];
 
   constructor(
+    private fb: FormBuilder,
 
-    private fb:
-      FormBuilder,
+    private authService: AuthService,
 
-    private authService:
-      AuthService,
-
-    private router:
-      Router,
+    private router: Router
   ) {
-
-    this.registerForm =
-      this.fb.group({
-
-        /*
+    this.registerForm = this.fb.group({
+      /*
         |--------------------------------------------------------------------------
         | Basic Details
         |--------------------------------------------------------------------------
         */
-        name: [
+      name: ['', Validators.required],
 
-          '',
+      email: ['', [Validators.required, Validators.email]],
+      gender: ['', Validators.required],
 
-          Validators.required,
-        ],
+      countryCode: ['+91', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
 
-        email: [
+      department: ['', Validators.required],
 
-          '',
+      designation: ['', Validators.required],
 
-          [
-            Validators.required,
+      joiningDate: ['', Validators.required],
 
-            Validators.email,
-          ],
-        ],
-        gender: [
-          '',
-          Validators.required,
-        ],
-
-        countryCode: [
-
-          '+91',
-
-          Validators.required,
-        ],
-        phone: [
-
-          '',
-
-          [
-
-            Validators.required,
-
-            Validators.pattern(
-              '^[0-9]{10}$'
-            ),
-          ],
-        ],
-
-        department: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        designation: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        joiningDate: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Doctor Fields
         |--------------------------------------------------------------------------
         */
-        qualification: [''],
+      qualification: [''],
 
-        specialization: [''],
+      specialization: [''],
 
-        medicalRegistrationNo: [''],
+      medicalRegistrationNo: [''],
 
-        consultationFee: [''],
+      consultationFee: [''],
 
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Security Question
         |--------------------------------------------------------------------------
         */
-        securityQuestion: [
+      securityQuestion: ['', Validators.required],
 
-          '',
+      securityAnswer: ['', Validators.required],
 
-          Validators.required,
-        ],
-
-        securityAnswer: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Password
         |--------------------------------------------------------------------------
         */
-        password: [
+      password: ['', [Validators.required, Validators.minLength(6)]],
 
-          '',
-
-          [
-            Validators.required,
-
-            Validators.minLength(6),
-          ],
-        ],
-
-        confirmPassword: [
-
-          '',
-
-          Validators.required,
-        ],
-       
-      });
+      confirmPassword: ['', Validators.required]
+    });
   }
 
   /*
@@ -222,13 +111,7 @@ export class Register {
   |--------------------------------------------------------------------------
   */
   isDoctor(): boolean {
-
-    return (
-
-      this.registerForm.value
-        .designation ===
-      'DOCTOR'
-    );
+    return this.registerForm.value.designation === 'DOCTOR';
   }
 
   /*
@@ -237,18 +120,13 @@ export class Register {
   |--------------------------------------------------------------------------
   */
   onSubmit(): void {
-
     /*
     |--------------------------------------------------------------------------
     | Form Validation
     |--------------------------------------------------------------------------
     */
-    if (
-      this.registerForm.invalid
-    ) {
-
-      this.registerForm
-        .markAllAsTouched();
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
 
       return;
     }
@@ -258,32 +136,17 @@ export class Register {
     | Password Match Validation
     |--------------------------------------------------------------------------
     */
-    if (
-
-      this.registerForm.value
-        .password
-
-      !==
-
-      this.registerForm.value
-        .confirmPassword
-    ) {
-
-      this.errorMessage =
-
-        'Passwords do not match';
+    if (this.registerForm.value.password !== this.registerForm.value.confirmPassword) {
+      this.errorMessage = 'Passwords do not match';
 
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
 
-    this.errorMessage =
-      '';
+    this.errorMessage = '';
 
-    this.successMessage =
-      '';
+    this.successMessage = '';
 
     /*
     |--------------------------------------------------------------------------
@@ -291,9 +154,7 @@ export class Register {
     |--------------------------------------------------------------------------
     */
     const payload = {
-
-      ...this.registerForm
-        .value,
+      ...this.registerForm.value
     };
 
     /*
@@ -302,34 +163,22 @@ export class Register {
     |--------------------------------------------------------------------------
     */
     this.authService
-      .register(
-        payload,
-      )
+      .register(payload)
 
       .subscribe({
+        next: (response: any) => {
+          console.log(response);
 
-        next: (
-          response: any,
-        ) => {
+          this.isSubmitting = false;
 
-          console.log(
-            response,
-          );
-
-          this.isSubmitting =
-            false;
-
-          this.successMessage =
-
-            'Registration submitted successfully. Wait for admin approval.';
+          this.successMessage = 'Registration submitted successfully. Wait for admin approval.';
 
           /*
           |--------------------------------------------------------------------------
           | Reset Form
           |--------------------------------------------------------------------------
           */
-          this.registerForm
-            .reset();
+          this.registerForm.reset();
 
           /*
           |--------------------------------------------------------------------------
@@ -337,35 +186,17 @@ export class Register {
           |--------------------------------------------------------------------------
           */
           setTimeout(() => {
-
-            this.router.navigate([
-              '/login',
-            ]);
-
+            this.router.navigate(['/login']);
           }, 2500);
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
+          this.isSubmitting = false;
 
-          this.isSubmitting =
-            false;
-
-          this.errorMessage =
-
-            error
-              ?.error
-              ?.message
-
-            ||
-
-            'Registration failed';
-        },
+          this.errorMessage = error?.error?.message || 'Registration failed';
+        }
       });
   }
 }

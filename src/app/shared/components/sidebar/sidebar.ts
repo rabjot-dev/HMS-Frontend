@@ -1,44 +1,22 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  RouterLink,
-  Router,
-} from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
-  selector:
-    'app-sidebar',
+  selector: 'app-sidebar',
 
-  imports: [
+  imports: [CommonModule, RouterLink],
 
-    CommonModule,
+  templateUrl: './sidebar.html',
 
-    RouterLink,
-  ],
-
-  templateUrl:
-    './sidebar.html',
-
-  styleUrl:
-    './sidebar.css',
+  styleUrl: './sidebar.css'
 })
-export class Sidebar
-implements OnInit {
-
+export class Sidebar implements OnInit {
   role = '';
 
-  constructor(
-
-    private router:
-      Router,
-  ) {}
+  constructor(private router: Router) {}
 
   /*
   |--------------------------------------------------------------------------
@@ -46,16 +24,9 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
+    this.role = localStorage.getItem('role') || '';
 
-    this.role =
-
-      localStorage.getItem(
-        'role',
-      ) || '';
-
-    console.log(
-      this.role,
-    );
+    console.log(this.role);
   }
 
   /*
@@ -64,44 +35,23 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   isAdmin(): boolean {
-
-    return (
-      this.role ===
-      'ADMIN'
-    );
+    return this.role === 'ADMIN';
   }
 
-isDoctor(): boolean {
+  isDoctor(): boolean {
+    console.log('Checking Doctor');
 
-  console.log(
-    "Checking Doctor",
-  );
+    console.log(this.role);
 
-  console.log(
-    this.role,
-  );
-
-  return (
-    this.role ===
-    'DOCTOR'
-  );
-}
+    return this.role === 'DOCTOR';
+  }
 
   isNurse(): boolean {
-
-    return (
-      this.role ===
-      'NURSE'
-    );
+    return this.role === 'NURSE';
   }
 
-  isReceptionist():
-  boolean {
-
-    return (
-      this.role ===
-      'RECEPTIONIST'
-    );
+  isReceptionist(): boolean {
+    return this.role === 'RECEPTIONIST';
   }
 
   /*
@@ -110,11 +60,8 @@ isDoctor(): boolean {
   |--------------------------------------------------------------------------
   */
   logout(): void {
-
     localStorage.clear();
 
-    this.router.navigate([
-      '/login',
-    ]);
+    this.router.navigate(['/login']);
   }
 }

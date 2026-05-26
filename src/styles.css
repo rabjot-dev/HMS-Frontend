@@ -4,9 +4,7 @@
 | Google Font
 |--------------------------------------------------------------------------
 */
-@import url(
-'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap'
-);
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import 'ngx-toastr/toastr';
 /*
 |--------------------------------------------------------------------------
@@ -14,68 +12,45 @@
 |--------------------------------------------------------------------------
 */
 :root {
-
   /* Colors */
 
-  --primary:
-    #3b82f6;
+  --primary: #3b82f6;
 
-  --primary-dark:
-    #2563eb;
+  --primary-dark: #2563eb;
 
-  --secondary:
-    #8b5cf6;
+  --secondary: #8b5cf6;
 
-  --success:
-    #22c55e;
+  --success: #22c55e;
 
-  --danger:
-    #ef4444;
+  --danger: #ef4444;
 
-  --warning:
-    #f59e0b;
+  --warning: #f59e0b;
 
-  --dark:
-    #0f172a;
+  --dark: #0f172a;
 
-  --dark-light:
-    #1e293b;
+  --dark-light: #1e293b;
 
-  --text:
-    #0f172a;
+  --text: #0f172a;
 
-  --text-light:
-    #64748b;
+  --text-light: #64748b;
 
-  --border:
-    rgba(255,255,255,0.2);
+  --border: rgba(255, 255, 255, 0.2);
 
   /* Backgrounds */
 
-  --bg:
-    #f4f7fb;
+  --bg: #f4f7fb;
 
-  --card-bg:
-    rgba(255,255,255,0.65);
+  --card-bg: rgba(255, 255, 255, 0.65);
 
   /* Effects */
 
-  --blur:
-    blur(16px);
+  --blur: blur(16px);
 
-  --radius:
-    20px;
+  --radius: 20px;
 
-  --shadow:
-    0 10px 40px rgba(
-      15,
-      23,
-      42,
-      0.08
-    );
+  --shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
 
-  --transition:
-    all 0.3s ease;
+  --transition: all 0.3s ease;
 }
 
 /*
@@ -84,7 +59,6 @@
 |--------------------------------------------------------------------------
 */
 * {
-
   margin: 0;
 
   padding: 0;
@@ -94,20 +68,11 @@
 
 html,
 body {
+  font-family: 'Inter', sans-serif;
 
-  font-family:
-    'Inter',
-    sans-serif;
+  background: linear-gradient(135deg, #f8fbff, #eef4ff);
 
-  background:
-    linear-gradient(
-      135deg,
-      #f8fbff,
-      #eef4ff
-    );
-
-  color:
-    var(--text);
+  color: var(--text);
 
   min-height: 100vh;
 
@@ -120,28 +85,21 @@ body {
 |--------------------------------------------------------------------------
 */
 ::-webkit-scrollbar {
-
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-
-  background:
-    transparent;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-
-  background:
-    rgba(59,130,246,0.25);
+  background: rgba(59, 130, 246, 0.25);
 
   border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-
-  background:
-    rgba(59,130,246,0.45);
+  background: rgba(59, 130, 246, 0.45);
 }
 
 /*
@@ -150,7 +108,6 @@ body {
 |--------------------------------------------------------------------------
 */
 h1 {
-
   font-size: 32px;
 
   font-weight: 700;
@@ -159,23 +116,19 @@ h1 {
 }
 
 h2 {
-
   font-size: 24px;
 
   font-weight: 600;
 }
 
 h3 {
-
   font-size: 18px;
 
   font-weight: 600;
 }
 
 p {
-
-  color:
-    var(--text-light);
+  color: var(--text-light);
 
   line-height: 1.6;
 }
@@ -186,7 +139,6 @@ p {
 |--------------------------------------------------------------------------
 */
 a {
-
   text-decoration: none;
 
   color: inherit;
@@ -198,65 +150,37 @@ a {
 |--------------------------------------------------------------------------
 */
 button {
-
   border: none;
 
   outline: none;
 
   cursor: pointer;
 
-  transition:
-    var(--transition);
+  transition: var(--transition);
 
-  font-family:
-    inherit;
+  font-family: inherit;
 }
 
 .primary-btn {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--primary),
-      var(--secondary)
-    );
+  color: white;
 
-  color:
-    white;
+  padding: 14px 24px;
 
-  padding:
-    14px 24px;
+  border-radius: 14px;
 
-  border-radius:
-    14px;
+  font-weight: 600;
 
-  font-weight:
-    600;
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.25);
 
-  box-shadow:
-    0 10px 25px rgba(
-      59,
-      130,
-      246,
-      0.25
-    );
-
-  transition:
-    var(--transition);
+  transition: var(--transition);
 }
 
 .primary-btn:hover {
+  transform: translateY(-2px);
 
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 15px 35px rgba(
-      59,
-      130,
-      246,
-      0.35
-    );
+  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.35);
 }
 
 /*
@@ -267,79 +191,41 @@ button {
 input,
 select,
 textarea {
+  width: 100%;
 
-  width:
-    100%;
+  padding: 14px 16px;
 
-  padding:
-    14px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
 
-  border:
-    1px solid rgba(
-      148,
-      163,
-      184,
-      0.2
-    );
+  background: rgba(255, 255, 255, 0.65);
 
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.65
-    );
+  backdrop-filter: var(--blur);
 
-  backdrop-filter:
-    var(--blur);
+  border-radius: 14px;
 
-  border-radius:
-    14px;
+  font-size: 14px;
 
-  font-size:
-    14px;
+  transition: var(--transition);
 
-  transition:
-    var(--transition);
+  font-family: inherit;
 
-  font-family:
-    inherit;
-
-  color:
-    var(--text);
+  color: var(--text);
 }
 
 input:focus,
 select:focus,
 textarea:focus {
+  outline: none;
 
-  outline:
-    none;
+  border-color: rgba(59, 130, 246, 0.4);
 
-  border-color:
-    rgba(
-      59,
-      130,
-      246,
-      0.4
-    );
-
-  box-shadow:
-    0 0 0 4px rgba(
-      59,
-      130,
-      246,
-      0.08
-    );
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
 }
 
 textarea {
+  resize: none;
 
-  resize:
-    none;
-
-  min-height:
-    120px;
+  min-height: 120px;
 }
 
 /*
@@ -348,21 +234,15 @@ textarea {
 |--------------------------------------------------------------------------
 */
 .glass-card {
+  background: var(--card-bg);
 
-  background:
-    var(--card-bg);
+  backdrop-filter: var(--blur);
 
-  backdrop-filter:
-    var(--blur);
+  border: 1px solid var(--border);
 
-  border:
-    1px solid var(--border);
+  border-radius: var(--radius);
 
-  border-radius:
-    var(--radius);
-
-  box-shadow:
-    var(--shadow);
+  box-shadow: var(--shadow);
 }
 
 /*
@@ -371,27 +251,19 @@ textarea {
 |--------------------------------------------------------------------------
 */
 .flex {
-
-  display:
-    flex;
+  display: flex;
 }
 
 .items-center {
-
-  align-items:
-    center;
+  align-items: center;
 }
 
 .justify-between {
-
-  justify-content:
-    space-between;
+  justify-content: space-between;
 }
 
 .gap-20 {
-
-  gap:
-    20px;
+  gap: 20px;
 }
 
 /*
@@ -400,28 +272,19 @@ textarea {
 |--------------------------------------------------------------------------
 */
 .fade-in {
-
-  animation:
-    fadeIn 0.5s ease;
+  animation: fadeIn 0.5s ease;
 }
 
 @keyframes fadeIn {
-
   from {
+    opacity: 0;
 
-    opacity:
-      0;
-
-    transform:
-      translateY(10px);
+    transform: translateY(10px);
   }
 
   to {
+    opacity: 1;
 
-    opacity:
-      1;
-
-    transform:
-      translateY(0);
+    transform: translateY(0);
   }
 }

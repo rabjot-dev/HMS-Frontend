@@ -1,118 +1,51 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
-import {
-  EmployeeService,
-} from '../../../core/services/employee';
+import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
-  selector:
-    'app-doctor-availability',
+  selector: 'app-doctor-availability',
 
   standalone: true,
 
-  imports: [
+  imports: [CommonModule, ReactiveFormsModule],
 
-    CommonModule,
+  templateUrl: './doctor-availability.html',
 
-    ReactiveFormsModule,
-  ],
-
-  templateUrl:
-    './doctor-availability.html',
-
-  styleUrls: [
-    './doctor-availability.css',
-  ],
+  styleUrls: ['./doctor-availability.css']
 })
-export class DoctorAvailability
-implements OnInit {
+export class DoctorAvailability implements OnInit {
+  isSubmitting = false;
 
-  isSubmitting =
-    false;
+  availabilityForm: any;
 
-  availabilityForm:
-  any;
-
-  workingDays =
-  [
-
-    'MONDAY',
-
-    'TUESDAY',
-
-    'WEDNESDAY',
-
-    'THURSDAY',
-
-    'FRIDAY',
-
-    'SATURDAY',
-
-    'SUNDAY',
-  ];
+  workingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
   constructor(
+    private fb: FormBuilder,
 
-    private fb:
-      FormBuilder,
-
-    private employeeService:
-      EmployeeService,
+    private employeeService: EmployeeService
   ) {
+    this.availabilityForm = this.fb.group({
+      workingDays: [[]],
 
-    this.availabilityForm =
+      startTime: ['', Validators.required],
 
-      this.fb.group({
+      endTime: ['', Validators.required],
 
-        workingDays:
-        [[]],
+      slotDuration: [15, Validators.required],
 
-        startTime: [
+      breakStartTime: [''],
 
-          '',
-          Validators.required,
-        ],
+      breakEndTime: [''],
 
-        endTime: [
+      maxPatientsPerDay: [40, Validators.required],
 
-          '',
-          Validators.required,
-        ],
-
-        slotDuration: [
-
-          15,
-          Validators.required,
-        ],
-
-        breakStartTime:
-        [''],
-
-        breakEndTime:
-        [''],
-
-        maxPatientsPerDay: [
-
-          40,
-          Validators.required,
-        ],
-
-        isAvailable:
-        [true],
-      });
+      isAvailable: [true]
+    });
   }
 
   /*
@@ -120,9 +53,7 @@ implements OnInit {
   | On Init
   |--------------------------------------------------------------------------
   */
-  ngOnInit():
-  void {
-
+  ngOnInit(): void {
     this.loadAvailability();
   }
 
@@ -131,83 +62,36 @@ implements OnInit {
   | Load Availability
   |--------------------------------------------------------------------------
   */
-  loadAvailability():
-  void {
-
+  loadAvailability(): void {
     this.employeeService
       .getDoctorAvailability()
 
       .subscribe({
+        next: (response: any) => {
+          console.log(response);
 
-        next: (
-          response: any,
-        ) => {
+          this.availabilityForm.patchValue({
+            workingDays: response?.data?.workingDays,
 
-          console.log(
-            response,
-          );
+            startTime: response?.data?.startTime,
 
-          this.availabilityForm
-            .patchValue({
+            endTime: response?.data?.endTime,
 
-              workingDays:
+            slotDuration: response?.data?.slotDuration,
 
-                response
-                ?.data
-                ?.workingDays,
+            breakStartTime: response?.data?.breakStartTime,
 
-              startTime:
+            breakEndTime: response?.data?.breakEndTime,
 
-                response
-                ?.data
-                ?.startTime,
+            maxPatientsPerDay: response?.data?.maxPatientsPerDay,
 
-              endTime:
-
-                response
-                ?.data
-                ?.endTime,
-
-              slotDuration:
-
-                response
-                ?.data
-                ?.slotDuration,
-
-              breakStartTime:
-
-                response
-                ?.data
-                ?.breakStartTime,
-
-              breakEndTime:
-
-                response
-                ?.data
-                ?.breakEndTime,
-
-              maxPatientsPerDay:
-
-                response
-                ?.data
-                ?.maxPatientsPerDay,
-
-              isAvailable:
-
-                response
-                ?.data
-                ?.isAvailable,
-            });
+            isAvailable: response?.data?.isAvailable
+          });
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -216,54 +100,19 @@ implements OnInit {
   | Toggle Working Day
   |--------------------------------------------------------------------------
   */
-  toggleDay(
-    day: string,
-  ): void {
+  toggleDay(day: string): void {
+    const currentDays = this.availabilityForm.value.workingDays;
 
-    const currentDays =
+    const exists = currentDays.includes(day);
 
-      this.availabilityForm
-        .value
-        .workingDays;
-
-    const exists =
-
-      currentDays
-        .includes(day);
-
-    if (
-      exists
-    ) {
-
-      this.availabilityForm
-        .patchValue({
-
-          workingDays:
-
-          currentDays
-            .filter(
-
-              (
-                d: string,
-              ) =>
-
-                d !== day,
-            ),
-        });
-    }
-
-    else {
-
-      this.availabilityForm
-        .patchValue({
-
-          workingDays: [
-
-            ...currentDays,
-
-            day,
-          ],
-        });
+    if (exists) {
+      this.availabilityForm.patchValue({
+        workingDays: currentDays.filter((d: string) => d !== day)
+      });
+    } else {
+      this.availabilityForm.patchValue({
+        workingDays: [...currentDays, day]
+      });
     }
   }
 
@@ -272,60 +121,32 @@ implements OnInit {
   | Submit
   |--------------------------------------------------------------------------
   */
-  onSubmit():
-  void {
-
-    if (
-
-      this.availabilityForm
-      .invalid
-    ) {
-
-      this.availabilityForm
-        .markAllAsTouched();
+  onSubmit(): void {
+    if (this.availabilityForm.invalid) {
+      this.availabilityForm.markAllAsTouched();
 
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
 
     this.employeeService
-      .updateDoctorAvailability(
-
-        this.availabilityForm
-        .value,
-      )
+      .updateDoctorAvailability(this.availabilityForm.value)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          alert('Availability updated successfully');
 
-          console.log(
-            response,
-          );
-
-          alert(
-            'Availability updated successfully',
-          );
-
-          this.isSubmitting =
-            false;
+          this.isSubmitting = false;
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isSubmitting =
-            false;
-        },
+          this.isSubmitting = false;
+        }
       });
   }
 }

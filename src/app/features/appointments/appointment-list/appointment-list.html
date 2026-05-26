@@ -1,499 +1,257 @@
 <div class="appointments-page">
+  <!-- Header -->
 
-    <!-- Header -->
+  <div class="appointments-header glass-card">
+    <div>
+      <p class="page-label">Appointment Management</p>
 
-    <div class="appointments-header glass-card">
+      <h1>Appointments</h1>
 
-        <div>
-
-            <p class="page-label">
-                Appointment Management
-            </p>
-
-            <h1>
-                Appointments
-            </h1>
-
-            <p class="page-subtitle">
-
-                Manage and monitor
-                patient appointments.
-
-            </p>
-
-        </div>
-
-        <!-- Button -->
-
-        @if(
-
-        authService.hasRole(
-            'ADMIN'
-        )
-
-        ||
-
-        authService.hasRole(
-            'RECEPTIONIST'
-        )
-
-        ){
-
-        <a
-          routerLink="/appointments/book"
-
-          class="book-btn"
-        >
-
-            <span>
-                +
-            </span>
-
-            Book Appointment
-
-        </a>
-
-        }
-
+      <p class="page-subtitle">Manage and monitor patient appointments.</p>
     </div>
 
-    <!-- Filters -->
+    <!-- Button -->
 
-    <div class="filters-wrapper glass-card">
+    @if( authService.hasRole( 'ADMIN' ) || authService.hasRole( 'RECEPTIONIST' ) ){
 
-        <!-- Search -->
+    <a routerLink="/appointments/book" class="book-btn">
+      <span> + </span>
 
-        <div class="search-box">
+      Book Appointment
+    </a>
 
-            <span>
-                🔍
-            </span>
+    }
+  </div>
 
-            <input
-              type="text"
+  <!-- Filters -->
 
-              placeholder="
+  <div class="filters-wrapper glass-card">
+    <!-- Search -->
+
+    <div class="search-box">
+      <span> 🔍 </span>
+
+      <input
+        type="text"
+        placeholder="
               Search patient or doctor
               "
-
-              [(ngModel)]="
+        [(ngModel)]="
               searchTerm
               "
-
-              (input)="
+        (input)="
               filterAppointments()
               "
-            />
-
-        </div>
-
-        <!-- Status -->
-
-        <select
-
-            [(ngModel)]="
-            selectedStatus
-            "
-
-            (change)="
-            filterAppointments()
-            "
-        >
-
-            <option value="">
-                All Status
-            </option>
-
-            <option value="BOOKED">
-                Booked
-            </option>
-
-            <option value="IN_CONSULTATION">
-                In Consultation
-            </option>
-
-            <option value="COMPLETED">
-                Completed
-            </option>
-
-            <option value="CANCELLED">
-                Cancelled
-            </option>
-
-        </select>
-
+      />
     </div>
 
-    <!-- Table -->
+    <!-- Status -->
 
-    <div class="table-wrapper glass-card">
+    <select
+      [(ngModel)]="
+            selectedStatus
+            "
+      (change)="
+            filterAppointments()
+            "
+    >
+      <option value="">All Status</option>
 
-        <table>
+      <option value="BOOKED">Booked</option>
 
-            <thead>
+      <option value="IN_CONSULTATION">In Consultation</option>
 
-                <tr>
+      <option value="COMPLETED">Completed</option>
 
-                    <th>
-                        Appointment
-                    </th>
+      <option value="CANCELLED">Cancelled</option>
+    </select>
+  </div>
 
-                    <th>
-                        Patient
-                    </th>
+  <!-- Table -->
 
-                    <th>
-                        Doctor
-                    </th>
+  <div class="table-wrapper glass-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Appointment</th>
 
-                    <th>
-                        Date & Time
-                    </th>
+          <th>Patient</th>
 
-                    <th>
-                        Type
-                    </th>
+          <th>Doctor</th>
 
-                    <th>
-                        Priority
-                    </th>
+          <th>Date & Time</th>
 
-                    <th>
-                        Status
-                    </th>
+          <th>Type</th>
 
-                    <th>
-                        Actions
-                    </th>
+          <th>Priority</th>
 
-                </tr>
+          <th>Status</th>
 
-            </thead>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-            <tbody>
+      <tbody>
+        @for ( appointment of filteredAppointments; track appointment._id ) {
 
-                @for (
-                appointment of
-                filteredAppointments;
+        <tr>
+          <!-- Appointment -->
 
-                track appointment._id
-                ) {
+          <td>
+            <div class="appointment-id">
+              <h4>{{ appointment ?.appointmentId }}</h4>
 
-                <tr>
+              <span> Token # {{ appointment ?.tokenNumber }} </span>
+            </div>
+          </td>
 
-                    <!-- Appointment -->
+          <!-- Patient -->
 
-                    <td>
+          <td>
+            <div class="patient-info">
+              <div class="avatar">{{ appointment ?.patientId ?.firstName ?.charAt(0) }}</div>
 
-                        <div class="appointment-id">
+              <div>
+                <h4>
+                  {{ appointment ?.patientId ?.firstName }} {{ appointment ?.patientId ?.lastName }}
+                </h4>
 
-                            <h4>
+                <span> Patient </span>
+              </div>
+            </div>
+          </td>
 
-                                {{
-                                appointment
-                                ?.appointmentId
-                                }}
+          <!-- Doctor -->
 
-                            </h4>
+          <td>
+            <div class="doctor-name">🩺 {{ appointment ?.doctorEmployeeId ?.name }}</div>
+          </td>
 
-                            <span>
+          <!-- Date -->
 
-                                Token #
+          <td>
+            <div class="date-info">
+              <h4>{{ appointment ?.appointmentDate | date }}</h4>
 
-                                {{
-                                appointment
-                                ?.tokenNumber
-                                }}
+              <span> {{ appointment ?.timeSlot }} </span>
+            </div>
+          </td>
 
-                            </span>
+          <!-- Type -->
 
-                        </div>
+          <td>
+            <span class="type-badge"> {{ appointment ?.appointmentType }} </span>
+          </td>
 
-                    </td>
+          <!-- Priority -->
 
-                    <!-- Patient -->
-
-                    <td>
-
-                        <div class="patient-info">
-
-                            <div class="avatar">
-
-                                {{
-
-                                appointment
-                                ?.patientId
-                                ?.firstName
-                                ?.charAt(0)
-
-                                }}
-
-                            </div>
-
-                            <div>
-
-                                <h4>
-
-                                    {{
-                                    appointment
-                                    ?.patientId
-                                    ?.firstName
-                                    }}
-
-                                    {{
-
-                                    appointment
-                                    ?.patientId
-                                    ?.lastName
-                                    }}
-
-                                </h4>
-
-                                <span>
-                                    Patient
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </td>
-
-                    <!-- Doctor -->
-
-                    <td>
-
-                        <div class="doctor-name">
-
-                            🩺
-
-                            {{
-                            appointment
-                            ?.doctorEmployeeId
-                            ?.name
-                            }}
-
-                        </div>
-
-                    </td>
-
-                    <!-- Date -->
-
-                    <td>
-
-                        <div class="date-info">
-
-                            <h4>
-
-                                {{
-                                appointment
-                                ?.appointmentDate
-                                | date
-                                }}
-
-                            </h4>
-
-                            <span>
-
-                                {{
-                                appointment
-                                ?.timeSlot
-                                }}
-
-                            </span>
-
-                        </div>
-
-                    </td>
-
-                    <!-- Type -->
-
-                    <td>
-
-                        <span
-                          class="type-badge"
-                        >
-
-                            {{
-                            appointment
-                            ?.appointmentType
-                            }}
-
-                        </span>
-
-                    </td>
-
-                    <!-- Priority -->
-
-                    <td>
-
-                        <span
-
-                          class="priority-badge"
-
-                          [class.normal]="
+          <td>
+            <span
+              class="priority-badge"
+              [class.normal]="
                           appointment
                           ?.priority
                           === 'NORMAL'
                           "
-
-                          [class.urgent]="
+              [class.urgent]="
                           appointment
                           ?.priority
                           === 'URGENT'
                           "
-
-                          [class.critical]="
+              [class.critical]="
                           appointment
                           ?.priority
                           === 'CRITICAL'
                           "
-                        >
+            >
+              {{ appointment ?.priority }}
+            </span>
+          </td>
 
-                            {{
-                            appointment
-                            ?.priority
-                            }}
+          <!-- Status -->
 
-                        </span>
-
-                    </td>
-
-                    <!-- Status -->
-
-                    <td>
-
-                        <span
-
-                          class="status-badge"
-
-                          [class.booked]="
+          <td>
+            <span
+              class="status-badge"
+              [class.booked]="
                           appointment
                           ?.status
                           === 'BOOKED'
                           "
-
-                          [class.completed]="
+              [class.completed]="
                           appointment
                           ?.status
                           === 'COMPLETED'
                           "
-
-                          [class.cancelled]="
+              [class.cancelled]="
                           appointment
                           ?.status
                           === 'CANCELLED'
                           "
-
-                          [class.consultation]="
+              [class.consultation]="
                           appointment
                           ?.status
                           === 'IN_CONSULTATION'
                           "
-                        >
+            >
+              {{ appointment ?.status }}
+            </span>
+          </td>
 
-                            {{
-                            appointment
-                            ?.status
-                            }}
+          <!-- Actions -->
 
-                        </span>
+          <td>
+            <div class="actions">
+              <!-- Admin -->
 
-                    </td>
+              @if( authService.hasRole( 'ADMIN' ) || authService.hasRole( 'RECEPTIONIST' ) ){
 
-                    <!-- Actions -->
-
-                    <td>
-
-                        <div class="actions">
-
-                            <!-- Admin -->
-
-                            @if(
-
-                            authService.hasRole(
-                                'ADMIN'
-                            )
-
-                            ||
-
-                            authService.hasRole(
-                                'RECEPTIONIST'
-                            )
-
-                            ){
-
-                            <button
-
-                              class="action-btn edit"
-
-                              [routerLink]="[
+              <button
+                class="action-btn edit"
+                [routerLink]="[
                                 '/appointments/edit',
                                 appointment._id
                               ]"
-                            >
+              >
+                Edit
+              </button>
 
-                                Edit
-
-                            </button>
-
-                            <button
-
-                              class="action-btn delete"
-
-                              (click)="
+              <button
+                class="action-btn delete"
+                (click)="
                               deleteAppointment(
                                 appointment._id
                               )
                               "
-                            >
+              >
+                Delete
+              </button>
 
-                                Delete
+              }
 
-                            </button>
+              <!-- Doctor -->
 
-                            }
+              @if( authService.hasRole( 'DOCTOR' ) ){
 
-                            <!-- Doctor -->
-
-                            @if(
-
-                            authService.hasRole(
-                                'DOCTOR'
-                            )
-
-                            ){
-
-                            <button
-
-                              class="action-btn view"
-
-                              [routerLink]="[
+              <button
+                class="action-btn view"
+                [routerLink]="[
                                 '/patients',
                                 appointment
                                 ?.patientId
                                 ?._id
                               ]"
-                            >
+              >
+                View Patient
+              </button>
 
-                                View Patient
+              }
+            </div>
+          </td>
+        </tr>
 
-                            </button>
-
-                            }
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-                }
-
-            </tbody>
-
-        </table>
-
-    </div>
-
+        }
+      </tbody>
+    </table>
+  </div>
 </div>

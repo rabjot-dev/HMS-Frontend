@@ -8,7 +8,7 @@ describe('PatientDetails', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PatientDetails],
+      imports: [PatientDetails]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PatientDetails);

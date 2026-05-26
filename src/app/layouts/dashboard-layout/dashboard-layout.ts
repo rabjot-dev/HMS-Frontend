@@ -1,84 +1,46 @@
-import {
-  Component,
-  HostListener,
-  ElementRef,
-} from '@angular/core';
+import { Component, HostListener, ElementRef } from '@angular/core';
 
-import {
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 
-import {
-  TokenService,
-} from '../../core/services/token';
+import { TokenService } from '../../core/services/token';
 
-import {
-  ChangeDetectorRef,
-} from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 
-import {
-  RouterLinkActive,
-  RouterLink,
-  RouterOutlet,
-} from '@angular/router';
+import { RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
 
-import {
-  AsyncPipe,
-} from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 
-import {
-  AuthService,
-} from '../../core/services/auth';
+import { AuthService } from '../../core/services/auth';
 
 @Component({
-  selector:
-    'app-dashboard-layout',
+  selector: 'app-dashboard-layout',
 
   standalone: true,
 
-  imports: [
+  imports: [RouterOutlet, RouterLink, AsyncPipe, RouterLinkActive],
 
-    RouterOutlet,
+  templateUrl: './dashboard-layout.html',
 
-    RouterLink,
-
-    AsyncPipe,
-
-    RouterLinkActive,
-  ],
-
-  templateUrl:
-    './dashboard-layout.html',
-
-  styleUrl:
-    './dashboard-layout.css',
+  styleUrl: './dashboard-layout.css'
 })
 export class DashboardLayout {
-
   /*
   |--------------------------------------------------------------------------
   | Profile Dropdown
   |--------------------------------------------------------------------------
   */
-  isProfileOpen =
-    false;
+  isProfileOpen = false;
 
   constructor(
+    public authService: AuthService,
 
-    public authService:
-      AuthService,
+    private tokenService: TokenService,
 
-    private tokenService:
-      TokenService,
+    private router: Router,
 
-    private router:
-      Router,
+    private cdr: ChangeDetectorRef,
 
-    private cdr:
-      ChangeDetectorRef,
-
-    private elementRef:
-      ElementRef,
+    private elementRef: ElementRef
   ) {}
 
   /*
@@ -86,12 +48,8 @@ export class DashboardLayout {
   | Toggle Dropdown
   |--------------------------------------------------------------------------
   */
-  toggleProfile():
-  void {
-
-    this.isProfileOpen =
-
-      !this.isProfileOpen;
+  toggleProfile(): void {
+    this.isProfileOpen = !this.isProfileOpen;
   }
 
   /*
@@ -99,27 +57,12 @@ export class DashboardLayout {
   | Close On Outside Click
   |--------------------------------------------------------------------------
   */
-  @HostListener(
-    'document:click',
-    ['$event'],
-  )
-
-  onClickOutside(
-    event: MouseEvent,
-  ): void {
-
-    const clickedInside =
-
-      this.elementRef
-        .nativeElement
-        .contains(
-          event.target,
-        );
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
 
     if (!clickedInside) {
-
-      this.isProfileOpen =
-        false;
+      this.isProfileOpen = false;
     }
   }
 
@@ -128,21 +71,13 @@ export class DashboardLayout {
   | Logout
   |--------------------------------------------------------------------------
   */
-  logout():
-  void {
+  logout(): void {
+    this.tokenService.removeToken();
 
-    this.tokenService
-      .removeToken();
+    this.authService.currentUser.next(null);
 
-    this.authService
-      .currentUser
-      .next(null);
+    this.router.navigate(['/login']);
 
-    this.router.navigate([
-      '/login',
-    ]);
-
-    this.cdr
-      .detectChanges();
+    this.cdr.detectChanges();
   }
 }

@@ -9,15 +9,13 @@ import { Router } from '@angular/router';
 
   templateUrl: './home.html',
 
-  styleUrl: './home.css',
+  styleUrl: './home.css'
 })
 export class Home {
-
   constructor(private router: Router) {}
 
   @HostListener('window:keydown.space')
   handleSpacebar(): void {
-
     this.router.navigate(['/login']);
   }
 }

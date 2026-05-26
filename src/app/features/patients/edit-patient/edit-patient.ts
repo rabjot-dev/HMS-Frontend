@@ -1,112 +1,65 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  PatientService,
-} from '../../../core/services/patient';
+import { PatientService } from '../../../core/services/patient';
 
 @Component({
-  selector:
-    'app-edit-patient',
+  selector: 'app-edit-patient',
 
   standalone: true,
 
-  imports: [
+  imports: [CommonModule, ReactiveFormsModule],
 
-    CommonModule,
+  templateUrl: './edit-patient.html',
 
-    ReactiveFormsModule,
-  ],
-
-  templateUrl:
-    './edit-patient.html',
-
-  styleUrls: [
-    './edit-patient.css',
-  ],
+  styleUrls: ['./edit-patient.css']
 })
-export class EditPatient
-implements OnInit {
-
+export class EditPatient implements OnInit {
   patientId = '';
 
-  isSubmitting =
-    false;
+  isSubmitting = false;
 
   doctors: any[] = [];
 
   patientForm: any;
 
   constructor(
+    private fb: FormBuilder,
 
-    private fb:
-      FormBuilder,
+    private route: ActivatedRoute,
 
-    private route:
-      ActivatedRoute,
+    private router: Router,
 
-    private router:
-      Router,
-
-    private patientService:
-      PatientService,
+    private patientService: PatientService
   ) {
+    this.patientForm = this.fb.group({
+      firstName: ['', Validators.required],
 
-    this.patientForm =
-      this.fb.group({
+      lastName: ['', Validators.required],
 
-        firstName: [
+      gender: [''],
 
-          '',
+      bloodGroup: [''],
 
-          Validators.required,
-        ],
+      phone: [''],
 
-        lastName: [
+      email: [''],
 
-          '',
+      medicalHistory: [''],
 
-          Validators.required,
-        ],
+      allergies: [''],
 
-        gender: [''],
+      insuranceProvider: [''],
 
-        bloodGroup: [''],
+      patientType: [''],
 
-        phone: [''],
-
-        email: [''],
-
-        medicalHistory:
-        [''],
-
-        allergies: [''],
-
-        insuranceProvider:
-        [''],
-
-        patientType: [''],
-
-        assignedDoctor:
-        [''],
-      });
+      assignedDoctor: ['']
+    });
   }
 
   /*
@@ -115,12 +68,7 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
-
-    this.patientId =
-
-      this.route.snapshot
-        .paramMap
-        .get('id')!;
+    this.patientId = this.route.snapshot.paramMap.get('id')!;
 
     this.loadDoctors();
 
@@ -133,28 +81,17 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   loadDoctors(): void {
-
     this.patientService
       .getDoctors()
 
       .subscribe({
-
-        next: (
-          response,
-        ) => {
-
-          this.doctors =
-            response.data;
+        next: (response) => {
+          this.doctors = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -164,74 +101,43 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   loadPatient(): void {
-
     this.patientService
-      .getPatientById(
-
-        this.patientId,
-      )
+      .getPatientById(this.patientId)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          const patient = response.data;
 
-          console.log(
-            response,
-          );
+          this.patientForm.patchValue({
+            firstName: patient.firstName,
 
-          const patient =
-            response.data;
+            lastName: patient.lastName,
 
-          this.patientForm
-            .patchValue({
+            gender: patient.gender,
 
-              firstName:
-                patient.firstName,
+            bloodGroup: patient.bloodGroup,
 
-              lastName:
-                patient.lastName,
+            phone: patient.phone,
 
-              gender:
-                patient.gender,
+            email: patient.email,
 
-              bloodGroup:
-                patient.bloodGroup,
+            medicalHistory: patient.medicalHistory,
 
-              phone:
-                patient.phone,
+            allergies: patient.allergies,
 
-              email:
-                patient.email,
+            insuranceProvider: patient.insuranceProvider,
 
-              medicalHistory:
-                patient.medicalHistory,
+            patientType: patient.patientType,
 
-              allergies:
-                patient.allergies,
-
-              insuranceProvider:
-                patient.insuranceProvider,
-
-              patientType:
-                patient.patientType,
-
-              assignedDoctor:
-                patient
-                  ?.assignedDoctor
-                  ?._id,
-            });
+            assignedDoctor: patient?.assignedDoctor?._id
+          });
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -241,58 +147,35 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   onSubmit(): void {
-
-    if (
-      this.patientForm.invalid
-    ) {
-
+    if (this.patientForm.invalid) {
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
 
     this.patientService
       .updatePatient(
-
         this.patientId,
 
-        this.patientForm.value,
+        this.patientForm.value
       )
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          alert('Patient Updated Successfully');
 
-          console.log(
-            response,
-          );
+          this.isSubmitting = false;
 
-          alert(
-            'Patient Updated Successfully',
-          );
-
-          this.isSubmitting =
-            false;
-
-          this.router.navigate([
-            '/patients',
-          ]);
+          this.router.navigate(['/patients']);
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isSubmitting =
-            false;
-        },
+          this.isSubmitting = false;
+        }
       });
   }
 }

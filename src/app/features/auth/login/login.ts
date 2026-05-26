@@ -1,90 +1,45 @@
-import {
-  Component,
-} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {
-  RouterLink,
-  Router,
-} from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import {
-  AuthService,
-} from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth';
 
-import {
-  TokenService,
-} from '../../../core/services/token';
+import { TokenService } from '../../../core/services/token';
 
 @Component({
-  selector:
-    'app-login',
+  selector: 'app-login',
 
   standalone: true,
 
-  imports: [
+  imports: [ReactiveFormsModule, RouterLink],
 
-    ReactiveFormsModule,
+  templateUrl: './login.html',
 
-    RouterLink,
-  ],
-
-  templateUrl:
-    './login.html',
-
-  styleUrl:
-    './login.css',
+  styleUrl: './login.css'
 })
 export class Login {
+  loginForm: FormGroup;
 
-  loginForm:
-  FormGroup;
+  isSubmitting = false;
 
-  isSubmitting =
-    false;
-
-  errorMessage =
-    '';
+  errorMessage = '';
 
   constructor(
+    private fb: FormBuilder,
 
-    private fb:
-      FormBuilder,
+    private authService: AuthService,
 
-    private authService:
-      AuthService,
+    private tokenService: TokenService,
 
-    private tokenService:
-      TokenService,
-
-    private router:
-      Router,
+    private router: Router
   ) {
+    this.loginForm = this.fb.group({
+      loginId: ['', Validators.required],
 
-    this.loginForm =
-
-      this.fb.group({
-
-        loginId: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        password: [
-
-          '',
-
-          Validators.required,
-        ],
-      });
+      password: ['', Validators.required]
+    });
   }
 
   /*
@@ -92,76 +47,40 @@ export class Login {
   | Submit
   |--------------------------------------------------------------------------
   */
-  onSubmit():
-  void {
+  onSubmit(): void {
+    console.log('Login button clicked');
 
-    console.log(
-      'Login button clicked',
-    );
+    if (this.loginForm.invalid) {
+      console.log('Form invalid');
 
-    if (
-      this.loginForm.invalid
-    ) {
-
-      console.log(
-        'Form invalid',
-      );
-
-      this.loginForm
-        .markAllAsTouched();
+      this.loginForm.markAllAsTouched();
 
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
 
-    this.errorMessage =
-      '';
+    this.errorMessage = '';
 
-    console.log(
-      'Calling login API',
-    );
+    console.log('Calling login API');
 
-    console.log(
-      this.loginForm.value,
-    );
+    console.log(this.loginForm.value);
 
     this.authService
-      .login(
-        this.loginForm.value,
-      )
+      .login(this.loginForm.value)
 
       .subscribe({
+        next: (response: any) => {
+          console.log('API SUCCESS');
 
-        next: (
-          response: any,
-        ) => {
+          console.log(response);
 
-          console.log(
-            'API SUCCESS',
-          );
+          const token = response?.data?.token;
 
-          console.log(
-            response,
-          );
-
-          const token =
-
-            response
-            ?.data
-            ?.token;
-
-          console.log(
-            'TOKEN:',
-            token,
-          );
+          console.log('TOKEN:', token);
 
           if (!token) {
-
-            console.log(
-              'Token missing',
-            );
+            console.log('Token missing');
 
             return;
           }
@@ -171,59 +90,39 @@ export class Login {
           | Save Token
           |--------------------------------------------------------------------------
           */
-          this.tokenService
-            .setToken(
-              token,
-            );
+          this.tokenService.setToken(token);
 
           /*
           |--------------------------------------------------------------------------
           | Save Role
           |--------------------------------------------------------------------------
           */
-          localStorage
-            .setItem(
+          localStorage.setItem(
+            'role',
 
-              'role',
-
-              response.data
-                .user
-                .roles?.[0],
-            );
+            response.data.user.roles?.[0]
+          );
 
           /*
           |--------------------------------------------------------------------------
           | Save Login ID
           |--------------------------------------------------------------------------
           */
-          localStorage
-            .setItem(
+          localStorage.setItem(
+            'loginId',
 
-              'loginId',
-
-              this.loginForm
-                .value
-                .loginId,
-            );
+            this.loginForm.value.loginId
+          );
 
           /*
           |--------------------------------------------------------------------------
           | First Login
           |--------------------------------------------------------------------------
           */
-          const isFirstLogin =
+          const isFirstLogin = response.data.user.isFirstLogin;
 
-            response.data
-              .user
-              .isFirstLogin;
-
-          if (
-            isFirstLogin
-          ) {
-
-            this.router.navigate([
-              '/create-password',
-            ]);
+          if (isFirstLogin) {
+            this.router.navigate(['/create-password']);
 
             return;
           }
@@ -233,92 +132,53 @@ export class Login {
           | Role Based Redirect
           |--------------------------------------------------------------------------
           */
-          const role =
-
-            response.data
-              .user
-              .roles?.[0];
+          const role = response.data.user.roles?.[0];
 
           /*
           |--------------------------------------------------------------------------
           | Admin
           |--------------------------------------------------------------------------
           */
-          if (
-            role === 'ADMIN'
-          ) {
-
-            this.router.navigate([
-              '/dashboard/admin',
-            ]);
-          }
+          if (role === 'ADMIN') {
+            this.router.navigate(['/dashboard/admin']);
+          } else if (role === 'DOCTOR') {
 
           /*
           |--------------------------------------------------------------------------
           | Doctor
           |--------------------------------------------------------------------------
           */
-          else if (
-            role === 'DOCTOR'
-          ) {
-
-            this.router.navigate([
-              '/dashboard/doctor',
-            ]);
-          }
+            this.router.navigate(['/dashboard/doctor']);
+          } else if (role === 'RECEPTIONIST') {
 
           /*
           |--------------------------------------------------------------------------
           | Receptionist
           |--------------------------------------------------------------------------
           */
-          else if (
-            role === 'RECEPTIONIST'
-          ) {
-
-            this.router.navigate([
-              '/dashboard/receptionist',
-            ]);
-          }
+            this.router.navigate(['/dashboard/receptionist']);
+          } else {
 
           /*
           |--------------------------------------------------------------------------
           | Default
           |--------------------------------------------------------------------------
           */
-          else {
-
-            this.router.navigate([
-              '/login',
-            ]);
+            this.router.navigate(['/login']);
           }
 
-          this.isSubmitting =
-            false;
+          this.isSubmitting = false;
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log('API ERROR');
 
-          console.log(
-            'API ERROR',
-          );
+          console.log(error);
 
-          console.log(
-            error,
-          );
+          this.errorMessage = error?.error?.message || 'Login failed';
 
-          this.errorMessage =
-
-            error?.error
-              ?.message ||
-
-            'Login failed';
-
-          this.isSubmitting =
-            false;
-        },
+          this.isSubmitting = false;
+        }
       });
   }
 }

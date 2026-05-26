@@ -1,133 +1,71 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  AppointmentService,
-} from '../../../core/services/appointment';
+import { AppointmentService } from '../../../core/services/appointment';
 
-import {
-  EmployeeService,
-} from '../../../core/services/employee';
+import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
-  selector:
-    'app-edit-appointment',
+  selector: 'app-edit-appointment',
 
   standalone: true,
 
-  imports: [
+  imports: [CommonModule, ReactiveFormsModule],
 
-    CommonModule,
+  templateUrl: './edit-appointment.html',
 
-    ReactiveFormsModule,
-  ],
-
-  templateUrl:
-    './edit-appointment.html',
-
-  styleUrls: [
-    './edit-appointment.css',
-  ],
+  styleUrls: ['./edit-appointment.css']
 })
-export class EditAppointment
-implements OnInit {
-
-  appointmentId =
-    '';
+export class EditAppointment implements OnInit {
+  appointmentId = '';
 
   doctors: any[] = [];
 
-  availableSlots:
-  string[] = [];
+  availableSlots: string[] = [];
 
-  isSubmitting =
-    false;
+  isSubmitting = false;
 
   appointmentForm: any;
 
   constructor(
+    private fb: FormBuilder,
 
-    private fb:
-      FormBuilder,
+    private route: ActivatedRoute,
 
-    private route:
-      ActivatedRoute,
+    private router: Router,
 
-    private router:
-      Router,
+    private appointmentService: AppointmentService,
 
-    private appointmentService:
-      AppointmentService,
-
-    private employeeService:
-      EmployeeService,
+    private employeeService: EmployeeService
   ) {
+    this.appointmentForm = this.fb.group({
+      doctorEmployeeId: ['', Validators.required],
 
-    this.appointmentForm =
-      this.fb.group({
+      appointmentDate: ['', Validators.required],
 
-        doctorEmployeeId: [
+      timeSlot: [''],
 
-          '',
+      appointmentType: ['CONSULTATION'],
 
-          Validators.required,
-        ],
+      priority: ['NORMAL'],
 
-        appointmentDate: [
+      paymentStatus: ['PENDING'],
 
-          '',
+      visitMode: ['OFFLINE'],
 
-          Validators.required,
-        ],
+      status: ['BOOKED'],
 
-        timeSlot: [
+      reason: [''],
 
-          '',
-        ],
+      notes: [''],
 
-        appointmentType: [
-          'CONSULTATION'
-        ],
-
-        priority: [
-          'NORMAL'
-        ],
-
-        paymentStatus: [
-          'PENDING'
-        ],
-
-        visitMode: [
-          'OFFLINE'
-        ],
-
-        status: [
-          'BOOKED'
-        ],
-
-        reason: [''],
-
-        notes: [''],
-
-        symptoms: [''],
-      });
+      symptoms: ['']
+    });
   }
 
   /*
@@ -136,7 +74,6 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
-
     this.loadDoctors();
 
     /*
@@ -144,64 +81,34 @@ implements OnInit {
     | Status Change Logic
     |--------------------------------------------------------------------------
     */
-    this.appointmentForm
-      .get('status')
-      ?.valueChanges
-
-      .subscribe({
-
-        next: (
-          status: string,
-        ) => {
-
-          /*
+    this.appointmentForm.get('status')?.valueChanges.subscribe({
+      next: (status: string) => {
+        /*
           |--------------------------------------------------------------------------
           | Hide Slots
           |--------------------------------------------------------------------------
           */
-          if (
+        if (status === 'COMPLETED' || status === 'CANCELLED') {
+          this.availableSlots = [];
 
-            status ===
-            'COMPLETED'
+          this.appointmentForm.patchValue({
+            timeSlot: ''
+          });
+        } else {
 
-            ||
-
-            status ===
-            'CANCELLED'
-          ) {
-
-            this.availableSlots = [];
-
-            this.appointmentForm
-              .patchValue({
-
-                timeSlot:
-                '',
-              });
-          }
-
-          /*
+        /*
           |--------------------------------------------------------------------------
           | Show Slots Again
           |--------------------------------------------------------------------------
           */
-          else {
+          this.fetchAvailableSlots();
+        }
+      }
+    });
 
-            this.fetchAvailableSlots();
-          }
-        },
-      });
+    this.appointmentId = this.route.snapshot.paramMap.get('id') || '';
 
-    this.appointmentId =
-
-      this.route.snapshot
-        .paramMap
-        .get('id') || '';
-
-    if (
-      this.appointmentId
-    ) {
-
+    if (this.appointmentId) {
       this.loadAppointment();
     }
   }
@@ -212,32 +119,19 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   loadDoctors(): void {
-
     this.employeeService
       .getDoctors()
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          this.doctors =
-            response.data;
+          this.doctors = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -246,119 +140,53 @@ implements OnInit {
   | Load Appointment
   |--------------------------------------------------------------------------
   */
-  loadAppointment():
-  void {
-
+  loadAppointment(): void {
     this.appointmentService
-      .getAppointmentById(
-
-        this.appointmentId,
-      )
+      .getAppointmentById(this.appointmentId)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          const appointment = response.data;
 
-          console.log(
-            response,
-          );
+          this.appointmentForm.patchValue({
+            doctorEmployeeId: appointment?.doctorEmployeeId?._id,
 
-          const appointment =
+            appointmentDate: appointment?.appointmentDate?.split('T')[0],
 
-            response.data;
+            timeSlot: appointment?.timeSlot,
 
-          this.appointmentForm
-            .patchValue({
+            appointmentType: appointment?.appointmentType,
 
-              doctorEmployeeId:
+            priority: appointment?.priority,
 
-                appointment
-                  ?.doctorEmployeeId
-                  ?._id,
+            paymentStatus: appointment?.paymentStatus,
 
-              appointmentDate:
+            visitMode: appointment?.visitMode,
 
-                appointment
-                  ?.appointmentDate
-                  ?.split('T')[0],
+            status: appointment?.status,
 
-              timeSlot:
+            reason: appointment?.reason,
 
-                appointment
-                  ?.timeSlot,
+            notes: appointment?.notes,
 
-              appointmentType:
-
-                appointment
-                  ?.appointmentType,
-
-              priority:
-
-                appointment
-                  ?.priority,
-
-              paymentStatus:
-
-                appointment
-                  ?.paymentStatus,
-
-              visitMode:
-
-                appointment
-                  ?.visitMode,
-
-              status:
-
-                appointment
-                  ?.status,
-
-              reason:
-
-                appointment
-                  ?.reason,
-
-              notes:
-
-                appointment
-                  ?.notes,
-
-              symptoms:
-
-                appointment
-                  ?.symptoms
-                  ?.join(', '),
-            });
+            symptoms: appointment?.symptoms?.join(', ')
+          });
 
           /*
           |--------------------------------------------------------------------------
           | Fetch Slots Only If Needed
           |--------------------------------------------------------------------------
           */
-          if (
-
-            appointment?.status
-            !== 'COMPLETED'
-
-            &&
-
-            appointment?.status
-            !== 'CANCELLED'
-          ) {
-
+          if (appointment?.status !== 'COMPLETED' && appointment?.status !== 'CANCELLED') {
             this.fetchAvailableSlots();
           }
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -367,92 +195,43 @@ implements OnInit {
   | Fetch Available Slots
   |--------------------------------------------------------------------------
   */
-  fetchAvailableSlots():
-  void {
-
-    const status =
-
-      this.appointmentForm
-        .get('status')
-        ?.value;
+  fetchAvailableSlots(): void {
+    const status = this.appointmentForm.get('status')?.value;
 
     /*
     |--------------------------------------------------------------------------
     | Don't Fetch For Completed/Cancelled
     |--------------------------------------------------------------------------
     */
-    if (
-
-      status ===
-      'COMPLETED'
-
-      ||
-
-      status ===
-      'CANCELLED'
-    ) {
-
+    if (status === 'COMPLETED' || status === 'CANCELLED') {
       return;
     }
 
-    const doctorEmployeeId =
+    const doctorEmployeeId = this.appointmentForm.get('doctorEmployeeId')?.value;
 
-      this.appointmentForm
-        .get(
-          'doctorEmployeeId',
-        )
-        ?.value;
+    const appointmentDate = this.appointmentForm.get('appointmentDate')?.value;
 
-    const appointmentDate =
-
-      this.appointmentForm
-        .get(
-          'appointmentDate',
-        )
-        ?.value;
-
-    if (
-
-      !doctorEmployeeId
-
-      ||
-
-      !appointmentDate
-    ) {
-
+    if (!doctorEmployeeId || !appointmentDate) {
       return;
     }
 
     this.appointmentService
       .getAvailableSlots(
-
         doctorEmployeeId,
 
-        appointmentDate,
+        appointmentDate
       )
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          this.availableSlots =
-            response.data;
+          this.availableSlots = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -462,85 +241,47 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   onSubmit(): void {
-
-    if (
-      this.appointmentForm
-        .invalid
-    ) {
-
-      this.appointmentForm
-        .markAllAsTouched();
+    if (this.appointmentForm.invalid) {
+      this.appointmentForm.markAllAsTouched();
 
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
 
     const formData = {
+      ...this.appointmentForm.value,
 
-      ...this.appointmentForm
-        .value,
+      symptoms: this.appointmentForm.value.symptoms
 
-      symptoms:
+        ?.split(',')
 
-        this.appointmentForm
-          .value
-          .symptoms
-
-          ?.split(',')
-
-          .map(
-            (
-              symptom:
-              string,
-            ) =>
-
-              symptom.trim(),
-          ),
+        .map((symptom: string) => symptom.trim())
     };
 
     this.appointmentService
       .updateAppointment(
-
         this.appointmentId,
 
-        formData,
+        formData
       )
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          alert('Appointment updated successfully');
 
-          console.log(
-            response,
-          );
+          this.router.navigate(['/appointments']);
 
-          alert(
-            'Appointment updated successfully',
-          );
-
-          this.router.navigate([
-            '/appointments',
-          ]);
-
-          this.isSubmitting =
-            false;
+          this.isSubmitting = false;
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isSubmitting =
-            false;
-        },
+          this.isSubmitting = false;
+        }
       });
   }
 }

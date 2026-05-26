@@ -1,155 +1,78 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
-import {
-  PatientService,
-} from '../../../core/services/patient';
+import { PatientService } from '../../../core/services/patient';
 
-import {
-  EmployeeService,
-} from '../../../core/services/employee';
+import { EmployeeService } from '../../../core/services/employee';
 
-import {
-  AppointmentService,
-} from '../../../core/services/appointment';
+import { AppointmentService } from '../../../core/services/appointment';
 
 @Component({
-  selector:
-    'app-book-appointment',
+  selector: 'app-book-appointment',
 
   standalone: true,
 
-  imports: [
+  imports: [CommonModule, ReactiveFormsModule],
 
-    CommonModule,
+  templateUrl: './book-appointment.html',
 
-    ReactiveFormsModule,
-  ],
-
-  templateUrl:
-    './book-appointment.html',
-
-  styleUrls: [
-    './book-appointment.css',
-  ],
+  styleUrls: ['./book-appointment.css']
 })
-export class BookAppointment
-  implements OnInit {
-
+export class BookAppointment implements OnInit {
   patients: any[] = [];
 
   doctors: any[] = [];
 
-  filteredDoctors:
-    any[] = [];
+  filteredDoctors: any[] = [];
 
-  availableSlots:
-    string[] = [];
+  availableSlots: string[] = [];
 
-  isSubmitting =
-    false;
+  isSubmitting = false;
 
   appointmentForm: any;
 
   constructor(
+    private fb: FormBuilder,
 
-    private fb:
-      FormBuilder,
+    private patientService: PatientService,
 
-    private patientService:
-      PatientService,
+    private employeeService: EmployeeService,
 
-    private employeeService:
-      EmployeeService,
-
-    private appointmentService:
-      AppointmentService,
+    private appointmentService: AppointmentService
   ) {
+    this.appointmentForm = this.fb.group({
+      patientId: ['', Validators.required],
 
-    this.appointmentForm =
-      this.fb.group({
+      department: ['', Validators.required],
 
-        patientId: [
+      doctorId: ['', Validators.required],
 
-          '',
+      appointmentDate: ['', Validators.required],
 
-          Validators.required,
-        ],
+      appointmentTime: ['', Validators.required],
 
-        department: [
+      reason: [''],
 
-          '',
-
-          Validators.required,
-        ],
-
-        doctorId: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        appointmentDate: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        appointmentTime: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        reason: [''],
-
-        notes: [''],
-        /*
+      notes: [''],
+      /*
 |--------------------------------------------------------------------------
 | Professional Fields
 |--------------------------------------------------------------------------
 */
 
-        appointmentType:
-          [
-            'CONSULTATION'
-          ],
+      appointmentType: ['CONSULTATION'],
 
-        priority:
-          [
-            'NORMAL'
-          ],
+      priority: ['NORMAL'],
 
-        paymentStatus:
-          [
-            'PENDING'
-          ],
+      paymentStatus: ['PENDING'],
 
-        visitMode:
-          [
-            'OFFLINE'
-          ],
+      visitMode: ['OFFLINE'],
 
-        symptoms:
-          [
-            ''
-          ],
-      });
+      symptoms: ['']
+    });
   }
 
   /*
@@ -158,7 +81,6 @@ export class BookAppointment
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
-
     this.loadPatients();
 
     this.loadDoctors();
@@ -170,28 +92,17 @@ export class BookAppointment
   |--------------------------------------------------------------------------
   */
   loadPatients(): void {
-
     this.patientService
       .getPatients()
 
       .subscribe({
-
-        next: (
-          response,
-        ) => {
-
-          this.patients =
-            response.data;
+        next: (response) => {
+          this.patients = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -201,28 +112,17 @@ export class BookAppointment
   |--------------------------------------------------------------------------
   */
   loadDoctors(): void {
-
     this.employeeService
       .getDoctors()
 
       .subscribe({
-
-        next: (
-          response,
-        ) => {
-
-          this.doctors =
-            response.data;
+        next: (response) => {
+          this.doctors = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -232,22 +132,9 @@ export class BookAppointment
   |--------------------------------------------------------------------------
   */
   filterDoctors(): void {
+    const department = this.appointmentForm.get('department')?.value;
 
-    const department =
-
-      this.appointmentForm
-        .get('department')
-        ?.value;
-
-    this.filteredDoctors =
-
-      this.doctors.filter(
-
-        (doctor) =>
-
-          doctor.department
-          === department,
-      );
+    this.filteredDoctors = this.doctors.filter((doctor) => doctor.department === department);
   }
 
   /*
@@ -255,63 +142,32 @@ export class BookAppointment
   | Fetch Available Slots
   |--------------------------------------------------------------------------
   */
-  fetchAvailableSlots():
-    void {
+  fetchAvailableSlots(): void {
+    const doctorId = this.appointmentForm.get('doctorId')?.value;
 
-    const doctorId =
+    const appointmentDate = this.appointmentForm.get('appointmentDate')?.value;
 
-      this.appointmentForm
-        .get('doctorId')
-        ?.value;
-
-    const appointmentDate =
-
-      this.appointmentForm
-        .get('appointmentDate')
-        ?.value;
-
-    if (
-
-      !doctorId
-
-      ||
-
-      !appointmentDate
-    ) {
-
+    if (!doctorId || !appointmentDate) {
       return;
     }
 
     this.appointmentService
       .getAvailableSlots(
-
         doctorId,
 
-        appointmentDate,
+        appointmentDate
       )
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          this.availableSlots =
-            response.data;
+          this.availableSlots = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -321,81 +177,42 @@ export class BookAppointment
   |--------------------------------------------------------------------------
   */
   onSubmit(): void {
-
-    if (
-      this.appointmentForm
-        .invalid
-    ) {
-
+    if (this.appointmentForm.invalid) {
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
     const formData = {
+      ...this.appointmentForm.value,
 
-      ...this.appointmentForm
-        .value,
+      symptoms: this.appointmentForm.value.symptoms
 
-      symptoms:
+        ?.split(',')
 
-        this.appointmentForm
-          .value
-          .symptoms
-
-          ?.split(',')
-
-          .map(
-            (
-              symptom:
-                string,
-            ) =>
-
-              symptom.trim(),
-          ),
+        .map((symptom: string) => symptom.trim())
     };
 
     this.appointmentService
-      .bookAppointment(
-
-       formData
-      )
+      .bookAppointment(formData)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          alert('Appointment booked successfully');
 
-          console.log(
-            response,
-          );
+          this.appointmentForm.reset();
 
-          alert(
-            'Appointment booked successfully',
-          );
+          this.availableSlots = [];
 
-          this.appointmentForm
-            .reset();
-
-          this.availableSlots =
-            [];
-
-          this.isSubmitting =
-            false;
+          this.isSubmitting = false;
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isSubmitting =
-            false;
-        },
+          this.isSubmitting = false;
+        }
       });
   }
 }

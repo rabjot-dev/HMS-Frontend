@@ -1,335 +1,155 @@
 <div class="patients-page">
+  <!-- Header -->
 
-    <!-- Header -->
+  <div class="patients-header glass-card">
+    <div>
+      <p class="page-label">Patient Management</p>
 
-    <div class="patients-header glass-card">
+      <h1>Patients</h1>
 
-        <div>
-
-            <p class="page-label">
-                Patient Management
-            </p>
-
-            <h1>
-                Patients
-            </h1>
-
-            <p class="page-subtitle">
-
-                Manage patient records,
-                history and profiles.
-
-            </p>
-
-        </div>
-
-        <div class="header-right">
-
-            <div class="patient-count">
-
-                {{
-                filteredPatients.length
-                }}
-
-                Patients
-
-            </div>
-
-            <!-- Add Patient Button -->
-
-            @if(
-            userRole !== 'DOCTOR'
-            ){
-
-            <a
-              routerLink="/patients/create"
-
-              class="add-btn"
-            >
-
-                + Add Patient
-
-            </a>
-
-            }
-
-        </div>
-
+      <p class="page-subtitle">Manage patient records, history and profiles.</p>
     </div>
 
-    <!-- Search -->
+    <div class="header-right">
+      <div class="patient-count">{{ filteredPatients.length }} Patients</div>
 
-    <div class="filters-wrapper glass-card">
+      <!-- Add Patient Button -->
 
-        <div class="search-box">
+      @if( userRole !== 'DOCTOR' ){
 
-            <span>
-                🔍
-            </span>
+      <a routerLink="/patients/create" class="add-btn"> + Add Patient </a>
 
-            <input
-              type="text"
+      }
+    </div>
+  </div>
 
-              placeholder="
+  <!-- Search -->
+
+  <div class="filters-wrapper glass-card">
+    <div class="search-box">
+      <span> 🔍 </span>
+
+      <input
+        type="text"
+        placeholder="
               Search patient name,
               ID or phone
               "
-
-              [(ngModel)]="
+        [(ngModel)]="
               searchTerm
               "
-
-              (input)="
+        (input)="
               searchPatients()
               "
-            />
-
-        </div>
-
+      />
     </div>
+  </div>
 
-    <!-- Table -->
+  <!-- Table -->
 
-    <div class="table-wrapper glass-card">
+  <div class="table-wrapper glass-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Patient</th>
 
-        <table>
+          <th>Patient ID</th>
 
-            <thead>
+          <th>Gender</th>
 
-                <tr>
+          <th>Phone</th>
 
-                    <th>
-                        Patient
-                    </th>
+          <th>Blood Group</th>
 
-                    <th>
-                        Patient ID
-                    </th>
+          <th>Status</th>
 
-                    <th>
-                        Gender
-                    </th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-                    <th>
-                        Phone
-                    </th>
+      <tbody>
+        @for( patient of filteredPatients; track patient._id ){
 
-                    <th>
-                        Blood Group
-                    </th>
+        <tr>
+          <!-- Patient -->
 
-                    <th>
-                        Status
-                    </th>
+          <td>
+            <div class="patient-info">
+              <div class="avatar">{{ patient ?.firstName ?.charAt(0) }}</div>
 
-                    <th>
-                        Actions
-                    </th>
+              <div>
+                <h4>{{ patient ?.firstName }} {{ patient ?.lastName }}</h4>
 
-                </tr>
+                <span> {{ patient ?.email || 'No Email' }} </span>
+              </div>
+            </div>
+          </td>
 
-            </thead>
+          <!-- Patient ID -->
 
-            <tbody>
+          <td>
+            <div class="patient-id">{{ patient ?.patientId }}</div>
+          </td>
 
-                @for(
-                patient of
-                filteredPatients;
+          <!-- Gender -->
 
-                track patient._id
-                ){
+          <td>
+            <span class="gender-badge"> {{ patient ?.gender }} </span>
+          </td>
 
-                <tr>
+          <!-- Phone -->
 
-                    <!-- Patient -->
+          <td>{{ patient ?.countryCode }} {{ patient ?.phone }}</td>
 
-                    <td>
+          <!-- Blood Group -->
 
-                        <div class="patient-info">
+          <td>
+            <span class="blood-badge"> 🩸 {{ patient ?.bloodGroup || 'N/A' }} </span>
+          </td>
 
-                            <div class="avatar">
+          <!-- Status -->
 
-                                {{
+          <td>
+            <span class="status-badge"> Active </span>
+          </td>
 
-                                patient
-                                ?.firstName
-                                ?.charAt(0)
+          <!-- Actions -->
 
-                                }}
+          <td>
+            <div class="actions">
+              <!-- View -->
 
-                            </div>
-
-                            <div>
-
-                                <h4>
-
-                                    {{
-                                    patient
-                                    ?.firstName
-                                    }}
-
-                                    {{
-                                    patient
-                                    ?.lastName
-                                    }}
-
-                                </h4>
-
-                                <span>
-
-                                    {{
-                                    patient
-                                    ?.email
-                                    || 'No Email'
-                                    }}
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </td>
-
-                    <!-- Patient ID -->
-
-                    <td>
-
-                        <div class="patient-id">
-
-                            {{
-                            patient
-                            ?.patientId
-                            }}
-
-                        </div>
-
-                    </td>
-
-                    <!-- Gender -->
-
-                    <td>
-
-                        <span
-                          class="gender-badge"
-                        >
-
-                            {{
-                            patient
-                            ?.gender
-                            }}
-
-                        </span>
-
-                    </td>
-
-                    <!-- Phone -->
-
-                    <td>
-
-                        {{
-                        patient
-                        ?.countryCode
-                        }}
-
-                        {{
-
-                        patient
-                        ?.phone
-                        }}
-
-                    </td>
-
-                    <!-- Blood Group -->
-
-                    <td>
-
-                        <span
-                          class="blood-badge"
-                        >
-
-                            🩸
-
-                            {{
-                            patient
-                            ?.bloodGroup
-                            || 'N/A'
-                            }}
-
-                        </span>
-
-                    </td>
-
-                    <!-- Status -->
-
-                    <td>
-
-                        <span
-                          class="status-badge"
-                        >
-
-                            Active
-
-                        </span>
-
-                    </td>
-
-                    <!-- Actions -->
-
-                    <td>
-
-                        <div class="actions">
-
-                            <!-- View -->
-
-                            <a
-
-                              class="action-btn view"
-
-                              [routerLink]="[
+              <a
+                class="action-btn view"
+                [routerLink]="[
                                 '/patients',
                                 patient._id
                               ]"
-                            >
+              >
+                View
+              </a>
 
-                                View
+              <!-- Edit -->
 
-                            </a>
+              @if( userRole !== 'DOCTOR' ){
 
-                            <!-- Edit -->
-
-                            @if(
-                            userRole !== 'DOCTOR'
-                            ){
-
-                            <a
-
-                              class="action-btn edit"
-
-                              [routerLink]="[
+              <a
+                class="action-btn edit"
+                [routerLink]="[
                                 '/patients/edit',
                                 patient._id
                               ]"
-                            >
+              >
+                Edit
+              </a>
 
-                                Edit
+              }
+            </div>
+          </td>
+        </tr>
 
-                            </a>
-
-                            }
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-                }
-
-            </tbody>
-
-        </table>
-
-    </div>
-
+        }
+      </tbody>
+    </table>
+  </div>
 </div>

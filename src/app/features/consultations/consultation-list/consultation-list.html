@@ -1,293 +1,137 @@
 <div class="consultation-list-container">
+  <!-- Header -->
 
-    <!-- Header -->
+  <div class="top-section">
+    <div>
+      <p class="section-label">Hospital Consultation Records</p>
 
-    <div class="top-section">
-
-        <div>
-
-            <p class="section-label">
-
-                Hospital Consultation Records
-
-            </p>
-
-            <h1>
-                Consultations
-            </h1>
-
-        </div>
-
-        <div class="consultation-count">
-
-            Total:
-            {{
-
-            consultations.length
-
-            }}
-
-        </div>
-
+      <h1>Consultations</h1>
     </div>
 
-    <!-- Loading -->
+    <div class="consultation-count">Total: {{ consultations.length }}</div>
+  </div>
 
-    @if(isLoading){
+  <!-- Loading -->
 
-    <div class="loading-card">
+  @if(isLoading){
 
-        <div class="loader">
+  <div class="loading-card">
+    <div class="loader"></div>
 
-        </div>
+    <p>Loading consultations...</p>
+  </div>
 
-        <p>
+  } @else {
 
-            Loading consultations...
+  <!-- Empty State -->
 
-        </p>
+  @if( consultations.length === 0 ){
 
-    </div>
+  <div class="empty-state">
+    <div class="empty-icon">📄</div>
 
-    }
+    <h2>No Consultations Found</h2>
 
-    @else {
+    <p>Completed consultations will appear here.</p>
+  </div>
 
-    <!-- Empty State -->
+  } @else {
 
-    @if(
-    consultations.length === 0
-    ){
+  <!-- Table -->
 
-    <div class="empty-state">
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Patient</th>
 
-        <div class="empty-icon">
+          <th>Doctor</th>
 
-            📄
+          <th>Diagnosis</th>
 
-        </div>
+          <th>Date</th>
 
-        <h2>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-            No Consultations Found
+      <tbody>
+        @for( consultation of consultations; track consultation._id ){
 
-        </h2>
+        <tr>
+          <!-- Patient -->
 
-        <p>
+          <td>
+            <div class="patient-info">
+              <div class="patient-avatar">
+                {{ consultation ?.patientId ?.firstName ?.charAt(0) }}
+              </div>
 
-            Completed consultations
-            will appear here.
+              <div>
+                <h4>
+                  {{ consultation ?.patientId ?.firstName }} {{ consultation ?.patientId ?.lastName
+                  }}
+                </h4>
 
-        </p>
+                <p>Patient Record</p>
+              </div>
+            </div>
+          </td>
 
-    </div>
+          <!-- Doctor -->
 
-    }
+          <td>
+            <div class="doctor-badge">🩺 {{ consultation ?.doctorEmployeeId ?.name }}</div>
+          </td>
 
-    @else {
+          <!-- Diagnosis -->
 
-    <!-- Table -->
+          <td>
+            <span class="diagnosis-text"> {{ consultation ?.diagnosis }} </span>
+          </td>
 
-    <div class="table-container">
+          <!-- Date -->
 
-        <table>
+          <td>
+            <div class="date-text">{{ consultation ?.createdAt | date: 'mediumDate' }}</div>
+          </td>
 
-            <thead>
+          <!-- Actions -->
 
-                <tr>
+          <td>
+            <div class="actions">
+              <!-- View -->
 
-                    <th>
-                        Patient
-                    </th>
-
-                    <th>
-                        Doctor
-                    </th>
-
-                    <th>
-                        Diagnosis
-                    </th>
-
-                    <th>
-                        Date
-                    </th>
-
-                    <th>
-                        Actions
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                @for(
-                consultation of consultations;
-                track consultation._id
-                ){
-
-                <tr>
-
-                    <!-- Patient -->
-
-                    <td>
-
-                        <div class="patient-info">
-
-                            <div class="patient-avatar">
-
-                                {{
-
-                                consultation
-                                ?.patientId
-                                ?.firstName
-                                ?.charAt(0)
-
-                                }}
-
-                            </div>
-
-                            <div>
-
-                                <h4>
-
-                                    {{
-                                    consultation
-                                    ?.patientId
-                                    ?.firstName
-                                    }}
-
-                                    {{
-
-                                    consultation
-                                    ?.patientId
-                                    ?.lastName
-                                    }}
-
-                                </h4>
-
-                                <p>
-
-                                    Patient Record
-
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </td>
-
-                    <!-- Doctor -->
-
-                    <td>
-
-                        <div class="doctor-badge">
-
-                            🩺
-
-                            {{
-
-                            consultation
-                            ?.doctorEmployeeId
-                            ?.name
-
-                            }}
-
-                        </div>
-
-                    </td>
-
-                    <!-- Diagnosis -->
-
-                    <td>
-
-                        <span class="diagnosis-text">
-
-                            {{
-                            consultation
-                            ?.diagnosis
-                            }}
-
-                        </span>
-
-                    </td>
-
-                    <!-- Date -->
-
-                    <td>
-
-                        <div class="date-text">
-
-                            {{
-
-                            consultation
-                            ?.createdAt
-                            | date:
-                            'mediumDate'
-
-                            }}
-
-                        </div>
-
-                    </td>
-
-                    <!-- Actions -->
-
-                   <td>
-
-    <div class="actions">
-
-        <!-- View -->
-
-        <a
-
-          class="view-btn"
-
-          [routerLink]="[
+              <a
+                class="view-btn"
+                [routerLink]="[
             '/consultations',
             consultation._id
           ]"
-        >
+              >
+                View
+              </a>
 
-            View
+              <!-- Download -->
 
-        </a>
-
-        <!-- Download -->
-
-        <button
-
-          class="download-btn"
-
-          (click)="
+              <button
+                class="download-btn"
+                (click)="
           downloadPdf(
             consultation._id
           )
           "
-        >
+              >
+                PDF
+              </button>
+            </div>
+          </td>
+        </tr>
 
-            PDF
+        }
+      </tbody>
+    </table>
+  </div>
 
-        </button>
-
-    </div>
-
-</td>
-
-                </tr>
-
-                }
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    }
-
-    }
-
+  } }
 </div>

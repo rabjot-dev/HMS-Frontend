@@ -4,12 +4,11 @@
 |--------------------------------------------------------------------------
 */
 .employees-page {
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
-
-    gap: 24px;
+  gap: 24px;
 }
 
 /*
@@ -18,43 +17,39 @@
 |--------------------------------------------------------------------------
 */
 .employees-header {
+  display: flex;
 
-    display: flex;
+  justify-content: space-between;
 
-    justify-content: space-between;
+  align-items: center;
 
-    align-items: center;
+  padding: 32px;
 
-    padding: 32px;
-
-    border-radius: 30px;
+  border-radius: 30px;
 }
 
 .page-label {
+  color: #3b82f6;
 
-    color: #3b82f6;
+  font-size: 13px;
 
-    font-size: 13px;
+  font-weight: 700;
 
-    font-weight: 700;
+  text-transform: uppercase;
 
-    text-transform: uppercase;
-
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .employees-header h1 {
+  font-size: 40px;
 
-    font-size: 40px;
+  margin-bottom: 10px;
 
-    margin-bottom: 10px;
-
-    color: #0f172a;
+  color: #0f172a;
 }
 
 .page-subtitle {
-
-    color: #64748b;
+  color: #64748b;
 }
 
 /*
@@ -63,29 +58,17 @@
 |--------------------------------------------------------------------------
 */
 .employee-count {
+  padding: 14px 22px;
 
-    padding: 14px 22px;
+  border-radius: 18px;
 
-    border-radius: 18px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #8b5cf6
-        );
+  color: white;
 
-    color: white;
+  font-weight: 700;
 
-    font-weight: 700;
-
-    box-shadow:
-        0 15px 35px rgba(
-            59,
-            130,
-            246,
-            0.25
-        );
+  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
 }
 
 /*
@@ -94,38 +77,33 @@
 |--------------------------------------------------------------------------
 */
 .filters-wrapper {
+  padding: 24px;
 
-    padding: 24px;
-
-    border-radius: 24px;
+  border-radius: 24px;
 }
 
 .search-box {
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
+  gap: 14px;
 
-    gap: 14px;
+  background: rgba(255, 255, 255, 0.6);
 
-    background:
-        rgba(255,255,255,0.6);
+  border-radius: 18px;
 
-    border-radius: 18px;
-
-    padding: 0 18px;
+  padding: 0 18px;
 }
 
 .search-box input {
+  border: none;
 
-    border: none;
-
-    background: transparent;
+  background: transparent;
 }
 
 .search-box input:focus {
-
-    box-shadow: none;
+  box-shadow: none;
 }
 
 /*
@@ -134,78 +112,61 @@
 |--------------------------------------------------------------------------
 */
 .table-wrapper {
+  overflow-x: auto;
 
-    overflow-x: auto;
+  border-radius: 28px;
 
-    border-radius: 28px;
-
-    padding: 10px;
+  padding: 10px;
 }
 
 table {
+  width: 100%;
 
-    width: 100%;
+  border-collapse: separate;
 
-    border-collapse: separate;
-
-    border-spacing: 0 14px;
+  border-spacing: 0 14px;
 }
 
 thead th {
+  padding: 18px;
 
-    padding: 18px;
+  color: #64748b;
 
-    color: #64748b;
+  font-size: 13px;
 
-    font-size: 13px;
+  text-transform: uppercase;
 
-    text-transform: uppercase;
-
-    letter-spacing: 1px;
+  letter-spacing: 1px;
 }
 
 tbody tr {
+  background: rgba(255, 255, 255, 0.65);
 
-    background:
-        rgba(255,255,255,0.65);
-
-    transition:
-        all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 tbody tr:hover {
+  transform: translateY(-3px);
 
-    transform:
-        translateY(-3px);
-
-    box-shadow:
-        0 15px 35px rgba(
-            15,
-            23,
-            42,
-            0.06
-        );
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.06);
 }
 
 tbody td {
+  padding: 22px 18px;
 
-    padding: 22px 18px;
-
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 tbody td:first-child {
+  border-top-left-radius: 22px;
 
-    border-top-left-radius: 22px;
-
-    border-bottom-left-radius: 22px;
+  border-bottom-left-radius: 22px;
 }
 
 tbody td:last-child {
+  border-top-right-radius: 22px;
 
-    border-top-right-radius: 22px;
-
-    border-bottom-right-radius: 22px;
+  border-bottom-right-radius: 22px;
 }
 
 /*
@@ -214,54 +175,45 @@ tbody td:last-child {
 |--------------------------------------------------------------------------
 */
 .employee-info {
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
-
-    gap: 14px;
+  gap: 14px;
 }
 
 .avatar {
+  width: 52px;
 
-    width: 52px;
+  height: 52px;
 
-    height: 52px;
+  border-radius: 18px;
 
-    border-radius: 18px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #8b5cf6
-        );
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
+  justify-content: center;
 
-    justify-content: center;
+  color: white;
 
-    color: white;
+  font-weight: 700;
 
-    font-weight: 700;
-
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .employee-info h4 {
+  margin-bottom: 5px;
 
-    margin-bottom: 5px;
-
-    color: #0f172a;
+  color: #0f172a;
 }
 
 .employee-info span {
+  color: #64748b;
 
-    color: #64748b;
-
-    font-size: 13px;
+  font-size: 13px;
 }
 
 /*
@@ -270,10 +222,9 @@ tbody td:last-child {
 |--------------------------------------------------------------------------
 */
 .employee-code {
+  font-weight: 700;
 
-    font-weight: 700;
-
-    color: #334155;
+  color: #334155;
 }
 
 /*
@@ -284,30 +235,25 @@ tbody td:last-child {
 .designation-badge,
 .department-badge,
 .status-badge {
+  padding: 10px 16px;
 
-    padding: 10px 16px;
+  border-radius: 999px;
 
-    border-radius: 999px;
+  font-size: 12px;
 
-    font-size: 12px;
-
-    font-weight: 700;
+  font-weight: 700;
 }
 
 .designation-badge {
+  background: rgba(59, 130, 246, 0.12);
 
-    background:
-        rgba(59,130,246,0.12);
-
-    color: #2563eb;
+  color: #2563eb;
 }
 
 .department-badge {
+  background: rgba(139, 92, 246, 0.12);
 
-    background:
-        rgba(139,92,246,0.12);
-
-    color: #7c3aed;
+  color: #7c3aed;
 }
 
 /*
@@ -316,27 +262,21 @@ tbody td:last-child {
 |--------------------------------------------------------------------------
 */
 .status-badge.active {
+  background: rgba(34, 197, 94, 0.12);
 
-    background:
-        rgba(34,197,94,0.12);
-
-    color: #15803d;
+  color: #15803d;
 }
 
 .status-badge.inactive {
+  background: rgba(239, 68, 68, 0.12);
 
-    background:
-        rgba(239,68,68,0.12);
-
-    color: #dc2626;
+  color: #dc2626;
 }
 
 .status-badge.pending {
+  background: rgba(245, 158, 11, 0.15);
 
-    background:
-        rgba(245,158,11,0.15);
-
-    color: #b45309;
+  color: #b45309;
 }
 
 /*
@@ -345,68 +285,55 @@ tbody td:last-child {
 |--------------------------------------------------------------------------
 */
 .actions {
+  display: flex;
 
-    display: flex;
+  gap: 10px;
 
-    gap: 10px;
-
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .action-btn {
+  border: none;
 
-    border: none;
+  padding: 10px 16px;
 
-    padding: 10px 16px;
+  border-radius: 14px;
 
-    border-radius: 14px;
+  font-weight: 600;
 
-    font-weight: 600;
+  cursor: pointer;
 
-    cursor: pointer;
+  transition: all 0.3s ease;
 
-    transition:
-        all 0.3s ease;
-
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .action-btn:hover {
-
-    transform:
-        translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .action-btn.view {
+  background: rgba(59, 130, 246, 0.12);
 
-    background:
-        rgba(59,130,246,0.12);
-
-    color: #2563eb;
+  color: #2563eb;
 }
 
 .action-btn.edit {
+  background: rgba(245, 158, 11, 0.14);
 
-    background:
-        rgba(245,158,11,0.14);
-
-    color: #b45309;
+  color: #b45309;
 }
 
 .action-btn.deactivate {
+  background: rgba(239, 68, 68, 0.12);
 
-    background:
-        rgba(239,68,68,0.12);
-
-    color: #dc2626;
+  color: #dc2626;
 }
 
 .action-btn.activate {
+  background: rgba(34, 197, 94, 0.12);
 
-    background:
-        rgba(34,197,94,0.12);
-
-    color: #15803d;
+  color: #15803d;
 }
 
 /*
@@ -414,21 +341,16 @@ tbody td:last-child {
 | Responsive
 |--------------------------------------------------------------------------
 */
-@media (
-max-width: 992px
-) {
+@media (max-width: 992px) {
+  .employees-header {
+    flex-direction: column;
 
-    .employees-header {
+    align-items: flex-start;
 
-        flex-direction: column;
+    gap: 20px;
+  }
 
-        align-items: flex-start;
-
-        gap: 20px;
-    }
-
-    table {
-
-        min-width: 1100px;
-    }
+  table {
+    min-width: 1100px;
+  }
 }

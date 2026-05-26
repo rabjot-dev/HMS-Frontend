@@ -1,147 +1,67 @@
 <div class="edit-employee-page">
+  <!-- Header -->
 
-    <!-- Header -->
+  <div class="page-header glass-card">
+    <div>
+      <p class="page-label">Employee Management</p>
 
-    <div class="page-header glass-card">
+      <h1>Edit Employee</h1>
 
-        <div>
+      <p class="page-subtitle">Update employee details, department and role access.</p>
+    </div>
+  </div>
 
-            <p class="page-label">
-                Employee Management
-            </p>
+  <!-- Form -->
 
-            <h1>
-                Edit Employee
-            </h1>
+  <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="employee-form glass-card">
+    <div class="form-grid">
+      <!-- Name -->
 
-            <p class="page-subtitle">
+      <div class="form-group">
+        <label> Full Name </label>
 
-                Update employee details,
-                department and role access.
+        <input type="text" placeholder="Enter full name" formControlName="name" />
+      </div>
 
-            </p>
+      <!-- Email -->
 
-        </div>
+      <div class="form-group">
+        <label> Email </label>
 
+        <input type="email" placeholder="Enter email" formControlName="email" />
+      </div>
+
+      <!-- Phone -->
+
+      <div class="form-group">
+        <label> Phone Number </label>
+
+        <input type="text" placeholder="Enter phone number" formControlName="phone" />
+      </div>
+
+      <!-- Department -->
+
+      <div class="form-group">
+        <label> Department </label>
+
+        <input type="text" placeholder="Enter department" formControlName="department" />
+      </div>
+
+      <!-- Designation -->
+
+      <div class="form-group">
+        <label> Designation </label>
+
+        <input type="text" placeholder="Enter designation" formControlName="designation" />
+      </div>
     </div>
 
-    <!-- Form -->
+    <!-- Buttons -->
 
-    <form
-        [formGroup]="employeeForm"
-        (ngSubmit)="onSubmit()"
-        class="employee-form glass-card"
-    >
+    <div class="button-group">
+      <button type="button" class="cancel-btn" routerLink="/employees">Cancel</button>
 
-        <div class="form-grid">
-
-            <!-- Name -->
-
-            <div class="form-group">
-
-                <label>
-                    Full Name
-                </label>
-
-                <input
-                    type="text"
-                    placeholder="Enter full name"
-                    formControlName="name"
-                />
-
-            </div>
-
-            <!-- Email -->
-
-            <div class="form-group">
-
-                <label>
-                    Email
-                </label>
-
-                <input
-                    type="email"
-                    placeholder="Enter email"
-                    formControlName="email"
-                />
-
-            </div>
-
-            <!-- Phone -->
-
-            <div class="form-group">
-
-                <label>
-                    Phone Number
-                </label>
-
-                <input
-                    type="text"
-                    placeholder="Enter phone number"
-                    formControlName="phone"
-                />
-
-            </div>
-
-            <!-- Department -->
-
-            <div class="form-group">
-
-                <label>
-                    Department
-                </label>
-
-                <input
-                    type="text"
-                    placeholder="Enter department"
-                    formControlName="department"
-                />
-
-            </div>
-
-            <!-- Designation -->
-
-            <div class="form-group">
-
-                <label>
-                    Designation
-                </label>
-
-                <input
-                    type="text"
-                    placeholder="Enter designation"
-                    formControlName="designation"
-                />
-
-            </div>
-
-        </div>
-
-        <!-- Buttons -->
-
-        <div class="button-group">
-
-            <button
-                type="button"
-                class="cancel-btn"
-                routerLink="/employees"
-            >
-
-                Cancel
-
-            </button>
-
-            <button
-                type="submit"
-                class="update-btn"
-            >
-
-                Update Employee
-
-            </button>
-
-        </div>
-
-    </form>
-
+      <button type="submit" class="update-btn">Update Employee</button>
+    </div>
+  </form>
 </div>

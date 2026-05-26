@@ -8,7 +8,7 @@ describe('DoctorQueue', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DoctorQueue],
+      imports: [DoctorQueue]
     }).compileComponents();
 
     fixture = TestBed.createComponent(DoctorQueue);

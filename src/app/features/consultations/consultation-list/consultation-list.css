@@ -4,12 +4,11 @@
 |--------------------------------------------------------------------------
 */
 .consultation-list-container {
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
-
-    gap: 24px;
+  gap: 24px;
 }
 
 /*
@@ -18,60 +17,47 @@
 |--------------------------------------------------------------------------
 */
 .top-section {
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
-
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .section-label {
+  color: #3b82f6;
 
-    color: #3b82f6;
+  font-size: 13px;
 
-    font-size: 13px;
+  font-weight: 700;
 
-    font-weight: 700;
+  text-transform: uppercase;
 
-    text-transform: uppercase;
+  letter-spacing: 1px;
 
-    letter-spacing: 1px;
-
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .top-section h1 {
+  font-size: 38px;
 
-    font-size: 38px;
-
-    color: #0f172a;
+  color: #0f172a;
 }
 
 .consultation-count {
+  background: rgba(255, 255, 255, 0.7);
 
-    background:
-        rgba(255,255,255,0.7);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 
-    border:
-        1px solid rgba(
-            255,
-            255,
-            255,
-            0.4
-        );
+  padding: 14px 18px;
 
-    padding:
-        14px 18px;
+  border-radius: 18px;
 
-    border-radius: 18px;
+  font-weight: 700;
 
-    font-weight: 700;
+  color: #334155;
 
-    color: #334155;
-
-    backdrop-filter:
-        blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 /*
@@ -80,60 +66,49 @@
 |--------------------------------------------------------------------------
 */
 .loading-card {
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
+  align-items: center;
 
-    align-items: center;
+  justify-content: center;
 
-    justify-content: center;
+  gap: 18px;
 
-    gap: 18px;
+  padding: 80px;
 
-    padding: 80px;
+  border-radius: 28px;
 
-    border-radius: 28px;
+  background: rgba(255, 255, 255, 0.6);
 
-    background:
-        rgba(255,255,255,0.6);
-
-    backdrop-filter:
-        blur(16px);
+  backdrop-filter: blur(16px);
 }
 
 .loader {
+  width: 48px;
 
-    width: 48px;
+  height: 48px;
 
-    height: 48px;
+  border-radius: 50%;
 
-    border-radius: 50%;
+  border: 4px solid #dbeafe;
 
-    border:
-        4px solid #dbeafe;
+  border-top: 4px solid #3b82f6;
 
-    border-top:
-        4px solid #3b82f6;
-
-    animation:
-        spin 1s linear infinite;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-
-    100% {
-
-        transform:
-            rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-card p {
+  color: #64748b;
 
-    color: #64748b;
-
-    font-weight: 500;
+  font-weight: 500;
 }
 
 /*
@@ -142,37 +117,31 @@
 |--------------------------------------------------------------------------
 */
 .empty-state {
+  background: rgba(255, 255, 255, 0.6);
 
-    background:
-        rgba(255,255,255,0.6);
+  border-radius: 28px;
 
-    border-radius: 28px;
+  padding: 80px 30px;
 
-    padding: 80px 30px;
+  text-align: center;
 
-    text-align: center;
-
-    backdrop-filter:
-        blur(16px);
+  backdrop-filter: blur(16px);
 }
 
 .empty-icon {
+  font-size: 64px;
 
-    font-size: 64px;
-
-    margin-bottom: 18px;
+  margin-bottom: 18px;
 }
 
 .empty-state h2 {
+  color: #0f172a;
 
-    color: #0f172a;
-
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .empty-state p {
-
-    color: #64748b;
+  color: #64748b;
 }
 
 /*
@@ -181,93 +150,57 @@
 |--------------------------------------------------------------------------
 */
 .table-container {
+  background: rgba(255, 255, 255, 0.65);
 
-    background:
-        rgba(255,255,255,0.65);
+  border: 1px solid rgba(255, 255, 255, 0.35);
 
-    border:
-        1px solid rgba(
-            255,
-            255,
-            255,
-            0.35
-        );
+  border-radius: 28px;
 
-    border-radius: 28px;
+  overflow: hidden;
 
-    overflow: hidden;
+  backdrop-filter: blur(18px);
 
-    backdrop-filter:
-        blur(18px);
-
-    box-shadow:
-        0 15px 40px rgba(
-            15,
-            23,
-            42,
-            0.06
-        );
+  box-shadow: 0 15px 40px rgba(15, 23, 42, 0.06);
 }
 
 table {
+  width: 100%;
 
-    width: 100%;
-
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 thead {
-
-    background:
-        rgba(59,130,246,0.08);
+  background: rgba(59, 130, 246, 0.08);
 }
 
 thead th {
+  padding: 22px;
 
-    padding: 22px;
+  text-align: left;
 
-    text-align: left;
+  color: #0f172a;
 
-    color: #0f172a;
+  font-size: 14px;
 
-    font-size: 14px;
+  font-weight: 700;
 
-    font-weight: 700;
-
-    border-bottom:
-        1px solid rgba(
-            226,
-            232,
-            240,
-            0.7
-        );
+  border-bottom: 1px solid rgba(226, 232, 240, 0.7);
 }
 
 tbody tr {
-
-    transition:
-        all 0.25s ease;
+  transition: all 0.25s ease;
 }
 
 tbody tr:hover {
-
-    background:
-        rgba(255,255,255,0.65);
+  background: rgba(255, 255, 255, 0.65);
 }
 
 tbody td {
+  padding: 22px;
 
-    padding: 22px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.55);
 
-    border-bottom:
-        1px solid rgba(
-            226,
-            232,
-            240,
-            0.55
-        );
-
-    color: #334155;
+  color: #334155;
 }
 
 /*
@@ -276,54 +209,45 @@ tbody td {
 |--------------------------------------------------------------------------
 */
 .patient-info {
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
-
-    gap: 14px;
+  gap: 14px;
 }
 
 .patient-avatar {
+  width: 52px;
 
-    width: 52px;
+  height: 52px;
 
-    height: 52px;
+  border-radius: 16px;
 
-    border-radius: 16px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #8b5cf6
-        );
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
+  justify-content: center;
 
-    justify-content: center;
+  color: white;
 
-    color: white;
+  font-weight: 700;
 
-    font-weight: 700;
-
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .patient-info h4 {
+  color: #0f172a;
 
-    color: #0f172a;
-
-    margin-bottom: 4px;
+  margin-bottom: 4px;
 }
 
 .patient-info p {
+  color: #64748b;
 
-    color: #64748b;
-
-    font-size: 13px;
+  font-size: 13px;
 }
 
 /*
@@ -332,24 +256,21 @@ tbody td {
 |--------------------------------------------------------------------------
 */
 .doctor-badge {
+  display: inline-flex;
 
-    display: inline-flex;
+  align-items: center;
 
-    align-items: center;
+  gap: 10px;
 
-    gap: 10px;
+  padding: 10px 14px;
 
-    padding:
-        10px 14px;
+  border-radius: 14px;
 
-    border-radius: 14px;
+  background: rgba(59, 130, 246, 0.08);
 
-    background:
-        rgba(59,130,246,0.08);
+  color: #2563eb;
 
-    color: #2563eb;
-
-    font-weight: 600;
+  font-weight: 600;
 }
 
 /*
@@ -358,10 +279,9 @@ tbody td {
 |--------------------------------------------------------------------------
 */
 .diagnosis-text {
+  color: #0f172a;
 
-    color: #0f172a;
-
-    font-weight: 500;
+  font-weight: 500;
 }
 
 /*
@@ -370,10 +290,9 @@ tbody td {
 |--------------------------------------------------------------------------
 */
 .date-text {
+  color: #64748b;
 
-    color: #64748b;
-
-    font-weight: 500;
+  font-weight: 500;
 }
 
 /*
@@ -382,65 +301,41 @@ tbody td {
 |--------------------------------------------------------------------------
 */
 .action-buttons {
+  display: flex;
 
-    display: flex;
-
-    gap: 12px;
+  gap: 12px;
 }
 
 .download-btn,
 .print-btn {
+  border: none;
 
-    border: none;
+  padding: 12px 18px;
 
-    padding:
-        12px 18px;
+  border-radius: 14px;
 
-    border-radius: 14px;
+  cursor: pointer;
 
-    cursor: pointer;
+  font-weight: 600;
 
-    font-weight: 600;
+  transition: all 0.3s ease;
 
-    transition:
-        all 0.3s ease;
-
-    color: white;
+  color: white;
 }
 
 .download-btn {
-
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #2563eb
-        );
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
 }
 
 .print-btn {
-
-    background:
-        linear-gradient(
-            135deg,
-            #22c55e,
-            #16a34a
-        );
+  background: linear-gradient(135deg, #22c55e, #16a34a);
 }
 
 .download-btn:hover,
 .print-btn:hover {
+  transform: translateY(-3px);
 
-    transform:
-        translateY(-3px);
-
-    box-shadow:
-        0 12px 28px rgba(
-            15,
-            23,
-            42,
-            0.12
-        );
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
 }
 
 /*
@@ -448,36 +343,26 @@ tbody td {
 | Responsive
 |--------------------------------------------------------------------------
 */
-@media (
-max-width: 992px
-) {
+@media (max-width: 992px) {
+  .table-container {
+    overflow-x: auto;
+  }
 
-    .table-container {
-
-        overflow-x: auto;
-    }
-
-    table {
-
-        min-width: 950px;
-    }
+  table {
+    min-width: 950px;
+  }
 }
 
-@media (
-max-width: 700px
-) {
+@media (max-width: 700px) {
+  .top-section {
+    flex-direction: column;
 
-    .top-section {
+    align-items: flex-start;
 
-        flex-direction: column;
+    gap: 18px;
+  }
 
-        align-items: flex-start;
-
-        gap: 18px;
-    }
-
-    .top-section h1 {
-
-        font-size: 30px;
-    }
+  .top-section h1 {
+    font-size: 30px;
+  }
 }

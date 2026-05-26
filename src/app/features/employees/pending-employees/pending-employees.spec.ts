@@ -8,7 +8,7 @@ describe('PendingEmployees', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PendingEmployees],
+      imports: [PendingEmployees]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PendingEmployees);

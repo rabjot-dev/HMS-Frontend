@@ -1,57 +1,32 @@
-import {
-  ApplicationConfig,
-} from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 
-import {
-  provideRouter,
-} from '@angular/router';
+import { provideRouter } from '@angular/router';
 
-import {
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
-import {
-  provideAnimations,
-} from '@angular/platform-browser/animations';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
-import {
-  provideToastr,
-} from 'ngx-toastr';
+import { provideToastr } from 'ngx-toastr';
 
-import {
-  routes,
-} from './app.routes';
+import { routes } from './app.routes';
 
-import {
-  authInterceptor,
-} from './core/interceptors/auth-interceptor';
+import { authInterceptor } from './core/interceptors/auth-interceptor';
 
-export const appConfig:
-ApplicationConfig = {
-
+export const appConfig: ApplicationConfig = {
   providers: [
-
     /*
     |--------------------------------------------------------------------------
     | Router
     |--------------------------------------------------------------------------
     */
-    provideRouter(
-      routes,
-    ),
+    provideRouter(routes),
 
     /*
     |--------------------------------------------------------------------------
     | HTTP
     |--------------------------------------------------------------------------
     */
-    provideHttpClient(
-
-      withInterceptors([
-        authInterceptor,
-      ]),
-    ),
+    provideHttpClient(withInterceptors([authInterceptor])),
 
     /*
     |--------------------------------------------------------------------------
@@ -66,21 +41,15 @@ ApplicationConfig = {
     |--------------------------------------------------------------------------
     */
     provideToastr({
+      positionClass: 'toast-top-right',
 
-      positionClass:
-        'toast-top-right',
+      timeOut: 3000,
 
-      timeOut:
-        3000,
+      preventDuplicates: true,
 
-      preventDuplicates:
-        true,
+      progressBar: true,
 
-      progressBar:
-        true,
-
-      closeButton:
-        true,
-    }),
-  ],
+      closeButton: true
+    })
+  ]
 };

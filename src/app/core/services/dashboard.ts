@@ -1,42 +1,24 @@
-import {
-  Injectable,
-} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {
-  HttpClient,
-} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
-import {
-  Observable,
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class DashboardService {
+  private apiUrl = 'http://localhost:5000/api/dashboard';
 
-  private apiUrl =
-
-    'http://localhost:5000/api/dashboard';
-
-  constructor(
-
-    private http:
-      HttpClient,
-  ) {}
+  constructor(private http: HttpClient) {}
 
   /*
   |--------------------------------------------------------------------------
   | Admin Stats
   |--------------------------------------------------------------------------
   */
-  getAdminStats():
-  Observable<any> {
-
-    return this.http.get(
-
-      `${this.apiUrl}/admin-stats`,
-    );
+  getAdminStats(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/admin-stats`);
   }
 
   /*
@@ -44,13 +26,8 @@ export class DashboardService {
   | Recent Employees
   |--------------------------------------------------------------------------
   */
-  getRecentEmployees():
-  Observable<any> {
-
-    return this.http.get(
-
-      `${this.apiUrl}/recent-employees`,
-    );
+  getRecentEmployees(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/recent-employees`);
   }
 
   /*
@@ -58,13 +35,8 @@ export class DashboardService {
   | Doctor Stats
   |--------------------------------------------------------------------------
   */
-  getDoctorStats():
-  Observable<any> {
-
-    return this.http.get(
-
-      `${this.apiUrl}/doctor-stats`,
-    );
+  getDoctorStats(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/doctor-stats`);
   }
 
   /*
@@ -72,13 +44,8 @@ export class DashboardService {
   | Receptionist Stats
   |--------------------------------------------------------------------------
   */
-  getReceptionistStats():
-  Observable<any> {
-
-    return this.http.get(
-
-      `${this.apiUrl}/receptionist-stats`,
-    );
+  getReceptionistStats(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/receptionist-stats`);
   }
 
   /*
@@ -86,12 +53,7 @@ export class DashboardService {
   | Today Appointments
   |--------------------------------------------------------------------------
   */
-  getTodayAppointments():
-  Observable<any> {
-
-    return this.http.get(
-
-      `${this.apiUrl}/today-appointments`,
-    );
+  getTodayAppointments(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/today-appointments`);
   }
 }

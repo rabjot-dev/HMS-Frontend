@@ -1,96 +1,45 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
-import {
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 
-import {
-  AuthService,
-} from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector:
-    'app-reset-password',
+  selector: 'app-reset-password',
 
   standalone: true,
 
-  imports: [
+  imports: [CommonModule, ReactiveFormsModule],
 
-    CommonModule,
+  templateUrl: './reset-password.html',
 
-    ReactiveFormsModule,
-  ],
-
-  templateUrl:
-    './reset-password.html',
-
-  styleUrls: [
-    './reset-password.css',
-  ],
+  styleUrls: ['./reset-password.css']
 })
-export class ResetPassword
-implements OnInit {
+export class ResetPassword implements OnInit {
+  isSubmitting = false;
 
-  isSubmitting =
-    false;
+  email = '';
 
-  email =
-    '';
+  securityQuestion = '';
 
-  securityQuestion =
-    '';
-
-  resetForm:
-  any;
+  resetForm: any;
 
   constructor(
+    private fb: FormBuilder,
 
-    private fb:
-      FormBuilder,
+    private authService: AuthService,
 
-    private authService:
-      AuthService,
-
-    private router:
-      Router,
+    private router: Router
   ) {
+    this.resetForm = this.fb.group({
+      securityAnswer: ['', Validators.required],
 
-    this.resetForm =
-
-      this.fb.group({
-
-        securityAnswer: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        newPassword: [
-
-          '',
-
-          [
-
-            Validators.required,
-
-            Validators.minLength(6),
-          ],
-        ],
-      });
+      newPassword: ['', [Validators.required, Validators.minLength(6)]]
+    });
   }
 
   /*
@@ -98,40 +47,20 @@ implements OnInit {
   | On Init
   |--------------------------------------------------------------------------
   */
-  ngOnInit():
-  void {
+  ngOnInit(): void {
+    const navigation = history.state;
 
-    const navigation =
+    this.email = navigation?.email;
 
-      history.state;
-
-    this.email =
-
-      navigation
-      ?.email;
-
-    this.securityQuestion =
-
-      navigation
-      ?.securityQuestion;
+    this.securityQuestion = navigation?.securityQuestion;
 
     /*
     |--------------------------------------------------------------------------
     | Redirect If No Data
     |--------------------------------------------------------------------------
     */
-    if (
-
-      !this.email
-
-      ||
-
-      !this.securityQuestion
-    ) {
-
-      this.router.navigate([
-        '/forgot-password',
-      ]);
+    if (!this.email || !this.securityQuestion) {
+      this.router.navigate(['/forgot-password']);
     }
   }
 
@@ -140,80 +69,42 @@ implements OnInit {
   | Submit
   |--------------------------------------------------------------------------
   */
-  onSubmit():
-  void {
-
-    if (
-
-      this.resetForm
-      .invalid
-    ) {
-
-      this.resetForm
-        .markAllAsTouched();
+  onSubmit(): void {
+    if (this.resetForm.invalid) {
+      this.resetForm.markAllAsTouched();
 
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
 
     const payload = {
+      email: this.email,
 
-      email:
-      this.email,
+      securityAnswer: this.resetForm.value.securityAnswer,
 
-      securityAnswer:
-
-        this.resetForm
-        .value
-        .securityAnswer,
-
-      newPassword:
-
-        this.resetForm
-        .value
-        .newPassword,
+      newPassword: this.resetForm.value.newPassword
     };
 
     this.authService
-      .resetPassword(
-        payload,
-      )
+      .resetPassword(payload)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          alert('Password reset successful');
 
-          console.log(
-            response,
-          );
+          this.router.navigate(['/login']);
 
-          alert(
-            'Password reset successful',
-          );
-
-          this.router.navigate([
-            '/login',
-          ]);
-
-          this.isSubmitting =
-            false;
+          this.isSubmitting = false;
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isSubmitting =
-            false;
-        },
+          this.isSubmitting = false;
+        }
       });
   }
 }

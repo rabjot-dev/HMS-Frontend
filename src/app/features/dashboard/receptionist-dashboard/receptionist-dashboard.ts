@@ -1,56 +1,33 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  RouterLink,
-} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
-import {
-  AsyncPipe,
-} from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 
-import {
-  DashboardService,
-} from '../../../core/services/dashboard';
+import { DashboardService } from '../../../core/services/dashboard';
 
-import {
-  AuthService,
-} from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector:
-    'app-receptionist-dashboard',
+  selector: 'app-receptionist-dashboard',
 
   standalone: true,
 
-  imports: [
-    RouterLink,
-    AsyncPipe,
-  ],
+  imports: [RouterLink, AsyncPipe],
 
-  templateUrl:
-    './receptionist-dashboard.html',
+  templateUrl: './receptionist-dashboard.html',
 
-  styleUrl:
-    './receptionist-dashboard.css',
+  styleUrl: './receptionist-dashboard.css'
 })
-export class ReceptionistDashboard
-implements OnInit {
-
+export class ReceptionistDashboard implements OnInit {
   stats: any = {};
 
-  todayAppointments:
-  any[] = [];
+  todayAppointments: any[] = [];
 
   constructor(
+    public authService: AuthService,
 
-    public authService:
-      AuthService,
-
-    private dashboardService:
-      DashboardService,
+    private dashboardService: DashboardService
   ) {}
 
   /*
@@ -59,7 +36,6 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
-
     this.loadReceptionStats();
 
     this.loadTodayAppointments();
@@ -70,34 +46,20 @@ implements OnInit {
   | Load Stats
   |--------------------------------------------------------------------------
   */
-  loadReceptionStats():
-  void {
-
+  loadReceptionStats(): void {
     this.dashboardService
       .getReceptionistStats()
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          this.stats =
-            response.data;
+          this.stats = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -106,34 +68,20 @@ implements OnInit {
   | Load Today Appointments
   |--------------------------------------------------------------------------
   */
-  loadTodayAppointments():
-  void {
-
+  loadTodayAppointments(): void {
     this.dashboardService
       .getTodayAppointments()
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          this.todayAppointments =
-            response.data;
+          this.todayAppointments = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 }

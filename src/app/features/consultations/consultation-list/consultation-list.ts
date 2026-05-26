@@ -1,50 +1,27 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
-import {
-  RouterLink,
-} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
-import {
-  ConsultationService,
-} from '../../../core/services/consultation';
+import { ConsultationService } from '../../../core/services/consultation';
 
 @Component({
-  selector:
-    'app-consultation-list',
+  selector: 'app-consultation-list',
 
   standalone: true,
 
-  imports: [
-    CommonModule,RouterLink
-  ],
+  imports: [CommonModule, RouterLink],
 
-  templateUrl:
-    './consultation-list.html',
+  templateUrl: './consultation-list.html',
 
-  styleUrls: [
-    './consultation-list.css',
-  ],
+  styleUrls: ['./consultation-list.css']
 })
-export class ConsultationList
-implements OnInit {
+export class ConsultationList implements OnInit {
+  consultations: any[] = [];
 
-  consultations:
-  any[] = [];
+  isLoading = false;
 
-  isLoading =
-    false;
-
-  constructor(
-
-    private consultationService:
-      ConsultationService,
-  ) {}
+  constructor(private consultationService: ConsultationService) {}
 
   /*
   |--------------------------------------------------------------------------
@@ -52,7 +29,6 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
-
     this.loadConsultations();
   }
 
@@ -61,43 +37,26 @@ implements OnInit {
   | Load Consultations
   |--------------------------------------------------------------------------
   */
-  loadConsultations():
-  void {
-
-    this.isLoading =
-      true;
+  loadConsultations(): void {
+    this.isLoading = true;
 
     this.consultationService
       .getConsultations()
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          this.consultations = response.data;
 
-          console.log(
-            response,
-          );
-
-          this.consultations =
-            response.data;
-
-          this.isLoading =
-            false;
+          this.isLoading = false;
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isLoading =
-            false;
-        },
+          this.isLoading = false;
+        }
       });
   }
 
@@ -106,45 +65,20 @@ implements OnInit {
   | Download PDF
   |--------------------------------------------------------------------------
   */
-  downloadPdf(
-    consultationId:
-    string,
-  ): void {
-
+  downloadPdf(consultationId: string): void {
     this.consultationService
-      .downloadPrescriptionPdf(
-
-        consultationId,
-      )
+      .downloadPrescriptionPdf(consultationId)
 
       .subscribe({
+        next: (response: Blob) => {
+          const fileURL = window.URL.createObjectURL(response);
 
-        next: (
-          response:
-          Blob,
-        ) => {
-
-          const fileURL =
-
-            window.URL
-              .createObjectURL(
-                response,
-              );
-
-          window.open(
-            fileURL,
-          );
+          window.open(fileURL);
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
-  
 }

@@ -1,140 +1,74 @@
-import { Component }
-  from '@angular/core';
-import { Router }
-  from '@angular/router';
-import { TokenService }
-  from '../../../core/services/token';
-import { AuthService }
-  from '../../../core/services/auth';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { TokenService } from '../../../core/services/token';
+import { AuthService } from '../../../core/services/auth';
 
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
-  selector:
-    'app-create-password',
+  selector: 'app-create-password',
 
-  imports: [
-    ReactiveFormsModule,
-  ],
+  imports: [ReactiveFormsModule],
 
-  templateUrl:
-    './create-password.html',
+  templateUrl: './create-password.html',
 
-  styleUrl:
-    './create-password.css',
+  styleUrl: './create-password.css'
 })
 export class CreatePassword {
-
   passwordForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private tokenService: TokenService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {
+    this.passwordForm = this.fb.group({
+      temporaryPassword: ['', Validators.required],
 
-    this.passwordForm =
-      this.fb.group({
+      newPassword: ['', Validators.required],
 
-        temporaryPassword: [
-          '',
-          Validators.required,
-        ],
+      confirmPassword: ['', Validators.required],
+      securityQuestion: ['', Validators.required],
 
-        newPassword: [
-          '',
-          Validators.required,
-        ],
-
-        confirmPassword: [
-          '',
-          Validators.required,
-        ],
-        securityQuestion: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        securityAnswer: [
-
-          '',
-
-          Validators.required,
-        ],
-      });
+      securityAnswer: ['', Validators.required]
+    });
   }
   onSubmit(): void {
-
-    if (
-      this.passwordForm.invalid
-    ) {
-
+    if (this.passwordForm.invalid) {
       return;
     }
 
     const payload = {
+      loginId: localStorage.getItem('loginId'),
 
-      loginId:
-        localStorage.getItem(
-          'loginId',
-        ),
+      temporaryPassword: this.passwordForm.value.temporaryPassword,
 
-      temporaryPassword:
-        this.passwordForm.value
-          .temporaryPassword,
+      newPassword: this.passwordForm.value.newPassword,
 
-      newPassword:
-        this.passwordForm.value
-          .newPassword,
+      confirmPassword: this.passwordForm.value.confirmPassword,
+      securityQuestion: this.passwordForm.value.securityQuestion,
 
-      confirmPassword:
-        this.passwordForm.value
-          .confirmPassword,
-      securityQuestion:
-        this.passwordForm.value
-          .securityQuestion,
-
-      securityAnswer:
-        this.passwordForm.value
-          .securityAnswer,
+      securityAnswer: this.passwordForm.value.securityAnswer
     };
 
-    this.authService
-      .createPassword(payload)
-      .subscribe({
+    this.authService.createPassword(payload).subscribe({
+      next: (response) => {
+        console.log(response);
 
-        next: (response) => {
+        this.tokenService.removeToken();
 
-          console.log(response);
+        this.router.navigate(['/login']);
+      },
 
-          this.tokenService
-            .removeToken();
+      error: (error) => {
+        console.log(error);
 
-          this.router.navigate([
-            '/login',
-          ]);
-        },
-
-        error: (error) => {
-
-          console.log(error);
-
-          console.log(
-            error.error.errors,
-          );
-        },
-      });
+        console.log(error.error.errors);
+      }
+    });
   }
   securityQuestions = [
-
     'What is your favourite color?',
 
     'What is your pet name?',
@@ -143,6 +77,6 @@ export class CreatePassword {
 
     'What is your favourite food?',
 
-    'What is your school name?',
+    'What is your school name?'
   ];
 }

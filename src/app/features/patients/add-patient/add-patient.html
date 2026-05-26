@@ -1,419 +1,295 @@
 <div class="patient-registration-page">
+  <!-- Header -->
 
-    <!-- Header -->
+  <div class="page-header glass-card">
+    <div>
+      <p class="page-label">Patient Management</p>
 
-    <div class="page-header glass-card">
+      <h1>Register Patient</h1>
 
-        <div>
-
-            <p class="page-label">
-                Patient Management
-            </p>
-
-            <h1>
-                Register Patient
-            </h1>
-
-            <p class="page-subtitle">
-
-                Create patient medical records
-                and onboarding details.
-
-            </p>
-
-        </div>
-
+      <p class="page-subtitle">Create patient medical records and onboarding details.</p>
     </div>
+  </div>
 
-    <!-- Progress -->
+  <!-- Progress -->
 
-    <div class="steps-wrapper glass-card">
-
-        <div class="step" [class.active]="
+  <div class="steps-wrapper glass-card">
+    <div
+      class="step"
+      [class.active]="
           currentStep >= 1
-          ">
+          "
+    >
+      <div class="step-number">1</div>
 
-            <div class="step-number">
-                1
-            </div>
-
-            <span>
-                Basic Info
-            </span>
-
-        </div>
-
-        <div class="step" [class.active]="
-          currentStep >= 2
-          ">
-
-            <div class="step-number">
-                2
-            </div>
-
-            <span>
-                Contact
-            </span>
-
-        </div>
-
-        <div class="step" [class.active]="
-          currentStep >= 3
-          ">
-
-            <div class="step-number">
-                3
-            </div>
-
-            <span>
-                Medical
-            </span>
-
-        </div>
-
-        <div class="step" [class.active]="
-          currentStep >= 4
-          ">
-
-            <div class="step-number">
-                4
-            </div>
-
-            <span>
-                Insurance
-            </span>
-
-        </div>
-
+      <span> Basic Info </span>
     </div>
 
-    <!-- FORM -->
+    <div
+      class="step"
+      [class.active]="
+          currentStep >= 2
+          "
+    >
+      <div class="step-number">2</div>
 
-    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="patient-form glass-card">
+      <span> Contact </span>
+    </div>
 
-        <!-- STEP 1 -->
+    <div
+      class="step"
+      [class.active]="
+          currentStep >= 3
+          "
+    >
+      <div class="step-number">3</div>
 
-        @if(currentStep === 1){
+      <span> Medical </span>
+    </div>
 
-        <div class="section">
+    <div
+      class="step"
+      [class.active]="
+          currentStep >= 4
+          "
+    >
+      <div class="step-number">4</div>
 
-            <div class="section-title">
+      <span> Insurance </span>
+    </div>
+  </div>
 
-                <h2>
-                    Basic Information
-                </h2>
+  <!-- FORM -->
 
-                <p>
-                    Enter patient personal details
-                </p>
+  <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="patient-form glass-card">
+    <!-- STEP 1 -->
 
-            </div>
+    @if(currentStep === 1){
 
-            <div class="grid-2">
+    <div class="section">
+      <div class="section-title">
+        <h2>Basic Information</h2>
 
-                <input type="text" placeholder="First Name" formControlName="firstName" />
+        <p>Enter patient personal details</p>
+      </div>
 
-                <input type="text" placeholder="Last Name" formControlName="lastName" />
+      <div class="grid-2">
+        <input type="text" placeholder="First Name" formControlName="firstName" />
 
-                <input type="date" formControlName="dateOfBirth" />
+        <input type="text" placeholder="Last Name" formControlName="lastName" />
 
-                <select formControlName="gender">
+        <input type="date" formControlName="dateOfBirth" />
 
-                    <option value="">
-                        Select Gender
-                    </option>
+        <select formControlName="gender">
+          <option value="">Select Gender</option>
 
-                    <option value="MALE">
-                        Male
-                    </option>
+          <option value="MALE">Male</option>
 
-                    <option value="FEMALE">
-                        Female
-                    </option>
+          <option value="FEMALE">Female</option>
 
-                    <option value="OTHER">
-                        Other
-                    </option>
+          <option value="OTHER">Other</option>
+        </select>
 
-                </select>
+        <select formControlName="bloodGroup">
+          <option value="">Select Blood Group</option>
 
-                <select formControlName="bloodGroup">
+          <option value="A+">A+</option>
 
-                    <option value="">
-                        Select Blood Group
-                    </option>
+          <option value="A-">A-</option>
 
-                    <option value="A+">
-                        A+
-                    </option>
+          <option value="B+">B+</option>
 
-                    <option value="A-">
-                        A-
-                    </option>
+          <option value="B-">B-</option>
 
-                    <option value="B+">
-                        B+
-                    </option>
+          <option value="AB+">AB+</option>
 
-                    <option value="B-">
-                        B-
-                    </option>
+          <option value="AB-">AB-</option>
 
-                    <option value="AB+">
-                        AB+
-                    </option>
+          <option value="O+">O+</option>
 
-                    <option value="AB-">
-                        AB-
-                    </option>
+          <option value="O-">O-</option>
+        </select>
 
-                    <option value="O+">
-                        O+
-                    </option>
+        <select formControlName="maritalStatus">
+          <option value="">Marital Status</option>
 
-                    <option value="O-">
-                        O-
-                    </option>
+          <option value="SINGLE">Single</option>
 
-                </select>
+          <option value="MARRIED">Married</option>
 
-                <select formControlName="maritalStatus">
+          <option value="DIVORCED">Divorced</option>
+        </select>
+      </div>
+    </div>
 
-                    <option value="">
-                        Marital Status
-                    </option>
+    }
 
-                    <option value="SINGLE">
-                        Single
-                    </option>
+    <!-- STEP 2 -->
 
-                    <option value="MARRIED">
-                        Married
-                    </option>
+    @if(currentStep === 2){
 
-                    <option value="DIVORCED">
-                        Divorced
-                    </option>
+    <div class="section">
+      <div class="section-title">
+        <h2>Contact Information</h2>
 
-                </select>
+        <p>Patient communication details</p>
+      </div>
 
-            </div>
+      <div class="grid-2">
+        <div class="phone-group">
+          <select formControlName="countryCode">
+            <option value="+91">+91 🇮🇳</option>
 
+            <option value="+1">+1 🇺🇸</option>
+
+            <option value="+44">+44 🇬🇧</option>
+          </select>
+
+          <input type="text" placeholder="Phone" maxlength="10" formControlName="phone" />
         </div>
 
-        }
+        <input type="email" placeholder="Email" formControlName="email" />
 
-        <!-- STEP 2 -->
+        <input type="text" placeholder="Address" formControlName="address" />
 
-        @if(currentStep === 2){
+        <input type="text" placeholder="City" formControlName="city" />
 
-        <div class="section">
+        <input type="text" placeholder="State" formControlName="state" />
 
-            <div class="section-title">
+        <input type="text" placeholder="Pincode" formControlName="pincode" />
 
-                <h2>
-                    Contact Information
-                </h2>
+        <input
+          type="text"
+          placeholder="Emergency Contact Name"
+          formControlName="emergencyContactName"
+        />
 
-                <p>
-                    Patient communication details
-                </p>
+        <input
+          type="text"
+          placeholder=" Emergency Contact Phone"
+          maxlength="10"
+          formControlName="emergencyContactPhone"
+        />
+      </div>
+    </div>
 
-            </div>
+    }
 
-            <div class="grid-2">
+    <!-- STEP 3 -->
 
-                <div class="phone-group">
+    @if(currentStep === 3){
 
-                    <select formControlName="countryCode">
+    <div class="section">
+      <div class="section-title">
+        <h2>Medical Information</h2>
 
-                        <option value="+91">
-                            +91 🇮🇳
-                        </option>
+        <p>Patient medical records</p>
+      </div>
 
-                        <option value="+1">
-                            +1 🇺🇸
-                        </option>
+      <div class="grid-2">
+        <textarea placeholder="Medical History" formControlName="medicalHistory"></textarea>
 
-                        <option value="+44">
-                            +44 🇬🇧
-                        </option>
+        <textarea placeholder="Allergies" formControlName="allergies"></textarea>
 
-                    </select>
-
-                    <input type="text" placeholder="Phone" maxlength="10" formControlName="phone" />
-
-                </div>
-
-                <input type="email" placeholder="Email" formControlName="email" />
-
-                <input type="text" placeholder="Address" formControlName="address" />
-
-                <input type="text" placeholder="City" formControlName="city" />
-
-                <input type="text" placeholder="State" formControlName="state" />
-
-                <input type="text" placeholder="Pincode" formControlName="pincode" />
-
-                <input type="text" placeholder="Emergency Contact Name" formControlName="emergencyContactName" />
-
-                <input type="text" placeholder=" Emergency Contact Phone" maxlength="10"
-                    formControlName="emergencyContactPhone" />
-
-            </div>
-
-        </div>
-
-        }
-
-        <!-- STEP 3 -->
-
-        @if(currentStep === 3){
-
-        <div class="section">
-
-            <div class="section-title">
-
-                <h2>
-                    Medical Information
-                </h2>
-
-                <p>
-                    Patient medical records
-                </p>
-
-            </div>
-
-            <div class="grid-2">
-
-                <textarea placeholder="Medical History" formControlName="medicalHistory"></textarea>
-
-                <textarea placeholder="Allergies" formControlName="allergies"></textarea>
-
-                <textarea placeholder="
+        <textarea
+          placeholder="
                   Chronic Diseases
-                  " formControlName="chronicDiseases"></textarea>
+                  "
+          formControlName="chronicDiseases"
+        ></textarea>
 
-                <textarea placeholder="
+        <textarea
+          placeholder="
                   Current Medications
-                  " formControlName="currentMedications"></textarea>
+                  "
+          formControlName="currentMedications"
+        ></textarea>
 
-                <textarea placeholder="
+        <textarea
+          placeholder="
                   Past Surgeries
-                  " formControlName="pastSurgeries"></textarea>
+                  "
+          formControlName="pastSurgeries"
+        ></textarea>
 
-                <textarea placeholder="
+        <textarea
+          placeholder="
                   Family Medical History
-                  " formControlName="familyMedicalHistory"></textarea>
+                  "
+          formControlName="familyMedicalHistory"
+        ></textarea>
+      </div>
+    </div>
 
-            </div>
+    }
 
-        </div>
+    <!-- STEP 4 -->
 
-        }
+    @if(currentStep === 4){
 
-        <!-- STEP 4 -->
+    <div class="section">
+      <div class="section-title">
+        <h2>Insurance & Hospital</h2>
 
-        @if(currentStep === 4){
+        <p>Insurance & assignment details</p>
+      </div>
 
-        <div class="section">
-
-            <div class="section-title">
-
-                <h2>
-                    Insurance & Hospital
-                </h2>
-
-                <p>
-                    Insurance & assignment details
-                </p>
-
-            </div>
-
-            <div class="grid-2">
-
-                <input type="text" placeholder="
+      <div class="grid-2">
+        <input
+          type="text"
+          placeholder="
                   Insurance Provider
-                  " formControlName="insuranceProvider" />
+                  "
+          formControlName="insuranceProvider"
+        />
 
-                <input type="text" placeholder="Policy Number" formControlName="insurancePolicyNumber" />
+        <input type="text" placeholder="Policy Number" formControlName="insurancePolicyNumber" />
 
-                <input type="date" formControlName="insuranceExpiryDate" />
+        <input type="date" formControlName="insuranceExpiryDate" />
 
-                <input type="number" placeholder="
+        <input
+          type="number"
+          placeholder="
                   Coverage Amount
-                  " formControlName="insuranceCoverageAmount" />
+                  "
+          formControlName="insuranceCoverageAmount"
+        />
 
-               
+        <select formControlName="patientType">
+          <option value="OPD">OPD</option>
 
-                <select formControlName="patientType">
+          <option value="IPD">IPD</option>
 
-                    <option value="OPD">
-                        OPD
-                    </option>
+          <option value="EMERGENCY">Emergency</option>
+        </select>
+      </div>
+    </div>
 
-                    <option value="IPD">
-                        IPD
-                    </option>
+    }
 
-                    <option value="EMERGENCY">
-                        Emergency
-                    </option>
+    <!-- BUTTONS -->
 
-                </select>
+    <div class="button-group">
+      @if(currentStep > 1){
 
-            </div>
+      <button type="button" class="secondary-btn" (click)="previousStep()">Previous</button>
 
-        </div>
+      } @if(currentStep < 4){
+      <button type="button" class="primary-btn" (click)="nextStep()">Save & Continue</button>
 
-        }
+      } @if(currentStep === 4){
 
-        <!-- BUTTONS -->
-
-        <div class="button-group">
-
-            @if(currentStep > 1){
-
-            <button type="button" class="secondary-btn" (click)="previousStep()">
-
-                Previous
-
-            </button>
-
-            }
-
-            @if(currentStep < 4){ <button type="button" class="primary-btn" (click)="nextStep()">
-
-                Save & Continue
-
-                </button>
-
-                }
-
-                @if(currentStep === 4){
-
-                <button type="submit" class="submit-btn" [disabled]="
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="
               isSubmitting
-              ">
+              "
+      >
+        @if(isSubmitting){ Registering... } @else { Register Patient }
+      </button>
 
-                    @if(isSubmitting){
-
-                    Registering...
-
-                    }
-
-                    @else {
-
-                    Register Patient
-
-                    }
-
-                </button>
-
-                }
-
-        </div>
-
-    </form>
-
+      }
+    </div>
+  </form>
 </div>

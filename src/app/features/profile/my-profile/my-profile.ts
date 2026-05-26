@@ -1,107 +1,59 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  AuthService,
-} from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector:
-    'app-my-profile',
+  selector: 'app-my-profile',
 
   standalone: true,
 
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
 
-  templateUrl:
-    './my-profile.html',
+  templateUrl: './my-profile.html',
 
-  styleUrl:
-    './my-profile.css',
+  styleUrl: './my-profile.css'
 })
-export class MyProfile
-implements OnInit {
-
+export class MyProfile implements OnInit {
   user: any;
 
-  constructor(
-
-    private authService:
-      AuthService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   /*
   |--------------------------------------------------------------------------
   | On Init
   |--------------------------------------------------------------------------
   */
-  ngOnInit():
-  void {
+  ngOnInit(): void {
+    this.authService.currentUser.subscribe({
+      next: (response: any) => {
+        console.log(response);
 
-    this.authService
-      .currentUser
+        if (response?.employeeId) {
+          this.user = response.employeeId;
+        } else {
+          this.user = {
+            name: 'Administrator',
 
-      .subscribe({
+            email: response?.email,
 
-        next: (
-          response: any,
-        ) => {
+            status: response?.status,
 
-          console.log(
-            response,
-          );
+            designation: response?.roles?.[0],
 
-         if (
-  response?.employeeId
-) {
+            department: 'Administration',
 
-  this.user =
-    response.employeeId;
-}
+            employeeCode: 'ADMIN',
 
-else {
+            joiningDate: response?.createdAt
+          };
+        }
+      },
 
-  this.user = {
-
-    name: 'Administrator',
-
-    email:
-      response?.email,
-
-    status:
-      response?.status,
-
-    designation:
-      response?.roles?.[0],
-
-    department:
-      'Administration',
-
-    employeeCode:
-      'ADMIN',
-
-    joiningDate:
-      response?.createdAt,
-  };
-}
-        },
-
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 }

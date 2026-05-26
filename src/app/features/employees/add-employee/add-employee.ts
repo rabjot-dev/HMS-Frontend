@@ -1,40 +1,23 @@
-import { Component }
-  from '@angular/core';
+import { Component } from '@angular/core';
 
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import { EmployeeService }
-  from '../../../core/services/employee';
+import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
   selector: 'app-add-employee',
 
   standalone: true,
 
-  imports: [
+  imports: [ReactiveFormsModule, CommonModule],
 
-    ReactiveFormsModule,
+  templateUrl: './add-employee.html',
 
-    CommonModule,
-  ],
-
-  templateUrl:
-    './add-employee.html',
-
-  styleUrl:
-    './add-employee.css',
+  styleUrl: './add-employee.css'
 })
 export class AddEmployee {
-
   employeeForm: FormGroup;
 
   successMessage = '';
@@ -44,132 +27,66 @@ export class AddEmployee {
   isSubmitting = false;
 
   constructor(
-
     private fb: FormBuilder,
 
-    private employeeService:
-      EmployeeService,
+    private employeeService: EmployeeService
   ) {
-
-    this.employeeForm =
-      this.fb.group({
-
-        /*
+    this.employeeForm = this.fb.group({
+      /*
         |--------------------------------------------------------------------------
         | Basic Details
         |--------------------------------------------------------------------------
         */
-        name: [
+      name: ['', Validators.required],
 
-          '',
-          Validators.required,
-        ],
+      email: ['', [Validators.required, Validators.email]],
 
-        email: [
+      countryCode: ['+91', Validators.required],
 
-          '',
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
 
-          [
+      gender: ['', Validators.required],
 
-            Validators.required,
+      designation: ['', Validators.required],
 
-            Validators.email,
-          ],
-        ],
+      department: ['', Validators.required],
 
-        countryCode: [
+      joiningDate: ['', Validators.required],
 
-          '+91',
-
-          Validators.required,
-        ],
-
-        phone: [
-
-          '',
-
-          [
-
-            Validators.required,
-
-            Validators.pattern(
-              '^[0-9]{10}$'
-            ),
-          ],
-        ],
-
-        gender: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        designation: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        department: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        joiningDate: [
-
-          '',
-
-          Validators.required,
-        ],
-
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Doctor Fields
         |--------------------------------------------------------------------------
         */
-        medicalRegistrationNo: [
-          '',
-        ],
+      medicalRegistrationNo: [''],
 
-        specialization: [
-          '',
-        ],
+      specialization: [''],
 
-        qualification: [
-          '',
-        ],
+      qualification: [''],
 
-        consultationFee: [
-          0,
-        ],
+      consultationFee: [0],
 
-        availabilitySlots: [
-          '',
-        ],
+      availabilitySlots: [''],
 
-        /*
+      /*
         |--------------------------------------------------------------------------
         | Doctor Availability
         |--------------------------------------------------------------------------
         */
-        workingDays: [[]],
+      workingDays: [[]],
 
-        startTime: [''],
+      startTime: [''],
 
-        endTime: [''],
+      endTime: [''],
 
-        slotDuration: [15],
+      slotDuration: [15],
 
-        breakStartTime: [''],
+      breakStartTime: [''],
 
-        breakEndTime: [''],
+      breakEndTime: [''],
 
-        maxPatientsPerDay: [40],
-      });
+      maxPatientsPerDay: [40]
+    });
   }
 
   /*
@@ -177,12 +94,8 @@ export class AddEmployee {
   | Designation Getter
   |--------------------------------------------------------------------------
   */
-  get designation():
-  string {
-
-    return this.employeeForm
-      .get('designation')
-      ?.value;
+  get designation(): string {
+    return this.employeeForm.get('designation')?.value;
   }
 
   /*
@@ -191,80 +104,53 @@ export class AddEmployee {
   |--------------------------------------------------------------------------
   */
   onSubmit(): void {
+    console.log('Create Employee Clicked');
 
-    console.log(
-      'Create Employee Clicked'
-    );
-
-    console.log(
-      this.employeeForm.value
-    );
+    console.log(this.employeeForm.value);
 
     /*
     |--------------------------------------------------------------------------
     | Validation
     |--------------------------------------------------------------------------
     */
-    if (
-      this.employeeForm.invalid
-    ) {
-
-      this.employeeForm
-        .markAllAsTouched();
+    if (this.employeeForm.invalid) {
+      this.employeeForm.markAllAsTouched();
 
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
 
-    this.successMessage =
-      '';
+    this.successMessage = '';
 
-    this.errorMessage =
-      '';
+    this.errorMessage = '';
 
     /*
     |--------------------------------------------------------------------------
     | Remove Doctor Fields
     |--------------------------------------------------------------------------
     */
-    if (
-      this.designation !==
-      'DOCTOR'
-    ) {
-
+    if (this.designation !== 'DOCTOR') {
       this.employeeForm.patchValue({
+        medicalRegistrationNo: '',
 
-        medicalRegistrationNo:
-          '',
+        specialization: '',
 
-        specialization:
-          '',
+        qualification: '',
 
-        qualification:
-          '',
+        consultationFee: 0,
 
-        consultationFee:
-          0,
+        availabilitySlots: '',
 
-        availabilitySlots:
-          '',
+        workingDays: [],
 
-        workingDays:
-          [],
+        startTime: '',
 
-        startTime:
-          '',
+        endTime: '',
 
-        endTime:
-          '',
+        breakStartTime: '',
 
-        breakStartTime:
-          '',
-
-        breakEndTime:
-          '',
+        breakEndTime: ''
       });
     }
 
@@ -274,37 +160,18 @@ export class AddEmployee {
     |--------------------------------------------------------------------------
     */
     const payload = {
-
       ...this.employeeForm.value,
 
-      qualification:
-        this.employeeForm.value
-          .qualification
+      qualification: this.employeeForm.value.qualification
+        ? [this.employeeForm.value.qualification]
+        : [],
 
-          ? [
-
-            this.employeeForm.value
-              .qualification,
-          ]
-
-          : [],
-
-      role:
-        this.employeeForm.value
-          .designation,
+      role: this.employeeForm.value.designation
     };
 
-    console.log(
-      'FINAL PAYLOAD'
-    );
+    console.log('FINAL PAYLOAD');
 
-    console.log(
-      JSON.stringify(
-        payload,
-        null,
-        2,
-      )
-    );
+    console.log(JSON.stringify(payload, null, 2));
 
     /*
     |--------------------------------------------------------------------------
@@ -312,77 +179,40 @@ export class AddEmployee {
     |--------------------------------------------------------------------------
     */
     this.employeeService
-      .createEmployee(
-        payload,
-      )
+      .createEmployee(payload)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          this.isSubmitting = false;
 
-          console.log(
-            response,
-          );
+          this.successMessage = 'Employee created successfully';
 
-          this.isSubmitting =
-            false;
+          this.employeeForm.reset();
 
-          this.successMessage =
-
-            'Employee created successfully';
-
-          this.employeeForm
-            .reset();
-
-          this.employeeForm
-            .patchValue({
-
-              countryCode:
-                '+91',
-            });
+          this.employeeForm.patchValue({
+            countryCode: '+91'
+          });
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log('FULL ERROR');
 
-          console.log(
-            'FULL ERROR',
-          );
+          console.log(error);
 
-          console.log(
-            error,
-          );
+          console.log('BACKEND RESPONSE');
 
-          console.log(
-            'BACKEND RESPONSE',
-          );
+          console.log(error?.error);
 
-          console.log(
-            error?.error,
-          );
+          console.log('VALIDATION');
 
-          console.log(
-            'VALIDATION',
-          );
+          console.log(error?.error?.errors);
 
-          console.log(
-            error?.error?.errors,
-          );
+          this.isSubmitting = false;
 
-          this.isSubmitting =
-            false;
-
-          this.errorMessage =
-
-            error?.error?.message
-
-            ||
-
-            'Failed to create employee';
-        },
+          this.errorMessage = error?.error?.message || 'Failed to create employee';
+        }
       });
   }
 
@@ -391,47 +221,19 @@ export class AddEmployee {
   | Working Days Selection
   |--------------------------------------------------------------------------
   */
-  onWorkingDayChange(
-    event: any,
-  ): void {
+  onWorkingDayChange(event: any): void {
+    const workingDays = this.employeeForm.get('workingDays')?.value || [];
 
-    const workingDays =
-
-      this.employeeForm
-        .get('workingDays')
-        ?.value || [];
-
-    if (
-      event.target.checked
-    ) {
-
-      workingDays.push(
-        event.target.value,
-      );
-
+    if (event.target.checked) {
+      workingDays.push(event.target.value);
     } else {
+      const index = workingDays.indexOf(event.target.value);
 
-      const index =
-
-        workingDays.indexOf(
-          event.target.value,
-        );
-
-      if (
-        index > -1
-      ) {
-
-        workingDays.splice(
-          index,
-          1,
-        );
+      if (index > -1) {
+        workingDays.splice(index, 1);
       }
     }
 
-    this.employeeForm
-      .get('workingDays')
-      ?.setValue(
-        workingDays,
-      );
+    this.employeeForm.get('workingDays')?.setValue(workingDays);
   }
 }

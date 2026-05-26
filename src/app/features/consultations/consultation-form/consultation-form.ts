@@ -1,88 +1,48 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  FormBuilder,
-  FormGroup,
-  FormArray,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  ConsultationService,
-} from '../../../core/services/consultation';
+import { ConsultationService } from '../../../core/services/consultation';
 
-import {
-  AppointmentService,
-} from '../../../core/services/appointment';
+import { AppointmentService } from '../../../core/services/appointment';
 
-import {
-  AuthService,
-} from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector:
-    'app-consultation-form',
+  selector: 'app-consultation-form',
 
   standalone: true,
 
-  imports: [
+  imports: [CommonModule, ReactiveFormsModule],
 
-    CommonModule,
+  templateUrl: './consultation-form.html',
 
-    ReactiveFormsModule,
-  ],
-
-  templateUrl:
-    './consultation-form.html',
-
-  styleUrls: [
-    './consultation-form.css',
-  ],
+  styleUrls: ['./consultation-form.css']
 })
-export class ConsultationForm
-  implements OnInit {
-
-  consultationForm!:
-    FormGroup;
+export class ConsultationForm implements OnInit {
+  consultationForm!: FormGroup;
 
   appointment: any;
 
-  isSubmitting =
-    false;
+  isSubmitting = false;
 
   constructor(
+    private fb: FormBuilder,
 
-    private fb:
-      FormBuilder,
+    private route: ActivatedRoute,
 
-    private route:
-      ActivatedRoute,
+    private router: Router,
 
-    private router:
-      Router,
+    private consultationService: ConsultationService,
 
-    private consultationService:
-      ConsultationService,
+    private appointmentService: AppointmentService,
 
-    private appointmentService:
-      AppointmentService,
-
-    private authService:
-      AuthService,
-  ) { }
+    private authService: AuthService
+  ) {}
 
   /*
   |--------------------------------------------------------------------------
@@ -90,24 +50,12 @@ export class ConsultationForm
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
-
     this.initializeForm();
 
-    const appointmentId =
+    const appointmentId = this.route.snapshot.paramMap.get('appointmentId');
 
-      this.route.snapshot
-        .paramMap
-        .get(
-          'appointmentId',
-        );
-
-    if (
-      appointmentId
-    ) {
-
-      this.loadAppointment(
-        appointmentId,
-      );
+    if (appointmentId) {
+      this.loadAppointment(appointmentId);
     }
   }
 
@@ -116,57 +64,28 @@ export class ConsultationForm
   | Initialize Form
   |--------------------------------------------------------------------------
   */
-  initializeForm():
-    void {
+  initializeForm(): void {
+    this.consultationForm = this.fb.group({
+      diagnosis: ['', Validators.required],
 
-    this.consultationForm =
+      symptoms: [''],
 
-      this.fb.group({
+      doctorNotes: [''],
 
-        diagnosis: [
+      vitals: this.fb.group({
+        bloodPressure: [''],
 
-          '',
+        pulseRate: [''],
 
-          Validators.required,
-        ],
+        oxygenLevel: [''],
 
-        symptoms: [
-          '',
-        ],
+        temperature: [''],
 
-        doctorNotes: [
-          '',
-        ],
+        weight: ['']
+      }),
 
-        vitals:
-          this.fb.group({
-
-            bloodPressure: [
-              '',
-            ],
-
-            pulseRate: [
-              '',
-            ],
-
-            oxygenLevel: [
-              '',
-            ],
-
-            temperature: [
-              '',
-            ],
-
-            weight: [
-              '',
-            ],
-          }),
-
-        prescriptions:
-          this.fb.array([
-            this.createPrescription(),
-          ]),
-      });
+      prescriptions: this.fb.array([this.createPrescription()])
+    });
   }
 
   /*
@@ -174,38 +93,15 @@ export class ConsultationForm
   | Create Prescription
   |--------------------------------------------------------------------------
   */
-  createPrescription():
-    FormGroup {
-
+  createPrescription(): FormGroup {
     return this.fb.group({
+      medicineName: ['', Validators.required],
 
-      medicineName: [
+      dosage: ['', Validators.required],
 
-        '',
+      frequency: ['', Validators.required],
 
-        Validators.required,
-      ],
-
-      dosage: [
-
-        '',
-
-        Validators.required,
-      ],
-
-      frequency: [
-
-        '',
-
-        Validators.required,
-      ],
-
-      duration: [
-
-        '',
-
-        Validators.required,
-      ],
+      duration: ['', Validators.required]
     });
   }
 
@@ -214,14 +110,8 @@ export class ConsultationForm
   | Get Prescriptions
   |--------------------------------------------------------------------------
   */
-  get prescriptions():
-    FormArray {
-
-    return this
-      .consultationForm
-      .get(
-        'prescriptions',
-      ) as FormArray;
+  get prescriptions(): FormArray {
+    return this.consultationForm.get('prescriptions') as FormArray;
   }
 
   /*
@@ -229,14 +119,8 @@ export class ConsultationForm
   | Add Prescription
   |--------------------------------------------------------------------------
   */
-  addPrescription():
-    void {
-
-    this.prescriptions
-      .push(
-
-        this.createPrescription(),
-      );
+  addPrescription(): void {
+    this.prescriptions.push(this.createPrescription());
   }
 
   /*
@@ -244,12 +128,8 @@ export class ConsultationForm
   | Remove Prescription
   |--------------------------------------------------------------------------
   */
-  removePrescription(
-    index: number,
-  ): void {
-
-    this.prescriptions
-      .removeAt(index);
+  removePrescription(index: number): void {
+    this.prescriptions.removeAt(index);
   }
 
   /*
@@ -257,35 +137,20 @@ export class ConsultationForm
   | Load Appointment
   |--------------------------------------------------------------------------
   */
-  loadAppointment(
-    id: string,
-  ): void {
-
+  loadAppointment(id: string): void {
     this.appointmentService
       .getAppointmentById(id)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          this.appointment =
-            response.data;
+          this.appointment = response.data;
         },
 
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
+        error: (error) => {
+          console.log(error);
+        }
       });
   }
 
@@ -294,144 +159,61 @@ export class ConsultationForm
   | Submit Consultation
   |--------------------------------------------------------------------------
   */
-  onSubmit():
-    void {
-
-    if (
-
-      this.consultationForm
-        .invalid
-    ) {
-
-      this.consultationForm
-        .markAllAsTouched();
+  onSubmit(): void {
+    if (this.consultationForm.invalid) {
+      this.consultationForm.markAllAsTouched();
 
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
 
-    const currentUser =
-
-      JSON.parse(
-
-        localStorage
-          .getItem(
-            'user',
-          ) || '{}',
-      );
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
 
     const consultationData = {
+      appointmentId: this.appointment?._id,
 
-      appointmentId:
+      patientId: this.appointment?.patientId?._id,
 
-        this.appointment
-          ?._id,
+      doctorEmployeeId: currentUser?.employeeId?._id,
 
-      patientId:
+      diagnosis: this.consultationForm.value.diagnosis,
 
-        this.appointment
-          ?.patientId
-          ?._id,
+      symptoms: this.consultationForm.value.symptoms
 
-      doctorEmployeeId:
+        ?.split(',')
 
-        currentUser
-          ?.employeeId
-          ?._id,
+        .map((symptom: string) => symptom.trim()),
 
-      diagnosis:
+      doctorNotes: this.consultationForm.value.doctorNotes,
 
-        this.consultationForm
-          .value
-          .diagnosis,
+      vitals: this.consultationForm.value.vitals,
 
-      symptoms:
-
-        this.consultationForm
-          .value
-          .symptoms
-
-          ?.split(',')
-
-          .map(
-            (
-              symptom:
-                string,
-            ) =>
-
-              symptom.trim(),
-          ),
-
-      doctorNotes:
-
-        this.consultationForm
-          .value
-          .doctorNotes,
-
-      vitals:
-
-        this.consultationForm
-          .value
-          .vitals,
-
-      prescriptions:
-
-        this.consultationForm
-          .value
-          .prescriptions,
+      prescriptions: this.consultationForm.value.prescriptions
     };
 
-    console.log(
-      consultationData,
-    );
+    console.log(consultationData);
 
     this.consultationService
-      .createConsultation(
-
-        consultationData,
-      )
+      .createConsultation(consultationData)
 
       .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        next: (
-          response,
-        ) => {
+          alert('Consultation completed successfully');
+          this.router.navigate(['/consultations']);
 
-          console.log(
-            response,
-          );
+          this.isSubmitting = false;
 
-          alert(
-            'Consultation completed successfully',
-          );
-          this.router.navigate([
-            '/consultations',
-          ]);
-
-          this.isSubmitting =
-            false;
-
-          this.router.navigate([
-
-            '/consultations',
-
-            response.data._id,
-          ]);
+          this.router.navigate(['/consultations', response.data._id]);
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isSubmitting =
-            false;
-        },
+          this.isSubmitting = false;
+        }
       });
   }
 }

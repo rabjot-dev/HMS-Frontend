@@ -1,10 +1,9 @@
 .appointment-page {
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
-
-    gap: 24px;
+  gap: 24px;
 }
 
 /*
@@ -13,37 +12,33 @@
 |--------------------------------------------------------------------------
 */
 .appointment-header {
+  padding: 32px;
 
-    padding: 32px;
-
-    border-radius: 30px;
+  border-radius: 30px;
 }
 
 .page-label {
+  color: #3b82f6;
 
-    color: #3b82f6;
+  font-size: 13px;
 
-    font-size: 13px;
+  font-weight: 700;
 
-    font-weight: 700;
+  text-transform: uppercase;
 
-    text-transform: uppercase;
-
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .appointment-header h1 {
+  font-size: 42px;
 
-    font-size: 42px;
+  margin-bottom: 10px;
 
-    margin-bottom: 10px;
-
-    color: #0f172a;
+  color: #0f172a;
 }
 
 .page-subtitle {
-
-    color: #64748b;
+  color: #64748b;
 }
 
 /*
@@ -52,16 +47,15 @@
 |--------------------------------------------------------------------------
 */
 .appointment-form {
+  padding: 35px;
 
-    padding: 35px;
+  border-radius: 30px;
 
-    border-radius: 30px;
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
-
-    gap: 32px;
+  gap: 32px;
 }
 
 /*
@@ -70,24 +64,21 @@
 |--------------------------------------------------------------------------
 */
 .form-section {
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
-
-    gap: 24px;
+  gap: 24px;
 }
 
 .section-title h2 {
+  color: #0f172a;
 
-    color: #0f172a;
-
-    margin-bottom: 6px;
+  margin-bottom: 6px;
 }
 
 .section-title p {
-
-    color: #64748b;
+  color: #64748b;
 }
 
 /*
@@ -96,19 +87,11 @@
 |--------------------------------------------------------------------------
 */
 .grid-2 {
+  display: grid;
 
-    display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(
-                260px,
-                1fr
-            )
-        );
-
-    gap: 22px;
+  gap: 22px;
 }
 
 /*
@@ -117,21 +100,19 @@
 |--------------------------------------------------------------------------
 */
 .form-group {
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
-
-    gap: 10px;
+  gap: 10px;
 }
 
 .form-group label {
+  font-size: 14px;
 
-    font-size: 14px;
+  font-weight: 600;
 
-    font-weight: 600;
-
-    color: #334155;
+  color: #334155;
 }
 
 /*
@@ -142,47 +123,31 @@
 input,
 select,
 textarea {
+  width: 100%;
 
-    width: 100%;
+  padding: 16px 18px;
 
-    padding: 16px 18px;
+  border-radius: 18px;
 
-    border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
 
-    border:
-        1px solid rgba(
-            148,
-            163,
-            184,
-            0.25
-        );
+  background: rgba(255, 255, 255, 0.65);
 
-    background:
-        rgba(255,255,255,0.65);
+  font-size: 15px;
 
-    font-size: 15px;
+  transition: all 0.3s ease;
 
-    transition:
-        all 0.3s ease;
-
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
+  outline: none;
 
-    outline: none;
+  border-color: #3b82f6;
 
-    border-color: #3b82f6;
-
-    box-shadow:
-        0 0 0 4px rgba(
-            59,
-            130,
-            246,
-            0.12
-        );
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
 }
 
 /*
@@ -191,10 +156,9 @@ textarea:focus {
 |--------------------------------------------------------------------------
 */
 textarea {
+  min-height: 120px;
 
-    min-height: 120px;
-
-    resize: vertical;
+  resize: vertical;
 }
 
 /*
@@ -203,98 +167,69 @@ textarea {
 |--------------------------------------------------------------------------
 */
 .slots-card {
+  padding: 28px;
 
-    padding: 28px;
+  border-radius: 24px;
 
-    border-radius: 24px;
+  background: rgba(248, 250, 252, 0.75);
 
-    background:
-        rgba(248,250,252,0.75);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 
-    border:
-        1px solid rgba(
-            226,
-            232,
-            240,
-            0.8
-        );
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
-
-    gap: 24px;
+  gap: 24px;
 }
 
 .slot-header h2 {
+  margin-bottom: 6px;
 
-    margin-bottom: 6px;
-
-    color: #0f172a;
+  color: #0f172a;
 }
 
 .slot-header p {
-
-    color: #64748b;
+  color: #64748b;
 }
 
 .slots-container {
+  display: flex;
 
-    display: flex;
+  flex-wrap: wrap;
 
-    flex-wrap: wrap;
-
-    gap: 14px;
+  gap: 14px;
 }
 
 .slot-btn {
+  border: none;
 
-    border: none;
+  padding: 14px 20px;
 
-    padding: 14px 20px;
+  border-radius: 16px;
 
-    border-radius: 16px;
+  background: rgba(59, 130, 246, 0.08);
 
-    background:
-        rgba(59,130,246,0.08);
+  color: #2563eb;
 
-    color: #2563eb;
+  font-weight: 700;
 
-    font-weight: 700;
+  cursor: pointer;
 
-    cursor: pointer;
-
-    transition:
-        all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .slot-btn:hover {
+  transform: translateY(-2px);
 
-    transform:
-        translateY(-2px);
-
-    background:
-        rgba(59,130,246,0.14);
+  background: rgba(59, 130, 246, 0.14);
 }
 
 .slot-btn.active {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #8b5cf6
-        );
+  color: white;
 
-    color: white;
-
-    box-shadow:
-        0 15px 30px rgba(
-            59,
-            130,
-            246,
-            0.25
-        );
+  box-shadow: 0 15px 30px rgba(59, 130, 246, 0.25);
 }
 
 /*
@@ -303,51 +238,35 @@ textarea {
 |--------------------------------------------------------------------------
 */
 .submit-btn {
+  border: none;
 
-    border: none;
+  padding: 18px;
 
-    padding: 18px;
+  border-radius: 20px;
 
-    border-radius: 20px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #8b5cf6
-        );
+  color: white;
 
-    color: white;
+  font-size: 16px;
 
-    font-size: 16px;
+  font-weight: 700;
 
-    font-weight: 700;
+  cursor: pointer;
 
-    cursor: pointer;
+  transition: all 0.3s ease;
 
-    transition:
-        all 0.3s ease;
-
-    box-shadow:
-        0 20px 40px rgba(
-            59,
-            130,
-            246,
-            0.22
-        );
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.22);
 }
 
 .submit-btn:hover {
-
-    transform:
-        translateY(-3px);
+  transform: translateY(-3px);
 }
 
 .submit-btn:disabled {
+  opacity: 0.7;
 
-    opacity: 0.7;
-
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
 /*
@@ -356,9 +275,7 @@ textarea {
 |--------------------------------------------------------------------------
 */
 .full-width {
-
-    grid-column:
-        1 / -1;
+  grid-column: 1 / -1;
 }
 
 /*
@@ -366,22 +283,16 @@ textarea {
 | Responsive
 |--------------------------------------------------------------------------
 */
-@media (
-max-width: 768px
-) {
+@media (max-width: 768px) {
+  .appointment-form {
+    padding: 22px;
+  }
 
-    .appointment-form {
+  .slots-container {
+    gap: 10px;
+  }
 
-        padding: 22px;
-    }
-
-    .slots-container {
-
-        gap: 10px;
-    }
-
-    .slot-btn {
-
-        width: 100%;
-    }
+  .slot-btn {
+    width: 100%;
+  }
 }

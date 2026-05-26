@@ -1,81 +1,39 @@
-import {
-  Component,
-} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
-import {
-  Router,
-} from '@angular/router';
+import { Router } from '@angular/router';
 
-import {
-  AuthService,
-} from '../../../core/services/auth';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector:
-    'app-forgot-password',
+  selector: 'app-forgot-password',
 
   standalone: true,
 
-  imports: [
+  imports: [CommonModule, ReactiveFormsModule],
 
-    CommonModule,
+  templateUrl: './forgot-password.html',
 
-    ReactiveFormsModule,
-  ],
-
-  templateUrl:
-    './forgot-password.html',
-
-  styleUrls: [
-    './forgot-password.css',
-  ],
+  styleUrls: ['./forgot-password.css']
 })
 export class ForgotPassword {
+  isSubmitting = false;
 
-  isSubmitting =
-    false;
-
-  forgotForm:
-  any;
+  forgotForm: any;
 
   constructor(
+    private fb: FormBuilder,
 
-    private fb:
-      FormBuilder,
+    private authService: AuthService,
 
-    private authService:
-      AuthService,
-
-    private router:
-      Router,
+    private router: Router
   ) {
-
-    this.forgotForm =
-
-      this.fb.group({
-
-        email: [
-
-          '',
-
-          [
-
-            Validators.required,
-
-            Validators.email,
-          ],
-        ],
-      });
+    this.forgotForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
   }
 
   /*
@@ -83,80 +41,42 @@ export class ForgotPassword {
   | Submit
   |--------------------------------------------------------------------------
   */
-  onSubmit():
-  void {
-
-    if (
-
-      this.forgotForm
-      .invalid
-    ) {
-
-      this.forgotForm
-        .markAllAsTouched();
+  onSubmit(): void {
+    if (this.forgotForm.invalid) {
+      this.forgotForm.markAllAsTouched();
 
       return;
     }
 
-    this.isSubmitting =
-      true;
+    this.isSubmitting = true;
 
     this.authService
-      .forgotPassword(
-
-        this.forgotForm
-        .value
-        .email,
-      )
+      .forgotPassword(this.forgotForm.value.email)
 
       .subscribe({
-
-        next: (
-          response: any,
-        ) => {
-
-          console.log(
-            response,
-          );
+        next: (response: any) => {
+          console.log(response);
 
           this.router.navigate(
-
-            [
-              '/reset-password',
-            ],
+            ['/reset-password'],
 
             {
               state: {
+                email: this.forgotForm.value.email,
 
-                email:
-
-                  this.forgotForm
-                  .value
-                  .email,
-
-                securityQuestion:
-
-                  response
-                  ?.securityQuestion,
-              },
-            },
+                securityQuestion: response?.securityQuestion
+              }
+            }
           );
 
-          this.isSubmitting =
-            false;
+          this.isSubmitting = false;
         },
 
-        error: (
-          error,
-        ) => {
+        error: (error) => {
+          console.log(error);
 
-          console.log(
-            error,
-          );
-
-          this.isSubmitting =
-            false;
-        },
+          this.isSubmitting = false;
+        }
       });
   }
 }

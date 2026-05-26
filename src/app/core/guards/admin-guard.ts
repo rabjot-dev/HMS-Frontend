@@ -1,46 +1,25 @@
-import { inject }
-from '@angular/core';
+import { inject } from '@angular/core';
 
-import {
-  CanActivateFn,
-  Router,
-} from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 
-import { AuthService }
-from '../services/auth';
+import { AuthService } from '../services/auth';
 
-import { map }
-from 'rxjs';
+import { map } from 'rxjs';
 
-export const adminGuard:
-CanActivateFn = () => {
+export const adminGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
 
-  const authService =
-    inject(AuthService);
+  const router = inject(Router);
 
-  const router =
-    inject(Router);
+  return authService.currentUser.pipe(
+    map((user) => {
+      if (user?.roles?.includes('ADMIN')) {
+        return true;
+      }
 
-  return authService
-    .currentUser
-    .pipe(
+      router.navigate(['/dashboard']);
 
-      map((user) => {
-
-        if (
-          user?.roles?.includes(
-            'ADMIN',
-          )
-        ) {
-
-          return true;
-        }
-
-        router.navigate([
-          '/dashboard',
-        ]);
-
-        return false;
-      }),
-    );
+      return false;
+    })
+  );
 };

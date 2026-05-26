@@ -8,7 +8,7 @@ describe('AdminDashboard', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdminDashboard],
+      imports: [AdminDashboard]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminDashboard);
