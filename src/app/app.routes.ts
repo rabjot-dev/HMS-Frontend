@@ -107,6 +107,9 @@ import {
   ResetPassword,
 } from './features/auth/reset-password/reset-password';
 import {
+  MyProfile,
+} from './features/profile/my-profile/my-profile';
+import {
   Home,
 } from './features/floater/home/home';
 
@@ -159,7 +162,7 @@ export const routes:
           component:
             CreatePassword,
         },
-                {
+        {
           path:
             'forgot-password',
 
@@ -209,42 +212,42 @@ export const routes:
             'full',
         },
 
-      /*
-|--------------------------------------------------------------------------
-| Admin Dashboard
-|--------------------------------------------------------------------------
-*/
-{
-  path: 'dashboard/admin',
+        /*
+  |--------------------------------------------------------------------------
+  | Admin Dashboard
+  |--------------------------------------------------------------------------
+  */
+        {
+          path: 'dashboard/admin',
 
-  component:
-    AdminDashboard,
+          component:
+            AdminDashboard,
 
-},
+        },
 
-/*
-|--------------------------------------------------------------------------
-| Doctor Dashboard
-|--------------------------------------------------------------------------
-*/
-{
-  path: 'dashboard/doctor',
+        /*
+        |--------------------------------------------------------------------------
+        | Doctor Dashboard
+        |--------------------------------------------------------------------------
+        */
+        {
+          path: 'dashboard/doctor',
 
-  component:
-    DoctorDashboard,
-},
+          component:
+            DoctorDashboard,
+        },
 
-/*
-|--------------------------------------------------------------------------
-| Receptionist Dashboard
-|--------------------------------------------------------------------------
-*/
-{
-  path: 'dashboard/receptionist',
+        /*
+        |--------------------------------------------------------------------------
+        | Receptionist Dashboard
+        |--------------------------------------------------------------------------
+        */
+        {
+          path: 'dashboard/receptionist',
 
-  component:
-    ReceptionistDashboard,
-},
+          component:
+            ReceptionistDashboard,
+        },
 
         /*
         |--------------------------------------------------------------------------
@@ -335,6 +338,7 @@ export const routes:
 
           component:
             EditPatient,
+          canActivate: [adminGuard],
         },
         {
           path:
@@ -391,6 +395,24 @@ export const routes:
 
           component:
             DoctorAvailability,
+        },
+        {
+          path:
+            'my-profile',
+
+          component:
+            MyProfile,
+        },
+        {
+          path:
+            'consultations/:id',
+
+          loadComponent: () =>
+            import(
+              './features/consultations/consultation-details/consultation-details'
+            ).then(
+              m => m.ConsultationDetails
+            ),
         },
 
       ],

@@ -37,6 +37,10 @@
 
             <!-- Add Patient Button -->
 
+            @if(
+            userRole !== 'DOCTOR'
+            ){
+
             <a
               routerLink="/patients/create"
 
@@ -46,6 +50,8 @@
                 + Add Patient
 
             </a>
+
+            }
 
         </div>
 
@@ -292,6 +298,10 @@
 
                             <!-- Edit -->
 
+                            @if(
+                            userRole !== 'DOCTOR'
+                            ){
+
                             <a
 
                               class="action-btn edit"
@@ -305,6 +315,8 @@
                                 Edit
 
                             </a>
+
+                            }
 
                         </div>
 

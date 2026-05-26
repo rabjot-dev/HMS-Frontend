@@ -125,7 +125,7 @@ downloadPrescriptionPdf(
 
       this.apiUrl
 
-    }/pdf/${
+    }/prescription/${
 
       consultationId
 
@@ -136,6 +136,28 @@ downloadPrescriptionPdf(
       responseType:
       'blob',
     },
+  );
+}
+/*
+|--------------------------------------------------------------------------
+| Get Consultation By Id
+|--------------------------------------------------------------------------
+*/
+getConsultationById(
+  id: string,
+): Observable<any> {
+
+  return this.http.get(
+
+    `${
+
+      this.apiUrl
+
+    }/${
+
+      id
+
+    }`,
   );
 }
 }

@@ -1,11 +1,11 @@
 import {
   Component,
-  OnInit,
 } from '@angular/core';
 
 import {
   ReactiveFormsModule,
   FormBuilder,
+  FormGroup,
   Validators,
 } from '@angular/forms';
 
@@ -37,8 +37,7 @@ import {
     './add-patient.css',
   ],
 })
-export class AddPatient
-  implements OnInit {
+export class AddPatient {
 
   /*
   |--------------------------------------------------------------------------
@@ -56,17 +55,10 @@ export class AddPatient
 
   /*
   |--------------------------------------------------------------------------
-  | Doctors
-  |--------------------------------------------------------------------------
-  */
-  doctors: any[] = [];
-
-  /*
-  |--------------------------------------------------------------------------
   | Patient Form
   |--------------------------------------------------------------------------
   */
-  patientForm: any;
+  patientForm!: FormGroup;
 
   constructor(
 
@@ -105,12 +97,6 @@ export class AddPatient
 
           Validators.required,
         ],
-        countryCode: [
-
-          '+91',
-
-          Validators.required,
-        ],
 
         gender: [
 
@@ -128,19 +114,26 @@ export class AddPatient
         | Contact Information
         |--------------------------------------------------------------------------
         */
-       phone: [
+        countryCode: [
 
-  '',
+          '+91',
 
-  [
+          Validators.required,
+        ],
 
-    Validators.required,
+        phone: [
 
-    Validators.pattern(
-      '^[0-9]{10}$'
-    ),
-  ],
-],
+          '',
+
+          [
+
+            Validators.required,
+
+            Validators.pattern(
+              '^[0-9]{10}$'
+            ),
+          ],
+        ],
 
         email: [''],
 
@@ -208,56 +201,9 @@ export class AddPatient
         | Hospital Information
         |--------------------------------------------------------------------------
         */
-        assignedDoctor: [''],
-
         department: [''],
 
         patientType: ['OPD'],
-      });
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | On Init
-  |--------------------------------------------------------------------------
-  */
-  ngOnInit(): void {
-
-    this.loadDoctors();
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | Load Doctors
-  |--------------------------------------------------------------------------
-  */
-  loadDoctors(): void {
-
-    this.patientService
-      .getDoctors()
-
-      .subscribe({
-
-        next: (
-          response,
-        ) => {
-
-          console.log(
-            response,
-          );
-
-          this.doctors =
-            response.data;
-        },
-
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
       });
   }
 
@@ -298,9 +244,43 @@ export class AddPatient
   */
   onSubmit(): void {
 
+    console.log(
+      'Register Patient Clicked',
+    );
+
+    console.log(
+      this.patientForm.value,
+    );
+
     if (
       this.patientForm.invalid
     ) {
+
+      console.log(
+        'FORM INVALID',
+      );
+
+      Object.keys(
+        this.patientForm.controls
+      ).forEach(key => {
+
+        const control =
+
+          this.patientForm
+            .get(key);
+
+        if (
+          control?.invalid
+        ) {
+
+          console.log(
+
+            key,
+
+            control.errors,
+          );
+        }
+      });
 
       this.patientForm
         .markAllAsTouched();
@@ -310,10 +290,6 @@ export class AddPatient
 
     this.isSubmitting =
       true;
-
-    console.log(
-      this.patientForm.value,
-    );
 
     this.patientService
       .createPatient(
@@ -335,9 +311,37 @@ export class AddPatient
             'Patient Registered Successfully',
           );
 
+          /*
+          |--------------------------------------------------------------------------
+          | Reset Form
+          |--------------------------------------------------------------------------
+          */
           this.patientForm
             .reset();
 
+          /*
+          |--------------------------------------------------------------------------
+          | Default Values After Reset
+          |--------------------------------------------------------------------------
+          */
+          this.patientForm
+            .patchValue({
+
+              countryCode:
+                '+91',
+
+              country:
+                'India',
+
+              patientType:
+                'OPD',
+            });
+
+          /*
+          |--------------------------------------------------------------------------
+          | Reset UI
+          |--------------------------------------------------------------------------
+          */
           this.currentStep =
             1;
 

@@ -10,11 +10,26 @@
                 Reception Workspace
             </p>
 
+            @if(
+            authService.currentUser
+            | async;
+            as user
+            ){
+
             <h1>
 
-                Welcome Receptionist 👋
+                Welcome,
+
+                {{
+                user?.employeeId?.name
+                || 'Receptionist'
+                }}
+
+                👋
 
             </h1>
+
+            }
 
             <p class="hero-subtitle">
 
@@ -257,11 +272,7 @@
 
             <div class="quick-grid">
 
-                <a
-                  routerLink="/patients/create"
-
-                  class="quick-card"
-                >
+                <a routerLink="/patients/create" class="quick-card">
 
                     <span>
                         🧑
@@ -271,11 +282,7 @@
 
                 </a>
 
-                <a
-                  routerLink="/appointments/book"
-
-                  class="quick-card"
-                >
+                <a routerLink="/appointments/book" class="quick-card">
 
                     <span>
                         📅
@@ -285,11 +292,7 @@
 
                 </a>
 
-                <a
-                  routerLink="/appointments"
-
-                  class="quick-card"
-                >
+                <a routerLink="/appointments" class="quick-card">
 
                     <span>
                         📋
@@ -299,11 +302,7 @@
 
                 </a>
 
-                <a
-                  routerLink="/patients"
-
-                  class="quick-card"
-                >
+                <a routerLink="/patients" class="quick-card">
 
                     <span>
                         👨‍⚕️

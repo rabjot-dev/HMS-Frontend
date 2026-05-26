@@ -29,13 +29,9 @@
 
     <div class="steps-wrapper glass-card">
 
-        <div
-          class="step"
-
-          [class.active]="
+        <div class="step" [class.active]="
           currentStep >= 1
-          "
-        >
+          ">
 
             <div class="step-number">
                 1
@@ -47,13 +43,9 @@
 
         </div>
 
-        <div
-          class="step"
-
-          [class.active]="
+        <div class="step" [class.active]="
           currentStep >= 2
-          "
-        >
+          ">
 
             <div class="step-number">
                 2
@@ -65,13 +57,9 @@
 
         </div>
 
-        <div
-          class="step"
-
-          [class.active]="
+        <div class="step" [class.active]="
           currentStep >= 3
-          "
-        >
+          ">
 
             <div class="step-number">
                 3
@@ -83,13 +71,9 @@
 
         </div>
 
-        <div
-          class="step"
-
-          [class.active]="
+        <div class="step" [class.active]="
           currentStep >= 4
-          "
-        >
+          ">
 
             <div class="step-number">
                 4
@@ -105,14 +89,7 @@
 
     <!-- FORM -->
 
-    <form
-
-      [formGroup]="patientForm"
-
-      (ngSubmit)="onSubmit()"
-
-      class="patient-form glass-card"
-    >
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="patient-form glass-card">
 
         <!-- STEP 1 -->
 
@@ -134,31 +111,13 @@
 
             <div class="grid-2">
 
-                <input
-                  type="text"
+                <input type="text" placeholder="First Name" formControlName="firstName" />
 
-                  placeholder="First Name"
+                <input type="text" placeholder="Last Name" formControlName="lastName" />
 
-                  formControlName="firstName"
-                />
+                <input type="date" formControlName="dateOfBirth" />
 
-                <input
-                  type="text"
-
-                  placeholder="Last Name"
-
-                  formControlName="lastName"
-                />
-
-                <input
-                  type="date"
-
-                  formControlName="dateOfBirth"
-                />
-
-                <select
-                  formControlName="gender"
-                >
+                <select formControlName="gender">
 
                     <option value="">
                         Select Gender
@@ -178,9 +137,7 @@
 
                 </select>
 
-                <select
-                  formControlName="bloodGroup"
-                >
+                <select formControlName="bloodGroup">
 
                     <option value="">
                         Select Blood Group
@@ -220,9 +177,7 @@
 
                 </select>
 
-                <select
-                  formControlName="maritalStatus"
-                >
+                <select formControlName="maritalStatus">
 
                     <option value="">
                         Marital Status
@@ -270,9 +225,7 @@
 
                 <div class="phone-group">
 
-                    <select
-                      formControlName="countryCode"
-                    >
+                    <select formControlName="countryCode">
 
                         <option value="+91">
                             +91 🇮🇳
@@ -288,87 +241,24 @@
 
                     </select>
 
-                    <input
-
-                      type="text"
-
-                      placeholder="Phone"
-
-                      formControlName="phone"
-                    />
+                    <input type="text" placeholder="Phone" maxlength="10" formControlName="phone" />
 
                 </div>
 
-                <input
+                <input type="email" placeholder="Email" formControlName="email" />
 
-                  type="email"
+                <input type="text" placeholder="Address" formControlName="address" />
 
-                  placeholder="Email"
+                <input type="text" placeholder="City" formControlName="city" />
 
-                  formControlName="email"
-                />
+                <input type="text" placeholder="State" formControlName="state" />
 
-                <input
+                <input type="text" placeholder="Pincode" formControlName="pincode" />
 
-                  type="text"
+                <input type="text" placeholder="Emergency Contact Name" formControlName="emergencyContactName" />
 
-                  placeholder="Address"
-
-                  formControlName="address"
-                />
-
-                <input
-
-                  type="text"
-
-                  placeholder="City"
-
-                  formControlName="city"
-                />
-
-                <input
-
-                  type="text"
-
-                  placeholder="State"
-
-                  formControlName="state"
-                />
-
-                <input
-
-                  type="text"
-
-                  placeholder="Pincode"
-
-                  formControlName="pincode"
-                />
-
-                <input
-
-                  type="text"
-
-                  placeholder="
-                  Emergency Contact Name
-                  "
-
-                  formControlName="
-                  emergencyContactName
-                  "
-                />
-
-                <input
-
-                  type="text"
-
-                  placeholder="
-                  Emergency Contact Phone
-                  "
-
-                  formControlName="
-                  emergencyContactPhone
-                  "
-                />
+                <input type="text" placeholder=" Emergency Contact Phone" maxlength="10"
+                    formControlName="emergencyContactPhone" />
 
             </div>
 
@@ -396,67 +286,25 @@
 
             <div class="grid-2">
 
-                <textarea
+                <textarea placeholder="Medical History" formControlName="medicalHistory"></textarea>
 
-                  placeholder="Medical History"
+                <textarea placeholder="Allergies" formControlName="allergies"></textarea>
 
-                  formControlName="
-                  medicalHistory
-                  "
-                ></textarea>
-
-                <textarea
-
-                  placeholder="Allergies"
-
-                  formControlName="
-                  allergies
-                  "
-                ></textarea>
-
-                <textarea
-
-                  placeholder="
+                <textarea placeholder="
                   Chronic Diseases
-                  "
+                  " formControlName="chronicDiseases"></textarea>
 
-                  formControlName="
-                  chronicDiseases
-                  "
-                ></textarea>
-
-                <textarea
-
-                  placeholder="
+                <textarea placeholder="
                   Current Medications
-                  "
+                  " formControlName="currentMedications"></textarea>
 
-                  formControlName="
-                  currentMedications
-                  "
-                ></textarea>
-
-                <textarea
-
-                  placeholder="
+                <textarea placeholder="
                   Past Surgeries
-                  "
+                  " formControlName="pastSurgeries"></textarea>
 
-                  formControlName="
-                  pastSurgeries
-                  "
-                ></textarea>
-
-                <textarea
-
-                  placeholder="
+                <textarea placeholder="
                   Family Medical History
-                  "
-
-                  formControlName="
-                  familyMedicalHistory
-                  "
-                ></textarea>
+                  " formControlName="familyMedicalHistory"></textarea>
 
             </div>
 
@@ -484,88 +332,21 @@
 
             <div class="grid-2">
 
-                <input
-
-                  type="text"
-
-                  placeholder="
+                <input type="text" placeholder="
                   Insurance Provider
-                  "
+                  " formControlName="insuranceProvider" />
 
-                  formControlName="
-                  insuranceProvider
-                  "
-                />
+                <input type="text" placeholder="Policy Number" formControlName="insurancePolicyNumber" />
 
-                <input
+                <input type="date" formControlName="insuranceExpiryDate" />
 
-                  type="text"
-
-                  placeholder="Policy Number"
-
-                  formControlName="
-                  insurancePolicyNumber
-                  "
-                />
-
-                <input
-
-                  type="date"
-
-                  formControlName="
-                  insuranceExpiryDate
-                  "
-                />
-
-                <input
-
-                  type="number"
-
-                  placeholder="
+                <input type="number" placeholder="
                   Coverage Amount
-                  "
+                  " formControlName="insuranceCoverageAmount" />
 
-                  formControlName="
-                  insuranceCoverageAmount
-                  "
-                />
+               
 
-                <select
-                  formControlName="
-                  assignedDoctor
-                  "
-                >
-
-                    <option value="">
-                        Select Doctor
-                    </option>
-
-                    @for (
-                    doctor of doctors;
-                    track doctor._id
-                    ) {
-
-                    <option
-                      [value]="doctor._id"
-                    >
-
-                        {{ doctor.name }}
-
-                        -
-
-                        {{ doctor.department }}
-
-                    </option>
-
-                    }
-
-                </select>
-
-                <select
-                  formControlName="
-                  patientType
-                  "
-                >
+                <select formControlName="patientType">
 
                     <option value="OPD">
                         OPD
@@ -593,14 +374,7 @@
 
             @if(currentStep > 1){
 
-            <button
-
-              type="button"
-
-              class="secondary-btn"
-
-              (click)="previousStep()"
-            >
+            <button type="button" class="secondary-btn" (click)="previousStep()">
 
                 Previous
 
@@ -608,51 +382,35 @@
 
             }
 
-            @if(currentStep < 4){
-
-            <button
-
-              type="button"
-
-              class="primary-btn"
-
-              (click)="nextStep()"
-            >
+            @if(currentStep < 4){ <button type="button" class="primary-btn" (click)="nextStep()">
 
                 Save & Continue
 
-            </button>
+                </button>
 
-            }
+                }
 
-            @if(currentStep === 4){
+                @if(currentStep === 4){
 
-            <button
-
-              type="submit"
-
-              class="submit-btn"
-
-              [disabled]="
+                <button type="submit" class="submit-btn" [disabled]="
               isSubmitting
-              "
-            >
+              ">
 
-                @if(isSubmitting){
+                    @if(isSubmitting){
 
-                Registering...
+                    Registering...
+
+                    }
+
+                    @else {
+
+                    Register Patient
+
+                    }
+
+                </button>
 
                 }
-
-                @else {
-
-                Register Patient
-
-                }
-
-            </button>
-
-            }
 
         </div>
 

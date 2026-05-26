@@ -10,11 +10,26 @@
                 Doctor Workspace
             </p>
 
+            @if(
+            authService.currentUser
+            | async;
+            as user
+            ){
+
             <h1>
 
-                Welcome Doctor 👨‍⚕️
+                Welcome Dr.
+
+                {{
+                user?.employeeId?.name
+                || 'Doctor'
+                }}
+
+                👋
 
             </h1>
+
+            }
 
             <p class="hero-subtitle">
 
@@ -257,11 +272,7 @@
 
             <div class="quick-grid">
 
-                <a
-                  routerLink="/doctor-queue"
-
-                  class="quick-card"
-                >
+                <a routerLink="/doctor-queue" class="quick-card">
 
                     <span>
                         🩺
@@ -271,11 +282,7 @@
 
                 </a>
 
-                <a
-                  routerLink="/appointments"
-
-                  class="quick-card"
-                >
+                <a routerLink="/appointments" class="quick-card">
 
                     <span>
                         📅
@@ -285,11 +292,7 @@
 
                 </a>
 
-                <a
-                  routerLink="/patients"
-
-                  class="quick-card"
-                >
+                <a routerLink="/patients" class="quick-card">
 
                     <span>
                         🧑
@@ -299,11 +302,7 @@
 
                 </a>
 
-                <a
-                  routerLink="/doctor-availability"
-
-                  class="quick-card"
-                >
+                <a routerLink="/doctor-availability" class="quick-card">
 
                     <span>
                         ⏰

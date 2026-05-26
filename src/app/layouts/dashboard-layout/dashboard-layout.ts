@@ -1,15 +1,23 @@
-import { Component }
-from '@angular/core';
-import { Router }
-from '@angular/router';
-import { TokenService }
-from '../../core/services/token';
-import { ChangeDetectorRef } from '@angular/core';
 import {
-  RouterLinkActive,
+  Component,
+  HostListener,
+  ElementRef,
+} from '@angular/core';
+
+import {
+  Router,
 } from '@angular/router';
 
 import {
+  TokenService,
+} from '../../core/services/token';
+
+import {
+  ChangeDetectorRef,
+} from '@angular/core';
+
+import {
+  RouterLinkActive,
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
@@ -18,19 +26,25 @@ import {
   AsyncPipe,
 } from '@angular/common';
 
-import { AuthService }
-from '../../core/services/auth';
+import {
+  AuthService,
+} from '../../core/services/auth';
 
 @Component({
-  selector: 'app-dashboard-layout',
+  selector:
+    'app-dashboard-layout',
+
+  standalone: true,
 
   imports: [
-    RouterOutlet,
-    RouterLink,
-    AsyncPipe,
-    RouterLinkActive,
 
-      
+    RouterOutlet,
+
+    RouterLink,
+
+    AsyncPipe,
+
+    RouterLinkActive,
   ],
 
   templateUrl:
@@ -41,26 +55,94 @@ from '../../core/services/auth';
 })
 export class DashboardLayout {
 
-constructor(
+  /*
+  |--------------------------------------------------------------------------
+  | Profile Dropdown
+  |--------------------------------------------------------------------------
+  */
+  isProfileOpen =
+    false;
 
-  public authService:
-    AuthService,
+  constructor(
 
-  private tokenService:
-    TokenService,
+    public authService:
+      AuthService,
 
-  private router: Router,
-  private cdr: ChangeDetectorRef,
+    private tokenService:
+      TokenService,
 
-) {}
-logout(): void {
+    private router:
+      Router,
 
-  this.tokenService.removeToken();
+    private cdr:
+      ChangeDetectorRef,
 
-  this.authService.currentUser
-    .next(null);
+    private elementRef:
+      ElementRef,
+  ) {}
 
-  this.router.navigate(['/login']);
-  this.cdr.detectChanges();
-}
+  /*
+  |--------------------------------------------------------------------------
+  | Toggle Dropdown
+  |--------------------------------------------------------------------------
+  */
+  toggleProfile():
+  void {
+
+    this.isProfileOpen =
+
+      !this.isProfileOpen;
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Close On Outside Click
+  |--------------------------------------------------------------------------
+  */
+  @HostListener(
+    'document:click',
+    ['$event'],
+  )
+
+  onClickOutside(
+    event: MouseEvent,
+  ): void {
+
+    const clickedInside =
+
+      this.elementRef
+        .nativeElement
+        .contains(
+          event.target,
+        );
+
+    if (!clickedInside) {
+
+      this.isProfileOpen =
+        false;
+    }
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Logout
+  |--------------------------------------------------------------------------
+  */
+  logout():
+  void {
+
+    this.tokenService
+      .removeToken();
+
+    this.authService
+      .currentUser
+      .next(null);
+
+    this.router.navigate([
+      '/login',
+    ]);
+
+    this.cdr
+      .detectChanges();
+  }
 }

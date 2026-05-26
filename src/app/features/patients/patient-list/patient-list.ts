@@ -6,14 +6,18 @@ import {
 import {
   CommonModule,
 } from '@angular/common';
+
 import {
   FormsModule,
 } from '@angular/forms';
 
 import {
+  RouterLink,
+} from '@angular/router';
+
+import {
   PatientService,
 } from '../../../core/services/patient';
-import { RouterLink } from "@angular/router";
 
 @Component({
   selector:
@@ -22,10 +26,13 @@ import { RouterLink } from "@angular/router";
   standalone: true,
 
   imports: [
+
     CommonModule,
+
     FormsModule,
-    RouterLink
-],
+
+    RouterLink,
+  ],
 
   templateUrl:
     './patient-list.html',
@@ -37,12 +44,29 @@ import { RouterLink } from "@angular/router";
 export class PatientList
 implements OnInit {
 
+  /*
+  |--------------------------------------------------------------------------
+  | Patients
+  |--------------------------------------------------------------------------
+  */
   patients: any[] = [];
 
   filteredPatients:
   any[] = [];
 
+  /*
+  |--------------------------------------------------------------------------
+  | Search
+  |--------------------------------------------------------------------------
+  */
   searchTerm = '';
+
+  /*
+  |--------------------------------------------------------------------------
+  | User Role
+  |--------------------------------------------------------------------------
+  */
+  userRole = '';
 
   constructor(
 
@@ -57,6 +81,27 @@ implements OnInit {
   */
   ngOnInit(): void {
 
+    /*
+    |--------------------------------------------------------------------------
+    | Get Role
+    |--------------------------------------------------------------------------
+    */
+    this.userRole =
+
+      localStorage.getItem(
+        'role',
+      ) || '';
+
+    console.log(
+      'ROLE:',
+      this.userRole,
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Load Patients
+    |--------------------------------------------------------------------------
+    */
     this.loadPatients();
   }
 

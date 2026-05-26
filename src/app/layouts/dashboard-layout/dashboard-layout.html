@@ -76,72 +76,72 @@
 
             <!-- ADMIN DASHBOARD -->
 
-@if(
-user?.roles?.includes(
-'ADMIN'
-)
-){
+            @if(
+            user?.roles?.includes(
+            'ADMIN'
+            )
+            ){
 
-<a
-  routerLink="/dashboard/admin"
-  routerLinkActive="active-link"
->
+            <a
+              routerLink="/dashboard/admin"
+              routerLinkActive="active-link"
+            >
 
-    <span>
-        🏠
-    </span>
+                <span>
+                    🏠
+                </span>
 
-    Dashboard
+                Dashboard
 
-</a>
+            </a>
 
-}
+            }
 
-<!-- DOCTOR DASHBOARD -->
+            <!-- DOCTOR DASHBOARD -->
 
-@if(
-user?.roles?.includes(
-'DOCTOR'
-)
-){
+            @if(
+            user?.roles?.includes(
+            'DOCTOR'
+            )
+            ){
 
-<a
-  routerLink="/dashboard/doctor"
-  routerLinkActive="active-link"
->
+            <a
+              routerLink="/dashboard/doctor"
+              routerLinkActive="active-link"
+            >
 
-    <span>
-        🏠
-    </span>
+                <span>
+                    🏠
+                </span>
 
-    Dashboard
+                Dashboard
 
-</a>
+            </a>
 
-}
+            }
 
-<!-- RECEPTIONIST DASHBOARD -->
+            <!-- RECEPTIONIST DASHBOARD -->
 
-@if(
-user?.roles?.includes(
-'RECEPTIONIST'
-)
-){
+            @if(
+            user?.roles?.includes(
+            'RECEPTIONIST'
+            )
+            ){
 
-<a
-  routerLink="/dashboard/receptionist"
-  routerLinkActive="active-link"
->
+            <a
+              routerLink="/dashboard/receptionist"
+              routerLinkActive="active-link"
+            >
 
-    <span>
-        🏠
-    </span>
+                <span>
+                    🏠
+                </span>
 
-    Dashboard
+                Dashboard
 
-</a>
+            </a>
 
-}
+            }
 
             <!-- ADMIN -->
 
@@ -331,18 +331,6 @@ user?.roles?.includes(
 
         </nav>
 
-        <!-- Logout -->
-
-        <button
-          class="logout-btn"
-
-          (click)="logout()"
-        >
-
-            Logout
-
-        </button>
-
         }
 
     </aside>
@@ -367,17 +355,106 @@ user?.roles?.includes(
 
             </div>
 
+            @if(
+            authService.currentUser
+            | async;
+            as user
+            ){
+
             <div class="topbar-right">
 
-                <div class="status-dot">
+                <!-- System Status -->
+
+                <div class="system-status">
+
+                    <div class="status-dot">
+
+                    </div>
+
+                    <span>
+                        System Active
+                    </span>
 
                 </div>
 
-                <span>
-                    System Active
-                </span>
+                <!-- Profile -->
+
+                <div
+                  class="top-profile"
+
+                  (click)="
+                  toggleProfile();
+
+                  $event.stopPropagation()
+                  "
+                >
+
+                    <!-- Avatar -->
+
+                    <div class="top-avatar">
+
+                        {{
+                        user?.email
+                        ?.charAt(0)
+                        ?.toUpperCase()
+                        }}
+
+                    </div>
+
+                    <!-- Info -->
+
+                    <div class="top-user-info">
+
+                        <h4>
+
+                            {{
+                            user?.employeeId?.name
+                            || 'User'
+                            }}
+
+                        </h4>
+
+                        <p>
+
+                            {{
+                            user?.roles?.[0]
+                            }}
+
+                        </p>
+
+                    </div>
+
+                    <!-- Dropdown -->
+
+                    @if(isProfileOpen){
+
+                    <div class="profile-dropdown">
+
+                        <a
+                          routerLink="/my-profile"
+                        >
+
+                            My Profile
+
+                        </a>
+
+                        <button
+                          (click)="logout()"
+                        >
+
+                            Logout
+
+                        </button>
+
+                    </div>
+
+                    }
+
+                </div>
 
             </div>
+
+            }
 
         </header>
 

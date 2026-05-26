@@ -6,8 +6,9 @@ import {
 import {
   CommonModule,
 } from '@angular/common';
+
 import {
-  RouterLink,
+  ActivatedRoute,
 } from '@angular/router';
 
 import {
@@ -16,59 +17,67 @@ import {
 
 @Component({
   selector:
-    'app-consultation-list',
+    'app-consultation-details',
 
   standalone: true,
 
   imports: [
-    CommonModule,RouterLink
+    CommonModule,
   ],
 
   templateUrl:
-    './consultation-list.html',
+    './consultation-details.html',
 
   styleUrls: [
-    './consultation-list.css',
+    './consultation-details.css',
   ],
 })
-export class ConsultationList
+export class ConsultationDetails
 implements OnInit {
 
-  consultations:
-  any[] = [];
+  consultation: any;
 
   isLoading =
-    false;
+    true;
 
   constructor(
+
+    private route:
+      ActivatedRoute,
 
     private consultationService:
       ConsultationService,
   ) {}
 
-  /*
-  |--------------------------------------------------------------------------
-  | On Init
-  |--------------------------------------------------------------------------
-  */
   ngOnInit(): void {
 
-    this.loadConsultations();
+    const id =
+
+      this.route.snapshot
+        .paramMap
+        .get('id');
+
+    if (id) {
+
+      this.loadConsultation(
+        id,
+      );
+    }
   }
 
   /*
   |--------------------------------------------------------------------------
-  | Load Consultations
+  | Load Consultation
   |--------------------------------------------------------------------------
   */
-  loadConsultations():
-  void {
-
-    this.isLoading =
-      true;
+  loadConsultation(
+    id: string,
+  ): void {
 
     this.consultationService
-      .getConsultations()
+      .getConsultationById(
+        id,
+      )
 
       .subscribe({
 
@@ -80,7 +89,7 @@ implements OnInit {
             response,
           );
 
-          this.consultations =
+          this.consultation =
             response.data;
 
           this.isLoading =
@@ -103,18 +112,25 @@ implements OnInit {
 
   /*
   |--------------------------------------------------------------------------
+  | Print
+  |--------------------------------------------------------------------------
+  */
+  printPage(): void {
+
+    window.print();
+  }
+
+  /*
+  |--------------------------------------------------------------------------
   | Download PDF
   |--------------------------------------------------------------------------
   */
-  downloadPdf(
-    consultationId:
-    string,
-  ): void {
+  downloadPdf(): void {
 
     this.consultationService
       .downloadPrescriptionPdf(
 
-        consultationId,
+        this.consultation._id,
       )
 
       .subscribe({
@@ -135,16 +151,6 @@ implements OnInit {
             fileURL,
           );
         },
-
-        error: (
-          error,
-        ) => {
-
-          console.log(
-            error,
-          );
-        },
       });
   }
-  
 }

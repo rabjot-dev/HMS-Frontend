@@ -112,6 +112,10 @@ export class Register {
             Validators.email,
           ],
         ],
+        gender: [
+          '',
+          Validators.required,
+        ],
 
         countryCode: [
 
@@ -208,12 +212,7 @@ export class Register {
 
           Validators.required,
         ],
-        gender: [
-
-          '',
-
-          Validators.required,
-        ],
+       
       });
   }
 

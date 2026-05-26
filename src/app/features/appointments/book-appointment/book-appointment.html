@@ -27,13 +27,7 @@
 
     <!-- Form -->
 
-    <form
-      [formGroup]="appointmentForm"
-
-      (ngSubmit)="onSubmit()"
-
-      class="appointment-form glass-card"
-    >
+    <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()" class="appointment-form glass-card">
 
         <!-- PATIENT + DOCTOR -->
 
@@ -61,9 +55,7 @@
                         Patient
                     </label>
 
-                    <select
-                      formControlName="patientId"
-                    >
+                    <select formControlName="patientId">
 
                         <option value="">
                             Select Patient
@@ -74,9 +66,7 @@
                         track patient._id
                         ) {
 
-                        <option
-                          [value]="patient._id"
-                        >
+                        <option [value]="patient._id">
 
                             {{
                             patient.patientId
@@ -108,14 +98,9 @@
                         Department
                     </label>
 
-                    <select
-
-                      formControlName="department"
-
-                      (change)="
+                    <select formControlName="department" (change)="
                       filterDoctors()
-                      "
-                    >
+                      ">
 
                         <option value="">
                             Select Department
@@ -140,6 +125,73 @@
                         <option value="PEDIATRICS">
                             Pediatrics
                         </option>
+                        <option value="DERMATOLOGY">
+                            Dermatology
+                        </option>
+
+                        <option value="GYNECOLOGY">
+                            Gynecology
+                        </option>
+
+                        <option value="ONCOLOGY">
+                            Oncology
+                        </option>
+
+                        <option value="RADIOLOGY">
+                            Radiology
+                        </option>
+
+                        <option value="PATHOLOGY">
+                            Pathology
+                        </option>
+
+                        <option value="EMERGENCY">
+                            Emergency
+                        </option>
+
+                        <option value="ICU">
+                            ICU
+                        </option>
+
+                        <option value="GENERAL_MEDICINE">
+                            General Medicine
+                        </option>
+
+                        <option value="ENT">
+                            ENT
+                        </option>
+
+                        <option value="UROLOGY">
+                            Urology
+                        </option>
+
+                        <option value="PSYCHIATRY">
+                            Psychiatry
+                        </option>
+
+                        <option value="PULMONOLOGY">
+                            Pulmonology
+                        </option>
+
+                        <option value="GASTROENTEROLOGY">
+                            Gastroenterology
+                        </option>
+
+                        <option value="NEPHROLOGY">
+                            Nephrology
+                        </option>
+
+                        <option value="OPHTHALMOLOGY">
+                            Ophthalmology
+                        </option>
+
+                        <option value="SURGERY">
+                            Surgery
+                        </option>
+
+                        <option value="ADMINISTRATION">
+                            Administration
+                        </option>
 
                     </select>
 
@@ -153,14 +205,9 @@
                         Doctor
                     </label>
 
-                    <select
-
-                      formControlName="doctorId"
-
-                      (change)="
+                    <select formControlName="doctorId" (change)="
                       fetchAvailableSlots()
-                      "
-                    >
+                      ">
 
                         <option value="">
                             Select Doctor
@@ -171,9 +218,7 @@
                         track doctor._id
                         ) {
 
-                        <option
-                          [value]="doctor._id"
-                        >
+                        <option [value]="doctor._id">
 
                             Dr.
                             {{ doctor.name }}
@@ -194,16 +239,9 @@
                         Appointment Date
                     </label>
 
-                    <input
-
-                      type="date"
-
-                      formControlName="appointmentDate"
-
-                      (change)="
+                    <input type="date" formControlName="appointmentDate" (change)="
                       fetchAvailableSlots()
-                      "
-                    />
+                      " />
 
                 </div>
 
@@ -238,21 +276,13 @@
                 track slot
                 ) {
 
-                <button
-
-                  type="button"
-
-                  class="slot-btn"
-
-                  [class.active]="
+                <button type="button" class="slot-btn" [class.active]="
                   appointmentForm
                   .get(
                     'appointmentTime'
                   )
                   ?.value === slot
-                  "
-
-                  (click)="
+                  " (click)="
                   appointmentForm
                   .get(
                     'appointmentTime'
@@ -260,8 +290,7 @@
                   ?.setValue(
                     slot
                   )
-                  "
-                >
+                  ">
 
                     {{ slot }}
 
@@ -299,9 +328,7 @@
                         Appointment Type
                     </label>
 
-                    <select
-                      formControlName="appointmentType"
-                    >
+                    <select formControlName="appointmentType">
 
                         <option value="CONSULTATION">
                             Consultation
@@ -335,9 +362,7 @@
                         Priority
                     </label>
 
-                    <select
-                      formControlName="priority"
-                    >
+                    <select formControlName="priority">
 
                         <option value="NORMAL">
                             Normal
@@ -363,9 +388,7 @@
                         Payment Status
                     </label>
 
-                    <select
-                      formControlName="paymentStatus"
-                    >
+                    <select formControlName="paymentStatus">
 
                         <option value="PENDING">
                             Pending
@@ -391,9 +414,7 @@
                         Visit Mode
                     </label>
 
-                    <select
-                      formControlName="visitMode"
-                    >
+                    <select formControlName="visitMode">
 
                         <option value="OFFLINE">
                             Offline
@@ -421,14 +442,9 @@
                     Symptoms
                 </label>
 
-                <textarea
-
-                  formControlName="symptoms"
-
-                  placeholder="
+                <textarea formControlName="symptoms" placeholder="
                   Enter symptoms
-                  "
-                ></textarea>
+                  "></textarea>
 
             </div>
 
@@ -440,14 +456,9 @@
                     Reason
                 </label>
 
-                <textarea
-
-                  formControlName="reason"
-
-                  placeholder="
+                <textarea formControlName="reason" placeholder="
                   Reason for appointment
-                  "
-                ></textarea>
+                  "></textarea>
 
             </div>
 
@@ -459,14 +470,9 @@
                     Notes
                 </label>
 
-                <textarea
-
-                  formControlName="notes"
-
-                  placeholder="
+                <textarea formControlName="notes" placeholder="
                   Additional notes
-                  "
-                ></textarea>
+                  "></textarea>
 
             </div>
 
@@ -474,16 +480,9 @@
 
         <!-- Submit -->
 
-        <button
-
-          type="submit"
-
-          class="submit-btn"
-
-          [disabled]="
+        <button type="submit" class="submit-btn" [disabled]="
           isSubmitting
-          "
-        >
+          ">
 
             @if(isSubmitting){
 

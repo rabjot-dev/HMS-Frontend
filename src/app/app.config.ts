@@ -1,28 +1,86 @@
-import { ApplicationConfig } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import {
+  ApplicationConfig,
+} from '@angular/core';
 
-import { routes } from './app.routes';
-import { withInterceptors,} from '@angular/common/http';
-import { authInterceptor } from './core/interceptors/auth-interceptor';
+import {
+  provideRouter,
+} from '@angular/router';
 
-export const appConfig: ApplicationConfig = {
+import {
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
+
+import {
+  provideAnimations,
+} from '@angular/platform-browser/animations';
+
+import {
+  provideToastr,
+} from 'ngx-toastr';
+
+import {
+  routes,
+} from './app.routes';
+
+import {
+  authInterceptor,
+} from './core/interceptors/auth-interceptor';
+
+export const appConfig:
+ApplicationConfig = {
+
   providers: [
-    provideRouter(routes),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Router
+    |--------------------------------------------------------------------------
+    */
+    provideRouter(
+      routes,
+    ),
+
+    /*
+    |--------------------------------------------------------------------------
+    | HTTP
+    |--------------------------------------------------------------------------
+    */
     provideHttpClient(
-      withInterceptors([authInterceptor])
-    )
-  ]
+
+      withInterceptors([
+        authInterceptor,
+      ]),
+    ),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Animations
+    |--------------------------------------------------------------------------
+    */
+    provideAnimations(),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Toastr
+    |--------------------------------------------------------------------------
+    */
+    provideToastr({
+
+      positionClass:
+        'toast-top-right',
+
+      timeOut:
+        3000,
+
+      preventDuplicates:
+        true,
+
+      progressBar:
+        true,
+
+      closeButton:
+        true,
+    }),
+  ],
 };
-
-// import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-// import { provideRouter } from '@angular/router';
-
-// import { routes } from './app.routes';
-
-// export const appConfig: ApplicationConfig = {
-//   providers: [
-//     provideBrowserGlobalErrorListeners(),
-//     provideRouter(routes)
-//   ]
-// };

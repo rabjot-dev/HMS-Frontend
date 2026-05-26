@@ -99,10 +99,7 @@
 
             }
 
-            <form
-                [formGroup]="registerForm"
-                (ngSubmit)="onSubmit()"
-            >
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 
                 <!-- Name -->
 
@@ -112,11 +109,7 @@
                         Full Name
                     </label>
 
-                    <input
-                        type="text"
-                        formControlName="name"
-                        placeholder="Enter full name"
-                    />
+                    <input type="text" formControlName="name" placeholder="Enter full name" />
 
                 </div>
 
@@ -130,19 +123,19 @@
 
                     <select formControlName="gender">
 
-                        <option value="">
+                        <option value="" disabled>
                             Select Gender
                         </option>
 
-                        <option value="MALE">
+                        <option [value]="'MALE'">
                             Male
                         </option>
 
-                        <option value="FEMALE">
+                        <option [value]="'FEMALE'">
                             Female
                         </option>
 
-                        <option value="OTHER">
+                        <option [value]="'OTHER'">
                             Other
                         </option>
 
@@ -158,11 +151,7 @@
                         Email
                     </label>
 
-                    <input
-                        type="email"
-                        formControlName="email"
-                        placeholder="Enter email"
-                    />
+                    <input type="email" formControlName="email" placeholder="Enter email" />
 
                 </div>
 
@@ -192,12 +181,7 @@
 
                         </select>
 
-                        <input
-                            type="text"
-                            formControlName="phone"
-                            placeholder="9876543210"
-                            maxlength="10"
-                        />
+                        <input type="text" formControlName="phone" placeholder="9876543210" maxlength="10" />
 
                     </div>
 
@@ -232,11 +216,7 @@
                         Department
                     </label>
 
-                    <input
-                        type="text"
-                        formControlName="department"
-                        placeholder="Enter department"
-                    />
+                    <input type="text" formControlName="department" placeholder="Enter department" />
 
                 </div>
 
@@ -292,11 +272,7 @@
                         Specialization
                     </label>
 
-                    <input
-                        type="text"
-                        formControlName="specialization"
-                        placeholder="Enter specialization"
-                    />
+                    <input type="text" formControlName="specialization" placeholder="Enter specialization" />
 
                 </div>
 
@@ -308,11 +284,7 @@
                         Qualification
                     </label>
 
-                    <input
-                        type="text"
-                        formControlName="qualification"
-                        placeholder="Enter qualification"
-                    />
+                    <input type="text" formControlName="qualification" placeholder="Enter qualification" />
 
                 </div>
 
@@ -324,11 +296,8 @@
                         Medical Registration No
                     </label>
 
-                    <input
-                        type="text"
-                        formControlName="medicalRegistrationNo"
-                        placeholder="Enter registration number"
-                    />
+                    <input type="text" formControlName="medicalRegistrationNo"
+                        placeholder="Enter registration number" />
 
                 </div>
 
@@ -342,10 +311,7 @@
                         Joining Date
                     </label>
 
-                    <input
-                        type="date"
-                        formControlName="joiningDate"
-                    />
+                    <input type="date" formControlName="joiningDate" />
 
                 </div>
 
@@ -357,11 +323,7 @@
                         Password
                     </label>
 
-                    <input
-                        type="password"
-                        formControlName="password"
-                        placeholder="Enter password"
-                    />
+                    <input type="password" formControlName="password" placeholder="Enter password" />
 
                 </div>
 
@@ -373,11 +335,7 @@
                         Confirm Password
                     </label>
 
-                    <input
-                        type="password"
-                        formControlName="confirmPassword"
-                        placeholder="Confirm password"
-                    />
+                    <input type="password" formControlName="confirmPassword" placeholder="Confirm password" />
 
                 </div>
 
@@ -420,31 +378,23 @@
                         Security Answer
                     </label>
 
-                    <input
-                        type="text"
-                        formControlName="securityAnswer"
-                        placeholder="Enter answer"
-                    />
+                    <input type="text" formControlName="securityAnswer" placeholder="Enter answer" />
 
                 </div>
 
                 <!-- Submit -->
 
-                <button
-                    type="submit"
-                    class="submit-btn"
-                    [disabled]="isSubmitting"
-                >
+                <button type="submit" class="submit-btn" [disabled]="isSubmitting">
 
                     @if(isSubmitting){
 
-                        Registering...
+                    Registering...
 
                     }
 
                     @else {
 
-                        Register
+                    Register
 
                     }
 

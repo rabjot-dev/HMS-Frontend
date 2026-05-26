@@ -8,8 +8,16 @@ import {
 } from '@angular/router';
 
 import {
+  AsyncPipe,
+} from '@angular/common';
+
+import {
   DashboardService,
 } from '../../../core/services/dashboard';
+
+import {
+  AuthService,
+} from '../../../core/services/auth';
 
 @Component({
   selector:
@@ -19,6 +27,7 @@ import {
 
   imports: [
     RouterLink,
+    AsyncPipe,
   ],
 
   templateUrl:
@@ -36,6 +45,9 @@ implements OnInit {
   any[] = [];
 
   constructor(
+
+    public authService:
+      AuthService,
 
     private dashboardService:
       DashboardService,

@@ -9,12 +9,26 @@
             <p class="hero-label">
                 Smart Healthcare Workspace
             </p>
+            @if(
+            authService.currentUser
+            | async;
+            as user
+            ){
 
             <h1>
 
-                Welcome back Admin 👋
+                Welcome,
+
+                {{
+                user?.employeeId?.name
+                || 'Administrator'
+                }}
+
+                👋
 
             </h1>
+
+            }
 
             <p class="hero-subtitle">
 
@@ -237,11 +251,7 @@
 
             <div class="quick-grid">
 
-                <a
-                  routerLink="/appointments/book"
-
-                  class="quick-card"
-                >
+                <a routerLink="/appointments/book" class="quick-card">
 
                     <span>
                         📅
@@ -251,11 +261,7 @@
 
                 </a>
 
-                <a
-                  routerLink="/patients/create"
-
-                  class="quick-card"
-                >
+                <a routerLink="/patients/create" class="quick-card">
 
                     <span>
                         🧑
@@ -265,11 +271,7 @@
 
                 </a>
 
-                <a
-                  routerLink="/employees/create"
-
-                  class="quick-card"
-                >
+                <a routerLink="/employees/create" class="quick-card">
 
                     <span>
                         👨‍⚕️
@@ -279,11 +281,7 @@
 
                 </a>
 
-                <a
-                  routerLink="/appointments"
-
-                  class="quick-card"
-                >
+                <a routerLink="/appointments" class="quick-card">
 
                     <span>
                         📋

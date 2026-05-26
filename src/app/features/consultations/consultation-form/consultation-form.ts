@@ -53,10 +53,10 @@ import {
   ],
 })
 export class ConsultationForm
-implements OnInit {
+  implements OnInit {
 
   consultationForm!:
-  FormGroup;
+    FormGroup;
 
   appointment: any;
 
@@ -82,7 +82,7 @@ implements OnInit {
 
     private authService:
       AuthService,
-  ) {}
+  ) { }
 
   /*
   |--------------------------------------------------------------------------
@@ -117,7 +117,7 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   initializeForm():
-  void {
+    void {
 
     this.consultationForm =
 
@@ -139,33 +139,33 @@ implements OnInit {
         ],
 
         vitals:
-        this.fb.group({
+          this.fb.group({
 
-          bloodPressure: [
-            '',
-          ],
+            bloodPressure: [
+              '',
+            ],
 
-          pulseRate: [
-            '',
-          ],
+            pulseRate: [
+              '',
+            ],
 
-          oxygenLevel: [
-            '',
-          ],
+            oxygenLevel: [
+              '',
+            ],
 
-          temperature: [
-            '',
-          ],
+            temperature: [
+              '',
+            ],
 
-          weight: [
-            '',
-          ],
-        }),
+            weight: [
+              '',
+            ],
+          }),
 
         prescriptions:
-        this.fb.array([
-          this.createPrescription(),
-        ]),
+          this.fb.array([
+            this.createPrescription(),
+          ]),
       });
   }
 
@@ -175,7 +175,7 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   createPrescription():
-  FormGroup {
+    FormGroup {
 
     return this.fb.group({
 
@@ -215,7 +215,7 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   get prescriptions():
-  FormArray {
+    FormArray {
 
     return this
       .consultationForm
@@ -230,7 +230,7 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   addPrescription():
-  void {
+    void {
 
     this.prescriptions
       .push(
@@ -295,7 +295,7 @@ implements OnInit {
   |--------------------------------------------------------------------------
   */
   onSubmit():
-  void {
+    void {
 
     if (
 
@@ -358,7 +358,7 @@ implements OnInit {
           .map(
             (
               symptom:
-              string,
+                string,
             ) =>
 
               symptom.trim(),
@@ -406,12 +406,18 @@ implements OnInit {
           alert(
             'Consultation completed successfully',
           );
+          this.router.navigate([
+            '/consultations',
+          ]);
 
           this.isSubmitting =
             false;
 
           this.router.navigate([
-            '/doctor-queue',
+
+            '/consultations',
+
+            response.data._id,
           ]);
         },
 
