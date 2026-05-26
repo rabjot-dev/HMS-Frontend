@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -22,6 +22,11 @@ import { AppointmentService } from '../../../core/services/appointment';
   styleUrls: ['./book-appointment.css']
 })
 export class BookAppointment implements OnInit {
+  /*
+  |--------------------------------------------------------------------------
+  | Data Arrays
+  |--------------------------------------------------------------------------
+  */
   patients: any[] = [];
 
   doctors: any[] = [];
@@ -30,9 +35,20 @@ export class BookAppointment implements OnInit {
 
   availableSlots: string[] = [];
 
+  /*
+  |--------------------------------------------------------------------------
+  | UI State
+  |--------------------------------------------------------------------------
+  */
   isSubmitting = false;
 
+  /*
+  |--------------------------------------------------------------------------
+  | Form
+  |--------------------------------------------------------------------------
+  */
   appointmentForm: any;
+  selectedDoctor: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -41,9 +57,15 @@ export class BookAppointment implements OnInit {
 
     private employeeService: EmployeeService,
 
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private cdr: ChangeDetectorRef
   ) {
     this.appointmentForm = this.fb.group({
+      /*
+        |--------------------------------------------------------------------------
+        | Main Fields
+        |--------------------------------------------------------------------------
+        */
       patientId: ['', Validators.required],
 
       department: ['', Validators.required],
@@ -54,24 +76,29 @@ export class BookAppointment implements OnInit {
 
       appointmentTime: ['', Validators.required],
 
+      /*
+        |--------------------------------------------------------------------------
+        | Additional Details
+        |--------------------------------------------------------------------------
+        */
       reason: [''],
 
       notes: [''],
-      /*
-|--------------------------------------------------------------------------
-| Professional Fields
-|--------------------------------------------------------------------------
-*/
 
+      symptoms: [''],
+
+      /*
+        |--------------------------------------------------------------------------
+        | Professional Fields
+        |--------------------------------------------------------------------------
+        */
       appointmentType: ['CONSULTATION'],
 
       priority: ['NORMAL'],
 
       paymentStatus: ['PENDING'],
 
-      visitMode: ['OFFLINE'],
-
-      symptoms: ['']
+      visitMode: ['OFFLINE']
     });
   }
 
@@ -97,7 +124,10 @@ export class BookAppointment implements OnInit {
 
       .subscribe({
         next: (response) => {
+          console.log(response);
+
           this.patients = response.data;
+          this.cdr.detectChanges();
         },
 
         error: (error) => {
@@ -117,6 +147,8 @@ export class BookAppointment implements OnInit {
 
       .subscribe({
         next: (response) => {
+          console.log(response);
+
           this.doctors = response.data;
         },
 
@@ -128,13 +160,22 @@ export class BookAppointment implements OnInit {
 
   /*
   |--------------------------------------------------------------------------
-  | Filter Doctors By Department
+  | Filter Doctors
   |--------------------------------------------------------------------------
   */
   filterDoctors(): void {
     const department = this.appointmentForm.get('department')?.value;
 
     this.filteredDoctors = this.doctors.filter((doctor) => doctor.department === department);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reset Doctor
+    |--------------------------------------------------------------------------
+    */
+    this.appointmentForm.get('doctorId')?.setValue('');
+
+    this.availableSlots = [];
   }
 
   /*
@@ -170,7 +211,28 @@ export class BookAppointment implements OnInit {
         }
       });
   }
+  onDoctorChange(): void {
+    const doctorId = this.appointmentForm.get('doctorId')?.value;
+    console.log(this.selectedDoctor);
 
+    this.selectedDoctor = this.filteredDoctors.find((doctor: any) => doctor._id === doctorId);
+
+    /*
+  |--------------------------------------------------------------------------
+  | Clear Previous Slot
+  |--------------------------------------------------------------------------
+  */
+    this.appointmentForm.get('appointmentTime')?.setValue('');
+
+    /*
+  |--------------------------------------------------------------------------
+  | Fetch Slots
+  |--------------------------------------------------------------------------
+  */
+    this.fetchAvailableSlots();
+
+    console.log(this.selectedDoctor);
+  }
   /*
   |--------------------------------------------------------------------------
   | Submit
@@ -178,10 +240,18 @@ export class BookAppointment implements OnInit {
   */
   onSubmit(): void {
     if (this.appointmentForm.invalid) {
+      this.appointmentForm.markAllAsTouched();
+
       return;
     }
 
     this.isSubmitting = true;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Payload
+    |--------------------------------------------------------------------------
+    */
     const formData = {
       ...this.appointmentForm.value,
 
@@ -192,6 +262,13 @@ export class BookAppointment implements OnInit {
         .map((symptom: string) => symptom.trim())
     };
 
+    console.log(formData);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Book Appointment
+    |--------------------------------------------------------------------------
+    */
     this.appointmentService
       .bookAppointment(formData)
 
@@ -201,9 +278,26 @@ export class BookAppointment implements OnInit {
 
           alert('Appointment booked successfully');
 
-          this.appointmentForm.reset();
+          /*
+          |--------------------------------------------------------------------------
+          | Reset Form
+          |--------------------------------------------------------------------------
+          */
+          this.appointmentForm.reset({
+            appointmentType: 'CONSULTATION',
+
+            priority: 'NORMAL',
+
+            paymentStatus: 'PENDING',
+
+            visitMode: 'OFFLINE',
+
+            consultationFee: 0
+          });
 
           this.availableSlots = [];
+
+          this.filteredDoctors = [];
 
           this.isSubmitting = false;
         },

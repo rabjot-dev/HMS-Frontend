@@ -24,7 +24,7 @@
       <div>
         <h4>{{ user.roles?.[0] }}</h4>
 
-        <span> {{ user.email }} </span>
+        <span>{{ user.email }}</span>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
       @if( user?.roles?.includes( 'ADMIN' ) ){
 
       <a routerLink="/dashboard/admin" routerLinkActive="active-link">
-        <span> 🏠 </span>
+        <span>🏠</span>
 
         Dashboard
       </a>
@@ -48,7 +48,7 @@
       @if( user?.roles?.includes( 'DOCTOR' ) ){
 
       <a routerLink="/dashboard/doctor" routerLinkActive="active-link">
-        <span> 🏠 </span>
+        <span>🏠</span>
 
         Dashboard
       </a>
@@ -60,7 +60,7 @@
       @if( user?.roles?.includes( 'RECEPTIONIST' ) ){
 
       <a routerLink="/dashboard/receptionist" routerLinkActive="active-link">
-        <span> 🏠 </span>
+        <span>🏠</span>
 
         Dashboard
       </a>
@@ -72,31 +72,31 @@
       @if( user?.roles?.includes( 'ADMIN' ) ){
 
       <a routerLink="/employees" routerLinkActive="active-link">
-        <span> 👨‍⚕️ </span>
+        <span>👨‍⚕️</span>
 
         Employees
       </a>
 
       <a routerLink="/employees/create" routerLinkActive="active-link">
-        <span> ➕ </span>
+        <span>➕</span>
 
         Add Employee
       </a>
 
       <a routerLink="/employees/pending" routerLinkActive="active-link">
-        <span> ⏳ </span>
+        <span>⏳</span>
 
         Pending Requests
       </a>
 
       <a routerLink="/patients" routerLinkActive="active-link">
-        <span> 🧑 </span>
+        <span>🧑</span>
 
         Patients
       </a>
 
       <a routerLink="/appointments" routerLinkActive="active-link">
-        <span> 📅 </span>
+        <span>📅</span>
 
         Appointments
       </a>
@@ -108,25 +108,25 @@
       @if( user?.roles?.includes( 'DOCTOR' ) ){
 
       <a routerLink="/doctor-queue" routerLinkActive="active-link">
-        <span> 🩺 </span>
+        <span>🩺</span>
 
         Queue
       </a>
 
       <a routerLink="/appointments" routerLinkActive="active-link">
-        <span> 📋 </span>
+        <span>📋</span>
 
         Appointments
       </a>
 
       <a routerLink="/patients" routerLinkActive="active-link">
-        <span> 🧑‍🤝‍🧑 </span>
+        <span>🧑‍🤝‍🧑</span>
 
         Patients
       </a>
 
       <a routerLink="/doctor-availability" routerLinkActive="active-link">
-        <span> ⏰ </span>
+        <span>⏰</span>
 
         Availability
       </a>
@@ -138,19 +138,19 @@
       @if( user?.roles?.includes( 'RECEPTIONIST' ) ){
 
       <a routerLink="/patients/create" routerLinkActive="active-link">
-        <span> ➕ </span>
+        <span>➕</span>
 
         Add Patient
       </a>
 
       <a routerLink="/appointments/book" routerLinkActive="active-link">
-        <span> 📌 </span>
+        <span>📌</span>
 
         Book Appointment
       </a>
 
       <a routerLink="/appointments" routerLinkActive="active-link">
-        <span> 📅 </span>
+        <span>📅</span>
 
         Appointments
       </a>
@@ -181,7 +181,7 @@
         <div class="system-status">
           <div class="status-dot"></div>
 
-          <span> System Active </span>
+          <span>System Active</span>
         </div>
 
         <!-- Profile -->
@@ -211,7 +211,7 @@
           @if(isProfileOpen){
 
           <div class="profile-dropdown">
-            <a routerLink="/my-profile"> My Profile </a>
+            <a routerLink="/my-profile">My Profile</a>
 
             <button (click)="logout()">Logout</button>
           </div>
@@ -226,7 +226,7 @@
     <!-- Routed Content -->
 
     <section class="page-content fade-in">
-      <router-outlet> </router-outlet>
+      <router-outlet></router-outlet>
     </section>
   </main>
 </div>

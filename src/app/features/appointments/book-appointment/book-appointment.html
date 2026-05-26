@@ -14,7 +14,7 @@
   <!-- Form -->
 
   <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()" class="appointment-form glass-card">
-    <!-- PATIENT + DOCTOR -->
+    <!-- Appointment Details -->
 
     <div class="form-section">
       <div class="section-title">
@@ -27,12 +27,12 @@
         <!-- Patient -->
 
         <div class="form-group">
-          <label> Patient </label>
+          <label>Patient</label>
 
           <select formControlName="patientId">
             <option value="">Select Patient</option>
 
-            @for ( patient of patients; track patient._id ) {
+            @for( patient of patients; track patient._id ){
 
             <option [value]="patient._id">
               {{ patient.patientId }} - {{ patient.firstName }} {{ patient.lastName }}
@@ -45,14 +45,9 @@
         <!-- Department -->
 
         <div class="form-group">
-          <label> Department </label>
+          <label>Department</label>
 
-          <select
-            formControlName="department"
-            (change)="
-                      filterDoctors()
-                      "
-          >
+          <select formControlName="department" (change)="filterDoctors()">
             <option value="">Select Department</option>
 
             <option value="CARDIOLOGY">Cardiology</option>
@@ -64,6 +59,7 @@
             <option value="GENERAL">General</option>
 
             <option value="PEDIATRICS">Pediatrics</option>
+
             <option value="DERMATOLOGY">Dermatology</option>
 
             <option value="GYNECOLOGY">Gynecology</option>
@@ -103,28 +99,37 @@
         <!-- Doctor -->
 
         <div class="form-group">
-          <label> Doctor </label>
+          <label>Doctor</label>
 
           <select
             formControlName="doctorId"
             (change)="
+                      onDoctorChange();
                       fetchAvailableSlots()
                       "
           >
             <option value="">Select Doctor</option>
 
-            @for ( doctor of filteredDoctors; track doctor._id ) {
+            @for( doctor of filteredDoctors; track doctor._id ){
 
             <option [value]="doctor._id">Dr. {{ doctor.name }}</option>
 
             }
           </select>
+
+          <!-- Consultation Fee -->
+
+          @if(selectedDoctor){
+
+          <p class="consultation-fee">Consultation Fee: ₹{{ selectedDoctor ?.consultationFee || 0 }}</p>
+
+          }
         </div>
 
-        <!-- Date -->
+        <!-- Appointment Date -->
 
         <div class="form-group">
-          <label> Appointment Date </label>
+          <label>Appointment Date</label>
 
           <input
             type="date"
@@ -137,7 +142,7 @@
       </div>
     </div>
 
-    <!-- SLOT SECTION -->
+    <!-- Available Slots -->
 
     <div class="slots-card">
       <div class="slot-header">
@@ -149,7 +154,7 @@
       </div>
 
       <div class="slots-container">
-        @for ( slot of availableSlots; track slot ) {
+        @for( slot of availableSlots; track slot ){
 
         <button
           type="button"
@@ -178,7 +183,7 @@
       </div>
     </div>
 
-    <!-- EXTRA DETAILS -->
+    <!-- Consultation Details -->
 
     <div class="form-section">
       <div class="section-title">
@@ -191,7 +196,7 @@
         <!-- Appointment Type -->
 
         <div class="form-group">
-          <label> Appointment Type </label>
+          <label>Appointment Type</label>
 
           <select formControlName="appointmentType">
             <option value="CONSULTATION">Consultation</option>
@@ -209,7 +214,7 @@
         <!-- Priority -->
 
         <div class="form-group">
-          <label> Priority </label>
+          <label>Priority</label>
 
           <select formControlName="priority">
             <option value="NORMAL">Normal</option>
@@ -220,10 +225,10 @@
           </select>
         </div>
 
-        <!-- Payment -->
+        <!-- Payment Status -->
 
         <div class="form-group">
-          <label> Payment Status </label>
+          <label>Payment Status</label>
 
           <select formControlName="paymentStatus">
             <option value="PENDING">Pending</option>
@@ -237,7 +242,7 @@
         <!-- Visit Mode -->
 
         <div class="form-group">
-          <label> Visit Mode </label>
+          <label>Visit Mode</label>
 
           <select formControlName="visitMode">
             <option value="OFFLINE">Offline</option>
@@ -252,52 +257,31 @@
       <!-- Symptoms -->
 
       <div class="form-group full-width">
-        <label> Symptoms </label>
+        <label>Symptoms</label>
 
-        <textarea
-          formControlName="symptoms"
-          placeholder="
-                  Enter symptoms
-                  "
-        ></textarea>
+        <textarea formControlName="symptoms" placeholder="Enter symptoms"></textarea>
       </div>
 
       <!-- Reason -->
 
       <div class="form-group full-width">
-        <label> Reason </label>
+        <label>Reason</label>
 
-        <textarea
-          formControlName="reason"
-          placeholder="
-                  Reason for appointment
-                  "
-        ></textarea>
+        <textarea formControlName="reason" placeholder="Reason for appointment"></textarea>
       </div>
 
       <!-- Notes -->
 
       <div class="form-group full-width">
-        <label> Notes </label>
+        <label>Notes</label>
 
-        <textarea
-          formControlName="notes"
-          placeholder="
-                  Additional notes
-                  "
-        ></textarea>
+        <textarea formControlName="notes" placeholder="Additional notes"></textarea>
       </div>
     </div>
 
     <!-- Submit -->
 
-    <button
-      type="submit"
-      class="submit-btn"
-      [disabled]="
-          isSubmitting
-          "
-    >
+    <button type="submit" class="submit-btn" [disabled]="isSubmitting">
       @if(isSubmitting){ Booking Appointment... } @else { Confirm Appointment }
     </button>
   </form>

@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink, Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
+
+  standalone: true,
 
   imports: [CommonModule, RouterLink],
 
@@ -16,7 +18,11 @@ import { RouterLink, Router } from '@angular/router';
 export class Sidebar implements OnInit {
   role = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+
+    private cdr: ChangeDetectorRef
+  ) {}
 
   /*
   |--------------------------------------------------------------------------
@@ -24,6 +30,28 @@ export class Sidebar implements OnInit {
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
+    this.loadRole();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Detect Route Changes
+    |--------------------------------------------------------------------------
+    */
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.loadRole();
+
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Load Role
+  |--------------------------------------------------------------------------
+  */
+  loadRole(): void {
     this.role = localStorage.getItem('role') || '';
 
     console.log(this.role);
@@ -39,10 +67,6 @@ export class Sidebar implements OnInit {
   }
 
   isDoctor(): boolean {
-    console.log('Checking Doctor');
-
-    console.log(this.role);
-
     return this.role === 'DOCTOR';
   }
 
@@ -61,6 +85,10 @@ export class Sidebar implements OnInit {
   */
   logout(): void {
     localStorage.clear();
+
+    this.role = '';
+
+    this.cdr.detectChanges();
 
     this.router.navigate(['/login']);
   }

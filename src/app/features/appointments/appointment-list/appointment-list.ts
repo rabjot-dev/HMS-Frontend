@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -33,7 +33,8 @@ export class AppointmentList implements OnInit {
   constructor(
     private appointmentService: AppointmentService,
 
-    public authService: AuthService
+    public authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -49,6 +50,7 @@ export class AppointmentList implements OnInit {
           this.appointments = response.data;
 
           this.filteredAppointments = response.data;
+          this.cdr.detectChanges();
         },
 
         error: (error) => {
@@ -59,18 +61,14 @@ export class AppointmentList implements OnInit {
 
   filterAppointments(): void {
     this.filteredAppointments = this.appointments.filter((appointment) => {
-      const patientName = `${appointment?.patientId?.firstName} ${
-        appointment?.patientId?.lastName
-      }`.toLowerCase();
+      const patientName = `${appointment?.patientId?.firstName} ${appointment?.patientId?.lastName}`.toLowerCase();
 
       const doctorName = appointment?.doctorEmployeeId?.name?.toLowerCase();
 
       const matchesSearch =
-        patientName.includes(this.searchTerm.toLowerCase()) ||
-        doctorName.includes(this.searchTerm.toLowerCase());
+        patientName.includes(this.searchTerm.toLowerCase()) || doctorName.includes(this.searchTerm.toLowerCase());
 
-      const matchesStatus =
-        this.selectedStatus === '' || appointment.status === this.selectedStatus;
+      const matchesStatus = this.selectedStatus === '' || appointment.status === this.selectedStatus;
 
       return matchesSearch && matchesStatus;
     });

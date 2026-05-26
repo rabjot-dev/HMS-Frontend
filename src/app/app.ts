@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { RouterOutlet } from '@angular/router';
 
@@ -19,6 +19,7 @@ export class App implements OnInit {
   constructor(
     private authService: AuthService,
 
+    private cdr: ChangeDetectorRef,
     private tokenService: TokenService
   ) {}
 
@@ -27,6 +28,7 @@ export class App implements OnInit {
 
     if (token) {
       this.authService.loadCurrentUser();
+      this.cdr.detectChanges();
     }
   }
 }

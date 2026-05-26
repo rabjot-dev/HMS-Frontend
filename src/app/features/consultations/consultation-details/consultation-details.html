@@ -37,25 +37,25 @@
         <h3>Patient Details</h3>
 
         <p>
-          <strong> Name: </strong>
+          <strong>Name:</strong>
 
           {{ consultation ?.patientId ?.firstName }} {{ consultation ?.patientId ?.lastName }}
         </p>
 
         <p>
-          <strong> Gender: </strong>
+          <strong>Gender:</strong>
 
           {{ consultation ?.patientId ?.gender }}
         </p>
 
         <p>
-          <strong> Blood Group: </strong>
+          <strong>Blood Group:</strong>
 
           {{ consultation ?.patientId ?.bloodGroup || 'N/A' }}
         </p>
 
         <p>
-          <strong> Phone: </strong>
+          <strong>Phone:</strong>
 
           {{ consultation ?.patientId ?.countryCode }} {{ consultation ?.patientId ?.phone }}
         </p>
@@ -67,25 +67,25 @@
         <h3>Doctor Details</h3>
 
         <p>
-          <strong> Doctor: </strong>
+          <strong>Doctor:</strong>
 
           Dr. {{ consultation ?.doctorEmployeeId ?.name }}
         </p>
 
         <p>
-          <strong> Department: </strong>
+          <strong>Department:</strong>
 
           {{ consultation ?.doctorEmployeeId ?.department }}
         </p>
 
         <p>
-          <strong> Specialization: </strong>
+          <strong>Specialization:</strong>
 
           {{ consultation ?.doctorEmployeeId ?.specialization || 'General' }}
         </p>
 
         <p>
-          <strong> Consultation Date: </strong>
+          <strong>Consultation Date:</strong>
 
           {{ consultation ?.createdAt | date : 'medium' }}
         </p>
@@ -115,25 +115,25 @@
 
       <div class="vitals-grid">
         <div class="vital-card">
-          <span> Blood Pressure </span>
+          <span>Blood Pressure</span>
 
           <h3>{{ consultation ?.vitals ?.bloodPressure || 'N/A' }}</h3>
         </div>
 
         <div class="vital-card">
-          <span> Temperature </span>
+          <span>Temperature</span>
 
           <h3>{{ consultation ?.vitals ?.temperature || 'N/A' }}</h3>
         </div>
 
         <div class="vital-card">
-          <span> Heart Rate </span>
+          <span>Heart Rate</span>
 
           <h3>{{ consultation ?.vitals ?.pulseRate || 'N/A' }}</h3>
         </div>
 
         <div class="vital-card">
-          <span> Weight </span>
+          <span>Weight</span>
 
           <h3>{{ consultation ?.vitals ?.weight || 'N/A' }}</h3>
         </div>
@@ -198,7 +198,7 @@
 
         <p>Dr. {{ consultation ?.doctorEmployeeId ?.name }}</p>
 
-        <span> Authorized Signature </span>
+        <span>Authorized Signature</span>
       </div>
     </div>
   </div>

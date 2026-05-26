@@ -12,7 +12,7 @@
 
     <div class="queue-stats">
       <div class="stat-card">
-        <span> Total Patients </span>
+        <span>Total Patients</span>
 
         <h2>{{ appointments.length }}</h2>
       </div>
@@ -57,7 +57,7 @@
         <!-- Token -->
 
         <div class="token-box">
-          <span> TOKEN </span>
+          <span>TOKEN</span>
 
           <h2>#{{ appointment ?.tokenNumber }}</h2>
         </div>
@@ -97,9 +97,7 @@
         <div class="avatar">{{ appointment ?.patientId ?.firstName ?.charAt(0) }}</div>
 
         <div>
-          <h3>
-            {{ appointment ?.patientId ?.firstName }} {{ appointment ?.patientId ?.lastName }}
-          </h3>
+          <h3>{{ appointment ?.patientId ?.firstName }} {{ appointment ?.patientId ?.lastName }}</h3>
 
           <p>{{ appointment ?.patientId ?.patientId }}</p>
         </div>
@@ -109,19 +107,19 @@
 
       <div class="info-grid">
         <div class="info-box">
-          <span> Appointment </span>
+          <span>Appointment</span>
 
-          <strong> {{ appointment ?.timeSlot }} </strong>
+          <strong>{{ appointment ?.timeSlot }}</strong>
         </div>
 
         <div class="info-box">
-          <span> Type </span>
+          <span>Type</span>
 
-          <strong> {{ appointment ?.appointmentType }} </strong>
+          <strong>{{ appointment ?.appointmentType }}</strong>
         </div>
 
         <div class="info-box">
-          <span> Priority </span>
+          <span>Priority</span>
 
           <span
             class="priority-badge"
@@ -154,7 +152,7 @@
         <div class="symptoms-list">
           @for ( symptom of appointment ?.symptoms; track symptom ) {
 
-          <span class="symptom-tag"> {{ symptom }} </span>
+          <span class="symptom-tag">{{ symptom }}</span>
 
           }
         </div>

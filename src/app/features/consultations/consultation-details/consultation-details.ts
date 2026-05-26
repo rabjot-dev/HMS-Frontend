@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -25,7 +25,8 @@ export class ConsultationDetails implements OnInit {
   constructor(
     private route: ActivatedRoute,
 
-    private consultationService: ConsultationService
+    private consultationService: ConsultationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +53,7 @@ export class ConsultationDetails implements OnInit {
           this.consultation = response.data;
 
           this.isLoading = false;
+          this.cdr.detectChanges();
         },
 
         error: (error) => {

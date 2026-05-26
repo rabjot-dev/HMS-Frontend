@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -27,7 +27,8 @@ export class DoctorAvailability implements OnInit {
   constructor(
     private fb: FormBuilder,
 
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private cdr: ChangeDetectorRef
   ) {
     this.availabilityForm = this.fb.group({
       workingDays: [[]],
@@ -87,6 +88,7 @@ export class DoctorAvailability implements OnInit {
 
             isAvailable: response?.data?.isAvailable
           });
+          this.cdr.detectChanges();
         },
 
         error: (error) => {

@@ -162,9 +162,7 @@ export class AddEmployee {
     const payload = {
       ...this.employeeForm.value,
 
-      qualification: this.employeeForm.value.qualification
-        ? [this.employeeForm.value.qualification]
-        : [],
+      qualification: this.employeeForm.value.qualification ? [this.employeeForm.value.qualification] : [],
 
       role: this.employeeForm.value.designation
     };

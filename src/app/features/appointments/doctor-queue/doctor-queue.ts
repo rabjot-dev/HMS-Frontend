@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -28,7 +28,8 @@ export class DoctorQueue implements OnInit {
   constructor(
     private appointmentService: AppointmentService,
 
-    public authService: AuthService
+    public authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   /*
@@ -68,6 +69,7 @@ export class DoctorQueue implements OnInit {
           this.appointments = response.data;
 
           this.isLoading = false;
+          this.cdr.detectChanges();
         },
 
         error: (error) => {

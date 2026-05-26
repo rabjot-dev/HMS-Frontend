@@ -17,9 +17,9 @@
         <h1>{{ user?.name }}</h1>
 
         <div class="badge-group">
-          <span class="role-badge"> {{ user?.designation }} </span>
+          <span class="role-badge">{{ user?.designation }}</span>
 
-          <span class="department-badge"> {{ user?.department }} </span>
+          <span class="department-badge">{{ user?.department }}</span>
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@
     <!-- Status -->
 
     <div class="status-card">
-      <span> Status </span>
+      <span>Status</span>
 
       <h3>{{ user?.status }}</h3>
     </div>
@@ -43,25 +43,25 @@
 
       <div class="info-list">
         <div class="info-item">
-          <label> Employee Code </label>
+          <label>Employee Code</label>
 
           <p>{{ user?.employeeCode }}</p>
         </div>
 
         <div class="info-item">
-          <label> Email </label>
+          <label>Email</label>
 
           <p>{{ user?.email }}</p>
         </div>
 
         <div class="info-item">
-          <label> Phone </label>
+          <label>Phone</label>
 
           <p>{{ user?.countryCode }} {{ user?.phone }}</p>
         </div>
 
         <div class="info-item">
-          <label> Gender </label>
+          <label>Gender</label>
 
           <p>{{ user?.gender || 'N/A' }}</p>
         </div>
@@ -75,25 +75,25 @@
 
       <div class="info-list">
         <div class="info-item">
-          <label> Designation </label>
+          <label>Designation</label>
 
           <p>{{ user?.designation }}</p>
         </div>
 
         <div class="info-item">
-          <label> Department </label>
+          <label>Department</label>
 
           <p>{{ user?.department }}</p>
         </div>
 
         <div class="info-item">
-          <label> Joining Date </label>
+          <label>Joining Date</label>
 
           <p>{{ user?.joiningDate | date }}</p>
         </div>
 
         <div class="info-item">
-          <label> Employee Status </label>
+          <label>Employee Status</label>
 
           <p>{{ user?.status }}</p>
         </div>
@@ -109,19 +109,19 @@
 
       <div class="info-list">
         <div class="info-item">
-          <label> Specialization </label>
+          <label>Specialization</label>
 
           <p>{{ user?.specialization || 'N/A' }}</p>
         </div>
 
         <div class="info-item">
-          <label> Qualification </label>
+          <label>Qualification</label>
 
           <p>{{ user?.qualification?.[0] || 'N/A' }}</p>
         </div>
 
         <div class="info-item">
-          <label> Consultation Fee </label>
+          <label>Consultation Fee</label>
 
           <p>₹ {{ user?.consultationFee || 0 }}</p>
         </div>

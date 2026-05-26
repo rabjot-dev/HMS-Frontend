@@ -140,30 +140,27 @@ export class Login {
           |--------------------------------------------------------------------------
           */
           if (role === 'ADMIN') {
-            this.router.navigate(['/dashboard/admin']);
+            this.router
+              .navigate(['/dashboard/admin'])
+
+              .then(() => {
+                window.location.reload();
+              });
           } else if (role === 'DOCTOR') {
+            this.router
+              .navigate(['/dashboard/doctor'])
 
-          /*
-          |--------------------------------------------------------------------------
-          | Doctor
-          |--------------------------------------------------------------------------
-          */
-            this.router.navigate(['/dashboard/doctor']);
+              .then(() => {
+                window.location.reload();
+              });
           } else if (role === 'RECEPTIONIST') {
+            this.router
+              .navigate(['/dashboard/receptionist'])
 
-          /*
-          |--------------------------------------------------------------------------
-          | Receptionist
-          |--------------------------------------------------------------------------
-          */
-            this.router.navigate(['/dashboard/receptionist']);
+              .then(() => {
+                window.location.reload();
+              });
           } else {
-
-          /*
-          |--------------------------------------------------------------------------
-          | Default
-          |--------------------------------------------------------------------------
-          */
             this.router.navigate(['/login']);
           }
 

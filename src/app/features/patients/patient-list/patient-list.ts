@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -43,7 +43,10 @@ export class PatientList implements OnInit {
   */
   userRole = '';
 
-  constructor(private patientService: PatientService) {}
+  constructor(
+    private patientService: PatientService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   /*
   |--------------------------------------------------------------------------
@@ -84,6 +87,7 @@ export class PatientList implements OnInit {
           this.patients = response.data;
 
           this.filteredPatients = response.data;
+          this.cdr.detectChanges();
         },
 
         error: (error) => {

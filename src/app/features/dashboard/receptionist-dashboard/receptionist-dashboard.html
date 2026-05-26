@@ -82,7 +82,7 @@
       <div class="section-header">
         <h2>Today's Appointments</h2>
 
-        <span> Front Desk Queue </span>
+        <span>Front Desk Queue</span>
       </div>
 
       <div class="employee-list">
@@ -92,9 +92,7 @@
           <div class="employee-avatar">{{ appointment ?.patientId ?.firstName ?.charAt(0) }}</div>
 
           <div>
-            <h4>
-              {{ appointment ?.patientId ?.firstName }} {{ appointment ?.patientId ?.lastName }}
-            </h4>
+            <h4>{{ appointment ?.patientId ?.firstName }} {{ appointment ?.patientId ?.lastName }}</h4>
 
             <p>{{ appointment ?.timeSlot }}</p>
           </div>
@@ -110,30 +108,30 @@
       <div class="section-header">
         <h2>Quick Actions</h2>
 
-        <span> Fast Navigation </span>
+        <span>Fast Navigation</span>
       </div>
 
       <div class="quick-grid">
         <a routerLink="/patients/create" class="quick-card">
-          <span> 🧑 </span>
+          <span>🧑</span>
 
           Add Patient
         </a>
 
         <a routerLink="/appointments/book" class="quick-card">
-          <span> 📅 </span>
+          <span>📅</span>
 
           Book Appointment
         </a>
 
         <a routerLink="/appointments" class="quick-card">
-          <span> 📋 </span>
+          <span>📋</span>
 
           View Appointments
         </a>
 
         <a routerLink="/patients" class="quick-card">
-          <span> 👨‍⚕️ </span>
+          <span>👨‍⚕️</span>
 
           Patients
         </a>

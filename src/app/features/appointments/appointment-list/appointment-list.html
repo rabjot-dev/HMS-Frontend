@@ -15,7 +15,7 @@
     @if( authService.hasRole( 'ADMIN' ) || authService.hasRole( 'RECEPTIONIST' ) ){
 
     <a routerLink="/appointments/book" class="book-btn">
-      <span> + </span>
+      <span>+</span>
 
       Book Appointment
     </a>
@@ -29,7 +29,7 @@
     <!-- Search -->
 
     <div class="search-box">
-      <span> 🔍 </span>
+      <span>🔍</span>
 
       <input
         type="text"
@@ -101,7 +101,7 @@
             <div class="appointment-id">
               <h4>{{ appointment ?.appointmentId }}</h4>
 
-              <span> Token # {{ appointment ?.tokenNumber }} </span>
+              <span>Token # {{ appointment ?.tokenNumber }}</span>
             </div>
           </td>
 
@@ -112,11 +112,9 @@
               <div class="avatar">{{ appointment ?.patientId ?.firstName ?.charAt(0) }}</div>
 
               <div>
-                <h4>
-                  {{ appointment ?.patientId ?.firstName }} {{ appointment ?.patientId ?.lastName }}
-                </h4>
+                <h4>{{ appointment ?.patientId ?.firstName }} {{ appointment ?.patientId ?.lastName }}</h4>
 
-                <span> Patient </span>
+                <span>Patient</span>
               </div>
             </div>
           </td>
@@ -133,14 +131,14 @@
             <div class="date-info">
               <h4>{{ appointment ?.appointmentDate | date }}</h4>
 
-              <span> {{ appointment ?.timeSlot }} </span>
+              <span>{{ appointment ?.timeSlot }}</span>
             </div>
           </td>
 
           <!-- Type -->
 
           <td>
-            <span class="type-badge"> {{ appointment ?.appointmentType }} </span>
+            <span class="type-badge">{{ appointment ?.appointmentType }}</span>
           </td>
 
           <!-- Priority -->

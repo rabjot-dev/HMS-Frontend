@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
@@ -26,7 +26,8 @@ export class DoctorDashboard implements OnInit {
   constructor(
     public authService: AuthService,
 
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   /*
@@ -54,6 +55,7 @@ export class DoctorDashboard implements OnInit {
           console.log(response);
 
           this.stats = response.data;
+          this.cdr.detectChanges();
         },
 
         error: (error) => {

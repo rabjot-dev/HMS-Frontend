@@ -17,7 +17,7 @@
 
       @if( userRole !== 'DOCTOR' ){
 
-      <a routerLink="/patients/create" class="add-btn"> + Add Patient </a>
+      <a routerLink="/patients/create" class="add-btn">+ Add Patient</a>
 
       }
     </div>
@@ -27,7 +27,7 @@
 
   <div class="filters-wrapper glass-card">
     <div class="search-box">
-      <span> 🔍 </span>
+      <span>🔍</span>
 
       <input
         type="text"
@@ -80,7 +80,7 @@
               <div>
                 <h4>{{ patient ?.firstName }} {{ patient ?.lastName }}</h4>
 
-                <span> {{ patient ?.email || 'No Email' }} </span>
+                <span>{{ patient ?.email || 'No Email' }}</span>
               </div>
             </div>
           </td>
@@ -94,7 +94,7 @@
           <!-- Gender -->
 
           <td>
-            <span class="gender-badge"> {{ patient ?.gender }} </span>
+            <span class="gender-badge">{{ patient ?.gender }}</span>
           </td>
 
           <!-- Phone -->
@@ -104,13 +104,13 @@
           <!-- Blood Group -->
 
           <td>
-            <span class="blood-badge"> 🩸 {{ patient ?.bloodGroup || 'N/A' }} </span>
+            <span class="blood-badge">🩸 {{ patient ?.bloodGroup || 'N/A' }}</span>
           </td>
 
           <!-- Status -->
 
           <td>
-            <span class="status-badge"> Active </span>
+            <span class="status-badge">Active</span>
           </td>
 
           <!-- Actions -->

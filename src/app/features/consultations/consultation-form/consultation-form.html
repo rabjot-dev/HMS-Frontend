@@ -14,19 +14,19 @@
 
     <div class="patient-info">
       <p>
-        <strong> Patient ID: </strong>
+        <strong>Patient ID:</strong>
 
         {{ appointment?.patientId?.patientId }}
       </p>
 
       <p>
-        <strong> Appointment: </strong>
+        <strong>Appointment:</strong>
 
         {{ appointment?.appointmentType }}
       </p>
 
       <p>
-        <strong> Time: </strong>
+        <strong>Time:</strong>
 
         {{ appointment?.timeSlot }}
       </p>
@@ -41,7 +41,7 @@
     <!-- Diagnosis -->
 
     <div class="form-group">
-      <label> Diagnosis </label>
+      <label>Diagnosis</label>
 
       <textarea formControlName="diagnosis" placeholder="Enter diagnosis"></textarea>
     </div>
@@ -49,7 +49,7 @@
     <!-- Symptoms -->
 
     <div class="form-group">
-      <label> Symptoms </label>
+      <label>Symptoms</label>
 
       <textarea formControlName="symptoms" placeholder="Fever, Cough, Headache"></textarea>
     </div>
@@ -57,7 +57,7 @@
     <!-- Doctor Notes -->
 
     <div class="form-group">
-      <label> Doctor Notes </label>
+      <label>Doctor Notes</label>
 
       <textarea formControlName="doctorNotes" placeholder="Enter doctor notes"></textarea>
     </div>
@@ -68,7 +68,7 @@
       <!-- Blood Pressure -->
 
       <div class="form-group">
-        <label> Blood Pressure </label>
+        <label>Blood Pressure</label>
 
         <input type="text" formControlName="bloodPressure" placeholder="120/80" />
       </div>
@@ -76,7 +76,7 @@
       <!-- Pulse Rate -->
 
       <div class="form-group">
-        <label> Pulse Rate </label>
+        <label>Pulse Rate</label>
 
         <input type="number" formControlName="pulseRate" placeholder="72" />
       </div>
@@ -84,7 +84,7 @@
       <!-- Oxygen Level -->
 
       <div class="form-group">
-        <label> Oxygen Level </label>
+        <label>Oxygen Level</label>
 
         <input type="number" formControlName="oxygenLevel" placeholder="98" />
       </div>
@@ -92,7 +92,7 @@
       <!-- Temperature -->
 
       <div class="form-group">
-        <label> Temperature </label>
+        <label>Temperature</label>
 
         <input type="number" formControlName="temperature" placeholder="Celsius" />
       </div>
@@ -100,7 +100,7 @@
       <!-- Weight -->
 
       <div class="form-group">
-        <label> Weight </label>
+        <label>Weight</label>
 
         <input type="number" formControlName="weight" placeholder="in kg" />
       </div>
@@ -124,7 +124,7 @@
           <!-- Medicine Name -->
 
           <div class="form-group">
-            <label> Medicine Name </label>
+            <label>Medicine Name</label>
 
             <input type="text" formControlName="medicineName" />
           </div>
@@ -132,7 +132,7 @@
           <!-- Dosage -->
 
           <div class="form-group">
-            <label> Dosage </label>
+            <label>Dosage</label>
 
             <input type="text" formControlName="dosage" />
           </div>
@@ -140,7 +140,7 @@
           <!-- Frequency -->
 
           <div class="form-group">
-            <label> Frequency/Day </label>
+            <label>Frequency/Day</label>
 
             <input type="text" formControlName="frequency" />
           </div>
@@ -148,7 +148,7 @@
           <!-- Duration -->
 
           <div class="form-group">
-            <label> Duration </label>
+            <label>Duration</label>
 
             <input type="text" formControlName="duration" />
           </div>
@@ -157,9 +157,7 @@
 
           @if( prescriptions.length > 1 ){
 
-          <button type="button" class="remove-btn" (click)="removePrescription($index)">
-            Remove
-          </button>
+          <button type="button" class="remove-btn" (click)="removePrescription($index)">Remove</button>
 
           }
         </div>
