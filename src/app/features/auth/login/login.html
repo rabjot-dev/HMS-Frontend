@@ -49,6 +49,9 @@
         <label>Email or Employee Code</label>
 
         <input type="text" placeholder="Enter your login ID" formControlName="loginId" />
+         @if(loginForm.get('loginId')?.invalid && loginForm.get('loginId')?.touched){
+    <span class="error-text">Login ID is required</span>
+  }
       </div>
 
       <!-- Password -->
@@ -57,6 +60,9 @@
         <label>Password</label>
 
         <input type="password" placeholder="Enter your password" formControlName="password" />
+        @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched){
+    <span class="error-text">Password is required</span>
+  }
       </div>
 
       <!-- Forgot -->

@@ -101,21 +101,15 @@
         <div class="form-group">
           <label>Doctor</label>
 
-          <select
-            formControlName="doctorId"
-            (change)="
-                      onDoctorChange();
-                      fetchAvailableSlots()
-                      "
-          >
-            <option value="">Select Doctor</option>
+       <select formControlName="doctorId" (change)="onDoctorChange()">
+  <option value="">Select Doctor</option>
 
-            @for( doctor of filteredDoctors; track doctor._id ){
-
-            <option [value]="doctor._id">Dr. {{ doctor.name }}</option>
-
-            }
-          </select>
+  <option
+    *ngFor="let doctor of filteredDoctors"
+    [value]="doctor._id">
+    {{ doctor.name   }}
+  </option>
+</select>
 
           <!-- Consultation Fee -->
 
@@ -131,13 +125,7 @@
         <div class="form-group">
           <label>Appointment Date</label>
 
-          <input
-            type="date"
-            formControlName="appointmentDate"
-            (change)="
-                      fetchAvailableSlots()
-                      "
-          />
+         <input type="date" formControlName="appointmentDate" (change)="fetchAvailableSlots()">
         </div>
       </div>
     </div>

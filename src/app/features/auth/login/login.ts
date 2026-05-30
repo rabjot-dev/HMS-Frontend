@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ChangeDetectorRef } from '@angular/core';
 
 import { RouterLink, Router } from '@angular/router';
 
@@ -33,7 +33,8 @@ export class Login {
 
     private tokenService: TokenService,
 
-    private router: Router
+    private router: Router,
+     private cdr: ChangeDetectorRef
   ) {
     this.loginForm = this.fb.group({
       loginId: ['', Validators.required],
@@ -42,11 +43,7 @@ export class Login {
     });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Submit
-  |--------------------------------------------------------------------------
-  */
+ 
   onSubmit(): void {
     console.log('Login button clicked');
 
@@ -85,40 +82,24 @@ export class Login {
             return;
           }
 
-          /*
-          |--------------------------------------------------------------------------
-          | Save Token
-          |--------------------------------------------------------------------------
-          */
+        
           this.tokenService.setToken(token);
 
-          /*
-          |--------------------------------------------------------------------------
-          | Save Role
-          |--------------------------------------------------------------------------
-          */
+       
           localStorage.setItem(
             'role',
 
             response.data.user.roles?.[0]
           );
 
-          /*
-          |--------------------------------------------------------------------------
-          | Save Login ID
-          |--------------------------------------------------------------------------
-          */
+        
           localStorage.setItem(
             'loginId',
 
             this.loginForm.value.loginId
           );
 
-          /*
-          |--------------------------------------------------------------------------
-          | First Login
-          |--------------------------------------------------------------------------
-          */
+         
           const isFirstLogin = response.data.user.isFirstLogin;
 
           if (isFirstLogin) {
@@ -127,18 +108,10 @@ export class Login {
             return;
           }
 
-          /*
-          |--------------------------------------------------------------------------
-          | Role Based Redirect
-          |--------------------------------------------------------------------------
-          */
+        
           const role = response.data.user.roles?.[0];
 
-          /*
-          |--------------------------------------------------------------------------
-          | Admin
-          |--------------------------------------------------------------------------
-          */
+         
           if (role === 'ADMIN') {
             this.router
               .navigate(['/dashboard/admin'])
@@ -175,6 +148,7 @@ export class Login {
           this.errorMessage = error?.error?.message || 'Login failed';
 
           this.isSubmitting = false;
+          this.cdr.detectChanges();
         }
       });
   }

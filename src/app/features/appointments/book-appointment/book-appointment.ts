@@ -111,6 +111,9 @@ export class BookAppointment implements OnInit {
     this.loadPatients();
 
     this.loadDoctors();
+     this.appointmentForm.get('department')?.valueChanges.subscribe(() => {
+    this.filterDoctors();
+  });
   }
 
   /*
@@ -150,6 +153,7 @@ export class BookAppointment implements OnInit {
           console.log(response);
 
           this.doctors = response.data;
+           console.log("Doctors Array:", this.doctors);
         },
 
         error: (error) => {
@@ -163,20 +167,19 @@ export class BookAppointment implements OnInit {
   | Filter Doctors
   |--------------------------------------------------------------------------
   */
-  filterDoctors(): void {
-    const department = this.appointmentForm.get('department')?.value;
+ filterDoctors(): void {
+  const department = this.appointmentForm.get('department')?.value;
 
-    this.filteredDoctors = this.doctors.filter((doctor) => doctor.department === department);
+  console.log('Selected Department:', department);
+  console.log('All Doctors:', this.doctors);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Reset Doctor
-    |--------------------------------------------------------------------------
-    */
-    this.appointmentForm.get('doctorId')?.setValue('');
+  this.filteredDoctors = this.doctors.filter(
+    (doctor) => doctor.department === department
+  );
 
-    this.availableSlots = [];
-  }
+  this.appointmentForm.get('doctorId')?.setValue('');
+  this.availableSlots = [];
+}
 
   /*
   |--------------------------------------------------------------------------
@@ -187,10 +190,12 @@ export class BookAppointment implements OnInit {
     const doctorId = this.appointmentForm.get('doctorId')?.value;
 
     const appointmentDate = this.appointmentForm.get('appointmentDate')?.value;
-
+     console.log('DATE VALUE BEING SENT:', appointmentDate);
     if (!doctorId || !appointmentDate) {
       return;
     }
+    const year = parseInt(appointmentDate.split('-')[0]);
+  if (year < 2000) return;
 
     this.appointmentService
       .getAvailableSlots(
