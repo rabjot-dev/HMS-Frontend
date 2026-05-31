@@ -239,6 +239,7 @@ export class AddPatient {
           console.log(error);
 
           this.isSubmitting = false;
+          alert(error?.error?.message || 'Failed to register patient');
         }
       });
   }

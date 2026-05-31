@@ -1,8 +1,34 @@
-/*
-|--------------------------------------------------------------------------
-| Page
-|--------------------------------------------------------------------------
-*/
+/* ── Global Font Scale ─────────────────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;        /* base was 16px — increase this to scale everything */
+}
+
+body {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+h1 { font-size: 2.2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.1rem; }
+h6 { font-size: 2rem; }
+
+
+p, span, a, li, td,  label {
+  font-size: 1.5rem;
+  margin-left: 10px;
+}
+
+input, select, textarea, button {
+  font-size: 0.75rem;
+ 
+}
 .employees-page {
   display: flex;
 

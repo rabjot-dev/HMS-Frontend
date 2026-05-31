@@ -1,3 +1,5 @@
+
+
 <div class="appointment-page">
   <!-- Header -->
 
@@ -40,6 +42,9 @@
 
             }
           </select>
+           @if(appointmentForm.get('patientId')?.invalid && appointmentForm.get('patientId')?.touched){
+            <span class="error-text">Patient Id is required</span>
+          }
         </div>
 
         <!-- Department -->
@@ -94,6 +99,9 @@
 
             <option value="ADMINISTRATION">Administration</option>
           </select>
+            @if(appointmentForm.get('department')?.invalid && appointmentForm.get('department')?.touched){
+            <span class="error-text">Department is required</span>
+          }
         </div>
 
         <!-- Doctor -->
@@ -109,6 +117,7 @@
     [value]="doctor._id">
     {{ doctor.name   }}
   </option>
+  
 </select>
 
           <!-- Consultation Fee -->
@@ -118,6 +127,11 @@
           <p class="consultation-fee">Consultation Fee: ₹{{ selectedDoctor ?.consultationFee || 0 }}</p>
 
           }
+          <!-- @else
+            (appointmentForm.get('doctorId')?.invalid && appointmentForm.get('doctorId')?.touched){
+            <span class="error-text">Doctor is required</span>
+          
+          } -->
         </div>
 
         <!-- Appointment Date -->
@@ -126,6 +140,12 @@
           <label>Appointment Date</label>
 
          <input type="date" formControlName="appointmentDate" (change)="fetchAvailableSlots()">
+          @if(appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched){
+            <span class="error-text">Appointment Date is required</span>
+          }
+           @if(noSlotsError){
+    <span class="error-text">Doctor is not available on this day</span>
+  }
         </div>
       </div>
     </div>
@@ -187,6 +207,7 @@
           <label>Appointment Type</label>
 
           <select formControlName="appointmentType">
+            <option value="">Select appointment type</option>
             <option value="CONSULTATION">Consultation</option>
 
             <option value="FOLLOW_UP">Follow Up</option>
@@ -197,6 +218,9 @@
 
             <option value="ROUTINE_CHECKUP">Routine Checkup</option>
           </select>
+           @if(appointmentForm.get('appointmentType')?.invalid && appointmentForm.get('appointmentType')?.touched){
+            <span class="error-text">Appointment type is required</span>
+          }
         </div>
 
         <!-- Priority -->
@@ -205,12 +229,16 @@
           <label>Priority</label>
 
           <select formControlName="priority">
+            <option value="">Select Priority</option>
             <option value="NORMAL">Normal</option>
 
             <option value="URGENT">Urgent</option>
 
             <option value="CRITICAL">Critical</option>
           </select>
+           @if(appointmentForm.get('priority')?.invalid && appointmentForm.get('priority')?.touched){
+            <span class="error-text">Priority is required</span>
+          }
         </div>
 
         <!-- Payment Status -->
@@ -219,12 +247,16 @@
           <label>Payment Status</label>
 
           <select formControlName="paymentStatus">
+            <option value="">Select Payment Status</option>
             <option value="PENDING">Pending</option>
 
             <option value="PAID">Paid</option>
 
             <option value="INSURANCE">Insurance</option>
           </select>
+           @if(appointmentForm.get('paymentStatus')?.invalid && appointmentForm.get('paymentStatus')?.touched){
+            <span class="error-text">Payment Status is required</span>
+          }
         </div>
 
         <!-- Visit Mode -->
@@ -233,12 +265,16 @@
           <label>Visit Mode</label>
 
           <select formControlName="visitMode">
+            <option value="">Select visit Mode</option>
             <option value="OFFLINE">Offline</option>
 
             <option value="ONLINE">Online</option>
 
             <option value="HOME_VISIT">Home Visit</option>
           </select>
+           @if(appointmentForm.get('visitMode')?.invalid && appointmentForm.get('visitMode')?.touched){
+            <span class="error-text">Visit Mode is required</span>
+          }
         </div>
       </div>
 

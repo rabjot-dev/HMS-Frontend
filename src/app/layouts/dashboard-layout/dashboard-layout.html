@@ -1,3 +1,14 @@
+
+
+<div class="global-toast-wrapper">
+  @if(toastState$ | async; as toast) {
+    <div class="global-toast" [ngClass]="toast.type">
+      <span class="toast-icon">{{ toast.type === 'success' ? '✓' : '✕' }}</span>
+      <span class="toast-message">{{ toast.message }}</span>
+      <button class="toast-close" (click)="dismissToast()">✕</button>
+    </div>
+  }
+</div>
 <div class="dashboard-shell">
   <!-- Sidebar -->
 
@@ -181,7 +192,7 @@
         <div class="system-status">
           <div class="status-dot"></div>
 
-          <span>System Active</span>
+          <span id="active">System Active</span>
         </div>
 
         <!-- Profile -->
