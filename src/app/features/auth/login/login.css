@@ -12,7 +12,12 @@
 
   overflow: hidden;
 }
-
+.error-text {
+  color: #e53e3e;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
 /*
 |--------------------------------------------------------------------------
 | Left Side

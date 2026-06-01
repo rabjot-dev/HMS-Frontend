@@ -57,6 +57,9 @@
           <label>Full Name</label>
 
           <input type="text" formControlName="name" placeholder="Enter full name" />
+            @if(registerForm.get('name')?.invalid && registerForm.get('name')?.touched){
+            <span class="error-text">Name is required</span>
+          }
         </div>
 
         <!-- Gender -->
@@ -73,6 +76,10 @@
 
             <option [value]="'OTHER'">Other</option>
           </select>
+           
+          @if(registerForm.get('gender')?.invalid && registerForm.get('gender')?.touched){
+  <span class="error-text">Gender is required</span>
+}
         </div>
 
         <!-- Email -->
@@ -81,6 +88,15 @@
           <label>Email</label>
 
           <input type="email" formControlName="email" placeholder="Enter email" />
+          
+            @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched){
+  @if(registerForm.get('email')?.hasError('required')){
+    <span class="error-text">Email is required</span>
+  }
+}
+  @if(registerForm.get('email')?.hasError('email')){
+    <span class="error-text">Enter a valid email address</span>
+  }
         </div>
 
         <!-- Phone -->
@@ -107,13 +123,69 @@
           }
         </div>
 
-        <!-- Department -->
-
-        <div class="form-group">
+        <div class="input-group">
           <label>Department</label>
 
-          <input type="text" formControlName="department" placeholder="Enter department" />
+          <select formControlName="department">
+            <option value="">Select Department</option>
+
+            <option value="CARDIOLOGY">Cardiology</option>
+
+            <option value="ORTHOPEDICS">Orthopedics</option>
+
+            <option value="NEUROLOGY">Neurology</option>
+
+            <option value="PEDIATRICS">Pediatrics</option>
+
+            <option value="DERMATOLOGY">Dermatology</option>
+
+            <option value="GYNECOLOGY">Gynecology</option>
+
+            <option value="ONCOLOGY">Oncology</option>
+
+            <option value="RADIOLOGY">Radiology</option>
+
+            <option value="PATHOLOGY">Pathology</option>
+
+            <option value="EMERGENCY">Emergency</option>
+
+            <option value="ICU">ICU</option>
+
+            <option value="GENERAL_MEDICINE">General Medicine</option>
+
+            <option value="ENT">ENT</option>
+
+            <option value="UROLOGY">Urology</option>
+
+            <option value="PSYCHIATRY">Psychiatry</option>
+
+            <option value="PULMONOLOGY">Pulmonology</option>
+
+            <option value="GASTROENTEROLOGY">Gastroenterology</option>
+
+            <option value="NEPHROLOGY">Nephrology</option>
+
+            <option value="OPHTHALMOLOGY">Ophthalmology</option>
+
+            <option value="SURGERY">Surgery</option>
+
+            <option value="ADMINISTRATION">Administration</option>
+
+            <option value="PHARMACY">Pharmacy</option>
+
+            <option value="LABORATORY">Laboratory</option>
+
+            <option value="RECEPTION">Reception</option>
+
+            <option value="BILLING">Billing</option>
+
+            <option value="HR">Human Resources</option>
+          </select>
+           @if(registerForm.get('department')?.invalid && registerForm.get('department')?.touched){
+            <span class="error-text">Department is required</span>
+          }
         </div>
+
 
         <!-- Designation -->
 
@@ -135,6 +207,10 @@
 
             <option value="ACCOUNTANT">Accountant</option>
           </select>
+          @if(registerForm.get('designation')?.invalid && registerForm.get('designation')?.touched){
+  <span class="error-text">Designation is required</span>
+}
+
         </div>
 
         @if(isDoctor()){
@@ -145,6 +221,9 @@
           <label>Specialization</label>
 
           <input type="text" formControlName="specialization" placeholder="Enter specialization" />
+           @if(registerForm.get('specialization')?.invalid && registerForm.get('specialization')?.touched){
+            <span class="error-text" >Specialization is required</span>
+          }
         </div>
 
         <!-- Qualification -->
@@ -153,6 +232,11 @@
           <label>Qualification</label>
 
           <input type="text" formControlName="qualification" placeholder="Enter qualification" />
+          
+           @if(registerForm.get('qualification')?.invalid && registerForm.get('qualification')?.touched){
+  <span class="error-text">Qualification is required</span>
+}
+
         </div>
 
         <!-- Registration -->
@@ -161,6 +245,10 @@
           <label>Medical Registration No</label>
 
           <input type="text" formControlName="medicalRegistrationNo" placeholder="Enter registration number" />
+           
+            @if(registerForm.get('name')?.invalid && registerForm.get('name')?.touched){
+            <span class="error-text">Name is required</span>
+          }
         </div>
 
         }
@@ -171,6 +259,10 @@
           <label>Joining Date</label>
 
           <input type="date" formControlName="joiningDate" />
+          
+           @if(registerForm.get('joiningDate')?.invalid && registerForm.get('joiningDate')?.touched){
+  <span class="error-text">Joining date is required</span>
+}
         </div>
 
         <!-- Password -->
@@ -179,6 +271,10 @@
           <label>Password</label>
 
           <input type="password" formControlName="password" placeholder="Enter password" />
+          
+            @if(registerForm.get('password')?.invalid && registerForm.get('password')?.touched){
+            <span class="error-text">Password is required</span>
+          }
         </div>
 
         <!-- Confirm Password -->
@@ -187,6 +283,10 @@
           <label>Confirm Password</label>
 
           <input type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+         
+            @if(registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched){
+            <span class="error-text">Confirm Password is required</span>
+          }
         </div>
 
         <!-- Security Question -->
@@ -203,6 +303,10 @@
 
             }
           </select>
+           
+            @if(registerForm.get('securityQuestion')?.invalid && registerForm.get('securityQuestion')?.touched){
+            <span class="error-text">Security Question is required</span>
+          }
         </div>
 
         <!-- Security Answer -->
@@ -211,6 +315,10 @@
           <label>Security Answer</label>
 
           <input type="text" formControlName="securityAnswer" placeholder="Enter answer" />
+           
+            @if(registerForm.get('securityAnswer')?.invalid && registerForm.get('securityAnswer')?.touched){
+            <span class="error-text">Security Answer is required</span>
+          }
         </div>
 
         <!-- Submit -->

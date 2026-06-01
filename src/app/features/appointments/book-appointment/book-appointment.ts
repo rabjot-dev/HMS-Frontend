@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-
+import { ToastService } from '../../../core/services/toast';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { PatientService } from '../../../core/services/patient';
@@ -41,6 +41,10 @@ export class BookAppointment implements OnInit {
   |--------------------------------------------------------------------------
   */
   isSubmitting = false;
+  toastMessage = '';
+toastType: 'success' | 'error' = 'success';
+showToast = false;
+noSlotsError = false;
 
   /*
   |--------------------------------------------------------------------------
@@ -58,7 +62,8 @@ export class BookAppointment implements OnInit {
     private employeeService: EmployeeService,
 
     private appointmentService: AppointmentService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+     private toastService: ToastService
   ) {
     this.appointmentForm = this.fb.group({
       /*
@@ -85,20 +90,20 @@ export class BookAppointment implements OnInit {
 
       notes: [''],
 
-      symptoms: [''],
+      symptoms: ['',Validators.required],
 
       /*
         |--------------------------------------------------------------------------
         | Professional Fields
         |--------------------------------------------------------------------------
         */
-      appointmentType: ['CONSULTATION'],
+      appointmentType: ['CONSULTATION',Validators.required],
 
-      priority: ['NORMAL'],
+      priority: ['NORMAL',Validators.required],
 
-      paymentStatus: ['PENDING'],
+      paymentStatus: ['PENDING',Validators.required],
 
-      visitMode: ['OFFLINE']
+      visitMode: ['OFFLINE',Validators.required]
     });
   }
 
@@ -111,6 +116,9 @@ export class BookAppointment implements OnInit {
     this.loadPatients();
 
     this.loadDoctors();
+     this.appointmentForm.get('department')?.valueChanges.subscribe(() => {
+    this.filterDoctors();
+  });
   }
 
   /*
@@ -150,6 +158,7 @@ export class BookAppointment implements OnInit {
           console.log(response);
 
           this.doctors = response.data;
+           console.log("Doctors Array:", this.doctors);
         },
 
         error: (error) => {
@@ -163,20 +172,23 @@ export class BookAppointment implements OnInit {
   | Filter Doctors
   |--------------------------------------------------------------------------
   */
-  filterDoctors(): void {
-    const department = this.appointmentForm.get('department')?.value;
 
-    this.filteredDoctors = this.doctors.filter((doctor) => doctor.department === department);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Reset Doctor
-    |--------------------------------------------------------------------------
-    */
-    this.appointmentForm.get('doctorId')?.setValue('');
+ filterDoctors(): void {
+  const department = this.appointmentForm.get('department')?.value;
 
-    this.availableSlots = [];
-  }
+  console.log('Selected Department:', department);
+  console.log('All Doctors:', this.doctors);
+
+  this.filteredDoctors = this.doctors.filter(
+    (doctor) => doctor.department === department
+  );
+
+  this.appointmentForm.get('doctorId')?.setValue('');
+  this.availableSlots = [];
+  this.noSlotsError = false;
+   this.cdr.detectChanges();
+}
 
   /*
   |--------------------------------------------------------------------------
@@ -187,15 +199,16 @@ export class BookAppointment implements OnInit {
     const doctorId = this.appointmentForm.get('doctorId')?.value;
 
     const appointmentDate = this.appointmentForm.get('appointmentDate')?.value;
-
+     console.log('DATE VALUE BEING SENT:', appointmentDate);
     if (!doctorId || !appointmentDate) {
       return;
     }
+    const year = parseInt(appointmentDate.split('-')[0]);
+  if (year < 2000) return;
 
     this.appointmentService
       .getAvailableSlots(
         doctorId,
-
         appointmentDate
       )
 
@@ -203,11 +216,28 @@ export class BookAppointment implements OnInit {
         next: (response) => {
           console.log(response);
 
-          this.availableSlots = response.data;
+          this.availableSlots = response.data ||[];
+          if (this.availableSlots.length === 0) {
+        this.noSlotsError = true;
+        this.toastService.show('No slots available for the selected date.', 'error');
+      }
+      else{
+        this.noSlotsError = false; 
+      }
+      this.cdr.detectChanges();
         },
 
         error: (error) => {
+          console.log('Slots error:', error);
+      this.availableSlots = [];
+      this.noSlotsError = true;
           console.log(error);
+       this.toastService.show(
+    error?.error?.message || 'No slots available for the selected date.',
+    'error'
+  );
+   this.cdr.detectChanges();
+         
         }
       });
   }
@@ -217,41 +247,35 @@ export class BookAppointment implements OnInit {
 
     this.selectedDoctor = this.filteredDoctors.find((doctor: any) => doctor._id === doctorId);
 
-    /*
-  |--------------------------------------------------------------------------
-  | Clear Previous Slot
-  |--------------------------------------------------------------------------
-  */
+  
     this.appointmentForm.get('appointmentTime')?.setValue('');
 
-    /*
-  |--------------------------------------------------------------------------
-  | Fetch Slots
-  |--------------------------------------------------------------------------
-  */
+    this.availableSlots = [];
+  this.noSlotsError = false;
+  this.cdr.detectChanges();
     this.fetchAvailableSlots();
-
     console.log(this.selectedDoctor);
   }
-  /*
-  |--------------------------------------------------------------------------
-  | Submit
-  |--------------------------------------------------------------------------
-  */
+ 
   onSubmit(): void {
     if (this.appointmentForm.invalid) {
       this.appointmentForm.markAllAsTouched();
-
-      return;
-    }
-
+      if (
+      this.appointmentForm.get('appointmentDate')?.valid &&
+      this.availableSlots.length === 0
+    ) {
+      this.noSlotsError = true;
+    }      
+    return;
+  }
+   if (this.availableSlots.length === 0) {
+    this.noSlotsError = true;
+    this.cdr.detectChanges();
+    return;
+  }
     this.isSubmitting = true;
 
-    /*
-    |--------------------------------------------------------------------------
-    | Payload
-    |--------------------------------------------------------------------------
-    */
+    
     const formData = {
       ...this.appointmentForm.value,
 
@@ -274,9 +298,15 @@ export class BookAppointment implements OnInit {
 
       .subscribe({
         next: (response) => {
-          console.log(response);
+          console.log(response);  
 
-          alert('Appointment booked successfully');
+          //alert('Appointment booked successfully');
+          this.toastService.show(
+  'Appointment booked successfully',
+  'success'
+);
+          
+       
 
           /*
           |--------------------------------------------------------------------------
@@ -289,6 +319,7 @@ export class BookAppointment implements OnInit {
             priority: 'NORMAL',
 
             paymentStatus: 'PENDING',
+
 
             visitMode: 'OFFLINE',
 
@@ -306,6 +337,10 @@ export class BookAppointment implements OnInit {
           console.log(error);
 
           this.isSubmitting = false;
+        this.toastService.show(
+    error?.error?.message || 'Failed to book appointment.',
+    'error'
+  );
         }
       });
   }

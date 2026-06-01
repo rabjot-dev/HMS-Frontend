@@ -84,7 +84,7 @@ export class ConsultationDetails implements OnInit {
 
       .subscribe({
         next: (response: Blob) => {
-          const fileURL = window.URL.createObjectURL(response);
+          const fileURL = globalThis.URL.createObjectURL(response);
 
           window.open(fileURL);
         }

@@ -18,25 +18,11 @@ import { PatientService } from '../../../core/services/patient';
   styleUrls: ['./add-patient.css']
 })
 export class AddPatient {
-  /*
-  |--------------------------------------------------------------------------
-  | Current Step
-  |--------------------------------------------------------------------------
-  */
+
   currentStep = 1;
 
-  /*
-  |--------------------------------------------------------------------------
-  | Loading
-  |--------------------------------------------------------------------------
-  */
   isSubmitting = false;
 
-  /*
-  |--------------------------------------------------------------------------
-  | Patient Form
-  |--------------------------------------------------------------------------
-  */
   patientForm!: FormGroup;
 
   constructor(
@@ -45,11 +31,6 @@ export class AddPatient {
     private patientService: PatientService
   ) {
     this.patientForm = this.fb.group({
-      /*
-        |--------------------------------------------------------------------------
-        | Basic Information
-        |--------------------------------------------------------------------------
-        */
       firstName: ['', Validators.required],
 
       lastName: ['', Validators.required],
@@ -58,47 +39,47 @@ export class AddPatient {
 
       gender: ['', Validators.required],
 
-      bloodGroup: [''],
+      bloodGroup: ['', Validators.required],
 
-      maritalStatus: [''],
+      maritalStatus: ['', Validators.required],
 
       /*
-        |--------------------------------------------------------------------------
-        | Contact Information
-        |--------------------------------------------------------------------------
-        */
+      |--------------------------------------------------------------------------
+      | Contact Information
+      |--------------------------------------------------------------------------
+      */
       countryCode: ['+91', Validators.required],
 
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
 
-      email: [''],
+      email: ['', Validators.required],
 
-      address: [''],
+      address: ['', Validators.required],
 
-      city: [''],
+      city: ['', Validators.required],
 
-      state: [''],
+      state: ['', Validators.required],
 
-      pincode: [''],
+      pincode: ['', Validators.required],
 
       country: ['India'],
 
       /*
-        |--------------------------------------------------------------------------
-        | Emergency Contact
-        |--------------------------------------------------------------------------
-        */
-      emergencyContactName: [''],
+      |--------------------------------------------------------------------------
+      | Emergency Contact
+      |--------------------------------------------------------------------------
+      */
+      emergencyContactName: ['', Validators.required],
 
-      emergencyContactPhone: [''],
+      emergencyContactPhone: ['', Validators.required],
 
-      relationship: [''],
+     
 
       /*
-        |--------------------------------------------------------------------------
-        | Medical Information
-        |--------------------------------------------------------------------------
-        */
+      |--------------------------------------------------------------------------
+      | Medical Information
+      |--------------------------------------------------------------------------
+      */
       medicalHistory: [''],
 
       allergies: [''],
@@ -112,10 +93,10 @@ export class AddPatient {
       familyMedicalHistory: [''],
 
       /*
-        |--------------------------------------------------------------------------
-        | Insurance Information
-        |--------------------------------------------------------------------------
-        */
+      |--------------------------------------------------------------------------
+      | Insurance Information
+      |--------------------------------------------------------------------------
+      */
       insuranceProvider: [''],
 
       insurancePolicyNumber: [''],
@@ -125,22 +106,45 @@ export class AddPatient {
       insuranceCoverageAmount: [''],
 
       /*
-        |--------------------------------------------------------------------------
-        | Hospital Information
-        |--------------------------------------------------------------------------
-        */
+      |--------------------------------------------------------------------------
+      | Hospital Information
+      |--------------------------------------------------------------------------
+      */
       department: [''],
 
-      patientType: ['OPD']
+      patientType: ['', Validators.required]
     });
   }
 
   /*
   |--------------------------------------------------------------------------
-  | Next Step
+  | Next Step — Validates only current step fields before proceeding
   |--------------------------------------------------------------------------
   */
   nextStep(): void {
+    const stepFields: { [key: number]: string[] } = {
+      1: ['firstName', 'lastName', 'dateOfBirth', 'gender', 'bloodGroup', 'maritalStatus'],
+      2: ['phone', 'email', 'address', 'city', 'state', 'pincode', 'emergencyContactName', 'emergencyContactPhone'],
+      3: [], 
+      4:['patientType']
+    };
+
+    const fieldsToValidate = stepFields[this.currentStep] || [];
+
+    // Mark only current step fields as touched to show errors
+    fieldsToValidate.forEach(field => {
+      this.patientForm.get(field)?.markAsTouched();
+    });
+
+    // Check if all current step fields are valid
+    const isStepValid = fieldsToValidate.every(field =>
+      this.patientForm.get(field)?.valid
+    );
+
+    if (!isStepValid) {
+      return; // Block navigation if invalid
+    }
+
     if (this.currentStep < 4) {
       this.currentStep++;
     }
@@ -167,6 +171,13 @@ export class AddPatient {
 
     console.log(this.patientForm.value);
 
+    // Mark patientType as touched to show error if not selected
+    this.patientForm.get('patientType')?.markAsTouched();
+
+    if (this.patientForm.get('patientType')?.invalid) {
+      return;
+    }
+
     if (this.patientForm.invalid) {
       console.log('FORM INVALID');
 
@@ -174,11 +185,7 @@ export class AddPatient {
         const control = this.patientForm.get(key);
 
         if (control?.invalid) {
-          console.log(
-            key,
-
-            control.errors
-          );
+          console.log(key, control.errors);
         }
       });
 
@@ -215,7 +222,7 @@ export class AddPatient {
 
             country: 'India',
 
-            patientType: 'OPD'
+            patientType: ''
           });
 
           /*
@@ -232,6 +239,7 @@ export class AddPatient {
           console.log(error);
 
           this.isSubmitting = false;
+          alert(error?.error?.message || 'Failed to register patient');
         }
       });
   }

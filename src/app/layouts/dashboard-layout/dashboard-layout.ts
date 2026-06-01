@@ -7,17 +7,18 @@ import { TokenService } from '../../core/services/token';
 import { ChangeDetectorRef } from '@angular/core';
 
 import { RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
-
+import { NgClass } from '@angular/common';
 import { AsyncPipe } from '@angular/common';
 
 import { AuthService } from '../../core/services/auth';
-
+import { ToastService ,ToastState} from '../../core/services/toast';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-dashboard-layout',
 
   standalone: true,
 
-  imports: [RouterOutlet, RouterLink, AsyncPipe, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, AsyncPipe, RouterLinkActive,NgClass],
 
   templateUrl: './dashboard-layout.html',
 
@@ -30,7 +31,7 @@ export class DashboardLayout {
   |--------------------------------------------------------------------------
   */
   isProfileOpen = false;
-
+ toastState$: Observable<ToastState | null>;
   constructor(
     public authService: AuthService,
 
@@ -40,14 +41,15 @@ export class DashboardLayout {
 
     private cdr: ChangeDetectorRef,
 
-    private elementRef: ElementRef
-  ) {}
+    private elementRef: ElementRef,
+     private toastService: ToastService ,
+  ) {
+    this.toastState$ = this.toastService.toast$;
+  }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Toggle Dropdown
-  |--------------------------------------------------------------------------
-  */
+  dismissToast(): void {
+    this.toastService.toast$.next(null);
+  }
   toggleProfile(): void {
     this.isProfileOpen = !this.isProfileOpen;
   }

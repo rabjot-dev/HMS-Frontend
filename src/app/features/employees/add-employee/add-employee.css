@@ -16,6 +16,13 @@
 
   border-radius: 30px;
 }
+.error-text {
+  color: #e53e3e;
+  font-size: 17px;
+  margin-top: 6px;
+  display: block;
+  padding-left: 4px;
+}
 
 .page-label {
   color: #3b82f6;
