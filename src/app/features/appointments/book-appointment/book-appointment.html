@@ -284,6 +284,9 @@
         <label>Symptoms</label>
 
         <textarea formControlName="symptoms" placeholder="Enter symptoms"></textarea>
+         @if(appointmentForm.get('symptoms')?.invalid && appointmentForm.get('symptoms')?.touched){
+            <span class="error-text">Symptoms is required</span>
+          }
       </div>
 
       <!-- Reason -->

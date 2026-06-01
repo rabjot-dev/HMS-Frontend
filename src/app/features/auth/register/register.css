@@ -3,7 +3,26 @@
 | Page
 |------------------------------------------------------------------
 */
-/* ── Step Indicator ── */
+.register-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 560px;
+  background: linear-gradient(135deg, #eff6ff, #f8fafc);
+}
+
+.error-text {
+  display: block;
+  font-size: 0.82rem;
+  color: #dc2626;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/*
+|------------------------------------------------------------------
+| Step Indicator
+|------------------------------------------------------------------
+*/
 .step-indicator {
   display: flex;
   align-items: center;
@@ -72,7 +91,11 @@
   background: #22c55e;
 }
 
-/* ── Step Section ── */
+/*
+|------------------------------------------------------------------
+| Step Section
+|------------------------------------------------------------------
+*/
 .step-section {
   display: flex;
   flex-direction: column;
@@ -80,7 +103,11 @@
   margin-bottom: 24px;
 }
 
-/* ── Button Row ── */
+/*
+|------------------------------------------------------------------
+| Button Row
+|------------------------------------------------------------------
+*/
 .btn-row {
   display: flex;
   gap: 12px;
@@ -109,73 +136,43 @@
   border-color: #94a3b8;
 }
 
-.register-page {
-  min-height: 100vh;
-
-  display: grid;
-
-  grid-template-columns: 1fr 560px;
-
-  background: linear-gradient(135deg, #eff6ff, #f8fafc);
-}
-.error-text {
-  display: block;
-  font-size: 0.82rem;
-  color: #dc2626;
-  margin-top: 4px;
-  font-weight: 500;
-}
 /*
 |------------------------------------------------------------------
 | Left
 |------------------------------------------------------------------
 */
-
 .register-left {
-  padding: 80px;
-
+  padding: 80px 100px;
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .brand-badge {
   width: fit-content;
-
   padding: 12px 20px;
-
   border-radius: 999px;
-
   background: rgba(59, 130, 246, 0.12);
-
   color: #2563eb;
-
   font-weight: 700;
-
   margin-bottom: 30px;
 }
 
 .register-left h1 {
   font-size: 60px;
-
   line-height: 1.08;
-
   margin-bottom: 24px;
-
   color: #0f172a;
+  max-width: 700px;
 }
 
 .left-subtitle {
-  max-width: 520px;
-
+  max-width: 620px;
   font-size: 18px;
-
   line-height: 1.8;
-
   color: #64748b;
-
   margin-bottom: 50px;
 }
 
@@ -184,38 +181,25 @@
 | Features
 |------------------------------------------------------------------
 */
-
 .feature-list {
   display: flex;
-
   flex-direction: column;
-
   gap: 18px;
 }
 
 .feature-card {
   display: flex;
-
   align-items: center;
-
   gap: 16px;
-
-  max-width: 420px;
-
+  max-width: 560px;
+  width: 100%;
   padding: 18px 22px;
-
   border-radius: 22px;
-
   background: rgba(255, 255, 255, 0.65);
-
   backdrop-filter: blur(18px);
-
   border: 1px solid rgba(255, 255, 255, 0.45);
-
   font-weight: 600;
-
   color: #334155;
-
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
 }
 
@@ -228,15 +212,12 @@
 | Right
 |------------------------------------------------------------------
 */
-
 .register-right {
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   padding: 40px;
+  
 }
 
 /*
@@ -244,14 +225,10 @@
 | Glass
 |------------------------------------------------------------------
 */
-
 .glass-card {
   background: rgba(255, 255, 255, 0.72);
-
   backdrop-filter: blur(24px);
-
   border-left: 1px solid rgba(255, 255, 255, 0.4);
-
   box-shadow: -10px 0 40px rgba(15, 23, 42, 0.06);
 }
 
@@ -260,16 +237,11 @@
 | Card
 |------------------------------------------------------------------
 */
-
 .register-card {
   width: 100%;
-
   max-width: 460px;
-
   max-height: 92vh;
-
   overflow-y: auto;
-
   padding-right: 6px;
 }
 
@@ -279,21 +251,17 @@
 
 .register-card::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-
   border-radius: 999px;
 }
 
 .register-card h2 {
   font-size: 38px;
-
   margin-bottom: 10px;
-
   color: #0f172a;
 }
 
 .subtitle {
   color: #64748b;
-
   margin-bottom: 30px;
 }
 
@@ -302,28 +270,21 @@
 | Form
 |------------------------------------------------------------------
 */
-
 form {
   display: flex;
-
   flex-direction: column;
-
   gap: 20px;
 }
 
 .form-group {
   display: flex;
-
   flex-direction: column;
-
   gap: 10px;
 }
 
 .form-group label {
   font-size: 14px;
-
   font-weight: 600;
-
   color: #334155;
 }
 
@@ -332,30 +293,21 @@ form {
 | Inputs
 |------------------------------------------------------------------
 */
-
 input,
 select {
   width: 100%;
-
   padding: 16px;
-
   border-radius: 16px;
-
   border: 1px solid #dbe4f0;
-
   background: rgba(255, 255, 255, 0.82);
-
   font-size: 14px;
-
   transition: all 0.3s ease;
 }
 
 input:focus,
 select:focus {
   outline: none;
-
   border-color: #3b82f6;
-
   box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.12);
 }
 
@@ -364,10 +316,8 @@ select:focus {
 | Phone
 |------------------------------------------------------------------
 */
-
 .phone-group {
   display: flex;
-
   gap: 10px;
 }
 
@@ -380,28 +330,17 @@ select:focus {
 | Button
 |------------------------------------------------------------------
 */
-
 .submit-btn {
   margin-top: 10px;
-
   border: none;
-
   padding: 18px;
-
   border-radius: 18px;
-
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-
   color: white;
-
   font-size: 15px;
-
   font-weight: 700;
-
   cursor: pointer;
-
   transition: all 0.3s ease;
-
   box-shadow: 0 18px 35px rgba(59, 130, 246, 0.25);
 }
 
@@ -411,7 +350,6 @@ select:focus {
 
 .submit-btn:disabled {
   opacity: 0.7;
-
   cursor: not-allowed;
 }
 
@@ -420,41 +358,22 @@ select:focus {
 | Messages
 |------------------------------------------------------------------
 */
-
 .success-message {
   padding: 14px 16px;
-
   border-radius: 14px;
-
   margin-bottom: 20px;
-
   background: rgba(34, 197, 94, 0.12);
-
   color: #15803d;
-
   font-weight: 600;
 }
 
 .error-message {
   padding: 14px 16px;
-
   border-radius: 14px;
-
   margin-bottom: 20px;
-
   background: rgba(239, 68, 68, 0.12);
-
   color: #dc2626;
-
   font-weight: 600;
-}
-
-.error-text {
-  color: #dc2626;
-
-  font-size: 13px;
-
-  font-weight: 500;
 }
 
 /*
@@ -462,20 +381,15 @@ select:focus {
 | Login Link
 |------------------------------------------------------------------
 */
-
 .login-link {
   margin-top: 24px;
-
   text-align: center;
-
   color: #64748b;
 }
 
 .login-link a {
   color: #2563eb;
-
   text-decoration: none;
-
   font-weight: 700;
 }
 
@@ -488,7 +402,6 @@ select:focus {
 | Responsive
 |------------------------------------------------------------------
 */
-
 @media (max-width: 1100px) {
   .register-page {
     grid-template-columns: 1fr;
@@ -500,11 +413,12 @@ select:focus {
 
   .register-right {
     padding: 24px;
+   
+    
   }
 
   .register-card {
     max-width: 100%;
-
     max-height: unset;
   }
 }

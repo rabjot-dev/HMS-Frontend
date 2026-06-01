@@ -10,7 +10,7 @@ import { EmployeeService } from '../../../core/services/employee';
   selector: 'app-employee-details',
   standalone: true,
 
-  imports: [CommonModule],
+  imports: [CommonModule],  
 
   templateUrl: './employee-details.html',
 

@@ -19,10 +19,11 @@ export class Register {
 
   /*
   |--------------------------------------------------------------------------
-  | Multi Step
+  | Multi Step — 3 steps total
   |--------------------------------------------------------------------------
   */
   currentStep = 1;
+  totalSteps = 3;
 
   /*
   |--------------------------------------------------------------------------
@@ -45,7 +46,7 @@ export class Register {
     this.registerForm = this.fb.group({
       /*
       |--------------------------------------------------------------------------
-      | Basic Details
+      | Step 1 — Basic Info
       |--------------------------------------------------------------------------
       */
       name:        ['', Validators.required],
@@ -55,35 +56,65 @@ export class Register {
       phone:       ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       department:  ['', Validators.required],
       designation: ['', Validators.required],
+
+      /*
+      |--------------------------------------------------------------------------
+      | Doctor Fields (part of Step 1 when designation = DOCTOR)
+      |--------------------------------------------------------------------------
+      */
+      qualification:         [''],
+      specialization:        [''],
+      medicalRegistrationNo: [''],
+      consultationFee:       [''],
+
+      /*
+      |--------------------------------------------------------------------------
+      | Step 2 — Work Details
+      |--------------------------------------------------------------------------
+      */
       joiningDate: ['', Validators.required],
 
       /*
       |--------------------------------------------------------------------------
-      | Doctor Fields
-      |--------------------------------------------------------------------------
-      */
-     qualification:         ['',Validators.required],
-    specialization:        ['',Validators.required],
-    medicalRegistrationNo: ['',Validators.required],
-    consultationFee:       ['',Validators.required],
-
-      /*
-      |--------------------------------------------------------------------------
-      | Security Question
+      | Step 3 — Account & Security
       |--------------------------------------------------------------------------
       */
       securityQuestion: ['', Validators.required],
       securityAnswer:   ['', Validators.required],
-
-      /*
-      |--------------------------------------------------------------------------
-      | Password
-      |--------------------------------------------------------------------------
-      */
-      password:        ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
+      password:         ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword:  ['', Validators.required]
     });
   }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Step 1 Fields
+  |--------------------------------------------------------------------------
+  */
+  private step1Fields = [
+    'name', 'email', 'gender', 'countryCode',
+    'phone', 'department', 'designation'
+  ];
+
+  private step1DoctorFields = [
+    'specialization', 'qualification', 'medicalRegistrationNo'
+  ];
+
+  /*
+  |--------------------------------------------------------------------------
+  | Step 2 Fields
+  |--------------------------------------------------------------------------
+  */
+  private step2Fields = ['joiningDate'];
+
+  /*
+  |--------------------------------------------------------------------------
+  | Step 3 Fields
+  |--------------------------------------------------------------------------
+  */
+  private step3Fields = [
+    'password', 'confirmPassword', 'securityQuestion', 'securityAnswer'
+  ];
 
   /*
   |--------------------------------------------------------------------------
@@ -96,10 +127,51 @@ export class Register {
 
   /*
   |--------------------------------------------------------------------------
-  | Next Step
+  | Step Label
   |--------------------------------------------------------------------------
   */
- 
+  getStepLabel(step: number): string {
+    const labels: Record<number, string> = {
+      1: 'Basic Info',
+      2: 'Work Details',
+      3: 'Account & Security'
+    };
+    return labels[step] ?? '';
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | Validate Current Step & Advance
+  |--------------------------------------------------------------------------
+  */
+  nextStep(): void {
+    this.errorMessage = '';
+
+    let fieldsToValidate: string[] = [];
+
+    if (this.currentStep === 1) {
+      fieldsToValidate = [...this.step1Fields];
+      if (this.isDoctor()) {
+        fieldsToValidate = [...fieldsToValidate, ...this.step1DoctorFields];
+      }
+    } else if (this.currentStep === 2) {
+      fieldsToValidate = [...this.step2Fields];
+    }
+
+    // Mark fields for the current step as touched so errors show
+    fieldsToValidate.forEach(field => this.registerForm.get(field)?.markAsTouched());
+
+    const stepInvalid = fieldsToValidate.some(
+      field => this.registerForm.get(field)?.invalid
+    );
+
+    if (stepInvalid) {
+      this.errorMessage = 'Please fill in all required fields before proceeding.';
+      return;
+    }
+
+    this.currentStep++;
+  }
 
   /*
   |--------------------------------------------------------------------------
@@ -107,22 +179,19 @@ export class Register {
   |--------------------------------------------------------------------------
   */
   prevStep(): void {
-    this.currentStep--;
+    this.errorMessage = '';
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
   }
 
   /*
   |--------------------------------------------------------------------------
-  | Submit Form
+  | Submit Form (Step 3)
   |--------------------------------------------------------------------------
   */
   onSubmit(): void {
-    /*
-    |--------------------------------------------------------------------------
-    | Mark Step 3 Fields Touched
-    |--------------------------------------------------------------------------
-    */
-    const step3Fields = ['password', 'confirmPassword', 'securityQuestion', 'securityAnswer'];
-    step3Fields.forEach(field => this.registerForm.get(field)?.markAsTouched());
+    this.step3Fields.forEach(field => this.registerForm.get(field)?.markAsTouched());
 
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
@@ -143,25 +212,15 @@ export class Register {
     this.errorMessage = '';
     this.successMessage = '';
 
-    /*
-    |--------------------------------------------------------------------------
-    | Payload
-    |--------------------------------------------------------------------------
-    */
     const payload = { ...this.registerForm.value };
 
-    /*
-    |--------------------------------------------------------------------------
-    | Register API
-    |--------------------------------------------------------------------------
-    */
     this.authService.register(payload).subscribe({
       next: (response: any) => {
         console.log(response);
         this.isSubmitting = false;
         this.successMessage = 'Registration submitted successfully. Wait for admin approval.';
         this.registerForm.reset();
-        this.currentStep = 1;   // ← reset back to step 1 after success
+        this.currentStep = 1;
 
         setTimeout(() => {
           this.router.navigate(['/login']);
