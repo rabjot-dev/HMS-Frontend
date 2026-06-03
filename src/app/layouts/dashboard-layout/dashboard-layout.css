@@ -9,7 +9,7 @@
 }
 
 html {
-  font-size: 22px;        /* base was 16px — increase this to scale everything */
+  font-size: 22px; /* base was 16px — increase this to scale everything */
 }
 
 body {
@@ -17,21 +17,42 @@ body {
   line-height: 1.7;
 }
 
-h1 { font-size: 2.2rem; }
-h2 { font-size: 1.8rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
-h5 { font-size: 1.1rem; }
-h6 { font-size: 1rem; }
+h1 {
+  font-size: 2.2rem;
+}
+h2 {
+  font-size: 1.8rem;
+}
+h3 {
+  font-size: 1.5rem;
+}
+h4 {
+  font-size: 1.25rem;
+}
+h5 {
+  font-size: 1.1rem;
+}
+h6 {
+  font-size: 1rem;
+}
 
-p, span, a, li, td, th, label {
+p,
+span,
+a,
+li,
+td,
+th,
+label {
   font-size: 3rem;
 }
-#active{
+#active {
   font-size: 1.5rem;
 }
 
-input, select, textarea, button {
+input,
+select,
+textarea,
+button {
   font-size: 3rem;
 }
 /* ── Global Toast ─────────────────────────────────────── */
@@ -104,8 +125,14 @@ input, select, textarea, button {
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .toast {
@@ -129,11 +156,11 @@ input, select, textarea, button {
 |--------------------------------------------------------------------------
 */
 .sidebar {
-  width: 320px;                          /* 280 → 320 */
+  width: 320px; /* 280 → 320 */
   background: rgba(15, 23, 42, 0.92);
   backdrop-filter: blur(20px);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 36px 26px;                    /* 28/20 → 36/26 */
+  padding: 36px 26px; /* 28/20 → 36/26 */
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -149,33 +176,33 @@ input, select, textarea, button {
 .logo-section {
   display: flex;
   align-items: center;
-  gap: 16px;                             /* 14 → 16 */
-  margin-bottom: 48px;                   /* 40 → 48 */
+  gap: 16px; /* 14 → 16 */
+  margin-bottom: 48px; /* 40 → 48 */
 }
 
 .logo-circle {
-  width: 62px;                           /* 52 → 62 */
+  width: 62px; /* 52 → 62 */
   height: 62px;
-  border-radius: 18px;                   /* 16 → 18 */
+  border-radius: 18px; /* 16 → 18 */
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 28px;                       /* 24 → 28 */
+  font-size: 28px; /* 24 → 28 */
   font-weight: 700;
   box-shadow: 0 10px 30px rgba(59, 130, 246, 0.35);
 }
 
 .logo-section h2 {
   color: white;
-  font-size: 22px;                       /* 20 → 22 */
+  font-size: 22px; /* 20 → 22 */
   margin-bottom: 5px;
 }
 
 .logo-section p {
   color: rgba(255, 255, 255, 0.6);
-  font-size: 14px;                       /* 13 → 14 */
+  font-size: 14px; /* 13 → 14 */
 }
 
 /*
@@ -186,16 +213,16 @@ input, select, textarea, button {
 .profile-card {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 22px;                   /* 20 → 22 */
-  padding: 22px;                         /* 18 → 22 */
+  border-radius: 22px; /* 20 → 22 */
+  padding: 22px; /* 18 → 22 */
   display: flex;
   align-items: center;
-  gap: 16px;                             /* 14 → 16 */
-  margin-bottom: 28px;                   /* 24 → 28 */
+  gap: 16px; /* 14 → 16 */
+  margin-bottom: 28px; /* 24 → 28 */
 }
 
 .avatar {
-  width: 58px;                           /* 50 → 58 */
+  width: 58px; /* 50 → 58 */
   height: 58px;
   border-radius: 50%;
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
@@ -204,18 +231,18 @@ input, select, textarea, button {
   justify-content: center;
   color: white;
   font-weight: 700;
-  font-size: 24px;                       /* 20 → 24 */
+  font-size: 24px; /* 20 → 24 */
 }
 
 .profile-card h4 {
   color: white;
-  font-size: 17px;                       /* 15 → 17 */
+  font-size: 17px; /* 15 → 17 */
   margin-bottom: 5px;
 }
 
 .profile-card span {
   color: rgba(255, 255, 255, 0.6);
-  font-size: 13px;                       /* 12 → 13 */
+  font-size: 13px; /* 12 → 13 */
 }
 
 /*
@@ -226,21 +253,21 @@ input, select, textarea, button {
 .nav-links {
   display: flex;
   flex-direction: column;
-  gap: 14px;                             /* 12 → 14 */
-  margin-top: 14px;                      /* 12 → 14 */
+  gap: 14px; /* 12 → 14 */
+  margin-top: 14px; /* 12 → 14 */
 }
 
 .nav-links a {
   display: flex;
   align-items: center;
-  gap: 14px;                             /* 12 → 14 */
-  padding: 17px 22px;                    /* 14/18 → 17/22 */
-  border-radius: 16px;                   /* 14 → 16 */
+  gap: 14px; /* 12 → 14 */
+  padding: 17px 22px; /* 14/18 → 17/22 */
+  border-radius: 16px; /* 14 → 16 */
   color: rgba(255, 255, 255, 0.72);
   text-decoration: none;
   transition: all 0.3s ease;
   font-weight: 500;
-  font-size: 16px;                       /* added explicit size */
+  font-size: 16px; /* added explicit size */
 }
 
 .nav-links a:hover {
@@ -263,7 +290,7 @@ input, select, textarea, button {
 */
 .main-content {
   flex: 1;
-  padding: 30px;                         /* 24 → 30 */
+  padding: 30px; /* 24 → 30 */
 }
 
 /*
@@ -275,27 +302,27 @@ input, select, textarea, button {
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 28px;                   /* 24 → 28 */
-  padding: 28px 36px;                    /* 24/30 → 28/36 */
+  border-radius: 28px; /* 24 → 28 */
+  padding: 28px 36px; /* 24/30 → 28/36 */
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 10px 40px rgba(15, 23, 42, 0.06);
-  margin-bottom: 30px;                   /* 24 → 30 */
+  margin-bottom: 30px; /* 24 → 30 */
   overflow: visible;
   position: relative;
   z-index: 100;
 }
 
 .topbar h1 {
-  font-size: 32px;                       /* 28 → 32 */
-  margin-bottom: 8px;                    /* 6 → 8 */
+  font-size: 32px; /* 28 → 32 */
+  margin-bottom: 8px; /* 6 → 8 */
   color: #0f172a;
 }
 
 .topbar p {
   color: #64748b;
-  font-size: 15px;                       /* added explicit size */
+  font-size: 15px; /* added explicit size */
 }
 
 /*
@@ -306,7 +333,7 @@ input, select, textarea, button {
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 20px;                             /* 18 → 20 */
+  gap: 20px; /* 18 → 20 */
 }
 
 /*
@@ -320,11 +347,11 @@ input, select, textarea, button {
   gap: 10px;
   color: #334155;
   font-weight: 500;
-  font-size: 15px;                       /* added explicit size */
+  font-size: 15px; /* added explicit size */
 }
 
 .status-dot {
-  width: 12px;                           /* 10 → 12 */
+  width: 12px; /* 10 → 12 */
   height: 12px;
   border-radius: 50%;
   background: #22c55e;
@@ -340,11 +367,11 @@ input, select, textarea, button {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 16px;                             /* 14 → 16 */
+  gap: 16px; /* 14 → 16 */
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.4);
-  padding: 12px 18px;                    /* 10/14 → 12/18 */
-  border-radius: 20px;                   /* 18 → 20 */
+  padding: 12px 18px; /* 10/14 → 12/18 */
+  border-radius: 20px; /* 18 → 20 */
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -359,16 +386,16 @@ input, select, textarea, button {
 |--------------------------------------------------------------------------
 */
 .top-avatar {
-  width: 52px;                           /* 46 → 52 */
+  width: 52px; /* 46 → 52 */
   height: 52px;
-  border-radius: 16px;                   /* 14 → 16 */
+  border-radius: 16px; /* 14 → 16 */
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-weight: 700;
-  font-size: 20px;                       /* 18 → 20 */
+  font-size: 20px; /* 18 → 20 */
 }
 
 /*
@@ -378,13 +405,13 @@ input, select, textarea, button {
 */
 .top-user-info h4 {
   color: #0f172a;
-  font-size: 16px;                       /* 14 → 16 */
-  margin-bottom: 4px;                    /* 3 → 4 */
+  font-size: 16px; /* 14 → 16 */
+  margin-bottom: 4px; /* 3 → 4 */
 }
 
 .top-user-info p {
   color: #64748b;
-  font-size: 13px;                       /* 12 → 13 */
+  font-size: 13px; /* 12 → 13 */
 }
 
 /*
@@ -394,15 +421,15 @@ input, select, textarea, button {
 */
 .profile-dropdown {
   position: absolute;
-  top: 86px;                             /* 78 → 86 */
+  top: 86px; /* 78 → 86 */
   right: 0;
-  width: 240px;                          /* 220 → 240 */
+  width: 240px; /* 220 → 240 */
   background: white;
-  border-radius: 20px;                   /* 18 → 20 */
-  padding: 12px;                         /* 10 → 12 */
+  border-radius: 20px; /* 18 → 20 */
+  padding: 12px; /* 10 → 12 */
   display: flex;
   flex-direction: column;
-  gap: 8px;                              /* 6 → 8 */
+  gap: 8px; /* 6 → 8 */
   box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
   z-index: 9999;
 }
@@ -417,13 +444,13 @@ input, select, textarea, button {
   width: 100%;
   border: none;
   background: transparent;
-  padding: 16px 18px;                    /* 14/16 → 16/18 */
-  border-radius: 14px;                   /* 12 → 14 */
+  padding: 16px 18px; /* 14/16 → 16/18 */
+  border-radius: 14px; /* 12 → 14 */
   text-align: left;
   cursor: pointer;
   text-decoration: none;
   color: #0f172a;
-  font-size: 15px;                       /* 14 → 15 */
+  font-size: 15px; /* 14 → 15 */
   font-weight: 600;
   transition: all 0.25s ease;
 }
@@ -455,7 +482,7 @@ input, select, textarea, button {
 */
 @media (max-width: 992px) {
   .sidebar {
-    width: 100px;                        /* 90 → 100 */
+    width: 100px; /* 90 → 100 */
   }
 
   .logo-section div,
@@ -469,10 +496,10 @@ input, select, textarea, button {
   }
 
   .topbar {
-    padding: 22px;                       /* 20 → 22 */
+    padding: 22px; /* 20 → 22 */
   }
 
   .topbar-right {
-    gap: 14px;                           /* 12 → 14 */
+    gap: 14px; /* 12 → 14 */
   }
 }

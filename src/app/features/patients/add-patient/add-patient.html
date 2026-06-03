@@ -30,7 +30,6 @@
 
   <!-- FORM -->
   <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="patient-form glass-card">
-
     <!-- STEP 1 -->
     @if(currentStep === 1){
     <div class="section">
@@ -40,12 +39,11 @@
       </div>
 
       <div class="grid-2">
-
         <!-- First Name -->
         <div class="form-field">
           <input type="text" placeholder="First Name" formControlName="firstName" />
           @if(patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched){
-            <span class="error-text">First Name is required</span>
+          <span class="error-text">First Name is required</span>
           }
         </div>
 
@@ -53,16 +51,16 @@
         <div class="form-field">
           <input type="text" placeholder="Last Name" formControlName="lastName" />
           @if(patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched){
-            <span class="error-text">Last Name is required</span>
+          <span class="error-text">Last Name is required</span>
           }
         </div>
 
         <!-- Date of Birth -->
         <div class="form-field">
           <label class="field-label">Date of Birth</label>
-          <input type="date" formControlName="dateOfBirth"/>
+          <input type="date" formControlName="dateOfBirth" />
           @if(patientForm.get('dateOfBirth')?.invalid && patientForm.get('dateOfBirth')?.touched){
-            <span class="error-text">Date of Birth is required</span>
+          <span class="error-text">Date of Birth is required</span>
           }
         </div>
 
@@ -75,7 +73,7 @@
             <option value="OTHER">Other</option>
           </select>
           @if(patientForm.get('gender')?.invalid && patientForm.get('gender')?.touched){
-            <span class="error-text">Gender is required</span>
+          <span class="error-text">Gender is required</span>
           }
         </div>
 
@@ -93,7 +91,7 @@
             <option value="O-">O-</option>
           </select>
           @if(patientForm.get('bloodGroup')?.invalid && patientForm.get('bloodGroup')?.touched){
-            <span class="error-text">Blood Group is required</span>
+          <span class="error-text">Blood Group is required</span>
           }
         </div>
 
@@ -106,10 +104,9 @@
             <option value="DIVORCED">Divorced</option>
           </select>
           @if(patientForm.get('maritalStatus')?.invalid && patientForm.get('maritalStatus')?.touched){
-            <span class="error-text">Marital Status is required</span>
+          <span class="error-text">Marital Status is required</span>
           }
         </div>
-
       </div>
     </div>
     }
@@ -123,7 +120,6 @@
       </div>
 
       <div class="grid-2">
-
         <!-- Phone -->
         <div class="form-field">
           <div class="phone-group">
@@ -135,10 +131,10 @@
             <input type="text" placeholder="Phone" maxlength="10" formControlName="phone" />
           </div>
           @if(patientForm.get('phone')?.invalid && patientForm.get('phone')?.touched){
-            <span class="error-text">
-              @if(patientForm.get('phone')?.errors?.['required']){ Phone number is required }
-              @else if(patientForm.get('phone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
-            </span>
+          <span class="error-text">
+            @if(patientForm.get('phone')?.errors?.['required']){ Phone number is required } @else
+            if(patientForm.get('phone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
+          </span>
           }
         </div>
 
@@ -146,10 +142,10 @@
         <div class="form-field">
           <input type="email" placeholder="Email" formControlName="email" />
           @if(patientForm.get('email')?.invalid && patientForm.get('email')?.touched){
-            <span class="error-text">
-              @if(patientForm.get('email')?.errors?.['required']){ Email is required }
-              @else if(patientForm.get('email')?.errors?.['email']){ Enter a valid email address }
-            </span>
+          <span class="error-text">
+            @if(patientForm.get('email')?.errors?.['required']){ Email is required } @else
+            if(patientForm.get('email')?.errors?.['email']){ Enter a valid email address }
+          </span>
           }
         </div>
 
@@ -157,7 +153,7 @@
         <div class="form-field">
           <input type="text" placeholder="Address" formControlName="address" />
           @if(patientForm.get('address')?.invalid && patientForm.get('address')?.touched){
-            <span class="error-text">Address is required</span>
+          <span class="error-text">Address is required</span>
           }
         </div>
 
@@ -165,7 +161,7 @@
         <div class="form-field">
           <input type="text" placeholder="City" formControlName="city" />
           @if(patientForm.get('city')?.invalid && patientForm.get('city')?.touched){
-            <span class="error-text">City is required</span>
+          <span class="error-text">City is required</span>
           }
         </div>
 
@@ -173,7 +169,7 @@
         <div class="form-field">
           <input type="text" placeholder="State" formControlName="state" />
           @if(patientForm.get('state')?.invalid && patientForm.get('state')?.touched){
-            <span class="error-text">State is required</span>
+          <span class="error-text">State is required</span>
           }
         </div>
 
@@ -181,10 +177,10 @@
         <div class="form-field">
           <input type="text" placeholder="Pincode" formControlName="pincode" />
           @if(patientForm.get('pincode')?.invalid && patientForm.get('pincode')?.touched){
-            <span class="error-text">
-              @if(patientForm.get('pincode')?.errors?.['required']){ Pincode is required }
-              @else if(patientForm.get('pincode')?.errors?.['pattern']){ Enter valid 6-digit pincode }
-            </span>
+          <span class="error-text">
+            @if(patientForm.get('pincode')?.errors?.['required']){ Pincode is required } @else
+            if(patientForm.get('pincode')?.errors?.['pattern']){ Enter valid 6-digit pincode }
+          </span>
           }
         </div>
 
@@ -192,21 +188,25 @@
         <div class="form-field">
           <input type="text" placeholder="Emergency Contact Name" formControlName="emergencyContactName" />
           @if(patientForm.get('emergencyContactName')?.invalid && patientForm.get('emergencyContactName')?.touched){
-            <span class="error-text">Emergency Contact Name is required</span>
+          <span class="error-text">Emergency Contact Name is required</span>
           }
         </div>
 
         <!-- Emergency Contact Phone -->
         <div class="form-field">
-          <input type="text" placeholder="Emergency Contact Phone" maxlength="10" formControlName="emergencyContactPhone" />
+          <input
+            type="text"
+            placeholder="Emergency Contact Phone"
+            maxlength="10"
+            formControlName="emergencyContactPhone"
+          />
           @if(patientForm.get('emergencyContactPhone')?.invalid && patientForm.get('emergencyContactPhone')?.touched){
-            <span class="error-text">
-              @if(patientForm.get('emergencyContactPhone')?.errors?.['required']){ Emergency Contact Phone is required }
-              @else if(patientForm.get('emergencyContactPhone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
-            </span>
+          <span class="error-text">
+            @if(patientForm.get('emergencyContactPhone')?.errors?.['required']){ Emergency Contact Phone is required }
+            @else if(patientForm.get('emergencyContactPhone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
+          </span>
           }
         </div>
-
       </div>
     </div>
     }
@@ -239,7 +239,6 @@
       </div>
 
       <div class="grid-2">
-
         <!-- Insurance Provider (optional) -->
         <div class="form-field">
           <input type="text" placeholder="Insurance Provider (optional)" formControlName="insuranceProvider" />
@@ -270,10 +269,9 @@
             <option value="EMERGENCY">Emergency</option>
           </select>
           @if(patientForm.get('patientType')?.invalid && patientForm.get('patientType')?.touched){
-            <span class="error-text">Patient Type is required</span>
+          <span class="error-text">Patient Type is required</span>
           }
         </div>
-
       </div>
     </div>
     }
@@ -281,17 +279,14 @@
     <!-- BUTTONS -->
     <div class="button-group">
       @if(currentStep > 1){
-        <button type="button" class="secondary-btn" (click)="previousStep()">Previous</button>
-      }
-      @if(currentStep < 4){
-        <button type="button" class="primary-btn" (click)="nextStep()">Save & Continue</button>
-      }
-      @if(currentStep === 4){
-        <button type="submit" class="submit-btn" [disabled]="isSubmitting">
-          @if(isSubmitting){ Registering... } @else { Register Patient }
-        </button>
+      <button type="button" class="secondary-btn" (click)="previousStep()">Previous</button>
+      } @if(currentStep < 4){
+      <button type="button" class="primary-btn" (click)="nextStep()">Save & Continue</button>
+      } @if(currentStep === 4){
+      <button type="submit" class="submit-btn" [disabled]="isSubmitting">
+        @if(isSubmitting){ Registering... } @else { Register Patient }
+      </button>
       }
     </div>
-
   </form>
 </div>

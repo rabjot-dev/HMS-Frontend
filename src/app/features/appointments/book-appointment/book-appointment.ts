@@ -42,9 +42,9 @@ export class BookAppointment implements OnInit {
   */
   isSubmitting = false;
   toastMessage = '';
-toastType: 'success' | 'error' = 'success';
-showToast = false;
-noSlotsError = false;
+  toastType: 'success' | 'error' = 'success';
+  showToast = false;
+  noSlotsError = false;
 
   /*
   |--------------------------------------------------------------------------
@@ -53,6 +53,7 @@ noSlotsError = false;
   */
   appointmentForm: any;
   selectedDoctor: any = null;
+  minDate = '';
 
   constructor(
     private fb: FormBuilder,
@@ -63,7 +64,7 @@ noSlotsError = false;
 
     private appointmentService: AppointmentService,
     private cdr: ChangeDetectorRef,
-     private toastService: ToastService
+    private toastService: ToastService
   ) {
     this.appointmentForm = this.fb.group({
       /*
@@ -90,20 +91,20 @@ noSlotsError = false;
 
       notes: [''],
 
-      symptoms: ['',Validators.required],
+      symptoms: ['', Validators.required],
 
       /*
         |--------------------------------------------------------------------------
         | Professional Fields
         |--------------------------------------------------------------------------
         */
-      appointmentType: ['CONSULTATION',Validators.required],
+      appointmentType: ['CONSULTATION', Validators.required],
 
-      priority: ['NORMAL',Validators.required],
+      priority: ['NORMAL', Validators.required],
 
-      paymentStatus: ['PENDING',Validators.required],
+      paymentStatus: ['PENDING', Validators.required],
 
-      visitMode: ['OFFLINE',Validators.required]
+      visitMode: ['OFFLINE', Validators.required]
     });
   }
 
@@ -113,12 +114,13 @@ noSlotsError = false;
   |--------------------------------------------------------------------------
   */
   ngOnInit(): void {
+    this.minDate = new Date().toISOString().split('T')[0];
     this.loadPatients();
 
     this.loadDoctors();
-     this.appointmentForm.get('department')?.valueChanges.subscribe(() => {
-    this.filterDoctors();
-  });
+    this.appointmentForm.get('department')?.valueChanges.subscribe(() => {
+      this.filterDoctors();
+    });
   }
 
   /*
@@ -158,7 +160,7 @@ noSlotsError = false;
           console.log(response);
 
           this.doctors = response.data;
-           console.log("Doctors Array:", this.doctors);
+          console.log('Doctors Array:', this.doctors);
         },
 
         error: (error) => {
@@ -173,22 +175,19 @@ noSlotsError = false;
   |--------------------------------------------------------------------------
   */
 
+  filterDoctors(): void {
+    const department = this.appointmentForm.get('department')?.value;
 
- filterDoctors(): void {
-  const department = this.appointmentForm.get('department')?.value;
+    console.log('Selected Department:', department);
+    console.log('All Doctors:', this.doctors);
 
-  console.log('Selected Department:', department);
-  console.log('All Doctors:', this.doctors);
+    this.filteredDoctors = this.doctors.filter((doctor) => doctor.department === department);
 
-  this.filteredDoctors = this.doctors.filter(
-    (doctor) => doctor.department === department
-  );
-
-  this.appointmentForm.get('doctorId')?.setValue('');
-  this.availableSlots = [];
-  this.noSlotsError = false;
-   this.cdr.detectChanges();
-}
+    this.appointmentForm.get('doctorId')?.setValue('');
+    this.availableSlots = [];
+    this.noSlotsError = false;
+    this.cdr.detectChanges();
+  }
 
   /*
   |--------------------------------------------------------------------------
@@ -199,45 +198,58 @@ noSlotsError = false;
     const doctorId = this.appointmentForm.get('doctorId')?.value;
 
     const appointmentDate = this.appointmentForm.get('appointmentDate')?.value;
-     console.log('DATE VALUE BEING SENT:', appointmentDate);
+
     if (!doctorId || !appointmentDate) {
       return;
     }
+
+    /*
+|--------------------------------------------------------------------------
+| Past Date Validation
+|--------------------------------------------------------------------------
+*/
+    const selectedDate = new Date(appointmentDate);
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      this.availableSlots = [];
+
+      this.noSlotsError = true;
+
+      this.toastService.show('Cannot select past dates', 'error');
+
+      return;
+    }
     const year = parseInt(appointmentDate.split('-')[0]);
-  if (year < 2000) return;
+    if (year < 2000) return;
 
     this.appointmentService
-      .getAvailableSlots(
-        doctorId,
-        appointmentDate
-      )
+      .getAvailableSlots(doctorId, appointmentDate)
 
       .subscribe({
         next: (response) => {
           console.log(response);
 
-          this.availableSlots = response.data ||[];
+          this.availableSlots = response.data || [];
           if (this.availableSlots.length === 0) {
-        this.noSlotsError = true;
-        this.toastService.show('No slots available for the selected date.', 'error');
-      }
-      else{
-        this.noSlotsError = false; 
-      }
-      this.cdr.detectChanges();
+            this.noSlotsError = true;
+            this.toastService.show('No slots available for the selected date.', 'error');
+          } else {
+            this.noSlotsError = false;
+          }
+          this.cdr.detectChanges();
         },
 
         error: (error) => {
           console.log('Slots error:', error);
-      this.availableSlots = [];
-      this.noSlotsError = true;
+          this.availableSlots = [];
+          this.noSlotsError = true;
           console.log(error);
-       this.toastService.show(
-    error?.error?.message || 'No slots available for the selected date.',
-    'error'
-  );
-   this.cdr.detectChanges();
-         
+          this.toastService.show(error?.error?.message || 'No slots available for the selected date.', 'error');
+          this.cdr.detectChanges();
         }
       });
   }
@@ -247,35 +259,30 @@ noSlotsError = false;
 
     this.selectedDoctor = this.filteredDoctors.find((doctor: any) => doctor._id === doctorId);
 
-  
     this.appointmentForm.get('appointmentTime')?.setValue('');
 
     this.availableSlots = [];
-  this.noSlotsError = false;
-  this.cdr.detectChanges();
+    this.noSlotsError = false;
+    this.cdr.detectChanges();
     this.fetchAvailableSlots();
     console.log(this.selectedDoctor);
   }
- 
+
   onSubmit(): void {
     if (this.appointmentForm.invalid) {
       this.appointmentForm.markAllAsTouched();
-      if (
-      this.appointmentForm.get('appointmentDate')?.valid &&
-      this.availableSlots.length === 0
-    ) {
+      if (this.appointmentForm.get('appointmentDate')?.valid && this.availableSlots.length === 0) {
+        this.noSlotsError = true;
+      }
+      return;
+    }
+    if (this.availableSlots.length === 0) {
       this.noSlotsError = true;
-    }      
-    return;
-  }
-   if (this.availableSlots.length === 0) {
-    this.noSlotsError = true;
-    this.cdr.detectChanges();
-    return;
-  }
+      this.cdr.detectChanges();
+      return;
+    }
     this.isSubmitting = true;
 
-    
     const formData = {
       ...this.appointmentForm.value,
 
@@ -298,15 +305,10 @@ noSlotsError = false;
 
       .subscribe({
         next: (response) => {
-          console.log(response);  
+          console.log(response);
 
           //alert('Appointment booked successfully');
-          this.toastService.show(
-  'Appointment booked successfully',
-  'success'
-);
-          
-       
+          this.toastService.show('Appointment booked successfully', 'success');
 
           /*
           |--------------------------------------------------------------------------
@@ -319,7 +321,6 @@ noSlotsError = false;
             priority: 'NORMAL',
 
             paymentStatus: 'PENDING',
-
 
             visitMode: 'OFFLINE',
 
@@ -337,10 +338,7 @@ noSlotsError = false;
           console.log(error);
 
           this.isSubmitting = false;
-        this.toastService.show(
-    error?.error?.message || 'Failed to book appointment.',
-    'error'
-  );
+          this.toastService.show(error?.error?.message || 'Failed to book appointment.', 'error');
         }
       });
   }

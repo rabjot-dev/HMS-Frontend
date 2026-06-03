@@ -48,12 +48,12 @@ export class Register {
       | Basic Details
       |--------------------------------------------------------------------------
       */
-      name:        ['', Validators.required],
-      email:       ['', [Validators.required, Validators.email]],
-      gender:      ['', Validators.required],
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      gender: ['', Validators.required],
       countryCode: ['+91', Validators.required],
-      phone:       ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      department:  ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      department: ['', Validators.required],
       designation: ['', Validators.required],
       joiningDate: ['', Validators.required],
 
@@ -62,10 +62,10 @@ export class Register {
       | Doctor Fields
       |--------------------------------------------------------------------------
       */
-     qualification:         ['',Validators.required],
-    specialization:        ['',Validators.required],
-    medicalRegistrationNo: ['',Validators.required],
-    consultationFee:       ['',Validators.required],
+      qualification: ['', Validators.required],
+      specialization: ['', Validators.required],
+      medicalRegistrationNo: ['', Validators.required],
+      consultationFee: ['', Validators.required],
 
       /*
       |--------------------------------------------------------------------------
@@ -73,14 +73,14 @@ export class Register {
       |--------------------------------------------------------------------------
       */
       securityQuestion: ['', Validators.required],
-      securityAnswer:   ['', Validators.required],
+      securityAnswer: ['', Validators.required],
 
       /*
       |--------------------------------------------------------------------------
       | Password
       |--------------------------------------------------------------------------
       */
-      password:        ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     });
   }
@@ -99,7 +99,6 @@ export class Register {
   | Next Step
   |--------------------------------------------------------------------------
   */
- 
 
   /*
   |--------------------------------------------------------------------------
@@ -122,7 +121,7 @@ export class Register {
     |--------------------------------------------------------------------------
     */
     const step3Fields = ['password', 'confirmPassword', 'securityQuestion', 'securityAnswer'];
-    step3Fields.forEach(field => this.registerForm.get(field)?.markAsTouched());
+    step3Fields.forEach((field) => this.registerForm.get(field)?.markAsTouched());
 
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
@@ -161,7 +160,7 @@ export class Register {
         this.isSubmitting = false;
         this.successMessage = 'Registration submitted successfully. Wait for admin approval.';
         this.registerForm.reset();
-        this.currentStep = 1;   // ← reset back to step 1 after success
+        this.currentStep = 1; // ← reset back to step 1 after success
 
         setTimeout(() => {
           this.router.navigate(['/login']);

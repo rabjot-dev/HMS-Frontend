@@ -18,7 +18,6 @@ import { PatientService } from '../../../core/services/patient';
   styleUrls: ['./add-patient.css']
 })
 export class AddPatient {
-
   currentStep = 1;
 
   isSubmitting = false;
@@ -73,8 +72,6 @@ export class AddPatient {
 
       emergencyContactPhone: ['', Validators.required],
 
-     
-
       /*
       |--------------------------------------------------------------------------
       | Medical Information
@@ -125,21 +122,19 @@ export class AddPatient {
     const stepFields: { [key: number]: string[] } = {
       1: ['firstName', 'lastName', 'dateOfBirth', 'gender', 'bloodGroup', 'maritalStatus'],
       2: ['phone', 'email', 'address', 'city', 'state', 'pincode', 'emergencyContactName', 'emergencyContactPhone'],
-      3: [], 
-      4:['patientType']
+      3: [],
+      4: ['patientType']
     };
 
     const fieldsToValidate = stepFields[this.currentStep] || [];
 
     // Mark only current step fields as touched to show errors
-    fieldsToValidate.forEach(field => {
+    fieldsToValidate.forEach((field) => {
       this.patientForm.get(field)?.markAsTouched();
     });
 
     // Check if all current step fields are valid
-    const isStepValid = fieldsToValidate.every(field =>
-      this.patientForm.get(field)?.valid
-    );
+    const isStepValid = fieldsToValidate.every((field) => this.patientForm.get(field)?.valid);
 
     if (!isStepValid) {
       return; // Block navigation if invalid

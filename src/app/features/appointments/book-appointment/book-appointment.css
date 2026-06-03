@@ -1,12 +1,10 @@
-
-
 /* ── Global Font Scale ─────────────────────────────────── */
 * {
   box-sizing: border-box;
 }
 
 html {
-  font-size: 18px;        /* base was 16px — increase this to scale everything */
+  font-size: 18px; /* base was 16px — increase this to scale everything */
 }
 
 body {
@@ -14,20 +12,40 @@ body {
   line-height: 1.7;
 }
 
-h1 { font-size: 2.2rem; }
-h2 { font-size: 1.8rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
-h5 { font-size: 1.1rem; }
-h6 { font-size: 1rem; }
-p{
+h1 {
+  font-size: 2.2rem;
+}
+h2 {
+  font-size: 1.8rem;
+}
+h3 {
+  font-size: 1.5rem;
+}
+h4 {
   font-size: 1.25rem;
 }
- span, a, li, td, th, label {
+h5 {
+  font-size: 1.1rem;
+}
+h6 {
+  font-size: 1rem;
+}
+p {
+  font-size: 1.25rem;
+}
+span,
+a,
+li,
+td,
+th,
+label {
   font-size: 1.5rem;
 }
 
-input, select, textarea, button {
+input,
+select,
+textarea,
+button {
   font-size: 1.75rem;
 }
 .appointment-page {
@@ -361,7 +379,9 @@ textarea {
   font-size: 14px;
   font-weight: 500;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  animation: slideIn 0.3s ease, fadeOut 0.4s ease 2.6s forwards;
+  animation:
+    slideIn 0.3s ease,
+    fadeOut 0.4s ease 2.6s forwards;
   border-left: 4px solid transparent;
 }
 

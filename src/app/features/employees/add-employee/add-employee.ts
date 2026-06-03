@@ -58,15 +58,15 @@ export class AddEmployee {
         | Doctor Fields
         |--------------------------------------------------------------------------
         */
-      medicalRegistrationNo: ['',Validators.required],
+      medicalRegistrationNo: ['', Validators.required],
 
-      specialization: ['',Validators.required],
+      specialization: ['', Validators.required],
 
-      qualification: ['',Validators.required],
+      qualification: ['', Validators.required],
 
-      consultationFee: [0,Validators.required],
+      consultationFee: [0, Validators.required],
 
-      availabilitySlots: ['',Validators.required],
+      availabilitySlots: ['', Validators.required],
 
       /*
         |--------------------------------------------------------------------------
@@ -75,17 +75,17 @@ export class AddEmployee {
         */
       workingDays: [[]],
 
-      startTime: ['',Validators.required],
+      startTime: ['', Validators.required],
 
-      endTime: ['',Validators.required],
+      endTime: ['', Validators.required],
 
-      slotDuration: [15,Validators.required],
+      slotDuration: [15, Validators.required],
 
-      breakStartTime: ['',Validators.required],
+      breakStartTime: ['', Validators.required],
 
-      breakEndTime: ['',Validators.required],
+      breakEndTime: ['', Validators.required],
 
-      maxPatientsPerDay: [40,Validators.required]
+      maxPatientsPerDay: [40, Validators.required]
     });
   }
 

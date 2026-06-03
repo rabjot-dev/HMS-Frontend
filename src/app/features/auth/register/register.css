@@ -20,7 +20,7 @@
 }
 
 .step p {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: #94a3b8;
   margin: 0;
@@ -97,7 +97,7 @@
   border: 1.5px solid #dbe4f0;
   background: #fff;
   color: #334155;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -114,7 +114,7 @@
 
   display: grid;
 
-  grid-template-columns: 1fr 560px;
+  grid-template-columns: 1fr 950px;
 
   background: linear-gradient(135deg, #eff6ff, #f8fafc);
 }
@@ -133,12 +133,10 @@
 
 .register-left {
   padding: 80px;
-
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
+  transform: translateY(-70px);
 }
 
 .brand-badge {
@@ -236,7 +234,7 @@
 
   align-items: center;
 
-  padding: 40px;
+  padding: 40px 60px;
 }
 
 /*
@@ -264,27 +262,11 @@
 .register-card {
   width: 100%;
 
-  max-width: 460px;
-
-  max-height: 92vh;
-
-  overflow-y: auto;
-
-  padding-right: 6px;
-}
-
-.register-card::-webkit-scrollbar {
-  width: 6px;
-}
-
-.register-card::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-
-  border-radius: 999px;
+  max-width: 620px;
 }
 
 .register-card h2 {
-  font-size: 38px;
+  font-size: 44px;
 
   margin-bottom: 10px;
 
@@ -292,6 +274,7 @@
 }
 
 .subtitle {
+  font-size: 17px;
   color: #64748b;
 
   margin-bottom: 30px;
@@ -320,7 +303,7 @@ form {
 }
 
 .form-group label {
-  font-size: 14px;
+  font-size: 16px;
 
   font-weight: 600;
 
@@ -337,7 +320,7 @@ input,
 select {
   width: 100%;
 
-  padding: 16px;
+  padding: 18px;
 
   border-radius: 16px;
 
@@ -345,7 +328,7 @@ select {
 
   background: rgba(255, 255, 255, 0.82);
 
-  font-size: 14px;
+  font-size: 16px;
 
   transition: all 0.3s ease;
 }
@@ -394,7 +377,7 @@ select:focus {
 
   color: white;
 
-  font-size: 15px;
+  font-size: 16px;
 
   font-weight: 700;
 

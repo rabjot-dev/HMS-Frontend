@@ -1,4 +1,4 @@
-import { Component,ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 
 import { RouterLink, Router } from '@angular/router';
 
@@ -34,7 +34,7 @@ export class Login {
     private tokenService: TokenService,
 
     private router: Router,
-     private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) {
     this.loginForm = this.fb.group({
       loginId: ['', Validators.required],
@@ -43,7 +43,6 @@ export class Login {
     });
   }
 
- 
   onSubmit(): void {
     console.log('Login button clicked');
 
@@ -82,24 +81,20 @@ export class Login {
             return;
           }
 
-        
           this.tokenService.setToken(token);
 
-       
           localStorage.setItem(
             'role',
 
             response.data.user.roles?.[0]
           );
 
-        
           localStorage.setItem(
             'loginId',
 
             this.loginForm.value.loginId
           );
 
-         
           const isFirstLogin = response.data.user.isFirstLogin;
 
           if (isFirstLogin) {
@@ -108,10 +103,8 @@ export class Login {
             return;
           }
 
-        
           const role = response.data.user.roles?.[0];
 
-         
           if (role === 'ADMIN') {
             this.router
               .navigate(['/dashboard/admin'])

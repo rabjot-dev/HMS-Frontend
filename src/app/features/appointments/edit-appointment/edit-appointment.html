@@ -3,18 +3,17 @@
 
   <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
     <div class="grid">
-
       <!-- Doctor -->
       <div class="form-group">
         <label>Doctor</label>
         <select formControlName="doctorEmployeeId" (change)="fetchAvailableSlots()">
           <option value="">Select Doctor</option>
           @for ( doctor of doctors; track doctor._id ) {
-            <option [value]="doctor._id">{{ doctor.name }}</option>
+          <option [value]="doctor._id">{{ doctor.name }}</option>
           }
         </select>
         @if(appointmentForm.get('doctorEmployeeId')?.invalid && appointmentForm.get('doctorEmployeeId')?.touched){
-          <span class="error-text">Doctor is required</span>
+        <span class="error-text">Doctor is required</span>
         }
       </div>
 
@@ -23,10 +22,9 @@
         <label>Appointment Date</label>
         <input type="date" formControlName="appointmentDate" (change)="fetchAvailableSlots()" />
         @if(appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched){
-          <span class="error-text">Appointment Date is required</span>
-        }
-        @if(noSlotsError){
-          <span class="error-text">Doctor is not available on this day</span>
+        <span class="error-text">Appointment Date is required</span>
+        } @if(noSlotsError){
+        <span class="error-text">Doctor is not available on this day</span>
         }
       </div>
 
@@ -42,7 +40,7 @@
           <option value="ROUTINE_CHECKUP">Routine Checkup</option>
         </select>
         @if(appointmentForm.get('appointmentType')?.invalid && appointmentForm.get('appointmentType')?.touched){
-          <span class="error-text">Appointment Type is required</span>
+        <span class="error-text">Appointment Type is required</span>
         }
       </div>
 
@@ -56,7 +54,7 @@
           <option value="CRITICAL">Critical</option>
         </select>
         @if(appointmentForm.get('priority')?.invalid && appointmentForm.get('priority')?.touched){
-          <span class="error-text">Priority is required</span>
+        <span class="error-text">Priority is required</span>
         }
       </div>
 
@@ -70,7 +68,7 @@
           <option value="INSURANCE">Insurance</option>
         </select>
         @if(appointmentForm.get('paymentStatus')?.invalid && appointmentForm.get('paymentStatus')?.touched){
-          <span class="error-text">Payment Status is required</span>
+        <span class="error-text">Payment Status is required</span>
         }
       </div>
 
@@ -84,7 +82,7 @@
           <option value="HOME_VISIT">Home Visit</option>
         </select>
         @if(appointmentForm.get('visitMode')?.invalid && appointmentForm.get('visitMode')?.touched){
-          <span class="error-text">Visit Mode is required</span>
+        <span class="error-text">Visit Mode is required</span>
         }
       </div>
 
@@ -99,31 +97,31 @@
           <option value="CANCELLED">Cancelled</option>
         </select>
         @if(appointmentForm.get('status')?.invalid && appointmentForm.get('status')?.touched){
-          <span class="error-text">Status is required</span>
+        <span class="error-text">Status is required</span>
         }
       </div>
     </div>
 
     <!-- Slots -->
     @if( appointmentForm.get('status')?.value !== 'COMPLETED' && appointmentForm.get('status')?.value !== 'CANCELLED' ){
-      <div class="slots-section">
-        <h2>Available Slots</h2>
-        <div class="slots-container">
-          @for ( slot of availableSlots; track slot ) {
-            <button
-              type="button"
-              class="slot-btn"
-              [class.active]="appointmentForm.get('timeSlot')?.value === slot"
-              (click)="appointmentForm.get('timeSlot')?.setValue(slot)"
-            >
-              {{ slot }}
-            </button>
-          }
-        </div>
-        @if(appointmentForm.get('timeSlot')?.invalid && appointmentForm.get('timeSlot')?.touched){
-          <span class="error-text">Please select a time slot</span>
+    <div class="slots-section">
+      <h2>Available Slots</h2>
+      <div class="slots-container">
+        @for ( slot of availableSlots; track slot ) {
+        <button
+          type="button"
+          class="slot-btn"
+          [class.active]="appointmentForm.get('timeSlot')?.value === slot"
+          (click)="appointmentForm.get('timeSlot')?.setValue(slot)"
+        >
+          {{ slot }}
+        </button>
         }
       </div>
+      @if(appointmentForm.get('timeSlot')?.invalid && appointmentForm.get('timeSlot')?.touched){
+      <span class="error-text">Please select a time slot</span>
+      }
+    </div>
     }
 
     <!-- Symptoms -->

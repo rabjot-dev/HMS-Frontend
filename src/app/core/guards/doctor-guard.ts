@@ -2,12 +2,12 @@ import { inject } from '@angular/core';
 
 import { CanActivateFn, Router } from '@angular/router';
 
-export const adminGuard: CanActivateFn = () => {
+export const doctorGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   const role = localStorage.getItem('role');
 
-  if (role === 'ADMIN') {
+  if (role === 'DOCTOR') {
     return true;
   }
 

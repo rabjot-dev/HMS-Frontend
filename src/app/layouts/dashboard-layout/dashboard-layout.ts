@@ -11,14 +11,14 @@ import { NgClass } from '@angular/common';
 import { AsyncPipe } from '@angular/common';
 
 import { AuthService } from '../../core/services/auth';
-import { ToastService ,ToastState} from '../../core/services/toast';
+import { ToastService, ToastState } from '../../core/services/toast';
 import { Observable } from 'rxjs';
 @Component({
   selector: 'app-dashboard-layout',
 
   standalone: true,
 
-  imports: [RouterOutlet, RouterLink, AsyncPipe, RouterLinkActive,NgClass],
+  imports: [RouterOutlet, RouterLink, AsyncPipe, RouterLinkActive, NgClass],
 
   templateUrl: './dashboard-layout.html',
 
@@ -31,7 +31,7 @@ export class DashboardLayout {
   |--------------------------------------------------------------------------
   */
   isProfileOpen = false;
- toastState$: Observable<ToastState | null>;
+  toastState$: Observable<ToastState | null>;
   constructor(
     public authService: AuthService,
 
@@ -42,7 +42,7 @@ export class DashboardLayout {
     private cdr: ChangeDetectorRef,
 
     private elementRef: ElementRef,
-     private toastService: ToastService ,
+    private toastService: ToastService
   ) {
     this.toastState$ = this.toastService.toast$;
   }
