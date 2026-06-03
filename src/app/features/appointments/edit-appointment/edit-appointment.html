@@ -4,7 +4,7 @@
   <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
     <div class="grid">
 
-      <!-- Doctor -->
+      <!-- Doctor --> 
       <div class="form-group">
         <label>Doctor</label>
         <select formControlName="doctorEmployeeId" (change)="fetchAvailableSlots()">
@@ -17,7 +17,6 @@
           <span class="error-text">Doctor is required</span>
         }
       </div>
-
       <!-- Appointment Date -->
       <div class="form-group">
         <label>Appointment Date</label>

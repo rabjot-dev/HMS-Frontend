@@ -3,7 +3,6 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
 import { TokenService } from '../services/token';
-
 export const authGuard: CanActivateFn = () => {
   const tokenService = inject(TokenService);
 
@@ -15,7 +14,7 @@ export const authGuard: CanActivateFn = () => {
     return true;
   }
 
-  
+  router.navigate(['/login']);
 
   return false;
 };

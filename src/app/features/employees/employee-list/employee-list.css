@@ -21,8 +21,11 @@ h6 { font-size: 2rem; }
 
 
 p, span, a, li, td,  label {
-  font-size: 1.5rem;
+  font-size: 1rem;
   margin-left: 10px;
+}
+#email{
+  font-size: 11px;
 }
 
 input, select, textarea, button {
@@ -239,7 +242,7 @@ tbody td:last-child {
 .employee-info span {
   color: #64748b;
 
-  font-size: 13px;
+  font-size: 10px;
 }
 
 /*
@@ -312,25 +315,17 @@ tbody td:last-child {
 */
 .actions {
   display: flex;
-
   gap: 10px;
-
   flex-wrap: wrap;
 }
 
 .action-btn {
   border: none;
-
-  padding: 10px 16px;
-
+  padding: 10px 10px;
   border-radius: 14px;
-
   font-weight: 600;
-
   cursor: pointer;
-
   transition: all 0.3s ease;
-
   text-decoration: none;
 }
 

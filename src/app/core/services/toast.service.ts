@@ -16,7 +16,8 @@ export class ToastService {
   show(message: string, type: 'success' | 'error') {
     this.toast$.next({
       message,
-      type
+      type,
+     
     });
 
     setTimeout(() => {

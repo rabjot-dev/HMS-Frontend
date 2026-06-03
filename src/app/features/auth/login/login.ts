@@ -37,7 +37,7 @@ export class Login {
      private cdr: ChangeDetectorRef
   ) {
     this.loginForm = this.fb.group({
-      loginId: ['', Validators.required],
+      loginId: ['', Validators.required,Validators.email],
 
       password: ['', Validators.required]
     });

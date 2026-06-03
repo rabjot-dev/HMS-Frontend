@@ -139,7 +139,7 @@
         <div class="form-group">
           <label>Appointment Date</label>
 
-         <input type="date" formControlName="appointmentDate" (change)="fetchAvailableSlots()">
+         <input type="date" formControlName="appointmentDate" (change)="fetchAvailableSlots()"[min]="minDate">
           @if(appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched){
             <span class="error-text">Appointment Date is required</span>
           }
@@ -196,7 +196,6 @@
     <div class="form-section">
       <div class="section-title">
         <h2>Consultation Details</h2>
-
         <p>Additional appointment info</p>
       </div>
 

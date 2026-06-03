@@ -6,7 +6,7 @@
       <div class="brand-content">
         <div class="logo-box">B</div>
 
-        <h1>BootStrap HMS</h1>
+        <h1 id="heading">BootStrap HMS</h1>
 
         <p>Modern Smart Healthcare Workspace</p>
 
@@ -52,6 +52,9 @@
          @if(loginForm.get('loginId')?.invalid && loginForm.get('loginId')?.touched){
     <span class="error-text">Login ID is required</span>
   }
+  @if(loginForm.get('loginId')?.hasError('email') && loginForm.get('loginId')?.touched){
+  <span class="error-text">Invalid email format</span>
+}
       </div>
 
       <!-- Password -->

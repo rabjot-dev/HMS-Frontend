@@ -66,11 +66,7 @@ noSlotsError = false;
      private toastService: ToastService
   ) {
     this.appointmentForm = this.fb.group({
-      /*
-        |--------------------------------------------------------------------------
-        | Main Fields
-        |--------------------------------------------------------------------------
-        */
+     
       patientId: ['', Validators.required],
 
       department: ['', Validators.required],
@@ -81,11 +77,7 @@ noSlotsError = false;
 
       appointmentTime: ['', Validators.required],
 
-      /*
-        |--------------------------------------------------------------------------
-        | Additional Details
-        |--------------------------------------------------------------------------
-        */
+     
       reason: [''],
 
       notes: [''],
@@ -103,18 +95,16 @@ noSlotsError = false;
 
       paymentStatus: ['PENDING',Validators.required],
 
-      visitMode: ['OFFLINE',Validators.required]
+      visitMode: ['OFFLINE',Validators.required],
+      
     });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | On Init
-  |--------------------------------------------------------------------------
-  */
+  minDate = '';
   ngOnInit(): void {
+      const today = new Date();
+  this.minDate = today.toISOString().split('T')[0];
     this.loadPatients();
-
     this.loadDoctors();
      this.appointmentForm.get('department')?.valueChanges.subscribe(() => {
     this.filterDoctors();

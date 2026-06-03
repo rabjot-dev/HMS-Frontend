@@ -109,13 +109,69 @@
             </div>
 
             <!-- Department -->
-            <div class="form-group">
-              <label>Department</label>
-              <input type="text" formControlName="department" placeholder="Enter department" />
-              @if(registerForm.get('department')?.invalid && registerForm.get('department')?.touched){
-                <span class="error-text">Department is required</span>
-              }
-            </div>
+           <div class="input-group">
+          <label>Department</label>
+
+          <select formControlName="department">
+            <option value="">Select Department</option>
+
+            <option value="CARDIOLOGY">Cardiology</option>
+
+            <option value="ORTHOPEDICS">Orthopedics</option>
+
+            <option value="NEUROLOGY">Neurology</option>
+
+            <option value="PEDIATRICS">Pediatrics</option>
+
+            <option value="DERMATOLOGY">Dermatology</option>
+
+            <option value="GYNECOLOGY">Gynecology</option>
+
+            <option value="ONCOLOGY">Oncology</option>
+
+            <option value="RADIOLOGY">Radiology</option>
+
+            <option value="PATHOLOGY">Pathology</option>
+
+            <option value="EMERGENCY">Emergency</option>
+
+            <option value="ICU">ICU</option>
+
+            <option value="GENERAL_MEDICINE">General Medicine</option>
+
+            <option value="ENT">ENT</option>
+
+            <option value="UROLOGY">Urology</option>
+
+            <option value="PSYCHIATRY">Psychiatry</option>
+
+            <option value="PULMONOLOGY">Pulmonology</option>
+
+            <option value="GASTROENTEROLOGY">Gastroenterology</option>
+
+            <option value="NEPHROLOGY">Nephrology</option>
+
+            <option value="OPHTHALMOLOGY">Ophthalmology</option>
+
+            <option value="SURGERY">Surgery</option>
+
+            <option value="ADMINISTRATION">Administration</option>
+
+            <option value="PHARMACY">Pharmacy</option>
+
+            <option value="LABORATORY">Laboratory</option>
+
+            <option value="RECEPTION">Reception</option>
+
+            <option value="BILLING">Billing</option>
+
+            <option value="HR">Human Resources</option>
+          </select>
+           @if(registerForm.get('department')?.invalid && registerForm.get('department')?.touched){
+            <span class="error-text">Department is required</span>
+          }
+        </div>
+
 
             <!-- Designation -->
             <div class="form-group">

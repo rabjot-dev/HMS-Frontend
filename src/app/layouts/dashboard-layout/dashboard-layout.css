@@ -1,6 +1,7 @@
 .dashboard-shell {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;        /* CHANGE from min-height → height */
+  overflow: hidden;     /* IMPORTANT */
   background: linear-gradient(135deg, #f8fbff, #eef4ff);
 }
 /* ── Global Font Scale ─────────────────────────────────── */
@@ -17,7 +18,7 @@ body {
   line-height: 1.7;
 }
 
-h1 { font-size: 2.2rem; }
+h1 { font-size: 1.2rem; }
 h2 { font-size: 1.8rem; }
 h3 { font-size: 1.5rem; }
 h4 { font-size: 1.25rem; }
@@ -25,20 +26,20 @@ h5 { font-size: 1.1rem; }
 h6 { font-size: 1rem; }
 
 p, span, a, li, td, th, label {
-  font-size: 3rem;
+  font-size: 1rem;
 }
 #active{
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 input, select, textarea, button {
-  font-size: 3rem;
+  font-size: 1rem;
 }
 /* ── Global Toast ─────────────────────────────────────── */
 .global-toast-wrapper {
   position: fixed;
   top: 24px;
-  left: 50%;
+  left: 56%;
   transform: translateX(-50%);
   z-index: 9999;
   pointer-events: none;
@@ -82,10 +83,12 @@ input, select, textarea, button {
 }
 
 .toast-message {
-  font-size: 1.75rem;
+  font-size: 1rem;
   font-weight: 700;
   flex: 1;
   text-align: center;
+ 
+  
 }
 
 .toast-close {
@@ -123,22 +126,18 @@ input, select, textarea, button {
   color: white;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Sidebar
-|--------------------------------------------------------------------------
-*/
 .sidebar {
-  width: 320px;                          /* 280 → 320 */
+  width: 320px;
   background: rgba(15, 23, 42, 0.92);
   backdrop-filter: blur(20px);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 36px 26px;                    /* 28/20 → 36/26 */
+  padding: 36px 26px;
   display: flex;
   flex-direction: column;
+  height: 100vh;        
+  overflow-y: auto;     
   position: sticky;
   top: 0;
-  height: 100vh;
 }
 
 /*
@@ -263,7 +262,9 @@ input, select, textarea, button {
 */
 .main-content {
   flex: 1;
-  padding: 30px;                         /* 24 → 30 */
+  padding: 30px;
+  height: 100vh;        /* ADD */
+  overflow-y: auto;     /* ADD */
 }
 
 /*
