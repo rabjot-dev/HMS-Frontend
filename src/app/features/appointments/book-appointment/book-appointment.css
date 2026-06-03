@@ -208,8 +208,12 @@ textarea {
   border-radius: 16px;
 
   background: rgba(59, 130, 246, 0.08);
+  
+  background-color: #dbeafe;
 
-  color: #2563eb;
+  color: #1e40af; 
+
+  
 
   font-weight: 700;
 
@@ -226,6 +230,7 @@ textarea {
 
 .slot-btn.active {
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background-color: #2563eb;
 
   color: white;
 
@@ -245,6 +250,8 @@ textarea {
   border-radius: 20px;
 
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+
+  background-color: #2563eb;
 
   color: white;
 

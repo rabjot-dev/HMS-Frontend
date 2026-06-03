@@ -31,10 +31,10 @@ export class AppointmentList implements OnInit {
   selectedStatus = '';
 
   constructor(
-    private appointmentService: AppointmentService,
+    readonly appointmentService: AppointmentService,
 
     public authService: AuthService,
-    private cdr: ChangeDetectorRef
+    readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {

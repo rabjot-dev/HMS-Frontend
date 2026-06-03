@@ -46,11 +46,11 @@ export class Register {
   ];
 
   constructor(
-    private fb: FormBuilder,
+    readonly fb: FormBuilder,
 
-    private authService: AuthService,
+    readonly authService: AuthService,
 
-    private router: Router
+    readonly router: Router
   ) {
     this.registerForm = this.fb.group({
       /*

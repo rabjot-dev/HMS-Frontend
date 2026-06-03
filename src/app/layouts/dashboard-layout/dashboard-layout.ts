@@ -34,13 +34,13 @@ export class DashboardLayout {
   constructor(
     public authService: AuthService,
 
-    private tokenService: TokenService,
+    readonly tokenService: TokenService,
 
-    private router: Router,
+    readonly router: Router,
 
-    private cdr: ChangeDetectorRef,
+    readonly cdr: ChangeDetectorRef,
 
-    private elementRef: ElementRef
+    readonly elementRef: ElementRef
   ) {}
 
   /*

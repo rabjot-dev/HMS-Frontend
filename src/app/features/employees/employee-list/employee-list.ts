@@ -25,9 +25,9 @@ export class EmployeeList implements OnInit {
   searchText = '';
 
   constructor(
-    private employeeService: EmployeeService,
+    readonly employeeService: EmployeeService,
 
-    private cdr: ChangeDetectorRef
+    readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {

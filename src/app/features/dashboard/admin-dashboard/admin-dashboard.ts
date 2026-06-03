@@ -26,8 +26,8 @@ export class AdminDashboard implements OnInit {
   constructor(
     public authService: AuthService,
 
-    private dashboardService: DashboardService,
-    private cdr: ChangeDetectorRef
+    readonly dashboardService: DashboardService,
+    readonly cdr: ChangeDetectorRef
   ) {}
 
   /*

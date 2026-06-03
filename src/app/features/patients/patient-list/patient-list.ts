@@ -44,8 +44,8 @@ export class PatientList implements OnInit {
   userRole = '';
 
   constructor(
-    private patientService: PatientService,
-    private cdr: ChangeDetectorRef
+    readonly patientService: PatientService,
+    readonly cdr: ChangeDetectorRef
   ) {}
 
   /*

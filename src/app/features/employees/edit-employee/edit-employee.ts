@@ -24,13 +24,13 @@ export class EditEmployee implements OnInit {
   employeeId = '';
 
   constructor(
-    private fb: FormBuilder,
+    readonly fb: FormBuilder,
 
-    private route: ActivatedRoute,
+    readonly route: ActivatedRoute,
 
-    private router: Router,
+    readonly router: Router,
 
-    private employeeService: EmployeeService
+    readonly employeeService: EmployeeService
   ) {
     this.employeeForm = this.fb.group({
       name: [''],

@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class AppointmentService {
   apiUrl = 'http://localhost:5000/api/appointments';
 
-  constructor(private http: HttpClient) {}
+  constructor(readonly http: HttpClient) {}
 
   /*
   |--------------------------------------------------------------------------

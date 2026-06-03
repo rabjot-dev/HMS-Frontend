@@ -31,18 +31,18 @@ export class ConsultationForm implements OnInit {
   isSubmitting = false;
 
   constructor(
-    private fb: FormBuilder,
+    readonly fb: FormBuilder,
 
-    private route: ActivatedRoute,
+    readonly route: ActivatedRoute,
 
-    private router: Router,
+    readonly router: Router,
 
-    private consultationService: ConsultationService,
+    readonly consultationService: ConsultationService,
 
-    private appointmentService: AppointmentService,
+    readonly appointmentService: AppointmentService,
 
-    private authService: AuthService,
-    private cdr: ChangeDetectorRef
+    readonly authService: AuthService,
+    readonly cdr: ChangeDetectorRef
   ) {}
 
   /*

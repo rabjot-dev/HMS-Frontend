@@ -10,7 +10,7 @@ import { API_BASE_URL } from '../constants/api.constants';
   providedIn: 'root'
 })
 export class EmployeeService {
-  constructor(private http: HttpClient) {}
+  constructor(readonly http: HttpClient) {}
 
   createEmployee(data: any): Observable<any> {
     return this.http.post(`${API_BASE_URL}/employees`, data);

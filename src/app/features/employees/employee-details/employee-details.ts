@@ -20,10 +20,10 @@ export class EmployeeDetails implements OnInit {
   employee: any = null;
 
   constructor(
-    private route: ActivatedRoute,
+    readonly route: ActivatedRoute,
 
-    private employeeService: EmployeeService,
-    private cdr: ChangeDetectorRef
+    readonly employeeService: EmployeeService,
+    readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {

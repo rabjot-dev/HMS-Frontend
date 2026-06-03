@@ -33,15 +33,15 @@ export class EditAppointment implements OnInit {
   appointmentForm: any;
 
   constructor(
-    private fb: FormBuilder,
+    readonly fb: FormBuilder,
 
-    private route: ActivatedRoute,
+    readonly route: ActivatedRoute,
 
-    private router: Router,
+    readonly router: Router,
 
-    private appointmentService: AppointmentService,
+    readonly appointmentService: AppointmentService,
 
-    private employeeService: EmployeeService
+    readonly employeeService: EmployeeService
   ) {
     this.appointmentForm = this.fb.group({
       doctorEmployeeId: ['', Validators.required],

@@ -51,14 +51,14 @@ export class BookAppointment implements OnInit {
   selectedDoctor: any = null;
 
   constructor(
-    private fb: FormBuilder,
+    readonly fb: FormBuilder,
 
-    private patientService: PatientService,
+    readonly patientService: PatientService,
 
-    private employeeService: EmployeeService,
+    readonly employeeService: EmployeeService,
 
-    private appointmentService: AppointmentService,
-    private cdr: ChangeDetectorRef
+    readonly appointmentService: AppointmentService,
+    readonly cdr: ChangeDetectorRef
   ) {
     this.appointmentForm = this.fb.group({
       /*

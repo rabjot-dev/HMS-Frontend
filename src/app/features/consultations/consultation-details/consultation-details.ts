@@ -23,10 +23,10 @@ export class ConsultationDetails implements OnInit {
   isLoading = true;
 
   constructor(
-    private route: ActivatedRoute,
+    readonly route: ActivatedRoute,
 
-    private consultationService: ConsultationService,
-    private cdr: ChangeDetectorRef
+    readonly consultationService: ConsultationService,
+    readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {

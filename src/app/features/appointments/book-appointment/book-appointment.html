@@ -27,7 +27,7 @@
         <!-- Patient -->
 
         <div class="form-group">
-          <label>Patient</label>
+          <label for = "patient">Patient</label>
 
           <select formControlName="patientId">
             <option value="">Select Patient</option>
@@ -45,7 +45,7 @@
         <!-- Department -->
 
         <div class="form-group">
-          <label>Department</label>
+          <label for = "department">Department</label>
 
           <select formControlName="department" (change)="filterDoctors()">
             <option value="">Select Department</option>
@@ -99,7 +99,7 @@
         <!-- Doctor -->
 
         <div class="form-group">
-          <label>Doctor</label>
+          <label for = "doctor">Doctor</label>
 
           <select
             formControlName="doctorId"
@@ -129,7 +129,7 @@
         <!-- Appointment Date -->
 
         <div class="form-group">
-          <label>Appointment Date</label>
+          <label for = "ap-date">Appointment Date</label>
 
           <input
             type="date"
@@ -196,7 +196,7 @@
         <!-- Appointment Type -->
 
         <div class="form-group">
-          <label>Appointment Type</label>
+          <label for = "ap-type">Appointment Type</label>
 
           <select formControlName="appointmentType">
             <option value="CONSULTATION">Consultation</option>
@@ -214,7 +214,7 @@
         <!-- Priority -->
 
         <div class="form-group">
-          <label>Priority</label>
+          <label for = "priority">Priority</label>
 
           <select formControlName="priority">
             <option value="NORMAL">Normal</option>
@@ -228,7 +228,7 @@
         <!-- Payment Status -->
 
         <div class="form-group">
-          <label>Payment Status</label>
+          <label for = "payment">Payment Status</label>
 
           <select formControlName="paymentStatus">
             <option value="PENDING">Pending</option>
@@ -242,7 +242,7 @@
         <!-- Visit Mode -->
 
         <div class="form-group">
-          <label>Visit Mode</label>
+          <label for = "vmode">Visit Mode</label>
 
           <select formControlName="visitMode">
             <option value="OFFLINE">Offline</option>
@@ -257,7 +257,7 @@
       <!-- Symptoms -->
 
       <div class="form-group full-width">
-        <label>Symptoms</label>
+        <label for = "symptoms">Symptoms</label>
 
         <textarea formControlName="symptoms" placeholder="Enter symptoms"></textarea>
       </div>
@@ -265,7 +265,7 @@
       <!-- Reason -->
 
       <div class="form-group full-width">
-        <label>Reason</label>
+        <label for = "reason">Reason</label>
 
         <textarea formControlName="reason" placeholder="Reason for appointment"></textarea>
       </div>
@@ -273,7 +273,7 @@
       <!-- Notes -->
 
       <div class="form-group full-width">
-        <label>Notes</label>
+        <label for = "notes">Notes</label>
 
         <textarea formControlName="notes" placeholder="Additional notes"></textarea>
       </div>

@@ -13,6 +13,10 @@
   overflow: hidden;
 }
 
+.error-text{
+  margin-top: 2px;
+  color: red;
+}
 /*
 |--------------------------------------------------------------------------
 | Left Side

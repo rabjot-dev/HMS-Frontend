@@ -40,9 +40,9 @@ export class AddPatient {
   patientForm!: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
+    readonly fb: FormBuilder,
 
-    private patientService: PatientService
+    readonly patientService: PatientService
   ) {
     this.patientForm = this.fb.group({
       /*

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 
 import { RouterLink, Router } from '@angular/router';
 
@@ -27,19 +27,26 @@ export class Login {
   errorMessage = '';
 
   constructor(
-    private fb: FormBuilder,
+    readonly fb: FormBuilder,
 
-    private authService: AuthService,
+    readonly authService: AuthService,
 
-    private tokenService: TokenService,
+    readonly tokenService: TokenService,
 
-    private router: Router
+    readonly router: Router,
+    readonly cdr:ChangeDetectorRef,
   ) {
     this.loginForm = this.fb.group({
-      loginId: ['', Validators.required],
-
-      password: ['', Validators.required]
-    });
+  loginId: ['', [
+    Validators.required,
+    Validators.minLength(3)
+  ]],
+  password: ['', [
+    Validators.required,
+    Validators.minLength(6)
+  ]]
+});
+    
   }
 
   /*
@@ -144,27 +151,28 @@ export class Login {
               .navigate(['/dashboard/admin'])
 
               .then(() => {
-                window.location.reload();
+                globalThis.location.reload();
               });
           } else if (role === 'DOCTOR') {
             this.router
               .navigate(['/dashboard/doctor'])
 
               .then(() => {
-                window.location.reload();
+                globalThis.location.reload();
               });
           } else if (role === 'RECEPTIONIST') {
             this.router
               .navigate(['/dashboard/receptionist'])
 
               .then(() => {
-                window.location.reload();
+                globalThis.location.reload();
               });
           } else {
             this.router.navigate(['/login']);
           }
 
           this.isSubmitting = false;
+          this.cdr.detectChanges();
         },
 
         error: (error) => {
@@ -175,6 +183,7 @@ export class Login {
           this.errorMessage = error?.error?.message || 'Login failed';
 
           this.isSubmitting = false;
+          this.cdr.detectChanges();
         }
       });
   }

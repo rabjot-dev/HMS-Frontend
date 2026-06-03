@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrl: './home.css'
 })
 export class Home {
-  constructor(private router: Router) {}
+  constructor(readonly router: Router) {}
 
   @HostListener('window:keydown.space')
   handleSpacebar(): void {

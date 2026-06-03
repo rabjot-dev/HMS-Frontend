@@ -5,9 +5,7 @@
 */
 .appointments-page {
   display: flex;
-
   flex-direction: column;
-
   gap: 24px;
 }
 
@@ -18,33 +16,23 @@
 */
 .appointments-header {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   padding: 32px;
-
   border-radius: 30px;
 }
 
 .page-label {
   color: #3b82f6;
-
   font-size: 13px;
-
   font-weight: 700;
-
   text-transform: uppercase;
-
   margin-bottom: 10px;
 }
 
 .appointments-header h1 {
   font-size: 40px;
-
   margin-bottom: 10px;
-
   color: #0f172a;
 }
 
@@ -59,25 +47,16 @@
 */
 .book-btn {
   display: flex;
-
   align-items: center;
-
   gap: 10px;
-
   padding: 16px 22px;
-
   border-radius: 18px;
-
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-
+  background-color: #2563eb; 
   color: white;
-
   text-decoration: none;
-
   font-weight: 600;
-
   transition: all 0.3s ease;
-
   box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
 }
 
@@ -92,39 +71,26 @@
 */
 .filters-wrapper {
   display: flex;
-
   justify-content: space-between;
-
   gap: 20px;
-
   padding: 24px;
-
   border-radius: 24px;
-
   flex-wrap: wrap;
 }
 
 .search-box {
   flex: 1;
-
   min-width: 260px;
-
   display: flex;
-
   align-items: center;
-
   gap: 12px;
-
   background: rgba(255, 255, 255, 0.55);
-
   border-radius: 18px;
-
   padding: 0 18px;
 }
 
 .search-box input {
   border: none;
-
   background: transparent;
 }
 
@@ -139,59 +105,46 @@
 */
 .table-wrapper {
   overflow-x: auto;
-
   border-radius: 28px;
-
   padding: 10px;
 }
 
 table {
   width: 100%;
-
   border-collapse: separate;
-
   border-spacing: 0 14px;
 }
 
 thead th {
   padding: 18px;
-
   color: #64748b;
-
   font-size: 13px;
-
   text-transform: uppercase;
-
   letter-spacing: 1px;
 }
 
 tbody tr {
   background: rgba(255, 255, 255, 0.62);
-
   transition: all 0.3s ease;
 }
 
 tbody tr:hover {
   transform: translateY(-3px);
-
   box-shadow: 0 15px 35px rgba(15, 23, 42, 0.06);
 }
 
 tbody td {
   padding: 22px 18px;
-
   vertical-align: middle;
 }
 
 tbody td:first-child {
   border-top-left-radius: 22px;
-
   border-bottom-left-radius: 22px;
 }
 
 tbody td:last-child {
   border-top-right-radius: 22px;
-
   border-bottom-right-radius: 22px;
 }
 
@@ -202,13 +155,11 @@ tbody td:last-child {
 */
 .appointment-id h4 {
   color: #0f172a;
-
   margin-bottom: 6px;
 }
 
 .appointment-id span {
   color: #64748b;
-
   font-size: 13px;
 }
 
@@ -219,41 +170,30 @@ tbody td:last-child {
 */
 .patient-info {
   display: flex;
-
   align-items: center;
-
   gap: 14px;
 }
 
 .avatar {
   width: 48px;
-
   height: 48px;
-
   border-radius: 16px;
-
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  color: white;
-
+  background-color: #6d28d9;
+  color:white;
   font-weight: 700;
 }
 
 .patient-info h4 {
   margin-bottom: 5px;
-
   color: #0f172a;
 }
 
 .patient-info span {
   color: #64748b;
-
   font-size: 13px;
 }
 
@@ -264,13 +204,9 @@ tbody td:last-child {
 */
 .doctor-name {
   display: flex;
-
   align-items: center;
-
   gap: 10px;
-
   color: #334155;
-
   font-weight: 600;
 }
 
@@ -281,13 +217,11 @@ tbody td:last-child {
 */
 .date-info h4 {
   margin-bottom: 6px;
-
   color: #0f172a;
 }
 
 .date-info span {
   color: #64748b;
-
   font-size: 13px;
 }
 
@@ -300,18 +234,15 @@ tbody td:last-child {
 .priority-badge,
 .status-badge {
   padding: 10px 16px;
-
   border-radius: 999px;
-
   font-size: 12px;
-
   font-weight: 700;
 }
 
 .type-badge {
   background: rgba(59, 130, 246, 0.12);
-
-  color: #2563eb;
+  background-color: #dbeafe;    
+  color: #1e40af;
 }
 
 /*
@@ -321,20 +252,20 @@ tbody td:last-child {
 */
 .priority-badge.normal {
   background: rgba(34, 197, 94, 0.12);
-
-  color: #15803d;
+  background-color: #dcfce7;  
+  color: #14532d;
 }
 
 .priority-badge.urgent {
   background: rgba(245, 158, 11, 0.15);
-
-  color: #b45309;
+  background-color: #fef3c7;
+  color: #92400e;
 }
 
 .priority-badge.critical {
   background: rgba(239, 68, 68, 0.15);
-
-  color: #dc2626;
+  background-color: #fee2e2; 
+  color: #991b1b;
 }
 
 /*
@@ -344,26 +275,26 @@ tbody td:last-child {
 */
 .status-badge.booked {
   background: rgba(59, 130, 246, 0.12);
-
-  color: #2563eb;
+  background-color: #dbeafe;
+  color: #1e40af;
 }
 
 .status-badge.completed {
   background: rgba(34, 197, 94, 0.12);
-
-  color: #15803d;
+  background-color: #dbeafe;
+  color: #14532d;
 }
 
 .status-badge.cancelled {
   background: rgba(239, 68, 68, 0.12);
-
-  color: #dc2626;
+  background-color: #fee2e2;    
+  color: #991b1b;
 }
 
 .status-badge.consultation {
   background: rgba(139, 92, 246, 0.14);
-
-  color: #7c3aed;
+  background-color: #ede9fe;       
+  color: #5b21b6;
 }
 
 /*
@@ -373,23 +304,16 @@ tbody td:last-child {
 */
 .actions {
   display: flex;
-
   gap: 10px;
-
   flex-wrap: wrap;
 }
 
 .action-btn {
   border: none;
-
   padding: 10px 16px;
-
   border-radius: 14px;
-
   font-weight: 600;
-
   cursor: pointer;
-
   transition: all 0.3s ease;
 }
 
@@ -399,20 +323,20 @@ tbody td:last-child {
 
 .action-btn.edit {
   background: rgba(59, 130, 246, 0.12);
-
-  color: #2563eb;
+  background-color: #dbeafe; 
+  color: #1e40af;
 }
 
 .action-btn.delete {
   background: rgba(239, 68, 68, 0.12);
-
-  color: #dc2626;
+  background-color: #fee2e2;  
+  color: #991b1b;
 }
 
 .action-btn.view {
   background: rgba(139, 92, 246, 0.12);
-
-  color: #7c3aed;
+  background-color: #ede9fe; 
+  color: #5b21b6;
 }
 
 /*
@@ -423,9 +347,7 @@ tbody td:last-child {
 @media (max-width: 992px) {
   .appointments-header {
     flex-direction: column;
-
     align-items: flex-start;
-
     gap: 20px;
   }
 

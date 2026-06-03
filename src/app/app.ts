@@ -17,10 +17,10 @@ import { TokenService } from './core/services/token';
 })
 export class App implements OnInit {
   constructor(
-    private authService: AuthService,
+    readonly authService: AuthService,
 
-    private cdr: ChangeDetectorRef,
-    private tokenService: TokenService
+    readonly cdr: ChangeDetectorRef,
+    readonly tokenService: TokenService
   ) {}
 
   ngOnInit(): void {

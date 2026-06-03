@@ -18,10 +18,10 @@ export class CreatePassword {
   passwordForm: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private tokenService: TokenService,
-    private authService: AuthService
+    readonly fb: FormBuilder,
+    readonly router: Router,
+    readonly tokenService: TokenService,
+    readonly authService: AuthService
   ) {
     this.passwordForm = this.fb.group({
       temporaryPassword: ['', Validators.required],

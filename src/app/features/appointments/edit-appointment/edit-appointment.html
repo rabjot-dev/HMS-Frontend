@@ -6,7 +6,7 @@
       <!-- Doctor -->
 
       <div class="form-group">
-        <label>Doctor</label>
+        <label for = "doctor">Doctor</label>
 
         <select formControlName="doctorEmployeeId" (change)="fetchAvailableSlots()">
           <option value="">Select Doctor</option>
@@ -22,7 +22,7 @@
       <!-- Appointment Date -->
 
       <div class="form-group">
-        <label>Appointment Date</label>
+        <label for = "date">Appointment Date</label>
 
         <input type="date" formControlName="appointmentDate" (change)="fetchAvailableSlots()" />
       </div>
@@ -30,7 +30,7 @@
       <!-- Appointment Type -->
 
       <div class="form-group">
-        <label>Appointment Type</label>
+        <label for = "type">Appointment Type</label>
 
         <select formControlName="appointmentType">
           <option value="CONSULTATION">Consultation</option>
@@ -48,7 +48,7 @@
       <!-- Priority -->
 
       <div class="form-group">
-        <label>Priority</label>
+        <label for = "priority">Priority</label>
 
         <select formControlName="priority">
           <option value="NORMAL">Normal</option>
@@ -62,7 +62,7 @@
       <!-- Payment Status -->
 
       <div class="form-group">
-        <label>Payment Status</label>
+        <label for = "payment">Payment Status</label>
 
         <select formControlName="paymentStatus">
           <option value="PENDING">Pending</option>
@@ -76,7 +76,7 @@
       <!-- Visit Mode -->
 
       <div class="form-group">
-        <label>Visit Mode</label>
+        <label for = "visit-mode">Visit Mode</label>
 
         <select formControlName="visitMode">
           <option value="OFFLINE">Offline</option>
@@ -90,7 +90,7 @@
       <!-- Status -->
 
       <div class="form-group">
-        <label>Status</label>
+        <label for = "status">Status</label>
 
         <select formControlName="status">
           <option value="BOOKED">Booked</option>
@@ -141,7 +141,7 @@
     <!-- Symptoms -->
 
     <div class="form-group full-width">
-      <label>Symptoms</label>
+      <label for = "symptoms">Symptoms</label>
 
       <textarea
         formControlName="symptoms"
@@ -154,7 +154,7 @@
     <!-- Reason -->
 
     <div class="form-group full-width">
-      <label>Reason</label>
+      <label for = "reason">Reason</label>
 
       <textarea formControlName="reason"></textarea>
     </div>
@@ -162,7 +162,7 @@
     <!-- Notes -->
 
     <div class="form-group full-width">
-      <label>Notes</label>
+      <label for = "notes">Notes</label>
 
       <textarea formControlName="notes"></textarea>
     </div>

@@ -21,10 +21,10 @@ export class PatientDetails implements OnInit {
   patient: any = {};
 
   constructor(
-    private route: ActivatedRoute,
+    readonly route: ActivatedRoute,
 
-    private patientService: PatientService,
-    private cdr: ChangeDetectorRef
+    readonly patientService: PatientService,
+    readonly cdr: ChangeDetectorRef
   ) {}
 
   /*

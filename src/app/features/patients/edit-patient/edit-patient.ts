@@ -29,13 +29,13 @@ export class EditPatient implements OnInit {
   patientForm: any;
 
   constructor(
-    private fb: FormBuilder,
+    readonly fb: FormBuilder,
 
-    private route: ActivatedRoute,
+    readonly route: ActivatedRoute,
 
-    private router: Router,
+    readonly router: Router,
 
-    private patientService: PatientService
+    readonly patientService: PatientService
   ) {
     this.patientForm = this.fb.group({
       firstName: ['', Validators.required],

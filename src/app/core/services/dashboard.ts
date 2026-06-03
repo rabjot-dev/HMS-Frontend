@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = 'http://localhost:5000/api/dashboard';
+  readonly apiUrl = 'http://localhost:5000/api/dashboard';
 
-  constructor(private http: HttpClient) {}
+  constructor(readonly http: HttpClient) {}
 
   /*
   |--------------------------------------------------------------------------

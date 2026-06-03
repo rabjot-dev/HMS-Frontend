@@ -19,9 +19,9 @@ export class Sidebar implements OnInit {
   role = '';
 
   constructor(
-    private router: Router,
+    readonly router: Router,
 
-    private cdr: ChangeDetectorRef
+    readonly cdr: ChangeDetectorRef
   ) {}
 
   /*

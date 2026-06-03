@@ -18,7 +18,7 @@ import { AuthService } from '../../../core/services/auth';
 export class MyProfile implements OnInit {
   user: any;
 
-  constructor(private authService: AuthService) {}
+  constructor(readonly authService: AuthService) {}
 
   /*
   |--------------------------------------------------------------------------

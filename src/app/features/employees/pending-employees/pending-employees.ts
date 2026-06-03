@@ -19,9 +19,9 @@ export class PendingEmployees implements OnInit {
   generatedPassword = '';
 
   constructor(
-    private employeeService: EmployeeService,
+    readonly employeeService: EmployeeService,
 
-    private cdr: ChangeDetectorRef
+    readonly cdr: ChangeDetectorRef
   ) {}
 
   /*

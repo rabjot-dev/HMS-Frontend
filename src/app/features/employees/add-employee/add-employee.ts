@@ -27,9 +27,9 @@ export class AddEmployee {
   isSubmitting = false;
 
   constructor(
-    private fb: FormBuilder,
+    readonly fb: FormBuilder,
 
-    private employeeService: EmployeeService
+    readonly employeeService: EmployeeService
   ) {
     this.employeeForm = this.fb.group({
       /*

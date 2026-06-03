@@ -21,7 +21,7 @@ export class ConsultationList implements OnInit {
 
   isLoading = false;
 
-  constructor(private consultationService: ConsultationService) {}
+  constructor(readonly consultationService: ConsultationService) {}
 
   /*
   |--------------------------------------------------------------------------

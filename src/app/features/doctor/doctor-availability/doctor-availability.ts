@@ -25,10 +25,10 @@ export class DoctorAvailability implements OnInit {
   workingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
   constructor(
-    private fb: FormBuilder,
+    readonly fb: FormBuilder,
 
-    private employeeService: EmployeeService,
-    private cdr: ChangeDetectorRef
+    readonly employeeService: EmployeeService,
+    readonly cdr: ChangeDetectorRef
   ) {
     this.availabilityForm = this.fb.group({
       workingDays: [[]],
