@@ -17,18 +17,10 @@ import { TokenService } from './core/services/token';
 })
 export class App implements OnInit {
   constructor(
-    private authService: AuthService,
-
-    private cdr: ChangeDetectorRef,
-    private tokenService: TokenService
+  
   ) {}
 
   ngOnInit(): void {
-    const token = this.tokenService.getToken();
-
-    if (token) {
-      this.authService.loadCurrentUser();
-      this.cdr.detectChanges();
-    }
-  }
+    
+}
 }
