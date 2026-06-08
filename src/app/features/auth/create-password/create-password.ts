@@ -26,9 +26,19 @@ export class CreatePassword {
     this.passwordForm = this.fb.group({
       temporaryPassword: ['', Validators.required],
 
-      newPassword: ['', Validators.required],
+      newPassword: [
+  '',
+  [
+    Validators.required,
+    Validators.minLength(8),
+    Validators.maxLength(20),
+    Validators.pattern(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/
+    )
+  ]
+],
 
-      confirmPassword: ['', Validators.required],
+confirmPassword: ['', Validators.required],
       securityQuestion: ['', Validators.required],
 
       securityAnswer: ['', Validators.required]
@@ -38,6 +48,13 @@ export class CreatePassword {
     if (this.passwordForm.invalid) {
       return;
     }
+    if (
+  this.passwordForm.value.newPassword !==
+  this.passwordForm.value.confirmPassword
+) {
+  alert('Passwords do not match');
+  return;
+}
 
     const payload = {
       loginId: localStorage.getItem('loginId'),

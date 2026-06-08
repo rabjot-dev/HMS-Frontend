@@ -30,87 +30,189 @@ export class AddPatient {
     private patientService: PatientService
   ) {
     this.patientForm = this.fb.group({
-      firstName: ['', Validators.required],
+  /*
+  |--------------------------------------------------------------------------
+  | Basic Information
+  |--------------------------------------------------------------------------
+  */
+  firstName: [
+    '',
+    [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50),
+      Validators.pattern(/^[A-Za-z\s'-]+$/)
+    ]
+  ],
 
-      lastName: ['', Validators.required],
+  lastName: [
+    '',
+    [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50),
+      Validators.pattern(/^[A-Za-z\s'-]+$/)
+    ]
+  ],
 
-      dateOfBirth: ['', Validators.required],
+  dateOfBirth: ['', Validators.required],
 
-      gender: ['', Validators.required],
+  gender: ['', Validators.required],
 
-      bloodGroup: ['', Validators.required],
+  bloodGroup: [
+    '',
+    Validators.pattern(/^(A|B|AB|O)[+-]$/)
+  ],
 
-      maritalStatus: ['', Validators.required],
+  maritalStatus: ['', Validators.required],
 
-      /*
-      |--------------------------------------------------------------------------
-      | Contact Information
-      |--------------------------------------------------------------------------
-      */
-      countryCode: ['+91', Validators.required],
+  /*
+  |--------------------------------------------------------------------------
+  | Contact Information
+  |--------------------------------------------------------------------------
+  */
+  countryCode: [
+    '+91',
+    [
+      Validators.required,
+      Validators.pattern(/^\+\d{1,4}$/)
+    ]
+  ],
 
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+  phone: [
+    '',
+    [
+      Validators.required,
+      Validators.pattern(/^[0-9]{10}$/)
+    ]
+  ],
 
-      email: ['', Validators.required],
+  email: [
+    '',
+    [
+      Validators.required,
+      Validators.email
+    ]
+  ],
 
-      address: ['', Validators.required],
+  address: [
+    '',
+    [
+      Validators.required,
+      Validators.maxLength(250)
+    ]
+  ],
 
-      city: ['', Validators.required],
+  city: [
+    '',
+    [
+      Validators.required,
+      Validators.maxLength(100),
+      Validators.pattern(/^[A-Za-z\s'-]+$/)
+    ]
+  ],
 
-      state: ['', Validators.required],
+  state: [
+    '',
+    [
+      Validators.required,
+      Validators.maxLength(100),
+      Validators.pattern(/^[A-Za-z\s'-]+$/)
+    ]
+  ],
 
-      pincode: ['', Validators.required],
+  pincode: [
+    '',
+    [
+      Validators.required,
+      Validators.pattern(/^[0-9]{6}$/)
+    ]
+  ],
 
-      country: ['India'],
+  country: [
+    'India',
+    [
+      Validators.maxLength(100),
+      Validators.pattern(/^[A-Za-z\s'-]+$/)
+    ]
+  ],
 
-      /*
-      |--------------------------------------------------------------------------
-      | Emergency Contact
-      |--------------------------------------------------------------------------
-      */
-      emergencyContactName: ['', Validators.required],
+  /*
+  |--------------------------------------------------------------------------
+  | Emergency Contact
+  |--------------------------------------------------------------------------
+  */
+  emergencyContactName: [
+    '',
+    [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(100),
+      Validators.pattern(/^[A-Za-z\s'-]+$/)
+    ]
+  ],
 
-      emergencyContactPhone: ['', Validators.required],
+  emergencyContactPhone: [
+    '',
+    [
+      Validators.required,
+      Validators.pattern(/^[0-9]{10}$/)
+    ]
+  ],
 
-      /*
-      |--------------------------------------------------------------------------
-      | Medical Information
-      |--------------------------------------------------------------------------
-      */
-      medicalHistory: [''],
+  relationship: [
+    '',
+    [
+      Validators.maxLength(50),
+      Validators.pattern(/^[A-Za-z\s'-]*$/)
+    ]
+  ],
 
-      allergies: [''],
+  /*
+  |--------------------------------------------------------------------------
+  | Medical Information
+  |--------------------------------------------------------------------------
+  */
+  medicalHistory: [''],
 
-      chronicDiseases: [''],
+  allergies: [''],
 
-      currentMedications: [''],
+  chronicDiseases: [''],
 
-      pastSurgeries: [''],
+  currentMedications: [''],
 
-      familyMedicalHistory: [''],
+  pastSurgeries: [''],
 
-      /*
-      |--------------------------------------------------------------------------
-      | Insurance Information
-      |--------------------------------------------------------------------------
-      */
-      insuranceProvider: [''],
+  familyMedicalHistory: [''],
 
-      insurancePolicyNumber: [''],
+  /*
+  |--------------------------------------------------------------------------
+  | Insurance Information
+  |--------------------------------------------------------------------------
+  */
+  insuranceProvider: [''],
 
-      insuranceExpiryDate: [''],
+  insurancePolicyNumber: [''],
 
-      insuranceCoverageAmount: [''],
+  insuranceExpiryDate: [''],
 
-      /*
-      |--------------------------------------------------------------------------
-      | Hospital Information
-      |--------------------------------------------------------------------------
-      */
-      department: [''],
+  insuranceCoverageAmount: [
+    '',
+    Validators.pattern(/^\d+(\.\d{1,2})?$/)
+  ],
 
-      patientType: ['', Validators.required]
-    });
+  /*
+  |--------------------------------------------------------------------------
+  | Hospital Information
+  |--------------------------------------------------------------------------
+  */
+  department: [''],
+
+  patientType: [
+    '',
+    Validators.required
+  ]
+});
   }
 
   /*
@@ -128,13 +230,17 @@ export class AddPatient {
 
     const fieldsToValidate = stepFields[this.currentStep] || [];
 
-    // Mark only current step fields as touched to show errors
-    fieldsToValidate.forEach((field) => {
-      this.patientForm.get(field)?.markAsTouched();
-    });
+    let isStepValid = true;
 
-    // Check if all current step fields are valid
-    const isStepValid = fieldsToValidate.every((field) => this.patientForm.get(field)?.valid);
+    for (const field of fieldsToValidate) {
+      const control = this.patientForm.get(field);
+      control?.markAsTouched();
+
+      if (!control?.valid) {
+        isStepValid = false;
+        break;
+      }
+    }
 
     if (!isStepValid) {
       return; // Block navigation if invalid

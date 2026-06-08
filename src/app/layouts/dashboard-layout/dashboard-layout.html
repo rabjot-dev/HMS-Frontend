@@ -145,18 +145,12 @@
       <!-- RECEPTIONIST -->
 
       @if( user?.roles?.includes( 'RECEPTIONIST' ) ){
+         <a routerLink="/patients" routerLinkActive="active-link">
+        <span>🧑</span>
 
-      <a routerLink="/patients/create" routerLinkActive="active-link">
-        <span>➕</span>
-
-        Add Patient
+        Patients
       </a>
 
-      <a routerLink="/appointments/book" routerLinkActive="active-link">
-        <span>📌</span>
-
-        Book Appointment
-      </a>
 
       <a routerLink="/appointments" routerLinkActive="active-link">
         <span>📅</span>

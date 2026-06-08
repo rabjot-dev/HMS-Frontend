@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
+import { Component,ChangeDetectorRef } from '@angular/core';
 
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
 
@@ -29,21 +34,36 @@ export class AddEmployee {
   constructor(
     private fb: FormBuilder,
 
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private cdr: ChangeDetectorRef
   ) {
     this.employeeForm = this.fb.group({
       /*
-        |--------------------------------------------------------------------------
-        | Basic Details
-        |--------------------------------------------------------------------------
-        */
-      name: ['', Validators.required],
+      |--------------------------------------------------------------------------
+      | Basic Details
+      |--------------------------------------------------------------------------
+      */
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(100),
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
 
       email: ['', [Validators.required, Validators.email]],
 
       countryCode: ['+91', Validators.required],
 
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      phone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]{10}$')
+        ]
+      ],
 
       gender: ['', Validators.required],
 
@@ -54,39 +74,100 @@ export class AddEmployee {
       joiningDate: ['', Validators.required],
 
       /*
-        |--------------------------------------------------------------------------
-        | Doctor Fields
-        |--------------------------------------------------------------------------
-        */
-      medicalRegistrationNo: ['', Validators.required],
+      |--------------------------------------------------------------------------
+      | Doctor Fields
+      |--------------------------------------------------------------------------
+      */
+      medicalRegistrationNo: [
+        '',
+        [
+          Validators.minLength(5),
+          Validators.maxLength(50),
+          Validators.pattern(/^[A-Za-z0-9\-\/]+$/)
+        ]
+      ],
 
-      specialization: ['', Validators.required],
+      specialization: [''],
 
-      qualification: ['', Validators.required],
+      qualification: [
+        '',
+        [
+          Validators.minLength(2),
+          Validators.maxLength(100),
+          Validators.pattern(/^[A-Za-z0-9\s.,()-]+$/)
+        ]
+      ],
 
-      consultationFee: [0, Validators.required],
+      consultationFee: [
+        0,
+        [
+          Validators.min(0)
+        ]
+      ],
 
-      availabilitySlots: ['', Validators.required],
+      availabilitySlots: [''],
 
       /*
-        |--------------------------------------------------------------------------
-        | Doctor Availability
-        |--------------------------------------------------------------------------
-        */
+      |--------------------------------------------------------------------------
+      | Doctor Availability
+      |--------------------------------------------------------------------------
+      */
       workingDays: [[]],
 
-      startTime: ['', Validators.required],
+      startTime: [''],
 
-      endTime: ['', Validators.required],
+      endTime: [''],
 
-      slotDuration: [15, Validators.required],
+      slotDuration: [15],
 
-      breakStartTime: ['', Validators.required],
+      breakStartTime: [''],
 
-      breakEndTime: ['', Validators.required],
+      breakEndTime: [''],
 
-      maxPatientsPerDay: [40, Validators.required]
+      maxPatientsPerDay: [40]
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dynamic Doctor Validators
+    |--------------------------------------------------------------------------
+    */
+    this.employeeForm
+      .get('designation')
+      ?.valueChanges.subscribe((designation) => {
+        const doctorFields = [
+          'medicalRegistrationNo',
+          'specialization',
+          'qualification',
+          'availabilitySlots',
+          'startTime',
+          'endTime',
+          'breakStartTime',
+          'breakEndTime'
+        ];
+
+        if (designation === 'DOCTOR') {
+          doctorFields.forEach((field) => {
+            this.employeeForm
+              .get(field)
+              ?.setValidators([Validators.required]);
+
+            this.employeeForm
+              .get(field)
+              ?.updateValueAndValidity();
+          });
+        } else {
+          doctorFields.forEach((field) => {
+            this.employeeForm
+              .get(field)
+              ?.clearValidators();
+
+            this.employeeForm
+              .get(field)
+              ?.updateValueAndValidity();
+          });
+        }
+      });
   }
 
   /*
@@ -104,6 +185,16 @@ export class AddEmployee {
   |--------------------------------------------------------------------------
   */
   onSubmit(): void {
+    console.log('FORM VALID:', this.employeeForm.valid);
+
+    Object.keys(this.employeeForm.controls).forEach((key) => {
+      const control = this.employeeForm.get(key);
+
+      if (control?.invalid) {
+        console.log(key, control.errors);
+      }
+    });
+
     console.log('Create Employee Clicked');
 
     console.log(this.employeeForm.value);
@@ -159,13 +250,30 @@ export class AddEmployee {
     | Payload
     |--------------------------------------------------------------------------
     */
-    const payload = {
-      ...this.employeeForm.value,
+    const payload: any = {
+  ...this.employeeForm.value,
 
-      qualification: this.employeeForm.value.qualification ? [this.employeeForm.value.qualification] : [],
+  qualification: this.employeeForm.value.qualification
+    ? [this.employeeForm.value.qualification]
+    : [],
 
-      role: this.employeeForm.value.designation
-    };
+  role: this.employeeForm.value.designation
+};
+
+if (this.designation !== 'DOCTOR') {
+  delete payload.medicalRegistrationNo;
+  delete payload.specialization;
+  delete payload.qualification;
+  delete payload.consultationFee;
+  delete payload.availabilitySlots;
+  delete payload.workingDays;
+  delete payload.startTime;
+  delete payload.endTime;
+  delete payload.slotDuration;
+  delete payload.breakStartTime;
+  delete payload.breakEndTime;
+  delete payload.maxPatientsPerDay;
+}
 
     console.log('FINAL PAYLOAD');
 
@@ -178,39 +286,49 @@ export class AddEmployee {
     */
     this.employeeService
       .createEmployee(payload)
-
       .subscribe({
         next: (response) => {
           console.log(response);
 
           this.isSubmitting = false;
 
-          this.successMessage = 'Employee created successfully';
+          this.successMessage =
+            'Employee created successfully';
+
+          this.errorMessage = '';
+          this.cdr.detectChanges();
 
           this.employeeForm.reset();
 
           this.employeeForm.patchValue({
-            countryCode: '+91'
+            countryCode: '+91',
+
+            designation: ''
           });
         },
 
         error: (error) => {
-          console.log('FULL ERROR');
+  console.log('FULL ERROR');
 
-          console.log(error);
+  console.log(error);
 
-          console.log('BACKEND RESPONSE');
+  console.log('BACKEND RESPONSE');
 
-          console.log(error?.error);
+  console.log(error?.error);
 
-          console.log('VALIDATION');
+  console.log('VALIDATION');
 
-          console.log(error?.error?.errors);
+  console.log(error?.error?.errors);
 
-          this.isSubmitting = false;
+  this.isSubmitting = false;
 
-          this.errorMessage = error?.error?.message || 'Failed to create employee';
-        }
+  this.successMessage = '';
+
+  this.errorMessage =
+    error?.error?.message ||
+    'Failed to create employee';
+  this.cdr.detectChanges();
+}
       });
   }
 
@@ -220,18 +338,23 @@ export class AddEmployee {
   |--------------------------------------------------------------------------
   */
   onWorkingDayChange(event: any): void {
-    const workingDays = this.employeeForm.get('workingDays')?.value || [];
+    const workingDays =
+      this.employeeForm.get('workingDays')?.value || [];
 
     if (event.target.checked) {
       workingDays.push(event.target.value);
     } else {
-      const index = workingDays.indexOf(event.target.value);
+      const index = workingDays.indexOf(
+        event.target.value
+      );
 
       if (index > -1) {
         workingDays.splice(index, 1);
       }
     }
 
-    this.employeeForm.get('workingDays')?.setValue(workingDays);
+    this.employeeForm
+      .get('workingDays')
+      ?.setValue(workingDays);
   }
 }

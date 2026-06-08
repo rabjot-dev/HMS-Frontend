@@ -313,3 +313,34 @@ select:focus {
     width: 100%;
   }
 }
+.error-box {
+  margin-top: 20px;
+
+  padding: 14px 18px;
+
+  border-radius: 12px;
+
+  background: #fee2e2;
+
+  border: 1px solid #ef4444;
+
+  color: #b91c1c;
+
+  font-weight: 600;
+}
+
+.success-box {
+  margin-top: 20px;
+
+  padding: 14px 18px;
+
+  border-radius: 12px;
+
+  background: #dcfce7;
+
+  border: 1px solid #22c55e;
+
+  color: #15803d;
+
+  font-weight: 600;
+}

@@ -98,13 +98,13 @@ export class BookAppointment implements OnInit {
         | Professional Fields
         |--------------------------------------------------------------------------
         */
-      appointmentType: ['CONSULTATION', Validators.required],
+      appointmentType: ['', Validators.required],
 
-      priority: ['NORMAL', Validators.required],
+      priority: ['', Validators.required],
 
-      paymentStatus: ['PENDING', Validators.required],
+      paymentStatus: ['', Validators.required],
 
-      visitMode: ['OFFLINE', Validators.required]
+      visitMode: ['', Validators.required]
     });
   }
 

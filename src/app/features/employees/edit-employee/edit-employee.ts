@@ -1,18 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 
 import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
   selector: 'app-edit-employee',
 
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  standalone: true,
+
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink
+  ],
 
   templateUrl: './edit-employee.html',
 
@@ -22,6 +31,12 @@ export class EditEmployee implements OnInit {
   employeeForm: FormGroup;
 
   employeeId = '';
+
+  isSubmitting = false;
+
+  errorMessage = '';
+
+  successMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -33,46 +48,136 @@ export class EditEmployee implements OnInit {
     private employeeService: EmployeeService
   ) {
     this.employeeForm = this.fb.group({
-      name: [''],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(100),
+          Validators.pattern(/^[A-Za-z ]+$/)
+        ]
+      ],
 
-      email: [''],
+      email: [
+        {
+          value: '',
+          disabled: true
+        }
+      ],
 
-      phone: [''],
+      phone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]{10}$/)
+        ]
+      ],
 
-      department: [''],
+      gender: [
+        '',
+        Validators.required
+      ],
 
-      designation: ['']
+      department: [
+        '',
+        Validators.required
+      ],
+
+      designation: [
+        '',
+        Validators.required
+      ],
+
+      joiningDate: [
+        '',
+        Validators.required
+      ]
     });
   }
 
   ngOnInit(): void {
-    this.employeeId = this.route.snapshot.paramMap.get('id') || '';
+    this.employeeId =
+      this.route.snapshot.paramMap.get('id') || '';
 
     this.loadEmployee();
   }
 
   loadEmployee(): void {
-    this.employeeService.getEmployeeById(this.employeeId).subscribe({
-      next: (response: any) => {
-        this.employeeForm.patchValue(response.data);
-      }
-    });
-  }
-
-  onSubmit(): void {
     this.employeeService
-      .updateEmployee(
-        this.employeeId,
-
-        this.employeeForm.value
-      )
+      .getEmployeeById(this.employeeId)
       .subscribe({
-        next: () => {
-          this.router.navigate(['/employees']);
+        next: (response: any) => {
+          const employee = response.data;
+
+          this.employeeForm.patchValue({
+            name: employee.name,
+            email: employee.email,
+            phone: employee.phone,
+            gender: employee.gender,
+            department: employee.department,
+            designation: employee.designation,
+            joiningDate: employee.joiningDate
+              ? employee.joiningDate.split('T')[0]
+              : ''
+          });
         },
 
         error: (error) => {
-          console.log(error);
+          console.error(error);
+
+          this.errorMessage =
+            error?.error?.message ||
+            'Failed to load employee';
+        }
+      });
+  }
+
+  onSubmit(): void {
+    this.errorMessage = '';
+
+    this.successMessage = '';
+
+    if (this.employeeForm.invalid) {
+      this.employeeForm.markAllAsTouched();
+
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    const payload = {
+      ...this.employeeForm.getRawValue()
+    };
+
+    delete payload.email;
+
+    this.employeeService
+      .updateEmployee(
+        this.employeeId,
+        payload
+      )
+      .subscribe({
+        next: () => {
+          this.isSubmitting = false;
+
+          this.successMessage =
+            'Employee updated successfully';
+
+          setTimeout(() => {
+            this.router.navigate([
+              '/employees'
+            ]);
+          }, 1000);
+        },
+
+        error: (error) => {
+          console.error(error);
+
+          this.isSubmitting = false;
+
+          this.errorMessage =
+            error?.error?.message ||
+            'Failed to update employee';
         }
       });
   }
