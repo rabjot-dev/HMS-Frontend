@@ -1,6 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
-import { RouterOutlet } from '@angular/router';
+import {
+  RouterOutlet
+} from '@angular/router';
 
 import { AuthService } from './core/services/auth';
 
@@ -16,11 +21,25 @@ import { TokenService } from './core/services/token';
   styleUrl: './app.css'
 })
 export class App implements OnInit {
+
   constructor(
-  
+
+    private authService: AuthService,
+
+    private tokenService: TokenService
+
   ) {}
 
   ngOnInit(): void {
-    
-}
+
+    const token =
+      this.tokenService.getToken();
+
+    if (token) {
+
+      this.authService
+        .loadCurrentUser();
+
+    }
+  }
 }

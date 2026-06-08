@@ -82,6 +82,9 @@ export class Login {
           }
 
           this.tokenService.setToken(token);
+          this.authService.currentUser.next(
+  response.data.user
+);
 
           localStorage.setItem(
             'role',
@@ -109,23 +112,14 @@ export class Login {
             this.router
               .navigate(['/dashboard/admin'])
 
-              .then(() => {
-                window.location.reload();
-              });
           } else if (role === 'DOCTOR') {
             this.router
               .navigate(['/dashboard/doctor'])
 
-              .then(() => {
-                window.location.reload();
-              });
           } else if (role === 'RECEPTIONIST') {
             this.router
               .navigate(['/dashboard/receptionist'])
 
-              .then(() => {
-                window.location.reload();
-              });
           } else {
             this.router.navigate(['/login']);
           }
