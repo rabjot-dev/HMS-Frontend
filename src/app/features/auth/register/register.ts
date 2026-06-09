@@ -6,6 +6,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+import {ToastService} from '../../../core/services/toast';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
 
@@ -20,11 +21,6 @@ export class Register {
   registerForm: FormGroup;
 
   isSubmitting = false;
-
-  successMessage = '';
-
-  errorMessage = '';
-
   currentStep = 1;
 
   securityQuestions = [
@@ -36,11 +32,15 @@ export class Register {
   ];
 
   constructor(
+    
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {
+    private cdr: ChangeDetectorRef,
+    private toastService: ToastService,
+    
+  )
+   {
     this.registerForm = this.fb.group({
       /*
       |------------------------------------------------------------------
@@ -135,7 +135,7 @@ export class Register {
           'qualification',
           'specialization',
           'medicalRegistrationNo',
-          'consultationFee'
+          
         ];
 
         if (designation === 'DOCTOR') {
@@ -199,6 +199,20 @@ export class Register {
       'FORM VALID',
       this.registerForm.valid
     );
+    console.log(
+  'Designation Value:',
+  this.registerForm.get('designation')?.value
+);
+
+console.log(
+  'Consultation Fee Errors:',
+  this.registerForm.get('consultationFee')?.errors
+);
+
+console.log(
+  'Consultation Fee Valid:',
+  this.registerForm.get('consultationFee')?.valid
+);
 
     Object.keys(this.registerForm.controls).forEach(
       (key) => {
@@ -237,17 +251,14 @@ export class Register {
       this.registerForm.value.password !==
       this.registerForm.value.confirmPassword
     ) {
-      this.errorMessage =
-        'Passwords do not match';
-
+      this.toastService.show(
+  'Passwords do not match',
+  'error'
+);
       return;
     }
 
     this.isSubmitting = true;
-
-    this.errorMessage = '';
-
-    this.successMessage = '';
 
     const payload = {
       ...this.registerForm.value
@@ -261,8 +272,10 @@ export class Register {
 
           this.isSubmitting = false;
 
-          this.successMessage =
-            'Registration submitted successfully. Wait for admin approval.';
+          this.toastService.show(
+  'Registration submitted successfully. Wait for admin approval.',
+  'success'
+);
             this.cdr.detectChanges();
 
           this.registerForm.reset();
@@ -275,20 +288,16 @@ export class Register {
             this.router.navigate(['/login']);
           }, 2500);
         },
+error: (error) => {
 
-        error: (error) => {
-  console.log(error);
+  this.toastService.show(
+    error?.error?.message ||
+    'Registration failed',
+    'error'
+  );
+
 
   this.isSubmitting = false;
-
-  this.successMessage = '';
-
-  this.errorMessage =
-    error?.error?.message ||
-    'Registration failed';
-
-  console.log('ERROR MESSAGE');
-  console.log(this.errorMessage);
 
   this.cdr.detectChanges();
 }

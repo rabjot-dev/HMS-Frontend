@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-
+import {ToastService} from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
@@ -20,8 +20,8 @@ export class PendingEmployees implements OnInit {
 
   constructor(
     private employeeService: EmployeeService,
-
-    private cdr: ChangeDetectorRef
+private toastService: ToastService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   /*
@@ -62,26 +62,61 @@ export class PendingEmployees implements OnInit {
   | Approve Employee
   |--------------------------------------------------------------------------
   */
-  approveEmployee(employeeId: string): void {
-    this.employeeService
-      .approveEmployee(employeeId)
+ approveEmployee(employee: any): void {
 
-      .subscribe({
-        next: (response: any) => {
-          console.log(response);
+  let consultationFee = null;
 
-          this.generatedPassword = response.temporaryPassword;
+  if (employee.designation === 'DOCTOR') {
 
-          alert(`Employee Approved\n\nTemporary Password: ${this.generatedPassword}`);
+    const fee = prompt(
+      `Enter consultation fee for Dr. ${employee.name}`
+    );
 
-          this.loadPendingEmployees();
-        },
+    if (
+      fee === null ||
+      fee.trim() === '' ||
+      Number(fee) < 0
+    ) {
+      alert('Valid consultation fee is required');
+      return;
+    }
 
-        error: (error) => {
-          console.log(error);
-        }
-      });
+    consultationFee = Number(fee);
   }
+
+  this.employeeService
+    .approveEmployee(
+      employee._id,
+      {
+        consultationFee
+      }
+    )
+    .subscribe({
+      next: (response: any) => {
+
+        console.log(response);
+
+      this.toastService.show(
+  employee.designation === 'DOCTOR'
+    ? `Doctor approved with consultation fee ₹${consultationFee}`
+    : 'Employee approved successfully',
+  'success'
+);
+        this.loadPendingEmployees();
+      },
+
+      error: (error) => {
+
+        console.log(error);
+
+        this.toastService.show(
+          error?.error?.message ||
+          'Failed to approve employee',
+          'error'
+        );
+      }
+    });
+}
 
   /*
   |--------------------------------------------------------------------------
@@ -96,13 +131,20 @@ export class PendingEmployees implements OnInit {
         next: (response: any) => {
           console.log(response);
 
-          alert('Employee Rejected');
-
+          this.toastService.show(
+  'Employee Rejected',
+  'success'
+);
           this.loadPendingEmployees();
         },
 
         error: (error) => {
           console.log(error);
+
+          this.toastService.show(
+            'Failed to reject employee',
+            'error'
+          );
         }
       });
   }

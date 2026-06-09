@@ -40,15 +40,7 @@
 
       <p class="subtitle">Create your HMS account</p>
 
-      @if(successMessage){
-
-      <div class="success-message">{{ successMessage }}</div>
-
-      } @if(errorMessage){
-
-      <div class="error-message">{{ errorMessage }}</div>
-
-      }
+     
 
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <!-- Name -->
@@ -339,18 +331,7 @@
           }
         </div>
 
-        <!-- Submit -->
-         @if(errorMessage){
-<div class="error-message">
-  {{ errorMessage }}
-</div>
-}
-
-@if(successMessage){
-<div class="success-message">
-  {{ successMessage }}
-</div>
-}
+  
 
         <button type="submit" class="submit-btn" [disabled]="isSubmitting">
           @if(isSubmitting){ Registering... } @else { Register }

@@ -194,65 +194,162 @@ export class BookAppointment implements OnInit {
   | Fetch Available Slots
   |--------------------------------------------------------------------------
   */
-  fetchAvailableSlots(): void {
-    const doctorId = this.appointmentForm.get('doctorId')?.value;
+ fetchAvailableSlots(): void {
+  const doctorId =
+    this.appointmentForm.get('doctorId')?.value;
 
-    const appointmentDate = this.appointmentForm.get('appointmentDate')?.value;
+  const appointmentDate =
+    this.appointmentForm.get('appointmentDate')?.value;
 
-    if (!doctorId || !appointmentDate) {
-      return;
-    }
-
-    /*
-|--------------------------------------------------------------------------
-| Past Date Validation
-|--------------------------------------------------------------------------
-*/
-    const selectedDate = new Date(appointmentDate);
-
-    const today = new Date();
-
-    today.setHours(0, 0, 0, 0);
-
-    if (selectedDate < today) {
-      this.availableSlots = [];
-
-      this.noSlotsError = true;
-
-      this.toastService.show('Cannot select past dates', 'error');
-
-      return;
-    }
-    const year = parseInt(appointmentDate.split('-')[0]);
-    if (year < 2000) return;
-
-    this.appointmentService
-      .getAvailableSlots(doctorId, appointmentDate)
-
-      .subscribe({
-        next: (response) => {
-          console.log(response);
-
-          this.availableSlots = response.data || [];
-          if (this.availableSlots.length === 0) {
-            this.noSlotsError = true;
-            this.toastService.show('No slots available for the selected date.', 'error');
-          } else {
-            this.noSlotsError = false;
-          }
-          this.cdr.detectChanges();
-        },
-
-        error: (error) => {
-          console.log('Slots error:', error);
-          this.availableSlots = [];
-          this.noSlotsError = true;
-          console.log(error);
-          this.toastService.show(error?.error?.message || 'No slots available for the selected date.', 'error');
-          this.cdr.detectChanges();
-        }
-      });
+  if (!doctorId || !appointmentDate) {
+    return;
   }
+
+  /*
+  |----------------------------------------------------------
+  | Past Date Validation
+  |----------------------------------------------------------
+  */
+  const selectedDate =
+    new Date(appointmentDate);
+
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+
+  if (selectedDate < today) {
+    this.availableSlots = [];
+
+    this.noSlotsError = true;
+
+    this.toastService.show(
+      'Cannot select past dates',
+      'error'
+    );
+
+    return;
+  }
+
+  const year = parseInt(
+    appointmentDate.split('-')[0]
+  );
+
+  if (year < 2000) {
+    return;
+  }
+
+  this.appointmentService
+    .getAvailableSlots(
+      doctorId,
+      appointmentDate
+    )
+    .subscribe({
+      next: (response) => {
+        console.log(response);
+
+        let slots =
+          response.data || [];
+
+        /*
+        |----------------------------------------------------------
+        | Hide Past Time Slots For Today
+        |----------------------------------------------------------
+        */
+        const selectedDateObj =
+          new Date(
+            appointmentDate
+          );
+
+        const currentDate =
+          new Date();
+
+        const isToday =
+          selectedDateObj.toDateString() ===
+          currentDate.toDateString();
+
+        if (isToday) {
+          const currentTime =
+            new Date();
+
+          /*
+          15 Minute Buffer
+          */
+          currentTime.setMinutes(
+            currentTime.getMinutes() +
+              15
+          );
+
+          slots = slots.filter(
+            (slot: string) => {
+              const [
+                hours,
+                minutes
+              ] = slot
+                .split(':')
+                .map(Number);
+
+              const slotTime =
+                new Date();
+
+              slotTime.setHours(
+                hours,
+                minutes,
+                0,
+                0
+              );
+
+              return (
+                slotTime >
+                currentTime
+              );
+            }
+          );
+        }
+
+        this.availableSlots =
+          slots;
+
+        if (
+          this.availableSlots
+            .length === 0
+        ) {
+          this.noSlotsError =
+            true;
+
+          this.toastService.show(
+            'No slots available for the selected date.',
+            'error'
+          );
+        } else {
+          this.noSlotsError =
+            false;
+        }
+
+        this.cdr.detectChanges();
+      },
+
+      error: (error) => {
+        console.log(
+          'Slots error:',
+          error
+        );
+
+        this.availableSlots =
+          [];
+
+        this.noSlotsError =
+          true;
+
+        this.toastService.show(
+          error?.error?.message ||
+            'No slots available for the selected date.',
+          'error'
+        );
+
+        this.cdr.detectChanges();
+      }
+    });
+}
   onDoctorChange(): void {
     const doctorId = this.appointmentForm.get('doctorId')?.value;
     console.log(this.selectedDoctor);
