@@ -272,12 +272,64 @@ registerForm.get('medicalRegistrationNo')?.touched){
 
         <!-- Specialization -->
 
-        <div class="form-group">
+        <div class="input-group">
           <label>Specialization</label>
 
-          <input type="text" formControlName="specialization" placeholder="Enter specialization" />
+          <select formControlName="specialization">
+            <option value="">Select Specialization</option>
+
+            <option value="GENERAL_PHYSICIAN">General Physician</option>
+
+            <option value="CARDIOLOGIST">Cardiologist</option>
+
+            <option value="ORTHOPEDIC_SURGEON">Orthopedic Surgeon</option>
+
+            <option value="NEUROLOGIST">Neurologist</option>
+
+            <option value="PEDIATRICIAN">Pediatrician</option>
+
+            <option value="DERMATOLOGIST">Dermatologist</option>
+
+            <option value="GYNECOLOGIST">Gynecologist</option>
+
+            <option value="ONCOLOGIST">Oncologist</option>
+
+            <option value="RADIOLOGIST">Radiologist</option>
+
+            <option value="ENT_SPECIALIST">ENT Specialist</option>
+
+            <option value="UROLOGIST">Urologist</option>
+
+            <option value="PSYCHIATRIST">Psychiatrist</option>
+
+            <option value="PULMONOLOGIST">Pulmonologist</option>
+
+            <option value="GASTROENTEROLOGIST">Gastroenterologist</option>
+
+            <option value="NEPHROLOGIST">Nephrologist</option>
+
+            <option value="OPHTHALMOLOGIST">Ophthalmologist</option>
+
+            <option value="ANESTHESIOLOGIST">Anesthesiologist</option>
+
+            <option value="PATHOLOGIST">Pathologist</option>
+
+            <option value="ENDOCRINOLOGIST">Endocrinologist</option>
+
+            <option value="RHEUMATOLOGIST">Rheumatologist</option>
+
+            <option value="PLASTIC_SURGEON">Plastic Surgeon</option>
+
+            <option value="CARDIAC_SURGEON">Cardiac Surgeon</option>
+
+            <option value="NEUROSURGEON">Neurosurgeon</option>
+
+            <option value="TRAUMA_SPECIALIST">Trauma Specialist</option>
+
+            <option value="EMERGENCY_PHYSICIAN">Emergency Physician</option>
+          </select>
           @if(registerForm.get('specialization')?.invalid && registerForm.get('specialization')?.touched){
-          <span class="error-text">Specialization is required</span>
+          <span class="error-text">specialization is required</span>
           }
         </div>
 
