@@ -1,12 +1,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
-import {ToastService} from '../../../core/services/toast';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastService } from '../../../core/services/toast';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
 
@@ -32,15 +27,12 @@ export class Register {
   ];
 
   constructor(
-    
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private toastService: ToastService,
-    
-  )
-   {
+    private toastService: ToastService
+  ) {
     this.registerForm = this.fb.group({
       /*
       |------------------------------------------------------------------
@@ -49,33 +41,16 @@ export class Register {
       */
       name: [
         '',
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(100),
-          Validators.pattern('^[A-Za-z ]+$')
-        ]
+        [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern('^[A-Za-z ]+$')]
       ],
 
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
+      email: ['', [Validators.required, Validators.email]],
 
       gender: ['', Validators.required],
 
       countryCode: ['+91', Validators.required],
 
-      phone: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern('^[0-9]{10}$')
-        ]
-      ],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
 
       department: ['', Validators.required],
 
@@ -112,12 +87,7 @@ export class Register {
       */
       password: [
         '',
-        [
-          Validators.required,
-          Validators.pattern(
-            String.raw`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$`
-          )
-        ]
+        [Validators.required, Validators.pattern(String.raw`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$`)]
       ],
 
       confirmPassword: ['', Validators.required]
@@ -128,42 +98,25 @@ export class Register {
     | Dynamic Doctor Validators
     |------------------------------------------------------------------
     */
-    this.registerForm
-      .get('designation')
-      ?.valueChanges.subscribe((designation) => {
-        const doctorFields = [
-          'qualification',
-          'specialization',
-          'medicalRegistrationNo',
-          
-        ];
+    this.registerForm.get('designation')?.valueChanges.subscribe((designation) => {
+      const doctorFields = ['qualification', 'specialization', 'medicalRegistrationNo'];
 
-        if (designation === 'DOCTOR') {
-          doctorFields.forEach((field) => {
-            this.registerForm
-              .get(field)
-              ?.setValidators([Validators.required]);
+      if (designation === 'DOCTOR') {
+        doctorFields.forEach((field) => {
+          this.registerForm.get(field)?.setValidators([Validators.required]);
 
-            this.registerForm
-              .get(field)
-              ?.updateValueAndValidity();
-          });
-        } else {
-          doctorFields.forEach((field) => {
-            this.registerForm
-              .get(field)
-              ?.clearValidators();
+          this.registerForm.get(field)?.updateValueAndValidity();
+        });
+      } else {
+        doctorFields.forEach((field) => {
+          this.registerForm.get(field)?.clearValidators();
 
-            this.registerForm
-              .get(field)
-              ?.setValue('');
+          this.registerForm.get(field)?.setValue('');
 
-            this.registerForm
-              .get(field)
-              ?.updateValueAndValidity();
-          });
-        }
-      });
+          this.registerForm.get(field)?.updateValueAndValidity();
+        });
+      }
+    });
   }
 
   /*
@@ -172,10 +125,7 @@ export class Register {
   |------------------------------------------------------------------
   */
   isDoctor(): boolean {
-    return (
-      this.registerForm.get('designation')?.value ===
-      'DOCTOR'
-    );
+    return this.registerForm.get('designation')?.value === 'DOCTOR';
   }
 
   /*
@@ -195,51 +145,24 @@ export class Register {
   onSubmit(): void {
     console.log('REGISTER BUTTON CLICKED');
 
-    console.log(
-      'FORM VALID',
-      this.registerForm.valid
-    );
-    console.log(
-  'Designation Value:',
-  this.registerForm.get('designation')?.value
-);
+    console.log('FORM VALID', this.registerForm.valid);
+    console.log('Designation Value:', this.registerForm.get('designation')?.value);
 
-console.log(
-  'Consultation Fee Errors:',
-  this.registerForm.get('consultationFee')?.errors
-);
+    console.log('Consultation Fee Errors:', this.registerForm.get('consultationFee')?.errors);
 
-console.log(
-  'Consultation Fee Valid:',
-  this.registerForm.get('consultationFee')?.valid
-);
+    console.log('Consultation Fee Valid:', this.registerForm.get('consultationFee')?.valid);
 
-    Object.keys(this.registerForm.controls).forEach(
-      (key) => {
-        const control =
-          this.registerForm.get(key);
+    Object.keys(this.registerForm.controls).forEach((key) => {
+      const control = this.registerForm.get(key);
 
-        if (control?.invalid) {
-          console.log(
-            key,
-            control.errors
-          );
-        }
+      if (control?.invalid) {
+        console.log(key, control.errors);
       }
-    );
+    });
 
-    const step3Fields = [
-      'password',
-      'confirmPassword',
-      'securityQuestion',
-      'securityAnswer'
-    ];
+    const step3Fields = ['password', 'confirmPassword', 'securityQuestion', 'securityAnswer'];
 
-    step3Fields.forEach((field) =>
-      this.registerForm
-        .get(field)
-        ?.markAsTouched()
-    );
+    step3Fields.forEach((field) => this.registerForm.get(field)?.markAsTouched());
 
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
@@ -247,14 +170,8 @@ console.log(
       return;
     }
 
-    if (
-      this.registerForm.value.password !==
-      this.registerForm.value.confirmPassword
-    ) {
-      this.toastService.show(
-  'Passwords do not match',
-  'error'
-);
+    if (this.registerForm.value.password !== this.registerForm.value.confirmPassword) {
+      this.toastService.show('Passwords do not match', 'error');
       return;
     }
 
@@ -264,43 +181,32 @@ console.log(
       ...this.registerForm.value
     };
 
-    this.authService
-      .register(payload)
-      .subscribe({
-        next: (response: any) => {
-          console.log(response);
+    this.authService.register(payload).subscribe({
+      next: (response: any) => {
+        console.log(response);
 
-          this.isSubmitting = false;
+        this.isSubmitting = false;
 
-          this.toastService.show(
-  'Registration submitted successfully. Wait for admin approval.',
-  'success'
-);
-            this.cdr.detectChanges();
+        this.toastService.show('Registration submitted successfully. Wait for admin approval.', 'success');
+        this.cdr.detectChanges();
 
-          this.registerForm.reset();
+        this.registerForm.reset();
 
-          this.registerForm.patchValue({
-            countryCode: '+91'
-          });
+        this.registerForm.patchValue({
+          countryCode: '+91'
+        });
 
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 2500);
-        },
-error: (error) => {
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2500);
+      },
+      error: (error) => {
+        this.toastService.show(error?.error?.message || 'Registration failed', 'error');
 
-  this.toastService.show(
-    error?.error?.message ||
-    'Registration failed',
-    'error'
-  );
+        this.isSubmitting = false;
 
-
-  this.isSubmitting = false;
-
-  this.cdr.detectChanges();
-}
-      });
+        this.cdr.detectChanges();
+      }
+    });
   }
 }

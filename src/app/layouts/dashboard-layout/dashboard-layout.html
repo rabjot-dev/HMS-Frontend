@@ -1,6 +1,4 @@
-<div class="global-toast-wrapper">
-
-</div>
+<div class="global-toast-wrapper"></div>
 <div class="dashboard-shell">
   <!-- Sidebar -->
 
@@ -139,12 +137,11 @@
       <!-- RECEPTIONIST -->
 
       @if( user?.roles?.includes( 'RECEPTIONIST' ) ){
-         <a routerLink="/patients" routerLinkActive="active-link">
+      <a routerLink="/patients" routerLinkActive="active-link">
         <span>🧑</span>
 
         Patients
       </a>
-
 
       <a routerLink="/appointments" routerLinkActive="active-link">
         <span>📅</span>

@@ -40,8 +40,6 @@
 
       <p class="subtitle">Create your HMS account</p>
 
-     
-
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <!-- Name -->
 
@@ -49,17 +47,11 @@
           <label>Full Name</label>
 
           <input type="text" formControlName="name" placeholder="Enter full name" />
-         @if(registerForm.get('name')?.errors?.['required']){
-<span class="error-text">
-  Name is required
-</span>
-}
-
-@if(registerForm.get('name')?.errors?.['pattern']){
-<span class="error-text">
-  Name can contain only alphabets
-</span>
-}
+          @if(registerForm.get('name')?.errors?.['required']){
+          <span class="error-text">Name is required</span>
+          } @if(registerForm.get('name')?.errors?.['pattern']){
+          <span class="error-text">Name can contain only alphabets</span>
+          }
         </div>
 
         <!-- Gender -->
@@ -267,17 +259,10 @@
           <input type="password" formControlName="password" placeholder="Enter password" />
 
           @if(registerForm.get('password')?.errors?.['required']){
-<span class="error-text">
-  Password is required
-</span>
-}
-
-@if(registerForm.get('password')?.errors?.['pattern']){
-<span class="error-text">
-  Password must contain uppercase,
-  lowercase, number and special character
-</span>
-}
+          <span class="error-text">Password is required</span>
+          } @if(registerForm.get('password')?.errors?.['pattern']){
+          <span class="error-text">Password must contain uppercase, lowercase, number and special character</span>
+          }
         </div>
 
         <!-- Confirm Password -->
@@ -287,16 +272,10 @@
 
           <input type="password" formControlName="confirmPassword" placeholder="Confirm password" />
 
-          @if(
- registerForm.value.password &&
- registerForm.value.confirmPassword &&
- registerForm.value.password !==
- registerForm.value.confirmPassword
-){
-<span class="error-text">
- Passwords do not match
-</span>
-}
+          @if( registerForm.value.password && registerForm.value.confirmPassword && registerForm.value.password !==
+          registerForm.value.confirmPassword ){
+          <span class="error-text">Passwords do not match</span>
+          }
         </div>
 
         <!-- Security Question -->
@@ -330,8 +309,6 @@
           <span class="error-text">Security Answer is required</span>
           }
         </div>
-
-  
 
         <button type="submit" class="submit-btn" [disabled]="isSubmitting">
           @if(isSubmitting){ Registering... } @else { Register }

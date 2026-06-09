@@ -43,42 +43,16 @@
         <div class="form-field">
           <input type="text" placeholder="First Name" formControlName="firstName" />
           @if(patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched){
-<span class="error-text">
-  @if(patientForm.get('firstName')?.errors?.['required']){
-    First name is required
-  }
-  @else if(patientForm.get('firstName')?.errors?.['minlength']){
-    First name must be at least 2 characters
-  }
-  @else if(patientForm.get('firstName')?.errors?.['maxlength']){
-    First name cannot exceed 50 characters
-  }
-  @else if(patientForm.get('firstName')?.errors?.['pattern']){
-    First name can contain only letters
-  }
-</span>
-}
+          <span class="error-text">First Name is required</span>
+          }
         </div>
 
         <!-- Last Name -->
         <div class="form-field">
           <input type="text" placeholder="Last Name" formControlName="lastName" />
           @if(patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched){
-<span class="error-text">
-  @if(patientForm.get('lastName')?.errors?.['required']){
-    Last name is required
-  }
-  @else if(patientForm.get('lastName')?.errors?.['minlength']){
-    Last name must be at least 2 characters
-  }
-  @else if(patientForm.get('lastName')?.errors?.['maxlength']){
-    Last name cannot exceed 50 characters
-  }
-  @else if(patientForm.get('lastName')?.errors?.['pattern']){
-    Last name can contain only letters
-  }
-</span>
-}
+          <span class="error-text">Last Name is required</span>
+          }
         </div>
 
         <!-- Date of Birth -->
@@ -86,11 +60,7 @@
           <label class="field-label">Date of Birth</label>
           <input type="date" formControlName="dateOfBirth" />
           @if(patientForm.get('dateOfBirth')?.invalid && patientForm.get('dateOfBirth')?.touched){
-          <span class="error-text">
-            @if(patientForm.get('dateOfBirth')?.errors?.['required']){
-              Date of Birth is required
-            }
-          </span>
+          <span class="error-text">Date of Birth is required</span>
           }
         </div>
 
@@ -103,11 +73,7 @@
             <option value="OTHER">Other</option>
           </select>
           @if(patientForm.get('gender')?.invalid && patientForm.get('gender')?.touched){
-          <span class="error-text">
-            @if(patientForm.get('gender')?.errors?.['required']){
-              Gender is required
-            }
-          </span>
+          <span class="error-text">Gender is required</span>
           }
         </div>
 
@@ -125,11 +91,7 @@
             <option value="O-">O-</option>
           </select>
           @if(patientForm.get('bloodGroup')?.invalid && patientForm.get('bloodGroup')?.touched){
-          <span class="error-text">
-            @if(patientForm.get('bloodGroup')?.errors?.['required']){
-              Blood Group is required
-            }
-          </span>
+          <span class="error-text">Blood Group is required</span>
           }
         </div>
 
@@ -142,11 +104,7 @@
             <option value="DIVORCED">Divorced</option>
           </select>
           @if(patientForm.get('maritalStatus')?.invalid && patientForm.get('maritalStatus')?.touched){
-          <span class="error-text">
-            @if(patientForm.get('maritalStatus')?.errors?.['required']){
-              Marital Status is required
-            }
-          </span>
+          <span class="error-text">Marital Status is required</span>
           }
         </div>
       </div>
@@ -170,10 +128,7 @@
               <option value="+1">+1 🇺🇸</option>
               <option value="+44">+44 🇬🇧</option>
             </select>
-            <input type="text" placeholder="Phone" maxlength="10" formControlName="phone"   (input)="
-  $any($event.target).value =
-  $any($event.target).value.replace(/[^0-9]/g,'')
-  " />
+            <input type="text" placeholder="Phone" maxlength="10" formControlName="phone" />
           </div>
           @if(patientForm.get('phone')?.invalid && patientForm.get('phone')?.touched){
           <span class="error-text">
@@ -204,14 +159,7 @@
         <div class="form-field">
           <input type="text" placeholder="City" formControlName="city" />
           @if(patientForm.get('city')?.invalid && patientForm.get('city')?.touched){
-         <span class="error-text">
-  @if(patientForm.get('city')?.errors?.['required']){
-    City is required
-  }
-  @else if(patientForm.get('city')?.errors?.['pattern']){
-    City can contain only letters
-  }
-</span>
+          <span class="error-text">City is required</span>
           }
         </div>
 
@@ -219,24 +167,29 @@
         <div class="form-field">
           <input type="text" placeholder="State" formControlName="state" />
           @if(patientForm.get('state')?.invalid && patientForm.get('state')?.touched){
-         <span class="error-text">
-  @if(patientForm.get('state')?.errors?.['required']){
-    State is required
-  }
-  @else if(patientForm.get('state')?.errors?.['pattern']){
-    State can contain only letters
-  }
-</span>
+          <span class="error-text">State is required</span>
           }
         </div>
 
         <!-- Pincode -->
         <div class="form-field">
-          <input type="text" placeholder="Pincode" formControlName="pincode" />
+          <input
+            type="text"
+            placeholder="Pincode"
+            maxlength="6"
+            formControlName="pincode"
+            (input)="
+      $any($event.target).value =
+      $any($event.target).value.replace(/[^0-9]/g,'')
+    "
+          />
+
           @if(patientForm.get('pincode')?.invalid && patientForm.get('pincode')?.touched){
+
           <span class="error-text">
             @if(patientForm.get('pincode')?.errors?.['required']){ Pincode is required } @else if(patientForm.get('pincode')?.errors?.['pattern']){ Enter valid 6-digit pincode }
           </span>
+
           }
         </div>
 
@@ -244,20 +197,7 @@
         <div class="form-field">
           <input type="text" placeholder="Emergency Contact Name" formControlName="emergencyContactName" />
           @if(patientForm.get('emergencyContactName')?.invalid && patientForm.get('emergencyContactName')?.touched){
-         <span class="error-text">
-  @if(patientForm.get('emergencyContactName')?.errors?.['required']){
-    Emergency Contact Name is required
-  }
-  @else if(patientForm.get('emergencyContactName')?.errors?.['minlength']){
-    Emergency Contact Name must be at least 2 characters
-  }
-  @else if(patientForm.get('emergencyContactName')?.errors?.['maxlength']){
-    Emergency Contact Name cannot exceed 100 characters
-  }
-  @else if(patientForm.get('emergencyContactName')?.errors?.['pattern']){
-    Emergency Contact Name can contain only letters
-  }
-</span>
+          <span class="error-text">Emergency Contact Name is required</span>
           }
         </div>
 
@@ -268,10 +208,6 @@
             placeholder="Emergency Contact Phone"
             maxlength="10"
             formControlName="emergencyContactPhone"
-              (input)="
-  $any($event.target).value =
-  $any($event.target).value.replace(/[^0-9]/g,'')
-  "
           />
           @if(patientForm.get('emergencyContactPhone')?.invalid && patientForm.get('emergencyContactPhone')?.touched){
           <span class="error-text">

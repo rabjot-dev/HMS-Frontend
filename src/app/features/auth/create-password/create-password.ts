@@ -27,18 +27,16 @@ export class CreatePassword {
       temporaryPassword: ['', Validators.required],
 
       newPassword: [
-  '',
-  [
-    Validators.required,
-    Validators.minLength(8),
-    Validators.maxLength(20),
-    Validators.pattern(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/
-    )
-  ]
-],
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(20),
+          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/)
+        ]
+      ],
 
-confirmPassword: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
       securityQuestion: ['', Validators.required],
 
       securityAnswer: ['', Validators.required]
@@ -48,13 +46,10 @@ confirmPassword: ['', Validators.required],
     if (this.passwordForm.invalid) {
       return;
     }
-    if (
-  this.passwordForm.value.newPassword !==
-  this.passwordForm.value.confirmPassword
-) {
-  alert('Passwords do not match');
-  return;
-}
+    if (this.passwordForm.value.newPassword !== this.passwordForm.value.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
 
     const payload = {
       loginId: localStorage.getItem('loginId'),

@@ -36,25 +36,20 @@ export class ResetPassword implements OnInit {
     private router: Router
   ) {
     this.resetForm = this.fb.group({
-  securityAnswer: ['', Validators.required],
+      securityAnswer: ['', Validators.required],
 
-  newPassword: [
-    '',
-    [
-      Validators.required,
-      Validators.minLength(8),
-      Validators.maxLength(20),
-      Validators.pattern(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/
-      )
-    ]
-  ],
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(20),
+          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/)
+        ]
+      ],
 
-  confirmPassword: [
-    '',
-    Validators.required
-  ]
-});
+      confirmPassword: ['', Validators.required]
+    });
   }
 
   /*
@@ -92,29 +87,23 @@ export class ResetPassword implements OnInit {
     }
 
     this.isSubmitting = true;
-    if (
-  this.resetForm.value.newPassword !==
-  this.resetForm.value.confirmPassword
-) {
-  this.isSubmitting = false;
+    if (this.resetForm.value.newPassword !== this.resetForm.value.confirmPassword) {
+      this.isSubmitting = false;
 
-  alert('Passwords do not match');
+      alert('Passwords do not match');
 
-  return;
-}
+      return;
+    }
 
     const payload = {
-  email: this.email,
+      email: this.email,
 
-  securityAnswer:
-    this.resetForm.value.securityAnswer,
+      securityAnswer: this.resetForm.value.securityAnswer,
 
-  newPassword:
-    this.resetForm.value.newPassword,
+      newPassword: this.resetForm.value.newPassword,
 
-  confirmPassword:
-    this.resetForm.value.confirmPassword
-};
+      confirmPassword: this.resetForm.value.confirmPassword
+    };
     this.authService
       .resetPassword(payload)
 
@@ -130,14 +119,14 @@ export class ResetPassword implements OnInit {
         },
 
         error: (error) => {
-  console.log('FULL ERROR');
-  console.log(error);
+          console.log('FULL ERROR');
+          console.log(error);
 
-  console.log('BACKEND ERRORS');
-  console.log(error?.error?.errors);
+          console.log('BACKEND ERRORS');
+          console.log(error?.error?.errors);
 
-  this.isSubmitting = false;
-}
+          this.isSubmitting = false;
+        }
       });
   }
 }

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
-
+import { ToastService } from '../../../core/services/toast';
 import { PatientService } from '../../../core/services/patient';
 
 @Component({
@@ -26,193 +26,91 @@ export class AddPatient {
 
   constructor(
     private fb: FormBuilder,
-
+    private toastService: ToastService,
     private patientService: PatientService
   ) {
     this.patientForm = this.fb.group({
-  /*
-  |--------------------------------------------------------------------------
-  | Basic Information
-  |--------------------------------------------------------------------------
-  */
-  firstName: [
-    '',
-    [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(50),
-      Validators.pattern(/^[A-Za-z\s'-]+$/)
-    ]
-  ],
+      firstName: ['', Validators.required],
 
-  lastName: [
-    '',
-    [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(50),
-      Validators.pattern(/^[A-Za-z\s'-]+$/)
-    ]
-  ],
+      lastName: ['', Validators.required],
 
-  dateOfBirth: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
 
-  gender: ['', Validators.required],
+      gender: ['', Validators.required],
 
-  bloodGroup: [
-    '',
-    Validators.pattern(/^(A|B|AB|O)[+-]$/)
-  ],
+      bloodGroup: ['', Validators.required],
 
-  maritalStatus: ['', Validators.required],
+      maritalStatus: ['', Validators.required],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Contact Information
-  |--------------------------------------------------------------------------
-  */
-  countryCode: [
-    '+91',
-    [
-      Validators.required,
-      Validators.pattern(/^\+\d{1,4}$/)
-    ]
-  ],
+      /*
+      |--------------------------------------------------------------------------
+      | Contact Information
+      |--------------------------------------------------------------------------
+      */
+      countryCode: ['+91', Validators.required],
 
-  phone: [
-    '',
-    [
-      Validators.required,
-      Validators.pattern(/^[0-9]{10}$/)
-    ]
-  ],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
 
-  email: [
-    '',
-    [
-      Validators.required,
-      Validators.email
-    ]
-  ],
+      email: ['', Validators.required],
 
-  address: [
-    '',
-    [
-      Validators.required,
-      Validators.maxLength(250)
-    ]
-  ],
+      address: ['', Validators.required],
 
-  city: [
-    '',
-    [
-      Validators.required,
-      Validators.maxLength(100),
-      Validators.pattern(/^[A-Za-z\s'-]+$/)
-    ]
-  ],
+      city: ['', Validators.required],
 
-  state: [
-    '',
-    [
-      Validators.required,
-      Validators.maxLength(100),
-      Validators.pattern(/^[A-Za-z\s'-]+$/)
-    ]
-  ],
+      state: ['', Validators.required],
 
-  pincode: [
-    '',
-    [
-      Validators.required,
-      Validators.pattern(/^[0-9]{6}$/)
-    ]
-  ],
+      pincode: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]],
 
-  country: [
-    'India',
-    [
-      Validators.maxLength(100),
-      Validators.pattern(/^[A-Za-z\s'-]+$/)
-    ]
-  ],
+      country: ['India'],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Emergency Contact
-  |--------------------------------------------------------------------------
-  */
-  emergencyContactName: [
-    '',
-    [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(100),
-      Validators.pattern(/^[A-Za-z\s'-]+$/)
-    ]
-  ],
+      /*
+      |--------------------------------------------------------------------------
+      | Emergency Contact
+      |--------------------------------------------------------------------------
+      */
+      emergencyContactName: ['', Validators.required],
 
-  emergencyContactPhone: [
-    '',
-    [
-      Validators.required,
-      Validators.pattern(/^[0-9]{10}$/)
-    ]
-  ],
+      emergencyContactPhone: ['', Validators.required],
 
-  relationship: [
-    '',
-    [
-      Validators.maxLength(50),
-      Validators.pattern(/^[A-Za-z\s'-]*$/)
-    ]
-  ],
+      /*
+      |--------------------------------------------------------------------------
+      | Medical Information
+      |--------------------------------------------------------------------------
+      */
+      medicalHistory: [''],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Medical Information
-  |--------------------------------------------------------------------------
-  */
-  medicalHistory: [''],
+      allergies: [''],
 
-  allergies: [''],
+      chronicDiseases: [''],
 
-  chronicDiseases: [''],
+      currentMedications: [''],
 
-  currentMedications: [''],
+      pastSurgeries: [''],
 
-  pastSurgeries: [''],
+      familyMedicalHistory: [''],
 
-  familyMedicalHistory: [''],
+      /*
+      |--------------------------------------------------------------------------
+      | Insurance Information
+      |--------------------------------------------------------------------------
+      */
+      insuranceProvider: [''],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Insurance Information
-  |--------------------------------------------------------------------------
-  */
-  insuranceProvider: [''],
+      insurancePolicyNumber: [''],
 
-  insurancePolicyNumber: [''],
+      insuranceExpiryDate: [''],
 
-  insuranceExpiryDate: [''],
+      insuranceCoverageAmount: [''],
 
-  insuranceCoverageAmount: [
-    '',
-    Validators.pattern(/^\d+(\.\d{1,2})?$/)
-  ],
+      /*
+      |--------------------------------------------------------------------------
+      | Hospital Information
+      |--------------------------------------------------------------------------
+      */
+      department: [''],
 
-  /*
-  |--------------------------------------------------------------------------
-  | Hospital Information
-  |--------------------------------------------------------------------------
-  */
-  department: [''],
-
-  patientType: [
-    '',
-    Validators.required
-  ]
-});
+      patientType: ['', Validators.required]
+    });
   }
 
   /*
@@ -230,17 +128,13 @@ export class AddPatient {
 
     const fieldsToValidate = stepFields[this.currentStep] || [];
 
-    let isStepValid = true;
+    // Mark only current step fields as touched to show errors
+    fieldsToValidate.forEach((field) => {
+      this.patientForm.get(field)?.markAsTouched();
+    });
 
-    for (const field of fieldsToValidate) {
-      const control = this.patientForm.get(field);
-      control?.markAsTouched();
-
-      if (!control?.valid) {
-        isStepValid = false;
-        break;
-      }
-    }
+    // Check if all current step fields are valid
+    const isStepValid = fieldsToValidate.every((field) => this.patientForm.get(field)?.valid);
 
     if (!isStepValid) {
       return; // Block navigation if invalid
@@ -304,7 +198,7 @@ export class AddPatient {
         next: (response) => {
           console.log(response);
 
-          alert('Patient Registered Successfully');
+          this.toastService.show('Patient Registered Successfully', 'success');
 
           /*
           |--------------------------------------------------------------------------
@@ -337,10 +231,13 @@ export class AddPatient {
         },
 
         error: (error) => {
-          console.log(error);
+          console.log('FULL ERROR =>', error);
+
+          console.log('VALIDATION ERRORS =>', error?.error?.errors);
+
+          alert(JSON.stringify(error?.error?.errors, null, 2));
 
           this.isSubmitting = false;
-          alert(error?.error?.message || 'Failed to register patient');
         }
       });
   }

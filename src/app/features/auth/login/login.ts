@@ -3,7 +3,7 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {ToastService} from '../../../core/services/toast';
+import { ToastService } from '../../../core/services/toast';
 import { AuthService } from '../../../core/services/auth';
 
 import { TokenService } from '../../../core/services/token';
@@ -46,15 +46,12 @@ export class Login {
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
-  this.loginForm.markAllAsTouched();
+      this.loginForm.markAllAsTouched();
 
-  this.toastService.show(
-    'Please enter valid credentials',
-    'error'
-  );
+      this.toastService.show('Please enter valid credentials', 'error');
 
-  return;
-}
+      return;
+    }
 
     this.isSubmitting = true;
 
@@ -78,13 +75,8 @@ export class Login {
           }
 
           this.tokenService.setToken(token);
-          this.authService.currentUser.next(
-  response.data.user
-);
-this.toastService.show(
-  'Login successful',
-  'success'
-);
+          this.authService.currentUser.next(response.data.user);
+          this.toastService.show('Login successful', 'success');
 
           localStorage.setItem(
             'role',
@@ -100,27 +92,25 @@ this.toastService.show(
 
           const isFirstLogin = response.data.user.isFirstLogin;
 
-        if (isFirstLogin) {
-  this.isSubmitting = false;
+          if (isFirstLogin) {
+            this.isSubmitting = false;
 
-  this.router.navigate([
-    '/create-password'
-  ]);
+            this.router.navigate(['/create-password']);
 
-  return;
-}
+            return;
+          }
 
           const role = response.data.user.roles?.[0];
 
-         this.isSubmitting = false;
+          this.isSubmitting = false;
 
-if (role === 'ADMIN') {
-  this.router.navigate(['/dashboard/admin']);
-} else if (role === 'DOCTOR') {
-  this.router.navigate(['/dashboard/doctor']);
-} else if (role === 'RECEPTIONIST') {
-  this.router.navigate(['/dashboard/receptionist']);
-}else {
+          if (role === 'ADMIN') {
+            this.router.navigate(['/dashboard/admin']);
+          } else if (role === 'DOCTOR') {
+            this.router.navigate(['/dashboard/doctor']);
+          } else if (role === 'RECEPTIONIST') {
+            this.router.navigate(['/dashboard/receptionist']);
+          } else {
             this.router.navigate(['/login']);
           }
 
@@ -132,15 +122,11 @@ if (role === 'ADMIN') {
 
           console.log(error);
 
-          this.toastService.show(
-            error?.error?.message || 'Login failed',
-            'error'
-          );
+          this.toastService.show(error?.error?.message || 'Login failed', 'error');
 
           this.isSubmitting = false;
           this.cdr.detectChanges();
         }
-        
       });
   }
 }

@@ -48,15 +48,9 @@ export class EmployeeService {
     return this.http.get(`${API_BASE_URL}/employees/pending-employees`);
   }
 
-  approveEmployee(
-  employeeId: string,
-  data: any
-) {
-  return this.http.patch(
-    `${API_BASE_URL}/employees/${employeeId}/approve-employee`,
-    data
-  );
-}
+  approveEmployee(employeeId: string, data: any) {
+    return this.http.patch(`${API_BASE_URL}/employees/${employeeId}/approve-employee`, data);
+  }
 
   rejectEmployee(employeeId: string) {
     return this.http.patch(

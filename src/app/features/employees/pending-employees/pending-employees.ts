@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import {ToastService} from '../../../core/services/toast';
+import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
@@ -20,8 +20,8 @@ export class PendingEmployees implements OnInit {
 
   constructor(
     private employeeService: EmployeeService,
-private toastService: ToastService,
-    private cdr: ChangeDetectorRef,
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   /*
@@ -62,61 +62,44 @@ private toastService: ToastService,
   | Approve Employee
   |--------------------------------------------------------------------------
   */
- approveEmployee(employee: any): void {
+  approveEmployee(employee: any): void {
+    let consultationFee = null;
 
-  let consultationFee = null;
+    if (employee.designation === 'DOCTOR') {
+      const fee = prompt(`Enter consultation fee for Dr. ${employee.name}`);
 
-  if (employee.designation === 'DOCTOR') {
+      if (fee === null || fee.trim() === '' || Number(fee) < 0) {
+        alert('Valid consultation fee is required');
+        return;
+      }
 
-    const fee = prompt(
-      `Enter consultation fee for Dr. ${employee.name}`
-    );
-
-    if (
-      fee === null ||
-      fee.trim() === '' ||
-      Number(fee) < 0
-    ) {
-      alert('Valid consultation fee is required');
-      return;
+      consultationFee = Number(fee);
     }
 
-    consultationFee = Number(fee);
-  }
-
-  this.employeeService
-    .approveEmployee(
-      employee._id,
-      {
+    this.employeeService
+      .approveEmployee(employee._id, {
         consultationFee
-      }
-    )
-    .subscribe({
-      next: (response: any) => {
+      })
+      .subscribe({
+        next: (response: any) => {
+          console.log(response);
 
-        console.log(response);
+          this.toastService.show(
+            employee.designation === 'DOCTOR'
+              ? `Doctor approved with consultation fee ₹${consultationFee}`
+              : 'Employee approved successfully',
+            'success'
+          );
+          this.loadPendingEmployees();
+        },
 
-      this.toastService.show(
-  employee.designation === 'DOCTOR'
-    ? `Doctor approved with consultation fee ₹${consultationFee}`
-    : 'Employee approved successfully',
-  'success'
-);
-        this.loadPendingEmployees();
-      },
+        error: (error) => {
+          console.log(error);
 
-      error: (error) => {
-
-        console.log(error);
-
-        this.toastService.show(
-          error?.error?.message ||
-          'Failed to approve employee',
-          'error'
-        );
-      }
-    });
-}
+          this.toastService.show(error?.error?.message || 'Failed to approve employee', 'error');
+        }
+      });
+  }
 
   /*
   |--------------------------------------------------------------------------
@@ -131,20 +114,14 @@ private toastService: ToastService,
         next: (response: any) => {
           console.log(response);
 
-          this.toastService.show(
-  'Employee Rejected',
-  'success'
-);
+          this.toastService.show('Employee Rejected', 'success');
           this.loadPendingEmployees();
         },
 
         error: (error) => {
           console.log(error);
 
-          this.toastService.show(
-            'Failed to reject employee',
-            'error'
-          );
+          this.toastService.show('Failed to reject employee', 'error');
         }
       });
   }

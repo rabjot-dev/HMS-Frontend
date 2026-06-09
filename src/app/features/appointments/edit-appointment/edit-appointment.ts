@@ -77,73 +77,46 @@ export class EditAppointment implements OnInit {
   }
 
   loadAppointment(): void {
-  this.appointmentService
-    .getAppointmentById(this.appointmentId)
-    .subscribe({
+    this.appointmentService.getAppointmentById(this.appointmentId).subscribe({
       next: (response) => {
         const appointment = response.data;
 
-        const date = new Date(
-          appointment.appointmentDate
-        );
+        const date = new Date(appointment.appointmentDate);
 
         const formattedDate =
           date.getFullYear() +
           '-' +
-          String(
-            date.getMonth() + 1
-          ).padStart(2, '0') +
+          String(date.getMonth() + 1).padStart(2, '0') +
           '-' +
-          String(
-            date.getDate()
-          ).padStart(2, '0');
+          String(date.getDate()).padStart(2, '0');
 
-        console.log(
-          'FORMATTED DATE',
-          formattedDate
-        );
+        console.log('FORMATTED DATE', formattedDate);
 
         this.appointmentForm.patchValue({
-          doctorEmployeeId:
-            appointment?.doctorEmployeeId?._id,
+          doctorEmployeeId: appointment?.doctorEmployeeId?._id,
 
-          appointmentDate:
-            formattedDate,
+          appointmentDate: formattedDate,
 
-          timeSlot:
-            appointment?.timeSlot,
+          timeSlot: appointment?.timeSlot,
 
-          appointmentType:
-            appointment?.appointmentType,
+          appointmentType: appointment?.appointmentType,
 
-          priority:
-            appointment?.priority,
+          priority: appointment?.priority,
 
-          paymentStatus:
-            appointment?.paymentStatus,
+          paymentStatus: appointment?.paymentStatus,
 
-          visitMode:
-            appointment?.visitMode,
+          visitMode: appointment?.visitMode,
 
-          status:
-            appointment?.status,
+          status: appointment?.status,
 
-          reason:
-            appointment?.reason,
+          reason: appointment?.reason,
 
-          notes:
-            appointment?.notes,
+          notes: appointment?.notes,
 
-          symptoms:
-            appointment?.symptoms?.join(', ')
+          symptoms: appointment?.symptoms?.join(', ')
         });
 
-        if (
-          appointment?.status !==
-            'COMPLETED' &&
-          appointment?.status !==
-            'CANCELLED'
-        ) {
+        if (appointment?.status !== 'COMPLETED' && appointment?.status !== 'CANCELLED') {
           this.fetchAvailableSlots();
         }
       },
@@ -152,137 +125,80 @@ export class EditAppointment implements OnInit {
         console.log(error);
       }
     });
-}
- fetchAvailableSlots(): void {
-  const status = this.appointmentForm.get('status')?.value;
-
-  if (
-    status === 'COMPLETED' ||
-    status === 'CANCELLED'
-  ) {
-    return;
   }
+  fetchAvailableSlots(): void {
+    const status = this.appointmentForm.get('status')?.value;
 
-  const doctorEmployeeId =
-    this.appointmentForm.get('doctorEmployeeId')?.value;
+    if (status === 'COMPLETED' || status === 'CANCELLED') {
+      return;
+    }
 
-  const appointmentDate =
-    this.appointmentForm.get('appointmentDate')?.value;
+    const doctorEmployeeId = this.appointmentForm.get('doctorEmployeeId')?.value;
 
-  if (
-    !doctorEmployeeId ||
-    !appointmentDate
-  ) {
-    return;
-  }
+    const appointmentDate = this.appointmentForm.get('appointmentDate')?.value;
 
-  this.noSlotsError = false;
+    if (!doctorEmployeeId || !appointmentDate) {
+      return;
+    }
 
-  this.availableSlots = [];
+    this.noSlotsError = false;
 
-  this.appointmentService
-    .getAvailableSlots(
-      doctorEmployeeId,
-      appointmentDate
-    )
-    .subscribe({
+    this.availableSlots = [];
+
+    this.appointmentService.getAvailableSlots(doctorEmployeeId, appointmentDate).subscribe({
       next: (response) => {
-        let slots =
-          response.data || [];
+        let slots = response.data || [];
 
         /*
         |--------------------------------------------------
         | Hide Past Slots For Today
         |--------------------------------------------------
         */
-        const selectedDate =
-          new Date(
-            appointmentDate
-          );
+        const selectedDate = new Date(appointmentDate);
 
-        const today =
-          new Date();
+        const today = new Date();
 
-        const isToday =
-          selectedDate.toDateString() ===
-          today.toDateString();
+        const isToday = selectedDate.toDateString() === today.toDateString();
 
         if (isToday) {
-          const currentTime =
-            new Date();
+          const currentTime = new Date();
 
           /*
           15 min buffer
           */
-          currentTime.setMinutes(
-            currentTime.getMinutes() +
-              15
-          );
+          currentTime.setMinutes(currentTime.getMinutes() + 15);
 
-          slots = slots.filter(
-            (
-              slot: string
-            ) => {
-              const [
-                hours,
-                minutes
-              ] = slot
-                .split(':')
-                .map(Number);
+          slots = slots.filter((slot: string) => {
+            const [hours, minutes] = slot.split(':').map(Number);
 
-              const slotTime =
-                new Date();
+            const slotTime = new Date();
 
-              slotTime.setHours(
-                hours,
-                minutes,
-                0,
-                0
-              );
+            slotTime.setHours(hours, minutes, 0, 0);
 
-              return (
-                slotTime >
-                currentTime
-              );
-            }
-          );
+            return slotTime > currentTime;
+          });
         }
 
-        this.availableSlots =
-          slots;
+        this.availableSlots = slots;
 
-        if (
-          this.availableSlots
-            .length === 0
-        ) {
-          this.noSlotsError =
-            true;
+        if (this.availableSlots.length === 0) {
+          this.noSlotsError = true;
 
-          this.toastService.show(
-            'No slots available for the selected date.',
-            'error'
-          );
+          this.toastService.show('No slots available for the selected date.', 'error');
         } else {
-          this.noSlotsError =
-            false;
+          this.noSlotsError = false;
         }
       },
 
       error: (error) => {
-        this.availableSlots =
-          [];
+        this.availableSlots = [];
 
-        this.noSlotsError =
-          true;
+        this.noSlotsError = true;
 
-        this.toastService.show(
-          error?.error?.message ||
-            'Doctor is not available on this date.',
-          'error'
-        );
+        this.toastService.show(error?.error?.message || 'Doctor is not available on this date.', 'error');
       }
     });
-}
+  }
 
   onSubmit(): void {
     if (this.appointmentForm.invalid) {

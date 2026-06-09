@@ -3,12 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { EmployeeService } from '../../../core/services/employee';
 
@@ -17,11 +12,7 @@ import { EmployeeService } from '../../../core/services/employee';
 
   standalone: true,
 
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterLink
-  ],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
 
   templateUrl: './edit-employee.html',
 
@@ -50,12 +41,7 @@ export class EditEmployee implements OnInit {
     this.employeeForm = this.fb.group({
       name: [
         '',
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(100),
-          Validators.pattern(/^[A-Za-z ]+$/)
-        ]
+        [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[A-Za-z ]+$/)]
       ],
 
       email: [
@@ -65,71 +51,46 @@ export class EditEmployee implements OnInit {
         }
       ],
 
-      phone: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[0-9]{10}$/)
-        ]
-      ],
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
 
-      gender: [
-        '',
-        Validators.required
-      ],
+      gender: ['', Validators.required],
 
-      department: [
-        '',
-        Validators.required
-      ],
+      department: ['', Validators.required],
 
-      designation: [
-        '',
-        Validators.required
-      ],
+      designation: ['', Validators.required],
 
-      joiningDate: [
-        '',
-        Validators.required
-      ]
+      joiningDate: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
-    this.employeeId =
-      this.route.snapshot.paramMap.get('id') || '';
+    this.employeeId = this.route.snapshot.paramMap.get('id') || '';
 
     this.loadEmployee();
   }
 
   loadEmployee(): void {
-    this.employeeService
-      .getEmployeeById(this.employeeId)
-      .subscribe({
-        next: (response: any) => {
-          const employee = response.data;
+    this.employeeService.getEmployeeById(this.employeeId).subscribe({
+      next: (response: any) => {
+        const employee = response.data;
 
-          this.employeeForm.patchValue({
-            name: employee.name,
-            email: employee.email,
-            phone: employee.phone,
-            gender: employee.gender,
-            department: employee.department,
-            designation: employee.designation,
-            joiningDate: employee.joiningDate
-              ? employee.joiningDate.split('T')[0]
-              : ''
-          });
-        },
+        this.employeeForm.patchValue({
+          name: employee.name,
+          email: employee.email,
+          phone: employee.phone,
+          gender: employee.gender,
+          department: employee.department,
+          designation: employee.designation,
+          joiningDate: employee.joiningDate ? employee.joiningDate.split('T')[0] : ''
+        });
+      },
 
-        error: (error) => {
-          console.error(error);
+      error: (error) => {
+        console.error(error);
 
-          this.errorMessage =
-            error?.error?.message ||
-            'Failed to load employee';
-        }
-      });
+        this.errorMessage = error?.error?.message || 'Failed to load employee';
+      }
+    });
   }
 
   onSubmit(): void {
@@ -151,34 +112,24 @@ export class EditEmployee implements OnInit {
 
     delete payload.email;
 
-    this.employeeService
-      .updateEmployee(
-        this.employeeId,
-        payload
-      )
-      .subscribe({
-        next: () => {
-          this.isSubmitting = false;
+    this.employeeService.updateEmployee(this.employeeId, payload).subscribe({
+      next: () => {
+        this.isSubmitting = false;
 
-          this.successMessage =
-            'Employee updated successfully';
+        this.successMessage = 'Employee updated successfully';
 
-          setTimeout(() => {
-            this.router.navigate([
-              '/employees'
-            ]);
-          }, 1000);
-        },
+        setTimeout(() => {
+          this.router.navigate(['/employees']);
+        }, 1000);
+      },
 
-        error: (error) => {
-          console.error(error);
+      error: (error) => {
+        console.error(error);
 
-          this.isSubmitting = false;
+        this.isSubmitting = false;
 
-          this.errorMessage =
-            error?.error?.message ||
-            'Failed to update employee';
-        }
-      });
+        this.errorMessage = error?.error?.message || 'Failed to update employee';
+      }
+    });
   }
 }

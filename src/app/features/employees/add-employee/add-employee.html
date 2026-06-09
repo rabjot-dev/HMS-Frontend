@@ -32,18 +32,7 @@
           <input type="text" placeholder="Enter full name" formControlName="name" />
           @if(employeeForm.get('name')?.invalid && employeeForm.get('name')?.touched){
           <span class="error-text">
-            @if(employeeForm.get('name')?.errors?.['required']){
-              Name is required
-            }
-            @else if(employeeForm.get('name')?.errors?.['minlength']){
-              Name must be at least 2 characters
-            }
-            @else if(employeeForm.get('name')?.errors?.['maxlength']){
-              Name cannot exceed 100 characters
-            }
-            @else if(employeeForm.get('name')?.errors?.['pattern']){
-              Name can contain only letters and spaces
-            }
+            @if(employeeForm.get('name')?.errors?.['required']){ Name is required } @else if(employeeForm.get('name')?.errors?.['minlength']){ Name must be at least 2 characters } @else if(employeeForm.get('name')?.errors?.['maxlength']){ Name cannot exceed 100 characters } @else if(employeeForm.get('name')?.errors?.['pattern']){ Name can contain only letters and spaces }
           </span>
           }
         </div>
@@ -55,12 +44,8 @@
           <input type="email" placeholder="Enter email" formControlName="email" />
           @if(employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched){
           <span class="error-text">
-            @if(employeeForm.get('email')?.errors?.['required']){
-              Email is required
-            }
-            @else if(employeeForm.get('email')?.errors?.['email']){
-              Please enter a valid email address
-            }
+            @if(employeeForm.get('email')?.errors?.['required']){ Email is required } 
+            @else if(employeeForm.get('email')?.errors?.['email']){ Please enter a valid email address }
           </span>
           }
         </div>
@@ -79,9 +64,7 @@
             </select>
             @if(employeeForm.get('countryCode')?.invalid && employeeForm.get('countryCode')?.touched){
             <span class="error-text">
-              @if(employeeForm.get('countryCode')?.errors?.['required']){
-                Country Code is required
-              }
+              @if(employeeForm.get('countryCode')?.errors?.['required']){ Country Code is required }
             </span>
             }
 
@@ -96,12 +79,8 @@
           </div>
           @if(employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched){
           <span class="error-text">
-            @if(employeeForm.get('phone')?.errors?.['required']){
-              Phone Number is required
-            }
-            @else if(employeeForm.get('phone')?.errors?.['pattern']){
-              Please enter a valid phone number
-            }
+            @if(employeeForm.get('phone')?.errors?.['required']){ Phone Number is required }
+             @else if(employeeForm.get('phone')?.errors?.['pattern']){ Please enter a valid phone number }
           </span>
           }
         </div>
@@ -121,11 +100,7 @@
             <option value="OTHER">Other</option>
           </select>
           @if(employeeForm.get('gender')?.invalid && employeeForm.get('gender')?.touched){
-          <span class="error-text">
-            @if(employeeForm.get('gender')?.errors?.['required']){
-              Gender is required
-            }
-          </span>
+          <span class="error-text">@if(employeeForm.get('gender')?.errors?.['required']){ Gender is required }</span>
           }
         </div>
       </div>
@@ -257,30 +232,17 @@
           <label>Medical Registration No</label>
 
           <input type="text" placeholder="Registration Number" formControlName="medicalRegistrationNo" />
-          @if(employeeForm.get('medicalRegistrationNo')?.invalid &&
-employeeForm.get('medicalRegistrationNo')?.touched){
+          @if(employeeForm.get('medicalRegistrationNo')?.invalid && employeeForm.get('medicalRegistrationNo')?.touched){
 
-<span class="error-text">
+          <span class="error-text">
+            @if(employeeForm.get('medicalRegistrationNo')?.errors?.['required']){ Medical Registration Number is
+            required } @else if(employeeForm.get('medicalRegistrationNo')?.errors?.['minlength']){ Minimum 5 characters
+            required } @else if(employeeForm.get('medicalRegistrationNo')?.errors?.['maxlength']){ Maximum 50 characters
+            allowed } @else if(employeeForm.get('medicalRegistrationNo')?.errors?.['pattern']){ Only letters, numbers,
+            '-' and '/' are allowed }
+          </span>
 
-@if(employeeForm.get('medicalRegistrationNo')?.errors?.['required']){
-Medical Registration Number is required
-}
-
-@else if(employeeForm.get('medicalRegistrationNo')?.errors?.['minlength']){
-Minimum 5 characters required
-}
-
-@else if(employeeForm.get('medicalRegistrationNo')?.errors?.['maxlength']){
-Maximum 50 characters allowed
-}
-
-@else if(employeeForm.get('medicalRegistrationNo')?.errors?.['pattern']){
-Only letters, numbers, '-' and '/' are allowed
-}
-
-</span>
-
-}
+          }
         </div>
 
         <!-- Specialization -->
@@ -352,30 +314,16 @@ Only letters, numbers, '-' and '/' are allowed
           <label>Qualification</label>
 
           <input type="text" placeholder="Qualification" formControlName="qualification" />
-          @if(employeeForm.get('qualification')?.invalid &&
-employeeForm.get('qualification')?.touched){
+          @if(employeeForm.get('qualification')?.invalid && employeeForm.get('qualification')?.touched){
 
-<span class="error-text">
+          <span class="error-text">
+            @if(employeeForm.get('qualification')?.errors?.['required']){ Qualification is required }
+             @else if(employeeForm.get('qualification')?.errors?.['minlength']){ Minimum 2 characters required }
+              @else if(employeeForm.get('qualification')?.errors?.['maxlength']){ Maximum 100 characters allowed }
+               @else if(employeeForm.get('qualification')?.errors?.['pattern']){ Invalid qualification format }
+          </span>
 
-@if(employeeForm.get('qualification')?.errors?.['required']){
-Qualification is required
-}
-
-@else if(employeeForm.get('qualification')?.errors?.['minlength']){
-Minimum 2 characters required
-}
-
-@else if(employeeForm.get('qualification')?.errors?.['maxlength']){
-Maximum 100 characters allowed
-}
-
-@else if(employeeForm.get('qualification')?.errors?.['pattern']){
-Invalid qualification format
-}
-
-</span>
-
-}
+          }
         </div>
 
         <!-- Consultation Fee -->
@@ -384,22 +332,14 @@ Invalid qualification format
           <label>Consultation Fee</label>
 
           <input type="number" placeholder="Consultation Fee" formControlName="consultationFee" />
-          @if(employeeForm.get('consultationFee')?.invalid &&
-employeeForm.get('consultationFee')?.touched){
+          @if(employeeForm.get('consultationFee')?.invalid && employeeForm.get('consultationFee')?.touched){
 
-<span class="error-text">
+          <span class="error-text">
+            @if(employeeForm.get('consultationFee')?.errors?.['required']){ Consultation fee is required } 
+            @else if(employeeForm.get('consultationFee')?.errors?.['min']){ Consultation fee cannot be negative }
+          </span>
 
-@if(employeeForm.get('consultationFee')?.errors?.['required']){
-Consultation fee is required
-}
-
-@else if(employeeForm.get('consultationFee')?.errors?.['min']){
-Consultation fee cannot be negative
-}
-
-</span>
-
-}
+          }
         </div>
       </div>
 
@@ -553,14 +493,11 @@ Consultation fee cannot be negative
 
     }
 
-   <!-- Submit -->
+    <!-- Submit -->
 
-<button type="submit" class="submit-btn">
-  Create Employee
-</button>
+    <button type="submit" class="submit-btn">Create Employee</button>
 
-<!-- Success -->
-<!-- Error -->
-
+    <!-- Success -->
+    <!-- Error -->
   </form>
 </div>

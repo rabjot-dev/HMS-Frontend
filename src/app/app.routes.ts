@@ -228,17 +228,12 @@ export const routes: Routes = [
         component: PatientList
       },
       {
-  path: 'patients/edit/:id',
+        path: 'patients/edit/:id',
 
-  component: EditPatient,
+        component: EditPatient,
 
-  canActivate: [
-    roleGuard([
-      'ADMIN',
-      'RECEPTIONIST'
-    ])
-  ]
-},
+        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST'])]
+      },
       {
         path: 'patients/:id',
 

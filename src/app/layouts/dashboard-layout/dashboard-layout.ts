@@ -1,6 +1,6 @@
 import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit } from '@angular/core';
 
-import { Router,RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
 
 import { TokenService } from '../../core/services/token';
 import { NgClass, AsyncPipe } from '@angular/common';
@@ -36,15 +36,11 @@ export class DashboardLayout {
 
     private cdr: ChangeDetectorRef,
 
-    private elementRef: ElementRef,
- 
-  ) {
-    
-  }
-   ngOnInit(): void {
+    private elementRef: ElementRef
+  ) {}
+  ngOnInit(): void {
     this.authService.loadCurrentUser();
   }
-
 
   dismissToast(): void {
     this.toastService.toast$.next(null);
