@@ -284,16 +284,21 @@ select:focus {
 |--------------------------------------------------------------------------
 */
 .success-box {
-  padding: 18px;
+  margin-top: 20px;
 
-  border-radius: 18px;
+  padding: 14px 18px;
 
-  background: rgba(34, 197, 94, 0.12);
+  border-radius: 12px;
+
+  background: #dcfce7;
+
+  border: 1px solid #22c55e;
 
   color: #15803d;
 
   font-weight: 600;
 }
+
 
 /*
 |--------------------------------------------------------------------------
@@ -329,18 +334,3 @@ select:focus {
   font-weight: 600;
 }
 
-.success-box {
-  margin-top: 20px;
-
-  padding: 14px 18px;
-
-  border-radius: 12px;
-
-  background: #dcfce7;
-
-  border: 1px solid #22c55e;
-
-  color: #15803d;
-
-  font-weight: 600;
-}

@@ -27,15 +27,15 @@ export class Login {
   errorMessage = '';
 
   constructor(
-    private fb: FormBuilder,
+    private readonly fb: FormBuilder,
 
-    private authService: AuthService,
+    private readonly authService: AuthService,
 
-    private tokenService: TokenService,
+    private readonly tokenService: TokenService,
 
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-    private toastService: ToastService
+    private readonly router: Router,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly toastService: ToastService
   ) {
     this.loginForm = this.fb.group({
       loginId: ['', Validators.required],

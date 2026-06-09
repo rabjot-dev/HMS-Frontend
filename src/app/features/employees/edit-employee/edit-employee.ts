@@ -30,13 +30,13 @@ export class EditEmployee implements OnInit {
   successMessage = '';
 
   constructor(
-    private fb: FormBuilder,
+    private readonly fb: FormBuilder,
 
-    private route: ActivatedRoute,
+    private readonly route: ActivatedRoute,
 
-    private router: Router,
+    private readonly router: Router,
 
-    private employeeService: EmployeeService
+    private readonly employeeService: EmployeeService
   ) {
     this.employeeForm = this.fb.group({
       name: [
@@ -51,7 +51,7 @@ export class EditEmployee implements OnInit {
         }
       ],
 
-      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
 
       gender: ['', Validators.required],
 

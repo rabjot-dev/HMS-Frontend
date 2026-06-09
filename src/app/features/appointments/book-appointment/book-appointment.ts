@@ -56,15 +56,15 @@ export class BookAppointment implements OnInit {
   minDate = '';
 
   constructor(
-    private fb: FormBuilder,
+    private readonly fb: FormBuilder,
 
-    private patientService: PatientService,
+    private readonly patientService: PatientService,
 
-    private employeeService: EmployeeService,
+    private readonly employeeService: EmployeeService,
 
-    private appointmentService: AppointmentService,
-    private cdr: ChangeDetectorRef,
-    private toastService: ToastService
+    private readonly appointmentService: AppointmentService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly toastService: ToastService
   ) {
     this.appointmentForm = this.fb.group({
       /*
@@ -224,7 +224,7 @@ export class BookAppointment implements OnInit {
       return;
     }
 
-    const year = parseInt(appointmentDate.split('-')[0]);
+    const year = Number.parseInt(appointmentDate.split('-')[0], 10);
 
     if (year < 2000) {
       return;
@@ -346,7 +346,6 @@ export class BookAppointment implements OnInit {
         next: (response) => {
           console.log(response);
 
-          //alert('Appointment booked successfully');
           this.toastService.show('Appointment booked successfully', 'success');
 
           /*

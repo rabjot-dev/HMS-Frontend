@@ -29,11 +29,11 @@ export class ResetPassword implements OnInit {
   resetForm: any;
 
   constructor(
-    private fb: FormBuilder,
+    private readonly fb: FormBuilder,
 
-    private authService: AuthService,
+    private readonly authService: AuthService,
 
-    private router: Router
+    private readonly router: Router
   ) {
     this.resetForm = this.fb.group({
       securityAnswer: ['', Validators.required],

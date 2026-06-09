@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 export class App {
   toastState$: Observable<ToastState | null>;
 
-  constructor(private toastService: ToastService) {
+  constructor(private readonly toastService: ToastService) {
     this.toastState$ = this.toastService.toast$;
   }
 

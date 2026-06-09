@@ -14,7 +14,6 @@ import { Register } from './features/auth/register/register';
 
 import { CreatePassword } from './features/auth/create-password/create-password';
 import { roleGuard } from './core/guards/role.guard';
-import { DashboardHome } from './features/dashboard/dashboard-home/dashboard-home';
 import { AdminDashboard } from './features/dashboard/admin-dashboard/admin-dashboard';
 import { doctorGuard } from './core/guards/doctor-guard';
 

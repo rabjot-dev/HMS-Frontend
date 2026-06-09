@@ -3,7 +3,7 @@ import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit } from '
 import { Router, RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
 
 import { TokenService } from '../../core/services/token';
-import { NgClass, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { AuthService } from '../../core/services/auth';
 import { ToastService } from '../../core/services/toast';
 
@@ -12,13 +12,13 @@ import { ToastService } from '../../core/services/toast';
 
   standalone: true,
 
-  imports: [RouterOutlet, RouterLink, AsyncPipe, RouterLinkActive, NgClass],
+  imports: [RouterOutlet, RouterLink, AsyncPipe, RouterLinkActive,],
 
   templateUrl: './dashboard-layout.html',
 
   styleUrl: './dashboard-layout.css'
 })
-export class DashboardLayout {
+export class DashboardLayout implements OnInit {
   /*
   |--------------------------------------------------------------------------
   | Profile Dropdown
@@ -29,14 +29,14 @@ export class DashboardLayout {
   constructor(
     public authService: AuthService,
 
-    private tokenService: TokenService,
+    private readonly tokenService: TokenService,
 
-    private router: Router,
-    private toastService: ToastService,
+    private readonly router: Router,
+    private readonly toastService: ToastService,
 
-    private cdr: ChangeDetectorRef,
+    private readonly cdr: ChangeDetectorRef,
 
-    private elementRef: ElementRef
+    private readonly elementRef: ElementRef
   ) {}
   ngOnInit(): void {
     this.authService.loadCurrentUser();
@@ -77,4 +77,5 @@ export class DashboardLayout {
 
     this.cdr.detectChanges();
   }
+
 }

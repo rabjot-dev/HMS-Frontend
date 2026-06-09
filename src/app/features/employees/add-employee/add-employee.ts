@@ -27,11 +27,11 @@ export class AddEmployee {
   isSubmitting = false;
 
   constructor(
-    private fb: FormBuilder,
+    private readonly fb: FormBuilder,
 
-    private employeeService: EmployeeService,
-    private cdr: ChangeDetectorRef,
-    private toastService: ToastService
+    private readonly employeeService: EmployeeService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly toastService: ToastService
   ) {
     this.employeeForm = this.fb.group({
       /*
@@ -65,7 +65,7 @@ export class AddEmployee {
       */
       medicalRegistrationNo: [
         '',
-        [Validators.minLength(5), Validators.maxLength(50), Validators.pattern(/^[A-Za-z0-9\-\/]+$/)]
+        [Validators.minLength(5), Validators.maxLength(50), Validators.pattern(/^[A-Za-z0-9\-/]+$/)]
       ],
 
       specialization: [''],
@@ -122,7 +122,7 @@ export class AddEmployee {
             Validators.required,
             Validators.minLength(5),
             Validators.maxLength(50),
-            Validators.pattern(/^[A-Za-z0-9\-\/]+$/)
+            Validators.pattern(/^[A-Za-z0-9\-/]+$/)
           ]);
 
         this.employeeForm

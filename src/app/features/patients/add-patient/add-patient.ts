@@ -25,9 +25,9 @@ export class AddPatient {
   patientForm!: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
-    private toastService: ToastService,
-    private patientService: PatientService
+    private readonly fb: FormBuilder,
+    private readonly toastService: ToastService,
+    private readonly patientService: PatientService
   ) {
     this.patientForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -59,7 +59,7 @@ export class AddPatient {
 
       state: ['', Validators.required],
 
-      pincode: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]],
+      pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
 
       country: ['India'],
 
