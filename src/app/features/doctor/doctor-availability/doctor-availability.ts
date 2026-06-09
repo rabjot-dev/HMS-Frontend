@@ -25,10 +25,10 @@ export class DoctorAvailability implements OnInit {
   workingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
   constructor(
-    private fb: FormBuilder,
+    private readonly fb: FormBuilder,
 
-    private employeeService: EmployeeService,
-    private cdr: ChangeDetectorRef
+    private readonly employeeService: EmployeeService,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.availabilityForm = this.fb.group({
       workingDays: [[]],
@@ -124,6 +124,7 @@ export class DoctorAvailability implements OnInit {
   |--------------------------------------------------------------------------
   */
   onSubmit(): void {
+    
     if (this.availabilityForm.invalid) {
       this.availabilityForm.markAllAsTouched();
 
@@ -137,15 +138,17 @@ export class DoctorAvailability implements OnInit {
 
       .subscribe({
         next: (response) => {
-          console.log(response);
 
-          alert('Availability updated successfully');
+  this.isSubmitting = false;
 
-          this.isSubmitting = false;
-        },
+  this.cdr.detectChanges();
+
+  alert('Availability updated successfully');
+},
 
         error: (error) => {
           console.log(error);
+          this.cdr.detectChanges();
 
           this.isSubmitting = false;
         }

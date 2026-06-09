@@ -137,7 +137,7 @@
     <!-- Submit -->
 
     <button type="submit" class="submit-btn" [disabled]="isSubmitting">
-      @if(isSubmitting){ Saving... } @else { Save Availability }
+       {{ isSubmitting ? 'Saving...' : 'Save Availability' }}
     </button>
   </form>
 </div>
