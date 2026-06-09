@@ -77,33 +77,82 @@ export class EditAppointment implements OnInit {
   }
 
   loadAppointment(): void {
-    this.appointmentService.getAppointmentById(this.appointmentId).subscribe({
+  this.appointmentService
+    .getAppointmentById(this.appointmentId)
+    .subscribe({
       next: (response) => {
         const appointment = response.data;
+
+        const date = new Date(
+          appointment.appointmentDate
+        );
+
+        const formattedDate =
+          date.getFullYear() +
+          '-' +
+          String(
+            date.getMonth() + 1
+          ).padStart(2, '0') +
+          '-' +
+          String(
+            date.getDate()
+          ).padStart(2, '0');
+
+        console.log(
+          'FORMATTED DATE',
+          formattedDate
+        );
+
         this.appointmentForm.patchValue({
-          doctorEmployeeId: appointment?.doctorEmployeeId?._id,
-          appointmentDate: appointment?.appointmentDate?.split('T')[0],
-          timeSlot: appointment?.timeSlot,
-          appointmentType: appointment?.appointmentType,
-          priority: appointment?.priority,
-          paymentStatus: appointment?.paymentStatus,
-          visitMode: appointment?.visitMode,
-          status: appointment?.status,
-          reason: appointment?.reason,
-          notes: appointment?.notes,
-          symptoms: appointment?.symptoms?.join(', ')
+          doctorEmployeeId:
+            appointment?.doctorEmployeeId?._id,
+
+          appointmentDate:
+            formattedDate,
+
+          timeSlot:
+            appointment?.timeSlot,
+
+          appointmentType:
+            appointment?.appointmentType,
+
+          priority:
+            appointment?.priority,
+
+          paymentStatus:
+            appointment?.paymentStatus,
+
+          visitMode:
+            appointment?.visitMode,
+
+          status:
+            appointment?.status,
+
+          reason:
+            appointment?.reason,
+
+          notes:
+            appointment?.notes,
+
+          symptoms:
+            appointment?.symptoms?.join(', ')
         });
 
-        if (appointment?.status !== 'COMPLETED' && appointment?.status !== 'CANCELLED') {
+        if (
+          appointment?.status !==
+            'COMPLETED' &&
+          appointment?.status !==
+            'CANCELLED'
+        ) {
           this.fetchAvailableSlots();
         }
       },
+
       error: (error) => {
         console.log(error);
       }
     });
-  }
-
+}
  fetchAvailableSlots(): void {
   const status = this.appointmentForm.get('status')?.value;
 
