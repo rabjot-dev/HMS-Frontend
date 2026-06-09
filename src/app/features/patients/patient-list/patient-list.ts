@@ -1,106 +1,57 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-
 import { FormsModule } from '@angular/forms';
-
 import { RouterLink } from '@angular/router';
 
 import { PatientService } from '../../../core/services/patient';
 
 @Component({
   selector: 'app-patient-list',
-
   standalone: true,
-
   imports: [CommonModule, FormsModule, RouterLink],
-
   templateUrl: './patient-list.html',
-
   styleUrls: ['./patient-list.css']
 })
 export class PatientList implements OnInit {
-  /*
-  |--------------------------------------------------------------------------
-  | Patients
-  |--------------------------------------------------------------------------
-  */
   patients: any[] = [];
-
   filteredPatients: any[] = [];
 
-  /*
-  |--------------------------------------------------------------------------
-  | Search
-  |--------------------------------------------------------------------------
-  */
   searchTerm = '';
-
-  /*
-  |--------------------------------------------------------------------------
-  | User Role
-  |--------------------------------------------------------------------------
-  */
   userRole = '';
 
   constructor(
-    private patientService: PatientService,
-    private cdr: ChangeDetectorRef
+    private readonly patientService: PatientService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
-  /*
-  |--------------------------------------------------------------------------
-  | On Init
-  |--------------------------------------------------------------------------
-  */
+  // Load patients on page load
   ngOnInit(): void {
-    /*
-    |--------------------------------------------------------------------------
-    | Get Role
-    |--------------------------------------------------------------------------
-    */
     this.userRole = localStorage.getItem('role') || '';
 
     console.log('ROLE:', this.userRole);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Load Patients
-    |--------------------------------------------------------------------------
-    */
     this.loadPatients();
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Load Patients
-  |--------------------------------------------------------------------------
-  */
+  // Get all patients
   loadPatients(): void {
-    this.patientService
-      .getPatients()
+    this.patientService.getPatients().subscribe({
+      next: (response) => {
+        console.log(response);
 
-      .subscribe({
-        next: (response) => {
-          console.log(response);
+        this.patients = response.data;
+        this.filteredPatients = response.data;
 
-          this.patients = response.data;
+        this.cdr.detectChanges();
+      },
 
-          this.filteredPatients = response.data;
-          this.cdr.detectChanges();
-        },
-
-        error: (error) => {
-          console.log(error);
-        }
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Search Patients
-  |--------------------------------------------------------------------------
-  */
+  // Search patients
   searchPatients(): void {
     const search = this.searchTerm.toLowerCase();
 

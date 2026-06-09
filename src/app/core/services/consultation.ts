@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,72 +10,44 @@ export class ConsultationService {
 
   constructor(private http: HttpClient) {}
 
-  /*
-  |--------------------------------------------------------------------------
-  | Create Consultation
-  |--------------------------------------------------------------------------
-  */
+  // Create a new consultation
   createConsultation(data: any): Observable<any> {
-    return this.http.post(
-      this.apiUrl,
-
-      data
-    );
+    return this.http.post(this.apiUrl, data);
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Get All Consultations
-  |--------------------------------------------------------------------------
-  */
+  // Get all consultations
   getConsultations(): Observable<any> {
     return this.http.get(this.apiUrl);
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Get Consultation By Appointment
-  |--------------------------------------------------------------------------
-  */
-  getConsultationByAppointment(appointmentId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/appointment/${appointmentId}`);
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | Update Consultation
-  |--------------------------------------------------------------------------
-  */
-  updateConsultation(
-    id: string,
-
-    data: any
+  // Get consultation by appointment ID
+  getConsultationByAppointment(
+    appointmentId: string
   ): Observable<any> {
-    return this.http.put(
-      `${this.apiUrl}/${id}`,
-
-      data
+    return this.http.get(
+      `${this.apiUrl}/appointment/${appointmentId}`
     );
   }
-  /*
-|--------------------------------------------------------------------------
-| Download Prescription PDF
-|--------------------------------------------------------------------------
-*/
+
+  // Update consultation details
+  updateConsultation(
+    id: string,
+    data: any
+  ): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, data);
+  }
+
+  // Download prescription PDF
   downloadPrescriptionPdf(consultationId: string) {
     return this.http.get(
       `${this.apiUrl}/prescription/${consultationId}`,
-
       {
         responseType: 'blob'
       }
     );
   }
-  /*
-|--------------------------------------------------------------------------
-| Get Consultation By Id
-|--------------------------------------------------------------------------
-*/
+
+  // Get consultation by ID
   getConsultationById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }

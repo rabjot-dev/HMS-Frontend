@@ -1,38 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-reset-password',
-
   standalone: true,
-
   imports: [CommonModule, ReactiveFormsModule],
-
   templateUrl: './reset-password.html',
-
   styleUrls: ['./reset-password.css']
 })
 export class ResetPassword implements OnInit {
   isSubmitting = false;
 
   email = '';
-
   securityQuestion = '';
 
   resetForm: any;
 
   constructor(
     private readonly fb: FormBuilder,
-
     private readonly authService: AuthService,
-
     private readonly router: Router
   ) {
     this.resetForm = this.fb.group({
@@ -52,81 +42,65 @@ export class ResetPassword implements OnInit {
     });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | On Init
-  |--------------------------------------------------------------------------
-  */
+  // Load email and security question from navigation state
   ngOnInit(): void {
     const navigation = history.state;
 
     this.email = navigation?.email;
-
     this.securityQuestion = navigation?.securityQuestion;
 
-    /*
-    |--------------------------------------------------------------------------
-    | Redirect If No Data
-    |--------------------------------------------------------------------------
-    */
+    // Redirect if page is opened directly
     if (!this.email || !this.securityQuestion) {
       this.router.navigate(['/forgot-password']);
     }
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Submit
-  |--------------------------------------------------------------------------
-  */
+  // Reset password
   onSubmit(): void {
     if (this.resetForm.invalid) {
       this.resetForm.markAllAsTouched();
-
       return;
     }
 
     this.isSubmitting = true;
-    if (this.resetForm.value.newPassword !== this.resetForm.value.confirmPassword) {
+
+    if (
+      this.resetForm.value.newPassword !==
+      this.resetForm.value.confirmPassword
+    ) {
       this.isSubmitting = false;
 
       alert('Passwords do not match');
-
       return;
     }
 
     const payload = {
       email: this.email,
-
       securityAnswer: this.resetForm.value.securityAnswer,
-
       newPassword: this.resetForm.value.newPassword,
-
       confirmPassword: this.resetForm.value.confirmPassword
     };
-    this.authService
-      .resetPassword(payload)
 
-      .subscribe({
-        next: (response) => {
-          console.log(response);
+    this.authService.resetPassword(payload).subscribe({
+      next: (response) => {
+        console.log(response);
 
-          alert('Password reset successful');
+        alert('Password reset successful');
 
-          this.router.navigate(['/login']);
+        this.router.navigate(['/login']);
 
-          this.isSubmitting = false;
-        },
+        this.isSubmitting = false;
+      },
 
-        error: (error) => {
-          console.log('FULL ERROR');
-          console.log(error);
+      error: (error) => {
+        console.log('FULL ERROR');
+        console.log(error);
 
-          console.log('BACKEND ERRORS');
-          console.log(error?.error?.errors);
+        console.log('BACKEND ERRORS');
+        console.log(error?.error?.errors);
 
-          this.isSubmitting = false;
-        }
-      });
+        this.isSubmitting = false;
+      }
+    });
   }
 }

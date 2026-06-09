@@ -1,21 +1,15 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 
 import { AuthService } from '../../../core/services/auth';
-
 import { DashboardService } from '../../../core/services/dashboard';
 
 @Component({
   selector: 'app-admin-dashboard',
-
   standalone: true,
-
   imports: [RouterLink, AsyncPipe],
-
   templateUrl: './admin-dashboard.html',
-
   styleUrl: './admin-dashboard.css'
 })
 export class AdminDashboard implements OnInit {
@@ -24,65 +18,46 @@ export class AdminDashboard implements OnInit {
   recentEmployees: any[] = [];
 
   constructor(
-    public authService: AuthService,
-
-    private dashboardService: DashboardService,
-    private cdr: ChangeDetectorRef
+    public readonly authService: AuthService,
+    private readonly dashboardService: DashboardService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
-  /*
-  |------------------------------------------------------------------
-  | On Init
-  |------------------------------------------------------------------
-  */
+  // Load dashboard data
   ngOnInit(): void {
     this.loadStats();
-
     this.loadRecentEmployees();
   }
 
-  /*
-  |------------------------------------------------------------------
-  | Load Stats
-  |------------------------------------------------------------------
-  */
+  // Fetch dashboard statistics
   loadStats(): void {
-    this.dashboardService
-      .getAdminStats()
+    this.dashboardService.getAdminStats().subscribe({
+      next: (response) => {
+        console.log(response);
 
-      .subscribe({
-        next: (response) => {
-          console.log(response);
+        this.stats = response.data;
 
-          this.stats = response.data;
-          this.cdr.detectChanges();
-        },
+        this.cdr.detectChanges();
+      },
 
-        error: (error) => {
-          console.log(error);
-        }
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
-  /*
-  |------------------------------------------------------------------
-  | Load Recent Employees
-  |------------------------------------------------------------------
-  */
+  // Fetch recently added employees
   loadRecentEmployees(): void {
-    this.dashboardService
-      .getRecentEmployees()
+    this.dashboardService.getRecentEmployees().subscribe({
+      next: (response) => {
+        console.log(response);
 
-      .subscribe({
-        next: (response) => {
-          console.log(response);
+        this.recentEmployees = response.data;
+      },
 
-          this.recentEmployees = response.data;
-        },
-
-        error: (error) => {
-          console.log(error);
-        }
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 }

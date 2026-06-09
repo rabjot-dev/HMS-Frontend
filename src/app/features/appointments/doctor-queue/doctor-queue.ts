@@ -4,18 +4,13 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { AppointmentService } from '../../../core/services/appointment';
-
 import { AuthService } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-doctor-queue',
-
   standalone: true,
-
   imports: [CommonModule, RouterLink],
-
   templateUrl: './doctor-queue.html',
-
   styleUrls: ['./doctor-queue.css']
 })
 export class DoctorQueue implements OnInit {
@@ -27,16 +22,11 @@ export class DoctorQueue implements OnInit {
 
   constructor(
     private appointmentService: AppointmentService,
-
     public authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {}
 
-  /*
-  |--------------------------------------------------------------------------
-  | On Init
-  |--------------------------------------------------------------------------
-  */
+  // Get logged-in doctor and load today's queue
   ngOnInit(): void {
     this.authService.currentUser.subscribe({
       next: (user: any) => {
@@ -51,17 +41,12 @@ export class DoctorQueue implements OnInit {
     });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Load Queue
-  |--------------------------------------------------------------------------
-  */
+  // Fetch doctor's appointment queue
   loadQueue(): void {
     this.isLoading = true;
 
     this.appointmentService
       .getDoctorQueue(this.doctorEmployeeId)
-
       .subscribe({
         next: (response) => {
           console.log(response);
@@ -80,25 +65,18 @@ export class DoctorQueue implements OnInit {
       });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Mark Completed
-  |--------------------------------------------------------------------------
-  */
+  // Mark appointment as completed
   markCompleted(appointment: any): void {
     const updatedData = {
       ...appointment,
-
       status: 'COMPLETED'
     };
 
     this.appointmentService
       .updateAppointment(
         appointment._id,
-
         updatedData
       )
-
       .subscribe({
         next: (response) => {
           console.log(response);
@@ -114,25 +92,18 @@ export class DoctorQueue implements OnInit {
       });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Start Consultation
-  |--------------------------------------------------------------------------
-  */
+  // Move appointment to consultation state
   startConsultation(appointment: any): void {
     const updatedData = {
       ...appointment,
-
       status: 'IN_CONSULTATION'
     };
 
     this.appointmentService
       .updateAppointment(
         appointment._id,
-
         updatedData
       )
-
       .subscribe({
         next: (response) => {
           console.log(response);

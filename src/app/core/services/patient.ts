@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,53 +10,38 @@ export class PatientService {
 
   constructor(private http: HttpClient) {}
 
-  /*
-  |--------------------------------------------------------------------------
-  | Register Patient
-  |--------------------------------------------------------------------------
-  */
+  // Register a new patient
   createPatient(patientData: any): Observable<any> {
     return this.http.post(
       this.apiUrl,
-
       patientData
     );
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Get All Patients
-  |--------------------------------------------------------------------------
-  */
+  // Get all patients
   getPatients(): Observable<any> {
     return this.http.get(this.apiUrl);
   }
-  /*
-|--------------------------------------------------------------------------
-| Get Doctors
-|--------------------------------------------------------------------------
-*/
+
+  // Get list of doctors for patient assignment
   getDoctors(): Observable<any> {
-    return this.http.get('http://localhost:5000/api/employees/doctors');
+    return this.http.get(
+      'http://localhost:5000/api/employees/doctors'
+    );
   }
-  /*
-|--------------------------------------------------------------------------
-| Get Patient By ID
-|--------------------------------------------------------------------------
-*/
+
+  // Get patient details by ID
   getPatientById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  /*
-|--------------------------------------------------------------------------
-| Update Patient
-|--------------------------------------------------------------------------
-*/
-  updatePatient(id: string, patientData: any): Observable<any> {
+  // Update patient information
+  updatePatient(
+    id: string,
+    patientData: any
+  ): Observable<any> {
     return this.http.put(
       `${this.apiUrl}/${id}`,
-
       patientData
     );
   }

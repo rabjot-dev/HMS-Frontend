@@ -1,20 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
   selector: 'app-doctor-availability',
-
   standalone: true,
-
   imports: [CommonModule, ReactiveFormsModule],
-
   templateUrl: './doctor-availability.html',
-
   styleUrls: ['./doctor-availability.css']
 })
 export class DoctorAvailability implements OnInit {
@@ -22,11 +16,18 @@ export class DoctorAvailability implements OnInit {
 
   availabilityForm: any;
 
-  workingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+  workingDays = [
+    'MONDAY',
+    'TUESDAY',
+    'WEDNESDAY',
+    'THURSDAY',
+    'FRIDAY',
+    'SATURDAY',
+    'SUNDAY'
+  ];
 
   constructor(
     private readonly fb: FormBuilder,
-
     private readonly employeeService: EmployeeService,
     private readonly cdr: ChangeDetectorRef
   ) {
@@ -34,13 +35,11 @@ export class DoctorAvailability implements OnInit {
       workingDays: [[]],
 
       startTime: ['', Validators.required],
-
       endTime: ['', Validators.required],
 
       slotDuration: [15, Validators.required],
 
       breakStartTime: [''],
-
       breakEndTime: [''],
 
       maxPatientsPerDay: [40, Validators.required],
@@ -49,59 +48,38 @@ export class DoctorAvailability implements OnInit {
     });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | On Init
-  |--------------------------------------------------------------------------
-  */
+  // Load doctor availability on page load
   ngOnInit(): void {
     this.loadAvailability();
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Load Availability
-  |--------------------------------------------------------------------------
-  */
+  // Fetch doctor availability details
   loadAvailability(): void {
-    this.employeeService
-      .getDoctorAvailability()
+    this.employeeService.getDoctorAvailability().subscribe({
+      next: (response: any) => {
+        console.log(response);
 
-      .subscribe({
-        next: (response: any) => {
-          console.log(response);
+        this.availabilityForm.patchValue({
+          workingDays: response?.data?.workingDays,
+          startTime: response?.data?.startTime,
+          endTime: response?.data?.endTime,
+          slotDuration: response?.data?.slotDuration,
+          breakStartTime: response?.data?.breakStartTime,
+          breakEndTime: response?.data?.breakEndTime,
+          maxPatientsPerDay: response?.data?.maxPatientsPerDay,
+          isAvailable: response?.data?.isAvailable
+        });
 
-          this.availabilityForm.patchValue({
-            workingDays: response?.data?.workingDays,
+        this.cdr.detectChanges();
+      },
 
-            startTime: response?.data?.startTime,
-
-            endTime: response?.data?.endTime,
-
-            slotDuration: response?.data?.slotDuration,
-
-            breakStartTime: response?.data?.breakStartTime,
-
-            breakEndTime: response?.data?.breakEndTime,
-
-            maxPatientsPerDay: response?.data?.maxPatientsPerDay,
-
-            isAvailable: response?.data?.isAvailable
-          });
-          this.cdr.detectChanges();
-        },
-
-        error: (error) => {
-          console.log(error);
-        }
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Toggle Working Day
-  |--------------------------------------------------------------------------
-  */
+  // Add or remove a working day
   toggleDay(day: string): void {
     const currentDays = this.availabilityForm.value.workingDays;
 
@@ -111,20 +89,17 @@ export class DoctorAvailability implements OnInit {
       this.availabilityForm.patchValue({
         workingDays: currentDays.filter((d: string) => d !== day)
       });
-    } else {
-      this.availabilityForm.patchValue({
-        workingDays: [...currentDays, day]
-      });
+
+      return;
     }
+
+    this.availabilityForm.patchValue({
+      workingDays: [...currentDays, day]
+    });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Submit
-  |--------------------------------------------------------------------------
-  */
+  // Save availability settings
   onSubmit(): void {
-    
     if (this.availabilityForm.invalid) {
       this.availabilityForm.markAllAsTouched();
 
@@ -135,22 +110,21 @@ export class DoctorAvailability implements OnInit {
 
     this.employeeService
       .updateDoctorAvailability(this.availabilityForm.value)
-
       .subscribe({
-        next: (response) => {
+        next: () => {
+          this.isSubmitting = false;
 
-  this.isSubmitting = false;
+          this.cdr.detectChanges();
 
-  this.cdr.detectChanges();
-
-  alert('Availability updated successfully');
-},
+          alert('Availability updated successfully');
+        },
 
         error: (error) => {
           console.log(error);
-          this.cdr.detectChanges();
 
           this.isSubmitting = false;
+
+          this.cdr.detectChanges();
         }
       });
   }

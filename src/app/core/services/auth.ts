@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
-
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { API_BASE_URL } from '../constants/api.constants';
@@ -25,11 +23,8 @@ export class AuthService {
   loadCurrentUser(): void {
     this.getCurrentUser().subscribe({
       next: (response) => {
-        console.log(response);
-
         this.currentUser.next(response.data);
       },
-
       error: () => {
         this.currentUser.next(null);
       }
@@ -39,18 +34,12 @@ export class AuthService {
   createPassword(data: any): Observable<any> {
     return this.http.post(`${API_BASE_URL}/auth/create-password`, data);
   }
-  register(data: any) {
-    return this.http.post(
-      `${API_BASE_URL}/auth/register`,
 
-      data
-    );
+  register(data: any): Observable<any> {
+    return this.http.post(`${API_BASE_URL}/auth/register`, data);
   }
-  /*
-|--------------------------------------------------------------------------
-| Check Role
-|--------------------------------------------------------------------------
-*/
+
+  // Check if current user has a specific role
   hasRole(role: string): boolean {
     const user = this.currentUser.value;
 
@@ -60,31 +49,16 @@ export class AuthService {
 
     return user.roles?.includes(role);
   }
-  /*
-|--------------------------------------------------------------------------
-| Forgot Password
-|--------------------------------------------------------------------------
-*/
-  forgotPassword(email: string) {
-    return this.http.post(
-      `${API_BASE_URL}/auth/forgot-password`,
 
-      {
-        email
-      }
-    );
+  // Get security question for password recovery
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${API_BASE_URL}/auth/forgot-password`, {
+      email
+    });
   }
 
-  /*
-|--------------------------------------------------------------------------
-| Reset Password
-|--------------------------------------------------------------------------
-*/
-  resetPassword(data: any) {
-    return this.http.post(
-      `${API_BASE_URL}/auth/reset-password`,
-
-      data
-    );
+  // Reset password using security answer
+  resetPassword(data: any): Observable<any> {
+    return this.http.post(`${API_BASE_URL}/auth/reset-password`, data);
   }
 }

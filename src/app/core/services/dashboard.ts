@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,47 +10,27 @@ export class DashboardService {
 
   constructor(private http: HttpClient) {}
 
-  /*
-  |--------------------------------------------------------------------------
-  | Admin Stats
-  |--------------------------------------------------------------------------
-  */
+  // Get admin dashboard statistics
   getAdminStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/admin-stats`);
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Recent Employees
-  |--------------------------------------------------------------------------
-  */
+  // Get recently added employees
   getRecentEmployees(): Observable<any> {
     return this.http.get(`${this.apiUrl}/recent-employees`);
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Doctor Stats
-  |--------------------------------------------------------------------------
-  */
+  // Get doctor dashboard statistics
   getDoctorStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/doctor-stats`);
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Receptionist Stats
-  |--------------------------------------------------------------------------
-  */
+  // Get receptionist dashboard statistics
   getReceptionistStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/receptionist-stats`);
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Today Appointments
-  |--------------------------------------------------------------------------
-  */
+  // Get today's appointments
   getTodayAppointments(): Observable<any> {
     return this.http.get(`${this.apiUrl}/today-appointments`);
   }

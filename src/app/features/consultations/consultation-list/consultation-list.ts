@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -7,13 +6,9 @@ import { ConsultationService } from '../../../core/services/consultation';
 
 @Component({
   selector: 'app-consultation-list',
-
   standalone: true,
-
   imports: [CommonModule, RouterLink],
-
   templateUrl: './consultation-list.html',
-
   styleUrls: ['./consultation-list.css']
 })
 export class ConsultationList implements OnInit {
@@ -21,54 +16,40 @@ export class ConsultationList implements OnInit {
 
   isLoading = false;
 
-  constructor(private consultationService: ConsultationService) {}
+  constructor(
+    private readonly consultationService: ConsultationService
+  ) {}
 
-  /*
-  |--------------------------------------------------------------------------
-  | On Init
-  |--------------------------------------------------------------------------
-  */
+  // Load consultations on page load
   ngOnInit(): void {
     this.loadConsultations();
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Load Consultations
-  |--------------------------------------------------------------------------
-  */
+  // Fetch all consultations
   loadConsultations(): void {
     this.isLoading = true;
 
-    this.consultationService
-      .getConsultations()
+    this.consultationService.getConsultations().subscribe({
+      next: (response) => {
+        console.log(response);
 
-      .subscribe({
-        next: (response) => {
-          console.log(response);
+        this.consultations = response.data;
 
-          this.consultations = response.data;
+        this.isLoading = false;
+      },
 
-          this.isLoading = false;
-        },
+      error: (error) => {
+        console.log(error);
 
-        error: (error) => {
-          console.log(error);
-
-          this.isLoading = false;
-        }
-      });
+        this.isLoading = false;
+      }
+    });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Download PDF
-  |--------------------------------------------------------------------------
-  */
+  // Download prescription PDF
   downloadPdf(consultationId: string): void {
     this.consultationService
       .downloadPrescriptionPdf(consultationId)
-
       .subscribe({
         next: (response: Blob) => {
           const fileURL = window.URL.createObjectURL(response);

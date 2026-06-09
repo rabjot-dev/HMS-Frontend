@@ -15,10 +15,15 @@ import { ToastService } from '../../../core/services/toast';
 })
 export class EditAppointment implements OnInit {
   appointmentId = '';
+
   doctors: any[] = [];
+
   availableSlots: string[] = [];
+
   isSubmitting = false;
-  noSlotsError = false; // ← ADD
+
+  noSlotsError = false;
+
   appointmentForm: any;
 
   constructor(
@@ -27,7 +32,7 @@ export class EditAppointment implements OnInit {
     private readonly router: Router,
     private readonly appointmentService: AppointmentService,
     private readonly employeeService: EmployeeService,
-    private readonly toastService: ToastService // ← ADD
+    private readonly toastService: ToastService
   ) {
     this.appointmentForm = this.fb.group({
       doctorEmployeeId: ['', Validators.required],
@@ -44,6 +49,7 @@ export class EditAppointment implements OnInit {
     });
   }
 
+  // Load doctors and appointment details when page opens
   ngOnInit(): void {
     this.loadDoctors();
 
@@ -60,22 +66,26 @@ export class EditAppointment implements OnInit {
     });
 
     this.appointmentId = this.route.snapshot.paramMap.get('id') || '';
+
     if (this.appointmentId) {
       this.loadAppointment();
     }
   }
 
+  // Get all doctors for dropdown
   loadDoctors(): void {
     this.employeeService.getDoctors().subscribe({
       next: (response) => {
         this.doctors = response.data;
       },
+
       error: (error) => {
         console.log(error);
       }
     });
   }
 
+  // Load appointment details and fill form
   loadAppointment(): void {
     this.appointmentService.getAppointmentById(this.appointmentId).subscribe({
       next: (response) => {
@@ -94,28 +104,19 @@ export class EditAppointment implements OnInit {
 
         this.appointmentForm.patchValue({
           doctorEmployeeId: appointment?.doctorEmployeeId?._id,
-
           appointmentDate: formattedDate,
-
           timeSlot: appointment?.timeSlot,
-
           appointmentType: appointment?.appointmentType,
-
           priority: appointment?.priority,
-
           paymentStatus: appointment?.paymentStatus,
-
           visitMode: appointment?.visitMode,
-
           status: appointment?.status,
-
           reason: appointment?.reason,
-
           notes: appointment?.notes,
-
           symptoms: appointment?.symptoms?.join(', ')
         });
 
+        // Load slots only for active appointments
         if (appointment?.status !== 'COMPLETED' && appointment?.status !== 'CANCELLED') {
           this.fetchAvailableSlots();
         }
@@ -126,9 +127,12 @@ export class EditAppointment implements OnInit {
       }
     });
   }
+
+  // Get available slots for selected doctor and date
   fetchAvailableSlots(): void {
     const status = this.appointmentForm.get('status')?.value;
 
+    // No slots needed for completed or cancelled appointments
     if (status === 'COMPLETED' || status === 'CANCELLED') {
       return;
     }
@@ -137,6 +141,7 @@ export class EditAppointment implements OnInit {
 
     const appointmentDate = this.appointmentForm.get('appointmentDate')?.value;
 
+    // Wait until doctor and date are selected
     if (!doctorEmployeeId || !appointmentDate) {
       return;
     }
@@ -149,11 +154,7 @@ export class EditAppointment implements OnInit {
       next: (response) => {
         let slots = response.data || [];
 
-        /*
-        |--------------------------------------------------
-        | Hide Past Slots For Today
-        |--------------------------------------------------
-        */
+        // Remove already passed time slots if selected date is today
         const selectedDate = new Date(appointmentDate);
 
         const today = new Date();
@@ -163,9 +164,7 @@ export class EditAppointment implements OnInit {
         if (isToday) {
           const currentTime = new Date();
 
-          /*
-          15 min buffer
-          */
+          // Keep 15 minutes buffer from current time
           currentTime.setMinutes(currentTime.getMinutes() + 15);
 
           slots = slots.filter((slot: string) => {
@@ -181,10 +180,14 @@ export class EditAppointment implements OnInit {
 
         this.availableSlots = slots;
 
+        // Show error if no slots are available
         if (this.availableSlots.length === 0) {
           this.noSlotsError = true;
 
-          this.toastService.show('No slots available for the selected date.', 'error');
+          this.toastService.show(
+            'No slots available for the selected date.',
+            'error'
+          );
         } else {
           this.noSlotsError = false;
         }
@@ -195,50 +198,79 @@ export class EditAppointment implements OnInit {
 
         this.noSlotsError = true;
 
-        this.toastService.show(error?.error?.message || 'Doctor is not available on this date.', 'error');
+        this.toastService.show(
+          error?.error?.message ||
+            'Doctor is not available on this date.',
+          'error'
+        );
       }
     });
   }
 
+  // Update appointment details
   onSubmit(): void {
     if (this.appointmentForm.invalid) {
       this.appointmentForm.markAllAsTouched();
-      // ← Show noSlotsError on submit if date filled but no slots
-      if (this.appointmentForm.get('appointmentDate')?.valid && this.availableSlots.length === 0) {
+
+      // Show slot error if date is selected but no slot is available
+      if (
+        this.appointmentForm.get('appointmentDate')?.valid &&
+        this.availableSlots.length === 0
+      ) {
         this.noSlotsError = true;
       }
+
       return;
     }
 
-    // ← Block submit if no slots
+    // Prevent update when no slot is available
     if (
       this.availableSlots.length === 0 &&
       this.appointmentForm.get('status')?.value !== 'COMPLETED' &&
       this.appointmentForm.get('status')?.value !== 'CANCELLED'
     ) {
       this.noSlotsError = true;
+
       return;
     }
 
     this.isSubmitting = true;
 
+    // Convert symptoms text into array before sending to backend
     const formData = {
       ...this.appointmentForm.value,
-      symptoms: this.appointmentForm.value.symptoms?.split(',').map((symptom: string) => symptom.trim())
+      symptoms: this.appointmentForm.value.symptoms
+        ?.split(',')
+        .map((symptom: string) => symptom.trim())
     };
 
-    this.appointmentService.updateAppointment(this.appointmentId, formData).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.toastService.show('Appointment updated successfully', 'success');
-        this.router.navigate(['/appointments']);
-        this.isSubmitting = false;
-      },
-      error: (error) => {
-        console.log(error);
-        this.isSubmitting = false;
-        this.toastService.show(error?.error?.message || 'Failed to update appointment.', 'error');
-      }
-    });
+    this.appointmentService
+      .updateAppointment(this.appointmentId, formData)
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+
+          this.toastService.show(
+            'Appointment updated successfully',
+            'success'
+          );
+
+          this.router.navigate(['/appointments']);
+
+          this.isSubmitting = false;
+        },
+
+        error: (error) => {
+          console.log(error);
+
+          this.isSubmitting = false;
+
+          this.toastService.show(
+            error?.error?.message ||
+              'Failed to update appointment.',
+            'error'
+          );
+        }
+      });
   }
 }

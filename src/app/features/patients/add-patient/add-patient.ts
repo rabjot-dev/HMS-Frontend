@@ -1,25 +1,19 @@
 import { Component } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../core/services/toast';
 import { PatientService } from '../../../core/services/patient';
 
 @Component({
   selector: 'app-add-patient',
-
   standalone: true,
-
   imports: [ReactiveFormsModule, CommonModule],
-
   templateUrl: './add-patient.html',
-
   styleUrls: ['./add-patient.css']
 })
 export class AddPatient {
   currentStep = 1;
-
   isSubmitting = false;
 
   patientForm!: FormGroup;
@@ -30,114 +24,85 @@ export class AddPatient {
     private readonly patientService: PatientService
   ) {
     this.patientForm = this.fb.group({
+      // Basic Information
       firstName: ['', Validators.required],
-
       lastName: ['', Validators.required],
-
       dateOfBirth: ['', Validators.required],
-
       gender: ['', Validators.required],
-
       bloodGroup: ['', Validators.required],
-
       maritalStatus: ['', Validators.required],
 
-      /*
-      |--------------------------------------------------------------------------
-      | Contact Information
-      |--------------------------------------------------------------------------
-      */
+      // Contact Information
       countryCode: ['+91', Validators.required],
-
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-
       email: ['', Validators.required],
-
       address: ['', Validators.required],
-
       city: ['', Validators.required],
-
       state: ['', Validators.required],
-
       pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
-
       country: ['India'],
 
-      /*
-      |--------------------------------------------------------------------------
-      | Emergency Contact
-      |--------------------------------------------------------------------------
-      */
+      // Emergency Contact
       emergencyContactName: ['', Validators.required],
-
       emergencyContactPhone: ['', Validators.required],
 
-      /*
-      |--------------------------------------------------------------------------
-      | Medical Information
-      |--------------------------------------------------------------------------
-      */
+      // Medical Information
       medicalHistory: [''],
-
       allergies: [''],
-
       chronicDiseases: [''],
-
       currentMedications: [''],
-
       pastSurgeries: [''],
-
       familyMedicalHistory: [''],
 
-      /*
-      |--------------------------------------------------------------------------
-      | Insurance Information
-      |--------------------------------------------------------------------------
-      */
+      // Insurance Information
       insuranceProvider: [''],
-
       insurancePolicyNumber: [''],
-
       insuranceExpiryDate: [''],
-
       insuranceCoverageAmount: [''],
 
-      /*
-      |--------------------------------------------------------------------------
-      | Hospital Information
-      |--------------------------------------------------------------------------
-      */
+      // Hospital Information
       department: [''],
-
       patientType: ['', Validators.required]
     });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Next Step — Validates only current step fields before proceeding
-  |--------------------------------------------------------------------------
-  */
+  // Move to next step after validating current step
   nextStep(): void {
     const stepFields: { [key: number]: string[] } = {
-      1: ['firstName', 'lastName', 'dateOfBirth', 'gender', 'bloodGroup', 'maritalStatus'],
-      2: ['phone', 'email', 'address', 'city', 'state', 'pincode', 'emergencyContactName', 'emergencyContactPhone'],
+      1: [
+        'firstName',
+        'lastName',
+        'dateOfBirth',
+        'gender',
+        'bloodGroup',
+        'maritalStatus'
+      ],
+      2: [
+        'phone',
+        'email',
+        'address',
+        'city',
+        'state',
+        'pincode',
+        'emergencyContactName',
+        'emergencyContactPhone'
+      ],
       3: [],
       4: ['patientType']
     };
 
     const fieldsToValidate = stepFields[this.currentStep] || [];
 
-    // Mark only current step fields as touched to show errors
     fieldsToValidate.forEach((field) => {
       this.patientForm.get(field)?.markAsTouched();
     });
 
-    // Check if all current step fields are valid
-    const isStepValid = fieldsToValidate.every((field) => this.patientForm.get(field)?.valid);
+    const isStepValid = fieldsToValidate.every(
+      (field) => this.patientForm.get(field)?.valid
+    );
 
     if (!isStepValid) {
-      return; // Block navigation if invalid
+      return;
     }
 
     if (this.currentStep < 4) {
@@ -145,28 +110,18 @@ export class AddPatient {
     }
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Previous Step
-  |--------------------------------------------------------------------------
-  */
+  // Go back to previous step
   previousStep(): void {
     if (this.currentStep > 1) {
       this.currentStep--;
     }
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Submit
-  |--------------------------------------------------------------------------
-  */
+  // Register patient
   onSubmit(): void {
     console.log('Register Patient Clicked');
-
     console.log(this.patientForm.value);
 
-    // Mark patientType as touched to show error if not selected
     this.patientForm.get('patientType')?.markAsTouched();
 
     if (this.patientForm.get('patientType')?.invalid) {
@@ -191,54 +146,44 @@ export class AddPatient {
 
     this.isSubmitting = true;
 
-    this.patientService
-      .createPatient(this.patientForm.value)
+    this.patientService.createPatient(this.patientForm.value).subscribe({
+      next: (response) => {
+        console.log(response);
 
-      .subscribe({
-        next: (response) => {
-          console.log(response);
+        this.toastService.show(
+          'Patient Registered Successfully',
+          'success'
+        );
 
-          this.toastService.show('Patient Registered Successfully', 'success');
+        // Reset form
+        this.patientForm.reset();
 
-          /*
-          |--------------------------------------------------------------------------
-          | Reset Form
-          |--------------------------------------------------------------------------
-          */
-          this.patientForm.reset();
+        // Restore default values
+        this.patientForm.patchValue({
+          countryCode: '+91',
+          country: 'India',
+          patientType: ''
+        });
 
-          /*
-          |--------------------------------------------------------------------------
-          | Default Values After Reset
-          |--------------------------------------------------------------------------
-          */
-          this.patientForm.patchValue({
-            countryCode: '+91',
+        // Reset UI state
+        this.currentStep = 1;
+        this.isSubmitting = false;
+      },
 
-            country: 'India',
+      error: (error) => {
+        console.log('FULL ERROR =>', error);
+        console.log('VALIDATION ERRORS =>', error?.error?.errors);
 
-            patientType: ''
-          });
+        alert(
+          JSON.stringify(
+            error?.error?.errors,
+            null,
+            2
+          )
+        );
 
-          /*
-          |--------------------------------------------------------------------------
-          | Reset UI
-          |--------------------------------------------------------------------------
-          */
-          this.currentStep = 1;
-
-          this.isSubmitting = false;
-        },
-
-        error: (error) => {
-          console.log('FULL ERROR =>', error);
-
-          console.log('VALIDATION ERRORS =>', error?.error?.errors);
-
-          alert(JSON.stringify(error?.error?.errors, null, 2));
-
-          this.isSubmitting = false;
-        }
-      });
+        this.isSubmitting = false;
+      }
+    });
   }
 }

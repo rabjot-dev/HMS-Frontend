@@ -1,21 +1,17 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
+
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
   selector: 'app-pending-employees',
-
   imports: [CommonModule],
-
   templateUrl: './pending-employees.html',
-
   styleUrl: './pending-employees.css'
 })
 export class PendingEmployees implements OnInit {
   pendingEmployees: any[] = [];
-
   generatedPassword = '';
 
   constructor(
@@ -24,44 +20,29 @@ export class PendingEmployees implements OnInit {
     private readonly cdr: ChangeDetectorRef
   ) {}
 
-  /*
-  |--------------------------------------------------------------------------
-  | On Init
-  |--------------------------------------------------------------------------
-  */
+  // Load pending employees on page load
   ngOnInit(): void {
     this.loadPendingEmployees();
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Load Pending Employees
-  |--------------------------------------------------------------------------
-  */
+  // Get all pending employees
   loadPendingEmployees(): void {
-    this.employeeService
-      .getPendingEmployees()
+    this.employeeService.getPendingEmployees().subscribe({
+      next: (response: any) => {
+        console.log(response);
 
-      .subscribe({
-        next: (response: any) => {
-          console.log(response);
+        this.pendingEmployees = response.data;
 
-          this.pendingEmployees = response.data;
+        this.cdr.detectChanges();
+      },
 
-          this.cdr.detectChanges();
-        },
-
-        error: (error) => {
-          console.log(error);
-        }
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Approve Employee
-  |--------------------------------------------------------------------------
-  */
+  // Approve employee
   approveEmployee(employee: any): void {
     let consultationFee = null;
 
@@ -76,53 +57,49 @@ export class PendingEmployees implements OnInit {
       consultationFee = Number(fee);
     }
 
-    this.employeeService
-      .approveEmployee(employee._id, {
-        consultationFee
-      })
-      .subscribe({
-        next: (response: any) => {
-          console.log(response);
+    this.employeeService.approveEmployee(employee._id, {
+      consultationFee
+    }).subscribe({
+      next: (response: any) => {
+        console.log(response);
 
-          this.toastService.show(
-            employee.designation === 'DOCTOR'
-              ? `Doctor approved with consultation fee ₹${consultationFee}`
-              : 'Employee approved successfully',
-            'success'
-          );
-          this.loadPendingEmployees();
-        },
+        this.toastService.show(
+          employee.designation === 'DOCTOR'
+            ? `Doctor approved with consultation fee ₹${consultationFee}`
+            : 'Employee approved successfully',
+          'success'
+        );
 
-        error: (error) => {
-          console.log(error);
+        this.loadPendingEmployees();
+      },
 
-          this.toastService.show(error?.error?.message || 'Failed to approve employee', 'error');
-        }
-      });
+      error: (error) => {
+        console.log(error);
+
+        this.toastService.show(
+          error?.error?.message || 'Failed to approve employee',
+          'error'
+        );
+      }
+    });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Reject Employee
-  |--------------------------------------------------------------------------
-  */
+  // Reject employee
   rejectEmployee(employeeId: string): void {
-    this.employeeService
-      .rejectEmployee(employeeId)
+    this.employeeService.rejectEmployee(employeeId).subscribe({
+      next: (response: any) => {
+        console.log(response);
 
-      .subscribe({
-        next: (response: any) => {
-          console.log(response);
+        this.toastService.show('Employee Rejected', 'success');
 
-          this.toastService.show('Employee Rejected', 'success');
-          this.loadPendingEmployees();
-        },
+        this.loadPendingEmployees();
+      },
 
-        error: (error) => {
-          console.log(error);
+      error: (error) => {
+        console.log(error);
 
-          this.toastService.show('Failed to reject employee', 'error');
-        }
-      });
+        this.toastService.show('Failed to reject employee', 'error');
+      }
+    });
   }
 }

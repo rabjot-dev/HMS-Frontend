@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,97 +10,53 @@ export class AppointmentService {
 
   constructor(private http: HttpClient) {}
 
-  /*
-  |--------------------------------------------------------------------------
-  | Get Available Slots
-  |--------------------------------------------------------------------------
-  */
+  // Get available slots for a doctor
   getAvailableSlots(
     doctorId: string,
-
     appointmentDate: string
   ): Observable<any> {
-    return this.http.get(
-      `${this.apiUrl}/available-slots`,
-
-      {
-        params: {
-          doctorId,
-
-          appointmentDate
-        }
+    return this.http.get(`${this.apiUrl}/available-slots`, {
+      params: {
+        doctorId,
+        appointmentDate
       }
-    );
+    });
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Book Appointment
-  |--------------------------------------------------------------------------
-  */
+  // Create a new appointment
   bookAppointment(appointmentData: any): Observable<any> {
-    return this.http.post(
-      this.apiUrl,
-
-      appointmentData
-    );
+    return this.http.post(this.apiUrl, appointmentData);
   }
-  /*
-|--------------------------------------------------------------------------
-| Get Appointments
-|--------------------------------------------------------------------------
-*/
+
+  // Get all appointments
   getAppointments(): Observable<any> {
     return this.http.get(this.apiUrl);
   }
 
-  /*
-|--------------------------------------------------------------------------
-| Delete Appointment
-|--------------------------------------------------------------------------
-*/
+  // Delete an appointment
   deleteAppointment(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
-  /*
-|--------------------------------------------------------------------------
-| Get Appointment By ID
-|--------------------------------------------------------------------------
-*/
+
+  // Get appointment details by ID
   getAppointmentById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  /*
-|--------------------------------------------------------------------------
-| Update Appointment
-|--------------------------------------------------------------------------
-*/
+  // Update an existing appointment
   updateAppointment(
     id: string,
-
     appointmentData: any
   ): Observable<any> {
-    return this.http.put(
-      `${this.apiUrl}/${id}`,
-
-      appointmentData
-    );
+    return this.http.put(`${this.apiUrl}/${id}`, appointmentData);
   }
-  /*
-|--------------------------------------------------------------------------
-| Doctor Queue
-|--------------------------------------------------------------------------
-*/
-  getDoctorQueue(doctorEmployeeId: string): Observable<any> {
-    return this.http.get(
-      `${this.apiUrl}/doctor-queue`,
 
-      {
-        params: {
-          doctorEmployeeId
-        }
+  // Get today's queue for a doctor
+  getDoctorQueue(doctorEmployeeId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/doctor-queue`, {
+      params: {
+        doctorEmployeeId
       }
-    );
+    });
   }
 }

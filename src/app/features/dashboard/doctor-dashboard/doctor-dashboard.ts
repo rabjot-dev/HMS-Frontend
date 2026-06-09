@@ -1,21 +1,15 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 
 import { AuthService } from '../../../core/services/auth';
-
 import { DashboardService } from '../../../core/services/dashboard';
 
 @Component({
   selector: 'app-doctor-dashboard',
-
   standalone: true,
-
   imports: [RouterLink, AsyncPipe],
-
   templateUrl: './doctor-dashboard.html',
-
   styleUrl: './doctor-dashboard.css'
 })
 export class DoctorDashboard implements OnInit {
@@ -24,65 +18,46 @@ export class DoctorDashboard implements OnInit {
   todayAppointments: any[] = [];
 
   constructor(
-    public authService: AuthService,
-
-    private dashboardService: DashboardService,
-    private cdr: ChangeDetectorRef
+    public readonly authService: AuthService,
+    private readonly dashboardService: DashboardService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
-  /*
-  |------------------------------------------------------------------
-  | On Init
-  |------------------------------------------------------------------
-  */
+  // Load dashboard data
   ngOnInit(): void {
     this.loadDoctorStats();
-
     this.loadTodayAppointments();
   }
 
-  /*
-  |------------------------------------------------------------------
-  | Load Stats
-  |------------------------------------------------------------------
-  */
+  // Fetch doctor dashboard statistics
   loadDoctorStats(): void {
-    this.dashboardService
-      .getDoctorStats()
+    this.dashboardService.getDoctorStats().subscribe({
+      next: (response) => {
+        console.log(response);
 
-      .subscribe({
-        next: (response) => {
-          console.log(response);
+        this.stats = response.data;
 
-          this.stats = response.data;
-          this.cdr.detectChanges();
-        },
+        this.cdr.detectChanges();
+      },
 
-        error: (error) => {
-          console.log(error);
-        }
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
-  /*
-  |------------------------------------------------------------------
-  | Load Today Appointments
-  |------------------------------------------------------------------
-  */
+  // Fetch today's appointments
   loadTodayAppointments(): void {
-    this.dashboardService
-      .getTodayAppointments()
+    this.dashboardService.getTodayAppointments().subscribe({
+      next: (response) => {
+        console.log(response);
 
-      .subscribe({
-        next: (response) => {
-          console.log(response);
+        this.todayAppointments = response.data;
+      },
 
-          this.todayAppointments = response.data;
-        },
-
-        error: (error) => {
-          console.log(error);
-        }
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 }
