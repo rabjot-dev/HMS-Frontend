@@ -8,7 +8,6 @@
   display: flex;
   align-items: center;
   margin-bottom: 32px;
-  gap: 0;
 }
 
 .step {
@@ -20,11 +19,10 @@
 }
 
 .step p {
-  font-size: 14px;
+  margin: 0;
+  font-size: 13px;
   font-weight: 600;
   color: #94a3b8;
-  margin: 0;
-  white-space: nowrap;
 }
 
 .step.active p,
@@ -33,39 +31,36 @@
 }
 
 .step-circle {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   border: 2px solid #dbe4f0;
-  background: #fff;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
   font-weight: 700;
-  color: #94a3b8;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 .step.active .step-circle {
-  border-color: #3b82f6;
   background: #3b82f6;
-  color: #fff;
+  border-color: #3b82f6;
+  color: white;
 }
 
 .step.completed .step-circle {
-  border-color: #22c55e;
   background: #22c55e;
-  color: #fff;
+  border-color: #22c55e;
+  color: white;
 }
-
 .step-line {
   flex: 1;
   height: 2px;
   background: #dbe4f0;
-  margin: 0 8px;
+  margin: 0 10px;
   margin-bottom: 22px;
-  transition: background 0.3s ease;
+  transition: 0.3s;
 }
 
 .step-line.completed {
@@ -76,7 +71,7 @@
 .step-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
   margin-bottom: 24px;
 }
 
@@ -94,21 +89,32 @@
 .back-btn {
   padding: 18px 24px;
   border-radius: 18px;
-  border: 1.5px solid #dbe4f0;
-  background: #fff;
+  border: 1px solid #dbe4f0;
+  background: white;
   color: #334155;
-  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
+  transition: 0.3s;
 }
 
 .back-btn:hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
+  background: #f8fafc;
+}
+.step-section {
+  animation: fadeSlide 0.25s ease;
 }
 
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .register-page {
   min-height: 100vh;
 
@@ -156,7 +162,7 @@
 }
 
 .register-left h1 {
-  font-size: 60px;
+  font-size: 52px;
 
   line-height: 1.08;
 
@@ -262,7 +268,7 @@
 .register-card {
   width: 100%;
 
-  max-width: 620px;
+  max-width: 680px;
 }
 
 .register-card h2 {
@@ -472,23 +478,18 @@ select:focus {
 |------------------------------------------------------------------
 */
 
-@media (max-width: 1100px) {
-  .register-page {
-    grid-template-columns: 1fr;
-  }
-
-  .register-left {
+@media (max-width: 768px) {
+  .step p {
     display: none;
   }
 
-  .register-right {
-    padding: 24px;
+  .step-circle {
+    width: 32px;
+    height: 32px;
   }
 
-  .register-card {
-    max-width: 100%;
-
-    max-height: unset;
+  .btn-row {
+    flex-direction: column;
   }
 }
 .error-message {

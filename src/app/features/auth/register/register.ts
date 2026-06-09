@@ -133,9 +133,56 @@ export class Register {
   | Previous Step
   |------------------------------------------------------------------
   */
-  prevStep(): void {
+ prevStep(): void {
+  if (this.currentStep > 1) {
     this.currentStep--;
   }
+}
+/*
+|------------------------------------------------------------------
+| Next Step
+|------------------------------------------------------------------
+*/
+nextStep(): void {
+  if (this.currentStep === 1) {
+    const step1Fields = [
+      'name',
+      'email',
+      'gender',
+      'countryCode',
+      'phone',
+      'department',
+      'designation',
+      'joiningDate'
+    ];
+
+    step1Fields.forEach((field) => {
+      this.registerForm.get(field)?.markAsTouched();
+    });
+
+    const isInvalid = step1Fields.some((field) => this.registerForm.get(field)?.invalid);
+
+    if (isInvalid) {
+      return;
+    }
+  }
+
+  if (this.currentStep === 2 && this.isDoctor()) {
+    const doctorFields = ['specialization', 'qualification', 'medicalRegistrationNo'];
+
+    doctorFields.forEach((field) => {
+      this.registerForm.get(field)?.markAsTouched();
+    });
+
+    const isInvalid = doctorFields.some((field) => this.registerForm.get(field)?.invalid);
+
+    if (isInvalid) {
+      return;
+    }
+  }
+
+  this.currentStep++;
+}
 
   /*
   |------------------------------------------------------------------

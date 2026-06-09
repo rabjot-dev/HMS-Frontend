@@ -41,15 +41,58 @@
       <p class="subtitle">Create your HMS account</p>
 
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="step-indicator">
+  <div
+    class="step"
+    [class.active]="currentStep === 1"
+    [class.completed]="currentStep > 1"
+  >
+    <div class="step-circle">1</div>
+    <p>Basic</p>
+  </div>
+
+  <div
+    class="step-line"
+    [class.completed]="currentStep > 1"
+  ></div>
+
+  <div
+    class="step"
+    [class.active]="currentStep === 2"
+    [class.completed]="currentStep > 2"
+  >
+    <div class="step-circle">2</div>
+    <p>Professional</p>
+  </div>
+
+  <div
+    class="step-line"
+    [class.completed]="currentStep > 2"
+  ></div>
+
+  <div
+    class="step"
+    [class.active]="currentStep === 3"
+  >
+    <div class="step-circle">3</div>
+    <p>Security</p>
+  </div>
+</div>
+@if(currentStep === 1){
+
+<div class="step-section">
         <!-- Name -->
 
         <div class="form-group">
           <label>Full Name</label>
 
           <input type="text" formControlName="name" placeholder="Enter full name" />
-          @if(registerForm.get('name')?.errors?.['required']){
-          <span class="error-text">Name is required</span>
-          } @if(registerForm.get('name')?.errors?.['pattern']){
+         @if(registerForm.get('medicalRegistrationNo')?.invalid &&
+registerForm.get('medicalRegistrationNo')?.touched){
+  <span class="error-text">
+    Medical Registration Number is required
+  </span>
+} @if(registerForm.get('name')?.errors?.['pattern']){
           <span class="error-text">Name can contain only alphabets</span>
           }
         </div>
@@ -199,6 +242,31 @@
           <span class="error-text">Department is required</span>
           }
         </div>
+        <!-- Joining Date -->
+
+        <div class="form-group">
+          <label>Joining Date</label>
+
+          <input type="date" formControlName="joiningDate" />
+
+          @if(registerForm.get('joiningDate')?.invalid && registerForm.get('joiningDate')?.touched){
+          <span class="error-text">Joining date is required</span>
+          }
+        </div>
+        </div>
+
+<button
+  type="button"
+  class="submit-btn"
+  (click)="nextStep()"
+>
+  Next
+</button>
+
+}
+@if(currentStep === 2){
+
+<div class="step-section">
 
         @if(isDoctor()){
 
@@ -236,20 +304,44 @@
           <span class="error-text">Name is required</span>
           }
         </div>
+        
 
         }
+          @if(!isDoctor()){
 
-        <!-- Joining Date -->
+    <div class="feature-card">
+      No additional information required for this designation.
+    </div>
 
-        <div class="form-group">
-          <label>Joining Date</label>
+  }
 
-          <input type="date" formControlName="joiningDate" />
+</div>
 
-          @if(registerForm.get('joiningDate')?.invalid && registerForm.get('joiningDate')?.touched){
-          <span class="error-text">Joining date is required</span>
-          }
-        </div>
+<div class="btn-row">
+
+  <button
+    type="button"
+    class="back-btn"
+    (click)="prevStep()"
+  >
+    Back
+  </button>
+
+  <button
+    type="button"
+    class="submit-btn"
+    (click)="nextStep()"
+  >
+    Next
+  </button>
+
+</div>
+
+}
+@if(currentStep === 3){
+
+<div class="step-section">
+        
 
         <!-- Password -->
 
@@ -309,6 +401,33 @@
           <span class="error-text">Security Answer is required</span>
           }
         </div>
+        </div>
+
+<div class="btn-row">
+
+  <button
+    type="button"
+    class="back-btn"
+    (click)="prevStep()"
+  >
+    Back
+  </button>
+
+  <button
+    type="submit"
+    class="submit-btn"
+    [disabled]="isSubmitting"
+  >
+    @if(isSubmitting){
+      Registering...
+    } @else {
+      Register
+    }
+  </button>
+
+</div>
+
+}
 
         <button type="submit" class="submit-btn" [disabled]="isSubmitting">
           @if(isSubmitting){ Registering... } @else { Register }
