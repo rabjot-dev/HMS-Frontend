@@ -6,9 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ConsultationService {
-  private apiUrl = 'http://localhost:5000/api/consultations';
+  private readonly apiUrl = 'http://localhost:5000/api/consultations';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // Create a new consultation
   createConsultation(data: any): Observable<any> {

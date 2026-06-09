@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class AppointmentService {
   apiUrl = 'http://localhost:5000/api/appointments';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // Get available slots for a doctor
   getAvailableSlots(

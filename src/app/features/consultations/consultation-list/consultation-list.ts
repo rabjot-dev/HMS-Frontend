@@ -52,9 +52,9 @@ export class ConsultationList implements OnInit {
       .downloadPrescriptionPdf(consultationId)
       .subscribe({
         next: (response: Blob) => {
-          const fileURL = window.URL.createObjectURL(response);
+          const fileURL = globalThis.URL.createObjectURL(response);
 
-          window.open(fileURL);
+          globalThis.open(fileURL);
         },
 
         error: (error) => {

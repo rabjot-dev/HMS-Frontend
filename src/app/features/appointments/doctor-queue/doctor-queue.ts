@@ -21,9 +21,9 @@ export class DoctorQueue implements OnInit {
   doctorEmployeeId = '';
 
   constructor(
-    private appointmentService: AppointmentService,
+    private readonly appointmentService: AppointmentService,
     public authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   // Get logged-in doctor and load today's queue

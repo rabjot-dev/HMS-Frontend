@@ -10,7 +10,7 @@ import { API_BASE_URL } from '../constants/api.constants';
 export class AuthService {
   currentUser = new BehaviorSubject<any>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   login(data: { loginId: string; password: string }): Observable<any> {
     return this.http.post(`${API_BASE_URL}/auth/login`, data);

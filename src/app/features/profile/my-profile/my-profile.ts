@@ -1,30 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-my-profile',
-
   standalone: true,
-
   imports: [CommonModule],
-
   templateUrl: './my-profile.html',
-
   styleUrl: './my-profile.css'
 })
 export class MyProfile implements OnInit {
   user: any;
 
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  /*
-  |--------------------------------------------------------------------------
-  | On Init
-  |--------------------------------------------------------------------------
-  */
+  // Load logged-in user profile
   ngOnInit(): void {
     this.authService.currentUser.subscribe({
       next: (response: any) => {
@@ -35,17 +26,11 @@ export class MyProfile implements OnInit {
         } else {
           this.user = {
             name: 'Administrator',
-
             email: response?.email,
-
             status: response?.status,
-
             designation: response?.roles?.[0],
-
             department: 'Administration',
-
             employeeCode: 'ADMIN',
-
             joiningDate: response?.createdAt
           };
         }

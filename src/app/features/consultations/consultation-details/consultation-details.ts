@@ -52,7 +52,7 @@ export class ConsultationDetails implements OnInit {
 
   // Print consultation details
   printPage(): void {
-    window.print();
+    globalThis.print();
   }
 
   // Download prescription PDF
@@ -63,7 +63,7 @@ export class ConsultationDetails implements OnInit {
         next: (response: Blob) => {
           const fileURL = globalThis.URL.createObjectURL(response);
 
-          window.open(fileURL);
+          globalThis.open(fileURL);
         }
       });
   }
