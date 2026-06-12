@@ -67,11 +67,7 @@ export default function DashboardScreen({ navigation }: any) {
             color="#10b981"
           />
 
-          <PrimaryButton
-            title="👤 My Profile"
-            onPress={() => navigation.navigate("ProfileScreen")}
-            color="#7c3aed"
-          />
+          
 
           <PrimaryButton
             title="🚪 Logout"

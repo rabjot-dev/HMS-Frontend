@@ -11,3 +11,6 @@ export const updateProfileApi = (data: any) =>
 
 export const getMyPatientAppointmentsApi = (patientId: string) =>
   client.get(`/appointments/patient/${patientId}`);
+
+export const updatePatientAppointmentApi = (id: string, data: any) =>
+  client.put(`/appointments/${id}`, data);

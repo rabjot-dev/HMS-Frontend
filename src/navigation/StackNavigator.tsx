@@ -5,6 +5,7 @@ import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BookAppointmentScreen from "../screens/BookAppointmentScreen";
 import AppointmentsScreen from "../screens/AppointmentsScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 const Stack = createNativeStackNavigator();
 
 export default function StackNavigator() {
@@ -12,6 +13,7 @@ export default function StackNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
 
        <Stack.Screen

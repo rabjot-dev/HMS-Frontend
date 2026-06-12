@@ -1,128 +1,97 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getProfileApi, updateProfileApi } from "../api/patient.api";
-import InputField from "../components/InputField";
-import PrimaryButton from "../components/PrimaryButton";
+import { getPatientId } from "../utils/storage";
+import client from "../api/client";
 
 export default function ProfileScreen({ navigation }: any) {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [loaded, setLoaded] = useState(false);
 
+  // ── Edit mode state ────────────────────────────────────────────────────────
   const [editMode, setEditMode] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [editForm, setEditForm] = useState({
+  const [form, setForm] = useState({
     name: "",
     phone: "",
     email: "",
-    gender: "",
-    dob: "",
     address: "",
     bloodGroup: "",
-    height: "",
-    weight: "",
+    gender: "",
     allergies: "",
-    medicalHistory: "",
-    hasInsurance: "",
     insuranceProvider: "",
-    insurancePolicyNumber: "",
-    chiefComplaint: "",
-    emergencyContactName: "",
-    emergencyContactRelation: "",
-    emergencyContactPhone: "",
   });
 
+  // ── Load profile ───────────────────────────────────────────────────────────
   const loadProfile = async () => {
     try {
       setLoading(true);
-      const res = await getProfileApi();
-      const p = res.data.patient;
-      setProfile(p);
-      setLoaded(true);
-    } catch (err) {
-      Alert.alert("Error", "Failed to load profile");
+      const patientId = await getPatientId();
+
+      if (!patientId) {
+        Alert.alert("Session Error", "Patient ID not found. Please login again.");
+        return;
+      }
+
+      const res = await client.get(`/patients/${patientId}`);
+      if (res.data.success) {
+        const data = res.data.data;
+        setProfile(data);
+        setForm({
+          name:              data.name              ?? "",
+          phone:             data.phone             ?? "",
+          email:             data.email             ?? "",
+          address:           data.address           ?? "",
+          bloodGroup:        data.bloodGroup        ?? "",
+          gender:            data.gender            ?? "",
+          allergies:         Array.isArray(data.allergies)
+                               ? data.allergies.join(", ")
+                               : (data.allergies ?? ""),
+          insuranceProvider: data.insuranceProvider ?? "",
+        });
+      } else {
+        Alert.alert("Error", res.data.message || "Failed to load profile");
+      }
+    } catch (err: any) {
+      Alert.alert("Error", err.response?.data?.message || "Failed to load profile");
     } finally {
       setLoading(false);
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     loadProfile();
   }, []);
 
-  const openEdit = () => {
-    if (!profile) return;
-    setEditForm({
-      name: profile.name ?? "",
-      phone: profile.phone ?? "",
-      email: profile.email ?? "",
-      gender: profile.gender ?? "",
-      dob: profile.dob ? profile.dob.split("T")[0] : "",
-      address: profile.address ?? "",
-      bloodGroup: profile.bloodGroup ?? "",
-      height: profile.height?.toString() ?? "",
-      weight: profile.weight?.toString() ?? "",
-      allergies: Array.isArray(profile.allergies)
-        ? profile.allergies.join(", ")
-        : (profile.allergies ?? ""),
-      medicalHistory: Array.isArray(profile.medicalHistory)
-        ? profile.medicalHistory.join(", ")
-        : (profile.medicalHistory ?? ""),
-      hasInsurance: profile.hasInsurance ? "true" : "false",
-      insuranceProvider: profile.insuranceProvider ?? "",
-      insurancePolicyNumber: profile.insurancePolicyNumber ?? "",
-      chiefComplaint: profile.chiefComplaint ?? "",
-      emergencyContactName: profile.emergencyContact?.name ?? "",
-      emergencyContactRelation: profile.emergencyContact?.relation ?? "",
-      emergencyContactPhone: profile.emergencyContact?.phone ?? "",
-    });
-    setEditMode(true);
-  };
-
-  const saveProfile = async () => {
+  // ── Save edits ─────────────────────────────────────────────────────────────
+  const handleSave = async () => {
+    if (!form.name.trim()) {
+      Alert.alert("Required", "Name cannot be empty.");
+      return;
+    }
     try {
       setSaving(true);
+      const patientId = await getPatientId();
       const payload = {
-        name: editForm.name,
-        phone: editForm.phone,
-        email: editForm.email,
-        gender: editForm.gender.toUpperCase(),
-        dob: editForm.dob,
-        address: editForm.address,
-        bloodGroup: editForm.bloodGroup,
-        height: editForm.height ? Number(editForm.height) : undefined,
-        weight: editForm.weight ? Number(editForm.weight) : undefined,
-        allergies: editForm.allergies
-          ? editForm.allergies.split(",").map((s) => s.trim())
+        ...form,
+        allergies: form.allergies
+          ? form.allergies.split(",").map((a) => a.trim()).filter(Boolean)
           : [],
-        medicalHistory: editForm.medicalHistory
-          ? editForm.medicalHistory.split(",").map((s) => s.trim())
-          : [],
-        hasInsurance: editForm.hasInsurance === "true",
-        insuranceProvider: editForm.insuranceProvider,
-        insurancePolicyNumber: editForm.insurancePolicyNumber,
-        chiefComplaint: editForm.chiefComplaint,
-        emergencyContact: {
-          name: editForm.emergencyContactName,
-          relation: editForm.emergencyContactRelation,
-          phone: editForm.emergencyContactPhone,
-        },
       };
-
-      const res = await updateProfileApi(payload);
+      const res = await client.put(`/patients/${patientId}`, payload);
       if (res.data.success) {
-        setProfile(res.data.patient);
+        setProfile(res.data.data);
         setEditMode(false);
-        Alert.alert("Success", "Profile updated successfully");
+        Alert.alert("Success", "Profile updated successfully.");
       } else {
         Alert.alert("Error", res.data.message || "Update failed");
       }
@@ -133,162 +102,237 @@ export default function ProfileScreen({ navigation }: any) {
     }
   };
 
-  const formatDOB = (dob: string) => {
-    const date = new Date(dob);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    return `${day}-${month}-${date.getFullYear()}`;
+  const handleCancelEdit = () => {
+    if (profile) {
+      setForm({
+        name:              profile.name              ?? "",
+        phone:             profile.phone             ?? "",
+        email:             profile.email             ?? "",
+        address:           profile.address           ?? "",
+        bloodGroup:        profile.bloodGroup        ?? "",
+        gender:            profile.gender            ?? "",
+        allergies:         Array.isArray(profile.allergies)
+                             ? profile.allergies.join(", ")
+                             : (profile.allergies ?? ""),
+        insuranceProvider: profile.insuranceProvider ?? "",
+      });
+    }
+    setEditMode(false);
   };
 
-  const field = (
-    label: string,
-    key: keyof typeof editForm,
-    options?: {
-      secureTextEntry?: boolean;
-      keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
-      placeholder?: string;
-    }
-  ) => (
-    <InputField
-      key={key}
-      label={label}
-      value={editForm[key]}
-      onChangeText={(val) => setEditForm((prev) => ({ ...prev, [key]: val }))}
-      {...options}
-    />
-  );
+  const setField = (key: keyof typeof form, value: string) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
 
-  if (loading && !loaded) {
-    return (
-      <SafeAreaView style={styles.centered}>
-        <ActivityIndicator size="large" color="#2563eb" />
-      </SafeAreaView>
-    );
-  }
-
-  if (editMode) {
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#f3f4f6" }}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => setEditMode(false)}>
-            <Text style={styles.backText}>← Back</Text>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Edit Profile</Text>
-          <View style={{ width: 60 }} />
-        </View>
-
-        <ScrollView contentContainerStyle={styles.editContainer}>
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>👤 Personal Info</Text>
-            {field("Full Name", "name")}
-            {field("Phone", "phone", { keyboardType: "phone-pad" })}
-            {field("Email", "email", { keyboardType: "email-address" })}
-            {field("Gender", "gender", { placeholder: "MALE / FEMALE / OTHER" })}
-            {field("Date of Birth", "dob", { placeholder: "YYYY-MM-DD" })}
-            {field("Address", "address")}
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>🩺 Medical Info</Text>
-            {field("Blood Group", "bloodGroup", { placeholder: "A+, B-, O+…" })}
-            {field("Height (cm)", "height", { keyboardType: "numeric" })}
-            {field("Weight (kg)", "weight", { keyboardType: "numeric" })}
-            {field("Allergies", "allergies", { placeholder: "Comma separated" })}
-            {field("Medical History", "medicalHistory", { placeholder: "Comma separated" })}
-            {field("Chief Complaint", "chiefComplaint")}
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>🏥 Insurance</Text>
-            {field("Has Insurance", "hasInsurance", { placeholder: "true or false" })}
-            {field("Insurance Provider", "insuranceProvider")}
-            {field("Policy Number", "insurancePolicyNumber")}
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>🚨 Emergency Contact</Text>
-            {field("Contact Name", "emergencyContactName")}
-            {field("Relation", "emergencyContactRelation")}
-            {field("Contact Phone", "emergencyContactPhone", { keyboardType: "phone-pad" })}
-          </View>
-
-          <PrimaryButton
-            title="💾 Save Changes"
-            onPress={saveProfile}
-            loading={saving}
-            color="#10b981"
-          />
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
-
+  // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f3f4f6" }}>
+    <SafeAreaView style={styles.safeArea}>
+
+      {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: 60 }}>
           <Text style={styles.backText}>← Back</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>My Profile</Text>
-        <View style={{ width: 60 }} />
+        {!loading && profile ? (
+          <TouchableOpacity
+            style={styles.editToggleBtn}
+            onPress={() => (editMode ? handleCancelEdit() : setEditMode(true))}
+          >
+            <Text style={styles.editToggleText}>
+              {editMode ? "Cancel" : "✏️ Edit"}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={{ width: 60 }} />
+        )}
       </View>
 
-      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-        {/* Avatar card */}
-        <View style={styles.avatarCard}>
-          <Text style={styles.avatarEmoji}>👤</Text>
-          <Text style={styles.profileName}>{profile?.name}</Text>
-          <Text style={styles.profileUHID}>{profile?.UHID}</Text>
+      {loading ? (
+        <ActivityIndicator size="large" color="#2563eb" style={{ marginTop: 40 }} />
+      ) : !profile ? (
+        <View style={styles.empty}>
+          <Text style={styles.emptyIcon}>👤</Text>
+          <Text style={styles.emptyText}>Profile not found.</Text>
         </View>
+      ) : editMode ? (
 
-        {profile ? (
-          <>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>👤 Personal Details</Text>
-              <InfoRow label="Email" value={profile.email} />
-              <InfoRow label="Phone" value={profile.phone} />
-              <InfoRow label="Gender" value={profile.gender} />
-              <InfoRow label="DOB" value={formatDOB(profile.dob)} />
-              <InfoRow label="Address" value={profile.address} />
-            </View>
+        /* ── EDIT MODE ──────────────────────────────────────────────────── */
+        <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>🩺 Medical Details</Text>
-              <InfoRow label="Blood Group" value={profile.bloodGroup} />
-              <InfoRow label="Height" value={`${profile.height} cm`} />
-              <InfoRow label="Weight" value={`${profile.weight} kg`} />
-              <InfoRow label="Allergies" value={profile.allergies?.join(", ") ?? profile.allergies} />
-              <InfoRow label="History" value={profile.medicalHistory?.join(", ") ?? profile.medicalHistory} />
-            </View>
+          <View style={styles.editBanner}>
+            <Text style={styles.editBannerText}>✏️  Editing Profile — tap Cancel to discard</Text>
+          </View>
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>🏥 Insurance</Text>
-              <InfoRow label="Provider" value={profile.insuranceProvider} />
-              <InfoRow label="Policy" value={profile.insurancePolicyNumber} />
-              <InfoRow label="Status" value={profile.hasInsurance ? "Active" : "Not Available"} />
-            </View>
+          <SectionCard title="👤 Personal Information">
+            <EditField
+              label="Full Name"
+              value={form.name}
+              onChangeText={(v) => setField("name", v)}
+              placeholder="Enter full name"
+            />
+            <EditField
+              label="Gender"
+              value={form.gender}
+              onChangeText={(v) => setField("gender", v)}
+              placeholder="Male / Female / Other"
+            />
+            <EditField
+              label="Blood Group"
+              value={form.bloodGroup}
+              onChangeText={(v) => setField("bloodGroup", v)}
+              placeholder="e.g. A+, B-, O+"
+            />
+          </SectionCard>
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>🚨 Emergency Contact</Text>
-              <InfoRow label="Name" value={profile.emergencyContact?.name} />
-              <InfoRow label="Relation" value={profile.emergencyContact?.relation} />
-              <InfoRow label="Phone" value={profile.emergencyContact?.phone} />
-            </View>
+          <SectionCard title="📞 Contact Information">
+            <EditField
+              label="Phone"
+              value={form.phone}
+              onChangeText={(v) => setField("phone", v)}
+              placeholder="Enter phone number"
+              keyboardType="phone-pad"
+              autoCapitalize="none"
+            />
+            <EditField
+              label="Email"
+              value={form.email}
+              onChangeText={(v) => setField("email", v)}
+              placeholder="Enter email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <EditField
+              label="Address"
+              value={form.address}
+              onChangeText={(v) => setField("address", v)}
+              placeholder="Enter address"
+              multiline
+            />
+          </SectionCard>
 
-            <View style={{ marginHorizontal: 15, marginTop: 8 }}>
-              <PrimaryButton title="✏️ Edit Profile" onPress={openEdit} />
+          <SectionCard title="🏥 Medical Information">
+            <EditField
+              label="Allergies (comma-separated)"
+              value={form.allergies}
+              onChangeText={(v) => setField("allergies", v)}
+              placeholder="e.g. Penicillin, Pollen"
+            />
+            <EditField
+              label="Insurance Provider"
+              value={form.insuranceProvider}
+              onChangeText={(v) => setField("insuranceProvider", v)}
+              placeholder="Enter insurance provider"
+            />
+          </SectionCard>
+
+          <TouchableOpacity
+            style={[styles.saveBtn, saving && styles.saveBtnDisabled]}
+            onPress={handleSave}
+            disabled={saving}
+            activeOpacity={0.85}
+          >
+            {saving ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.saveBtnText}>💾  Save Changes</Text>
+            )}
+          </TouchableOpacity>
+
+          <View style={{ height: 30 }} />
+        </ScrollView>
+
+      ) : (
+
+        /* ── VIEW MODE ──────────────────────────────────────────────────── */
+        <ScrollView contentContainerStyle={styles.body}>
+
+          {/* Avatar + Name */}
+          <View style={styles.avatarSection}>
+            <View style={styles.avatarCircle}>
+              <Text style={styles.avatarText}>
+                {profile.name?.charAt(0).toUpperCase() ?? "P"}
+              </Text>
             </View>
-          </>
-        ) : (
-          <Text style={{ textAlign: "center", marginTop: 40, color: "#6b7280" }}>
-            No profile data found.
-          </Text>
-        )}
-      </ScrollView>
+            <Text style={styles.profileName}>{profile.name}</Text>
+            <Text style={styles.profileId}>ID: {profile.patientId ?? profile._id}</Text>
+          </View>
+
+          <SectionCard title="👤 Personal Information">
+            <InfoRow label="Full Name"     value={profile.name} />
+            <InfoRow label="Gender"        value={profile.gender} />
+            <InfoRow
+              label="Date of Birth"
+              value={
+                profile.dateOfBirth
+                  ? new Date(profile.dateOfBirth).toLocaleDateString("en-IN", {
+                      day: "2-digit", month: "long", year: "numeric",
+                    })
+                  : undefined
+              }
+            />
+            <InfoRow label="Blood Group"   value={profile.bloodGroup} />
+          </SectionCard>
+
+          <SectionCard title="📞 Contact Information">
+            <InfoRow label="Phone"   value={profile.phone} />
+            <InfoRow label="Email"   value={profile.email} />
+            <InfoRow label="Address" value={profile.address} />
+          </SectionCard>
+
+          <SectionCard title="🏥 Medical Information">
+            <InfoRow label="Assigned Doctor" value={profile.assignedDoctor?.name} />
+            <InfoRow
+              label="Allergies"
+              value={
+                Array.isArray(profile.allergies) && profile.allergies.length > 0
+                  ? profile.allergies.join(", ")
+                  : undefined
+              }
+            />
+            <InfoRow
+              label="Medical History"
+              value={
+                Array.isArray(profile.medicalHistory) && profile.medicalHistory.length > 0
+                  ? profile.medicalHistory.join(", ")
+                  : undefined
+              }
+            />
+            <InfoRow label="Insurance" value={profile.insuranceProvider} />
+          </SectionCard>
+
+          <SectionCard title="🔒 Account">
+            <InfoRow label="Status" value={profile.status} />
+            <InfoRow
+              label="Joined"
+              value={
+                profile.createdAt
+                  ? new Date(profile.createdAt).toLocaleDateString("en-IN", {
+                      day: "2-digit", month: "long", year: "numeric",
+                    })
+                  : undefined
+              }
+            />
+          </SectionCard>
+
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 }
 
+// ─── Section Card ─────────────────────────────────────────────────────────────
+function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>{title}</Text>
+      <View style={styles.divider} />
+      {children}
+    </View>
+  );
+}
+
+// ─── View mode row ────────────────────────────────────────────────────────────
 function InfoRow({ label, value }: { label: string; value?: string }) {
   return (
     <View style={styles.infoRow}>
@@ -298,95 +342,113 @@ function InfoRow({ label, value }: { label: string; value?: string }) {
   );
 }
 
+// ─── Edit mode field ──────────────────────────────────────────────────────────
+function EditField({
+  label, value, onChangeText, placeholder, keyboardType, autoCapitalize, multiline,
+}: {
+  label: string;
+  value: string;
+  onChangeText: (v: string) => void;
+  placeholder?: string;
+  keyboardType?: any;
+  autoCapitalize?: any;
+  multiline?: boolean;
+}) {
+  return (
+    <View style={styles.editFieldWrapper}>
+      <Text style={styles.editFieldLabel}>{label}</Text>
+      <TextInput
+        style={[styles.editFieldInput, multiline && styles.editFieldInputMultiline]}
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        placeholderTextColor="#9ca3af"
+        keyboardType={keyboardType ?? "default"}
+        autoCapitalize={autoCapitalize ?? "words"}
+        multiline={multiline ?? false}
+      />
+    </View>
+  );
+}
+
+// ─── Styles ───────────────────────────────────────────────────────────────────
+const BLUE       = "#2563eb";
+const BLUE_LIGHT = "#eff6ff";
+
 const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  safeArea: { flex: 1, backgroundColor: "#f3f4f6" },
+
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#2563eb",
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+    backgroundColor: BLUE, paddingHorizontal: 16, paddingVertical: 16,
   },
-  backText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-    width: 60,
+  backText:      { color: "#fff", fontSize: 16, fontWeight: "bold", width: 60 },
+  headerTitle:   { color: "#fff", fontSize: 20, fontWeight: "bold" },
+  editToggleBtn: {
+    backgroundColor: "rgba(255,255,255,0.2)", paddingHorizontal: 12,
+    paddingVertical: 6, borderRadius: 8,
   },
-  headerTitle: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "bold",
+  editToggleText: { color: "#fff", fontWeight: "700", fontSize: 13 },
+
+  body: { padding: 16, paddingBottom: 40 },
+
+  empty:     { alignItems: "center", marginTop: 80 },
+  emptyIcon: { fontSize: 48, marginBottom: 12 },
+  emptyText: { fontSize: 16, color: "#6b7280" },
+
+  avatarSection: {
+    alignItems: "center", marginBottom: 20, paddingVertical: 24,
+    backgroundColor: "#fff", borderRadius: 16,
+    elevation: 3, shadowColor: "#000", shadowOpacity: 0.07,
+    shadowRadius: 6, shadowOffset: { width: 0, height: 2 },
   },
-  avatarCard: {
-    backgroundColor: "#2563eb",
-    alignItems: "center",
-    paddingVertical: 28,
-    paddingBottom: 32,
-    borderBottomLeftRadius: 28,
-    borderBottomRightRadius: 28,
-    marginBottom: 8,
+  avatarCircle: {
+    width: 80, height: 80, borderRadius: 40,
+    backgroundColor: BLUE, alignItems: "center",
+    justifyContent: "center", marginBottom: 12,
   },
-  avatarEmoji: {
-    fontSize: 52,
-    backgroundColor: "#fff",
-    borderRadius: 50,
-    padding: 8,
-    marginBottom: 10,
-    overflow: "hidden",
+  avatarText:  { fontSize: 34, color: "#fff", fontWeight: "bold" },
+  profileName: { fontSize: 22, fontWeight: "bold", color: "#111827", marginBottom: 4 },
+  profileId:   { fontSize: 12, color: "#9ca3af" },
+
+  editBanner: {
+    backgroundColor: "#fef3c7", borderRadius: 10, padding: 12,
+    marginBottom: 14, alignItems: "center",
+    borderWidth: 1, borderColor: "#fcd34d",
   },
-  profileName: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#fff",
+  editBannerText: { color: "#92400e", fontWeight: "700", fontSize: 13 },
+
+  card: {
+    backgroundColor: "#fff", borderRadius: 14, padding: 16,
+    marginBottom: 14, elevation: 2, shadowColor: "#000",
+    shadowOpacity: 0.05, shadowRadius: 5, shadowOffset: { width: 0, height: 1 },
   },
-  profileUHID: {
-    fontSize: 13,
-    color: "#dbeafe",
-    marginTop: 4,
-  },
-  section: {
-    backgroundColor: "#fff",
-    marginHorizontal: 15,
-    marginTop: 15,
-    padding: 16,
-    borderRadius: 14,
-    elevation: 2,
-    gap: 10,
-  },
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "#2563eb",
-    marginBottom: 4,
-  },
+  cardTitle: { fontSize: 14, fontWeight: "700", color: BLUE, marginBottom: 10 },
+  divider:   { height: 1, backgroundColor: "#f3f4f6", marginBottom: 10 },
+
   infoRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: "#f3f4f6",
-    paddingBottom: 8,
+    flexDirection: "row", justifyContent: "space-between",
+    alignItems: "flex-start", paddingVertical: 7,
+    borderBottomWidth: 1, borderBottomColor: "#f9fafb",
   },
-  infoLabel: {
-    fontSize: 13,
-    color: "#6b7280",
-    fontWeight: "600",
-    flex: 1,
+  infoLabel: { fontSize: 13, color: "#6b7280", fontWeight: "600", flex: 1 },
+  infoValue: { fontSize: 13, color: "#111827", flex: 1.5, textAlign: "right" },
+
+  editFieldWrapper: { marginBottom: 14 },
+  editFieldLabel:   { fontSize: 12, fontWeight: "600", color: "#6b7280", marginBottom: 5 },
+  editFieldInput: {
+    borderWidth: 1.5, borderColor: "#d1d5db", borderRadius: 10,
+    paddingHorizontal: 13, paddingVertical: 11,
+    fontSize: 14, color: "#111827", backgroundColor: "#f9fafb",
   },
-  infoValue: {
-    fontSize: 13,
-    color: "#111827",
-    flex: 2,
-    textAlign: "right",
+  editFieldInputMultiline: { minHeight: 80, textAlignVertical: "top" },
+
+  saveBtn: {
+    marginTop: 8, backgroundColor: BLUE, borderRadius: 12,
+    paddingVertical: 15, alignItems: "center",
+    elevation: 3, shadowColor: BLUE, shadowOpacity: 0.3,
+    shadowRadius: 6, shadowOffset: { width: 0, height: 3 },
   },
-  editContainer: {
-    padding: 15,
-    paddingBottom: 40,
-    gap: 4,
-  },
+  saveBtnDisabled: { opacity: 0.6 },
+  saveBtnText:     { color: "#fff", fontWeight: "bold", fontSize: 15 },
 });
