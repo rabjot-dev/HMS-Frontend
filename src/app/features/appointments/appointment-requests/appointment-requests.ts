@@ -1,0 +1,110 @@
+import {
+  Component,
+  OnInit,
+} from '@angular/core';
+
+import {
+  CommonModule,
+} from '@angular/common';
+
+import {
+  AppointmentService,
+} from '../../../core/services/appointment';
+
+@Component({
+  selector:
+    'app-appointment-requests',
+
+  standalone: true,
+
+  imports: [
+    CommonModule,
+  ],
+
+  templateUrl:
+    './appointment-requests.html',
+
+  styleUrls: [
+    './appointment-requests.css',
+  ],
+})
+export class AppointmentRequestsComponent
+implements OnInit {
+
+  appointments:
+    any[] = [];
+
+  loading =
+    false;
+
+  constructor(
+    private readonly appointmentService:
+      AppointmentService
+  ) {}
+
+  ngOnInit(): void {
+
+    this.loadPendingAppointments();
+
+  }
+
+  loadPendingAppointments(): void {
+
+    this.loading =
+      true;
+
+    this.appointmentService
+      .getPendingAppointments()
+      .subscribe({
+
+        next:
+          (response) => {
+
+            this.appointments =
+              response.data;
+
+            this.loading =
+              false;
+          },
+
+        error:
+          () => {
+
+            this.loading =
+              false;
+          },
+      });
+  }
+
+  approve(
+    id: string
+  ): void {
+
+    this.appointmentService
+      .approveAppointment(id)
+      .subscribe({
+
+        next:
+          () => {
+
+            this.loadPendingAppointments();
+          },
+      });
+  }
+
+  reject(
+    id: string
+  ): void {
+
+    this.appointmentService
+      .rejectAppointment(id)
+      .subscribe({
+
+        next:
+          () => {
+
+            this.loadPendingAppointments();
+          },
+      });
+  }
+}

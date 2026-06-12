@@ -214,6 +214,14 @@ export const routes: Routes = [
         component: AppointmentList
       },
       {
+        path: 'appointments/requests',
+
+        loadComponent: () =>
+          import(
+            './features/appointments/appointment-requests/appointment-requests'
+          ).then((m) => m.AppointmentRequestsComponent)
+      },
+      {
         path: 'appointments/edit/:id',
 
         component: EditAppointment
