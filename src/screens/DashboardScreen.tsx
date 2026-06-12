@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -9,9 +9,29 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { removeToken } from "../utils/storage";
-import PrimaryButton from "../components/PrimaryButton";
+import { getProfileApi } from "../api/patient.api";
 
 export default function DashboardScreen({ navigation }: any) {
+  const [patientName, setPatientName] = useState("");
+  const [patientId, setPatientId] = useState("");
+
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  const loadDashboardData = async () => {
+    try {
+      const profileRes = await getProfileApi();
+      const p = profileRes.data?.data;
+      if (p) {
+        setPatientName(`${p.firstName} ${p.lastName}`);
+        setPatientId(p.patientId ?? "");
+      }
+    } catch (err) {
+      // fail silently
+    }
+  };
+
   const handleLogout = async () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
       { text: "Cancel", style: "cancel" },
@@ -20,132 +40,171 @@ export default function DashboardScreen({ navigation }: any) {
         style: "destructive",
         onPress: async () => {
           await removeToken();
-          navigation.replace("LoginScreen");
+          navigation.replace("Login");
         },
       },
     ]);
   };
 
+  const initials = patientName
+    ? patientName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    : "P";
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>Patient Dashboard</Text>
-          <TouchableOpacity
-            style={styles.profileIconBtn}
-            onPress={() => navigation.navigate("ProfileScreen")}
-          >
-            <Text style={{ fontSize: 22 }}>👤</Text>
-          </TouchableOpacity>
+      <ScrollView showsVerticalScrollIndicator={false}>
+
+        {/* ── Top Header ── */}
+        <View style={styles.headerBg}>
+          <View style={styles.headerRow}>
+            <View>
+              <Text style={styles.greeting}>Good day 👋</Text>
+              <Text style={styles.patientName}>
+                {patientName || "Patient"}
+              </Text>
+              {patientId ? (
+                <Text style={styles.patientId}>ID: {patientId}</Text>
+              ) : null}
+            </View>
+            <TouchableOpacity
+              style={styles.avatarBtn}
+              onPress={() => navigation.navigate("Profile")}
+            >
+              <Text style={styles.avatarText}>{initials}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
-        {/* Stat cards */}
-        <View style={styles.cardRow}>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>3</Text>
-            <Text style={styles.statLabel}>Today's Appointments</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>--</Text>
-            <Text style={styles.statLabel}>Upcoming</Text>
-          </View>
-        </View>
-
-        {/* Quick Actions */}
-        <View style={styles.actionsContainer}>
+        {/* ── Quick Actions ── */}
+        <View style={styles.body}>
           <Text style={styles.sectionTitle}>Quick Actions</Text>
 
-          <PrimaryButton
-            title="📅 View Appointments"
-            onPress={() => navigation.navigate("AppointmentsScreen")}
-          />
-
-          <PrimaryButton
-            title="📝 Book Appointment"
-            onPress={() => navigation.navigate("BookAppointmentScreen")}
-            color="#10b981"
-          />
-
-          <PrimaryButton
-            title="👤 My Profile"
-            onPress={() => navigation.navigate("ProfileScreen")}
-            color="#7c3aed"
-          />
-
-          <PrimaryButton
-            title="🚪 Logout"
-            onPress={handleLogout}
-            color="#ef4444"
-          />
+          <View style={styles.actionsGrid}>
+            <ActionCard
+              icon="📋"
+              label="View Appointments"
+              color="#eff6ff"
+              iconBg="#2563eb"
+              onPress={() => navigation.navigate("Appointments")}
+            />
+            <ActionCard
+              icon="➕"
+              label="Book Appointment"
+              color="#f0fdf4"
+              iconBg="#16a34a"
+              onPress={() => navigation.navigate("BookAppointment")}
+            />
+            <ActionCard
+              icon="👤"
+              label="My Profile"
+              color="#faf5ff"
+              iconBg="#7c3aed"
+              onPress={() => navigation.navigate("Profile")}
+            />
+            <ActionCard
+              icon="🚪"
+              label="Logout"
+              color="#fff1f2"
+              iconBg="#dc2626"
+              onPress={handleLogout}
+            />
+          </View>
         </View>
+
       </ScrollView>
     </SafeAreaView>
   );
 }
 
+function ActionCard({
+  icon, label, color, iconBg, onPress,
+}: {
+  icon: string; label: string; color: string; iconBg: string; onPress: () => void;
+}) {
+  return (
+    <TouchableOpacity
+      style={[actionStyles.card, { backgroundColor: color }]}
+      onPress={onPress}
+      activeOpacity={0.75}
+    >
+      <View style={[actionStyles.iconCircle, { backgroundColor: iconBg }]}>
+        <Text style={actionStyles.icon}>{icon}</Text>
+      </View>
+      <Text style={actionStyles.label}>{label}</Text>
+    </TouchableOpacity>
+  );
+}
+
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f3f4f6",
+  safeArea: { flex: 1, backgroundColor: "#f0f4ff" },
+
+  headerBg: {
+    backgroundColor: "#1e3a8a",
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 32,
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
   },
-  header: {
+  headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 12,
+    alignItems: "flex-start",
   },
-  title: {
-    fontSize: 26,
-    fontWeight: "bold",
-    color: "#1f2937",
-  },
-  profileIconBtn: {
-    width: 44,
-    height: 44,
-    backgroundColor: "#dbeafe",
-    borderRadius: 22,
+  greeting:    { color: "#93c5fd", fontSize: 13, marginBottom: 2 },
+  patientName: { color: "#fff", fontSize: 22, fontWeight: "bold" },
+  patientId:   { color: "#93c5fd", fontSize: 12, marginTop: 2 },
+  avatarBtn: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    backgroundColor: "#3b82f6",
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#93c5fd",
   },
-  cardRow: {
-    flexDirection: "row",
-    paddingHorizontal: 15,
-    marginBottom: 20,
-    gap: 12,
-  },
-  statCard: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 14,
-    alignItems: "center",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-  },
-  statNumber: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "#2563eb",
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: "#6b7280",
-    textAlign: "center",
-  },
-  actionsContainer: {
-    paddingHorizontal: 15,
-  },
+  avatarText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+
+  body:         { padding: 20 },
   sectionTitle: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#1f2937",
     marginBottom: 14,
+  },
+  actionsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
+  },
+});
+
+const actionStyles = StyleSheet.create({
+  card: {
+    width: "47%",
+    borderRadius: 16,
+    padding: 18,
+    alignItems: "center",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  iconCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  icon:  { fontSize: 22 },
+  label: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#1f2937",
+    textAlign: "center",
   },
 });
