@@ -110,7 +110,7 @@ export default function BookAppointmentScreen({ navigation }: any) {
       setSlots(Array.isArray(data) ? data : []);
     } catch (err: any) {
       setSlots([]);
-      Alert.alert("Error", err?.response?.data?.message || "Failed to load available slots");
+     
     } finally {
       setLoadingSlots(false);
     }
@@ -289,7 +289,7 @@ export default function BookAppointmentScreen({ navigation }: any) {
           </View>
         ) : slots.length === 0 ? (
           <View style={s.hintBox}>
-            <Text style={s.hintText}>😔  No slots available for this date. Try another day.</Text>
+            <Text style={s.hintText}>No slots available for this date. Try another day.</Text>
           </View>
         ) : (
           <View style={s.slotsGrid}>
