@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AppointmentService } from '../../../core/services/appointment';
 import { ToastService } from '../../../core/services/toast';
-import { ChangeDetectorRef } from '@angular/core';
+
 @Component({
   selector: 'app-pending-appointments',
   standalone: true,
@@ -19,7 +19,7 @@ export class PendingAppointmentsComponent implements OnInit {
   constructor(
     private appointmentService: AppointmentService,
     private toast: ToastService,
-    private cdr:ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -71,13 +71,15 @@ export class PendingAppointmentsComponent implements OnInit {
     });
   }
 
+  // ✅ Fixed: patientId has firstName + lastName
   getPatientName(appt: any): string {
     const p = appt.patientId;
     return p ? `${p.firstName} ${p.lastName}` : 'N/A';
   }
 
+  // ✅ Fixed: doctorEmployeeId has single "name" field
   getDoctorName(appt: any): string {
     const d = appt.doctorEmployeeId;
-    return d ? `Dr. ${d.firstName} ${d.lastName}` : 'N/A';
+    return d ? `Dr. ${d.name}` : 'N/A';
   }
 }
