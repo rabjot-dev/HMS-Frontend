@@ -4,7 +4,7 @@ import SignupScreen from "../screens/SignupScreen";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BookAppointmentScreen from "../screens/BookAppointmentScreen";
-
+import AppointmentsScreen from "../screens/AppointmentsScreen";
 const Stack = createNativeStackNavigator();
 
 export default function StackNavigator() {
@@ -18,6 +18,7 @@ export default function StackNavigator() {
         name="BookAppointmentScreen"
         component={BookAppointmentScreen}
       />
+      <Stack.Screen name="Appointments" component={AppointmentsScreen} />
       <Stack.Screen name="Dashboard" component={DashboardScreen} />
     </Stack.Navigator>
   );

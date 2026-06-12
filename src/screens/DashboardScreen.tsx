@@ -58,7 +58,7 @@ export default function DashboardScreen({ navigation }: any) {
 
           <PrimaryButton
             title="📅 View Appointments"
-            onPress={() => navigation.navigate("AppointmentsScreen")}
+            onPress={() => navigation.navigate("Appointments")}
           />
 
           <PrimaryButton

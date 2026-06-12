@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getMyPatientAppointmentsApi } from "../api/patient.api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getPatientId } from "../utils/storage";
 
 export default function AppointmentsScreen({ navigation }: any) {
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -18,7 +20,14 @@ export default function AppointmentsScreen({ navigation }: any) {
   const loadAppointments = async () => {
     try {
       setLoading(true);
-      const res = await getMyPatientAppointmentsApi();
+      
+       const patientId = await getPatientId();
+    // use whatever key you stored it under
+
+    if (!patientId) {
+      Alert.alert("Error", "Patient ID not found. Please login again.");
+      return;
+    } const res = await getMyPatientAppointmentsApi(patientId);
       if (res.data.success) {
         setAppointments(res.data.data);
       } else {
@@ -35,14 +44,15 @@ export default function AppointmentsScreen({ navigation }: any) {
     loadAppointments();
   }, []);
 
-  const statusColor = (status: string) => {
-    switch (status?.toLowerCase()) {
-      case "confirmed": return "#10b981";
-      case "pending":   return "#f59e0b";
-      case "cancelled": return "#ef4444";
-      default:          return "#6b7280";
-    }
-  };
+ const statusColor = (status: string) => {
+  switch (status?.toUpperCase()) {
+    case "APPROVED":  return "#10b981"; // green
+    case "PENDING":   return "#f59e0b"; // yellow
+    case "REJECTED":  return "#ef4444"; // red
+    case "BOOKED":    return "#2563eb"; // blue
+    default:          return "#6b7280"; // gray
+  }
+};
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -65,37 +75,42 @@ export default function AppointmentsScreen({ navigation }: any) {
               <Text style={styles.emptyText}>No appointments found.</Text>
             </View>
           ) : (
-            appointments.map((appt) => (
-              <View key={appt._id} style={styles.card}>
-                {/* Top row: name + status badge */}
-                <View style={styles.cardHeader}>
-                  <Text style={styles.patientName}>{appt.patientName}</Text>
-                  <View style={[styles.badge, { backgroundColor: statusColor(appt.status) }]}>
-                    <Text style={styles.badgeText}>{appt.status}</Text>
-                  </View>
-                </View>
+           appointments.map((appt) => (
+  <View key={appt._id} style={styles.card}>
+    
+    <View style={styles.cardHeader}>
+      {/* patientName comes from populated patientId */}
+      <Text style={styles.patientName}>
+        {appt.patientId?.name ?? "Patient"}
+      </Text>
+      {/* use approvalStatus instead of status */}
+      <View style={[styles.badge, { backgroundColor: statusColor(appt.approvalStatus) }]}>
+        <Text style={styles.badgeText}>{appt.approvalStatus}</Text>
+      </View>
+    </View>
 
-                <Text style={styles.apptId}>ID: {appt.appointmentId}</Text>
+    <Text style={styles.apptId}>ID: {appt.appointmentId}</Text>
+    <View style={styles.divider} />
 
-                <View style={styles.divider} />
+    {/* doctorEmployeeId is the populated doctor object */}
+    <InfoRow icon="👨‍⚕️" label="Doctor"  value={appt.doctorEmployeeId?.name} />
+    <InfoRow
+      icon="📅"
+      label="Date"
+      value={new Date(appt.appointmentDate).toLocaleDateString("en-IN", {
+        day: "2-digit", month: "short", year: "numeric",
+      })}
+    />
+    {/* timeSlot instead of appointmentTime */}
+    <InfoRow icon="🕐" label="Time"   value={appt.timeSlot} />
+    {/* appointmentType instead of type */}
+    <InfoRow icon="🏷️" label="Type"   value={appt.appointmentType} />
+    {appt.notes ? (
+      <InfoRow icon="📝" label="Notes" value={appt.notes} />
+    ) : null}
 
-                <InfoRow icon="👨‍⚕️" label="Doctor" value={appt.doctorName} />
-                <InfoRow
-                  icon="📅"
-                  label="Date"
-                  value={new Date(appt.appointmentDate).toLocaleDateString("en-IN", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                />
-                <InfoRow icon="🕐" label="Time" value={appt.appointmentTime} />
-                <InfoRow icon="🏷️" label="Type" value={appt.type} />
-                {appt.notes ? (
-                  <InfoRow icon="📝" label="Notes" value={appt.notes} />
-                ) : null}
-              </View>
-            ))
+  </View>
+))
           )}
         </ScrollView>
       )}

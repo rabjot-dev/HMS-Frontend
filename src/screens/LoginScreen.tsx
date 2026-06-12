@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { loginApi } from "../api/auth.api";
-import { storeToken } from "../utils/storage";
+import { storeToken,storePatientId } from "../utils/storage";
 
+import { jwtDecode } from "jwt-decode";
 export default function LoginScreen({ navigation }: any) {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +32,8 @@ export default function LoginScreen({ navigation }: any) {
       // -------------------------
       // TOKEN EXTRACTION (SAFE)
       // -------------------------
-      const token = res.data?.token || res.data?.data?.token;
+    const token = res.data?.data?.token;
+const userId = res.data?.data?.user?._id;
 
       if (!token) {
         throw new Error("Token not received from server");
@@ -41,6 +43,14 @@ export default function LoginScreen({ navigation }: any) {
       // STORE TOKEN SAFELY
       // -------------------------
       await storeToken(token);
+      const decoded: any = jwtDecode(token);
+      const patientId = decoded?.patientId;
+      
+
+
+      if (patientId) {
+  await storePatientId(patientId);
+}
 
       // -------------------------
       // NAVIGATION SAFETY CHECK

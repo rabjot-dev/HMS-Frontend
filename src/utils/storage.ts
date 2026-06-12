@@ -7,7 +7,12 @@ export const storeToken = async (token: string) => {
     console.log("Storage Error:", error);
   }
 };
-
+export const storePatientId = async (patientId: string) => {
+  await AsyncStorage.setItem("patientId", patientId);
+};
+export const getPatientId = async (): Promise<string | null> => {
+  return await AsyncStorage.getItem("patientId");
+};
 export const getToken = async () => {
   return await AsyncStorage.getItem("token");
 };
