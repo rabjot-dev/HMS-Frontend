@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors
+} from '@angular/forms';
 
 import { ToastService } from '../../../core/services/toast';
 import { PatientService } from '../../../core/services/patient';
@@ -15,6 +22,7 @@ import { PatientService } from '../../../core/services/patient';
 export class AddPatient {
   currentStep = 1;
   isSubmitting = false;
+  maxDate = new Date().toISOString().split('T')[0];
 
   patientForm!: FormGroup;
 
@@ -25,9 +33,27 @@ export class AddPatient {
   ) {
     this.patientForm = this.fb.group({
       // Basic Information
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      dateOfBirth: ['', Validators.required],
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
+      dateOfBirth: [
+        '',
+        [
+          Validators.required,
+          this.notFutureDateValidator
+        ]
+      ],
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
       maritalStatus: ['', Validators.required],
@@ -36,15 +62,45 @@ export class AddPatient {
       countryCode: ['+91', Validators.required],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       email: ['', Validators.required],
-      address: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
+      address: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
+      city: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
+      state: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
       pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
       country: ['India'],
 
       // Emergency Contact
-      emergencyContactName: ['', Validators.required],
-      emergencyContactPhone: ['', Validators.required],
+      emergencyContactName: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
+      emergencyContactPhone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\d{10}$/)
+        ]
+      ],
 
       // Medical Information
       medicalHistory: [''],
@@ -64,6 +120,20 @@ export class AddPatient {
       department: [''],
       patientType: ['', Validators.required]
     });
+  }
+
+  notFutureDateValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) {
+      return null;
+    }
+
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+
+    selectedDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    return selectedDate > today ? { futureDate: true } : null;
   }
 
   // Move to next step after validating current step
@@ -172,9 +242,29 @@ export class AddPatient {
 
       error: (error) => {
         console.log('FULL ERROR =>', error);
+        console.log('ERROR BODY =>', error?.error);
         console.log('VALIDATION ERRORS =>', error?.error?.errors);
-         const message = error?.error?.message || 'Failed to register patient';
-  alert(message);
+        console.log(
+          'VALIDATION ERRORS JSON =>',
+          JSON.stringify(error?.error?.errors, null, 2)
+        );
+
+        const validationMessage = error?.error?.errors
+          ?.map((validationError: any) => {
+            const field = validationError.path || validationError.param;
+
+            return field
+              ? `${field}: ${validationError.msg}`
+              : validationError.msg;
+          })
+          .join('\n');
+
+        const message =
+          validationMessage ||
+          error?.error?.message ||
+          'Failed to register patient';
+
+        alert(message);
         // alert(
         //   JSON.stringify(
         //     error?.error?.errors,

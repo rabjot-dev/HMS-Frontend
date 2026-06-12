@@ -43,7 +43,10 @@
         <div class="form-field">
           <input type="text" placeholder="First Name" formControlName="firstName" />
           @if(patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched){
-          <span class="error-text">First Name is required</span>
+          <span class="error-text">
+            @if(patientForm.get('firstName')?.errors?.['required']){ First Name is required }
+            @else if(patientForm.get('firstName')?.errors?.['pattern']){ Only letters are allowed }
+          </span>
           }
         </div>
 
@@ -51,16 +54,22 @@
         <div class="form-field">
           <input type="text" placeholder="Last Name" formControlName="lastName" />
           @if(patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched){
-          <span class="error-text">Last Name is required</span>
+          <span class="error-text">
+            @if(patientForm.get('lastName')?.errors?.['required']){ Last Name is required }
+            @else if(patientForm.get('lastName')?.errors?.['pattern']){ Only letters are allowed }
+          </span>
           }
         </div>
 
         <!-- Date of Birth -->
         <div class="form-field">
           <label class="field-label">Date of Birth</label>
-          <input type="date" formControlName="dateOfBirth" />
+          <input type="date" formControlName="dateOfBirth" [max]="maxDate" />
           @if(patientForm.get('dateOfBirth')?.invalid && patientForm.get('dateOfBirth')?.touched){
-          <span class="error-text">Date of Birth is required</span>
+          <span class="error-text">
+            @if(patientForm.get('dateOfBirth')?.errors?.['required']){ Date of Birth is required }
+            @else if(patientForm.get('dateOfBirth')?.errors?.['futureDate']){ Date of Birth cannot be in the future }
+          </span>
           }
         </div>
 
@@ -151,7 +160,10 @@
         <div class="form-field">
           <input type="text" placeholder="Address" formControlName="address" />
           @if(patientForm.get('address')?.invalid && patientForm.get('address')?.touched){
-          <span class="error-text">Address is required</span>
+          <span class="error-text">
+            @if(patientForm.get('address')?.errors?.['required']){ Address is required }
+            @else if(patientForm.get('address')?.errors?.['pattern']){ Only letters are allowed }
+          </span>
           }
         </div>
 
@@ -159,7 +171,10 @@
         <div class="form-field">
           <input type="text" placeholder="City" formControlName="city" />
           @if(patientForm.get('city')?.invalid && patientForm.get('city')?.touched){
-          <span class="error-text">City is required</span>
+          <span class="error-text">
+            @if(patientForm.get('city')?.errors?.['required']){ City is required }
+            @else if(patientForm.get('city')?.errors?.['pattern']){ Only letters are allowed }
+          </span>
           }
         </div>
 
@@ -167,7 +182,10 @@
         <div class="form-field">
           <input type="text" placeholder="State" formControlName="state" />
           @if(patientForm.get('state')?.invalid && patientForm.get('state')?.touched){
-          <span class="error-text">State is required</span>
+          <span class="error-text">
+            @if(patientForm.get('state')?.errors?.['required']){ State is required }
+            @else if(patientForm.get('state')?.errors?.['pattern']){ Only letters are allowed }
+          </span>
           }
         </div>
 
@@ -197,7 +215,10 @@
         <div class="form-field">
           <input type="text" placeholder="Emergency Contact Name" formControlName="emergencyContactName" />
           @if(patientForm.get('emergencyContactName')?.invalid && patientForm.get('emergencyContactName')?.touched){
-          <span class="error-text">Emergency Contact Name is required</span>
+          <span class="error-text">
+            @if(patientForm.get('emergencyContactName')?.errors?.['required']){ Emergency Contact Name is required }
+            @else if(patientForm.get('emergencyContactName')?.errors?.['pattern']){ Only letters are allowed }
+          </span>
           }
         </div>
 
