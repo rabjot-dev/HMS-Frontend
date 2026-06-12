@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import {
@@ -39,8 +40,8 @@ implements OnInit {
 
   constructor(
     private readonly appointmentService:
-      AppointmentService
-  ) {}
+      AppointmentService,
+      private readonly cdr: ChangeDetectorRef  ) {}
 
   ngOnInit(): void {
 
@@ -65,6 +66,7 @@ implements OnInit {
 
             this.loading =
               false;
+              this.cdr.detectChanges();
           },
 
         error:
