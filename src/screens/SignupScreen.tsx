@@ -42,7 +42,7 @@ export default function SignupScreen({ navigation }: any) {
       setLoading(true);
       await signupApi(form);
       Alert.alert("Success", "Account created successfully", [
-        { text: "OK", onPress: () => navigation.replace("Login") },
+        { text: "OK", onPress: () => navigation.replace("LoginScreen") },
       ]);
     } catch (err: any) {
       Alert.alert("Error", err.response?.data?.message || "Signup failed");
@@ -107,7 +107,7 @@ export default function SignupScreen({ navigation }: any) {
 
         <PrimaryButton title="Sign Up" onPress={handleSignup} loading={loading} />
 
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
           <Text style={styles.link}>Already have an account? Login</Text>
         </TouchableOpacity>
       </ScrollView>

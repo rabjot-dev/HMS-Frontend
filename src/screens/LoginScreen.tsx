@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { loginApi } from "../api/auth.api";
-import { storeToken,storePatientId } from "../utils/storage";
-
+import { storeToken, storePatientId } from "../utils/storage";
 import { jwtDecode } from "jwt-decode";
+
 export default function LoginScreen({ navigation }: any) {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
@@ -19,49 +19,40 @@ export default function LoginScreen({ navigation }: any) {
     try {
       setLoading(true);
 
-      // -------------------------
-      // API CALL
-      // -------------------------
-      const res = await loginApi({
-        loginId,
-        password,
-      });
-
+      const res = await loginApi({ loginId, password });
       console.log("LOGIN RESPONSE:", res.data);
 
-      // -------------------------
-      // TOKEN EXTRACTION (SAFE)
-      // -------------------------
-    const token = res.data?.data?.token;
-const userId = res.data?.data?.user?._id;
+      const token = res.data?.data?.token;
+      const user = res.data?.data?.user;
 
       if (!token) {
         throw new Error("Token not received from server");
       }
 
-      // -------------------------
-      // STORE TOKEN SAFELY
-      // -------------------------
       await storeToken(token);
+
       const decoded: any = jwtDecode(token);
       const patientId = decoded?.patientId;
-      
-
-
       if (patientId) {
-  await storePatientId(patientId);
-}
+        await storePatientId(patientId);
+      }
 
-      // -------------------------
-      // NAVIGATION SAFETY CHECK
-      // -------------------------
-      if (navigation.canGoBack()) {
+      // ✅ Check if this is the user's first login (temp password)
+     const firstLogin = user?.isFirstLogin;
+      const userEmail = user?.email;
+
+      if (firstLogin) {
+        // Redirect to reset password — user must change temp password
+        navigation.replace("ResetPassword", {
+          email: userEmail,
+          isFirstLogin: true,
+        });
+      } else {
+        // Normal flow — go to Dashboard
         navigation.reset({
           index: 0,
           routes: [{ name: "Dashboard" }],
         });
-      } else {
-        navigation.navigate("Dashboard");
       }
     } catch (err: any) {
       console.log("LOGIN ERROR:", err.response?.data || err.message);
@@ -102,10 +93,7 @@ const userId = res.data?.data?.user?._id;
         Login
       </Button>
 
-      <Text
-        style={styles.link}
-        onPress={() => navigation.navigate("Signup")}
-      >
+      <Text style={styles.link} onPress={() => navigation.navigate("Signup")}>
         Create new account
       </Text>
 
