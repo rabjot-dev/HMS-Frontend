@@ -20,6 +20,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "expo": {
+    "plugins": [
+      ["expo-location", { "locationWhenInUsePermission": "Allow app to use your location to fill address." }]
+    ]
+  },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },

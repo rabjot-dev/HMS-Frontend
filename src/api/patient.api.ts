@@ -14,3 +14,13 @@ export const getMyPatientAppointmentsApi = (patientId: string) =>
 
 export const updatePatientAppointmentApi = (id: string, data: any) =>
   client.put(`/appointments/${id}`, data);
+
+
+export const getAvailableSlotsApi = (
+  doctorId: string,
+  appointmentDate: string
+) => {
+  return client.get(
+    `/appointments/available-slots?doctorId=${doctorId}&appointmentDate=${appointmentDate}`
+  );
+};

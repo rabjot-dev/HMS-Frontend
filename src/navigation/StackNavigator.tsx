@@ -6,6 +6,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BookAppointmentScreen from "../screens/BookAppointmentScreen";
 import AppointmentsScreen from "../screens/AppointmentsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import EditPersonalInfoScreen from "../screens/EditPersonalInfoScreen";
+import EditContactInfoScreen from "../screens/EditContactInfoScreen";
+import EditMedicalInfoScreen from "../screens/EditMedicalInfoScreen";
+import EditEmergencyContactScreen from "../screens/EditContactInfoScreen";
+import EditInsuranceScreen from "../screens/EditInsuranceScreen";
 const Stack = createNativeStackNavigator();
 
 export default function StackNavigator() {
@@ -22,6 +27,11 @@ export default function StackNavigator() {
       />
       <Stack.Screen name="Appointments" component={AppointmentsScreen} />
       <Stack.Screen name="Dashboard" component={DashboardScreen} />
+      <Stack.Screen name="EditPersonalInfo"    component={EditPersonalInfoScreen} />
+<Stack.Screen name="EditContactInfo"     component={EditContactInfoScreen} />
+<Stack.Screen name="EditEmergencyContact" component={EditEmergencyContactScreen} />
+<Stack.Screen name="EditMedicalInfo"     component={EditMedicalInfoScreen} />
+<Stack.Screen name="EditInsurance"       component={EditInsuranceScreen} />
     </Stack.Navigator>
   );
 }
