@@ -75,6 +75,23 @@ function profileToForm(data: any): ProfileForm {
   };
 }
 
+// ─── Extracted Helpers ────────────────────────────────────────────────────────
+
+const fetchProfile = async (patientId: string) => {
+  const res = await client.get(`/patients/${patientId}`);
+  if (!res.data.success) {
+    throw new Error(res.data.message || "Failed to load profile");
+  }
+  return res.data.data;
+};
+
+const buildPayload = (merged: ProfileForm) => ({
+  ...merged,
+  allergies:          toArray(merged.allergies),
+  chronicDiseases:    toArray(merged.chronicDiseases),
+  currentMedications: toArray(merged.currentMedications),
+});
+
 // ─── Main Screen ──────────────────────────────────────────────────────────────
 export default function ProfileScreen({ navigation }: any) {
   const [profile, setProfile] = useState<any>(null);
@@ -89,15 +106,11 @@ export default function ProfileScreen({ navigation }: any) {
         Alert.alert("Session Error", "Please login again.");
         return;
       }
-      const res = await client.get(`/patients/${patientId}`);
-      if (res.data.success) {
-        setProfile(res.data.data);
-        setForm(profileToForm(res.data.data));
-      } else {
-        Alert.alert("Error", res.data.message || "Failed to load profile");
-      }
+      const data = await fetchProfile(patientId);
+      setProfile(data);
+      setForm(profileToForm(data));
     } catch (err: any) {
-      Alert.alert("Error", err.response?.data?.message || "Failed to load profile");
+      Alert.alert("Error", err.response?.data?.message || err.message || "Failed to load profile");
     } finally {
       setLoading(false);
     }
@@ -109,31 +122,25 @@ export default function ProfileScreen({ navigation }: any) {
   const savePartial = async (partial: Partial<ProfileForm>) => {
     const patientId = await getPatientId();
     const merged    = { ...form, ...partial };
-    const payload   = {
-      ...merged,
-      allergies:          toArray(merged.allergies),
-      chronicDiseases:    toArray(merged.chronicDiseases),
-      currentMedications: toArray(merged.currentMedications),
-    };
-    const res = await client.put(`/patients/${patientId}`, payload);
-    if (res.data.success) {
-      setProfile(res.data.data);
-      setForm(profileToForm(res.data.data));
-    } else {
+    const payload   = buildPayload(merged);
+    const res       = await client.put(`/patients/${patientId}`, payload);
+    if (!res.data.success) {
       throw new Error(res.data.message || "Update failed");
     }
+    setProfile(res.data.data);
+    setForm(profileToForm(res.data.data));
   };
 
-  // ── Navigate to edit screens with pre-filled values + onSave callback ────────
+  // ── Navigate to edit screens ──────────────────────────────────────────────
   const editPersonal = () =>
     navigation.navigate("EditPersonalInfo", {
       initialValues: {
-        firstName:    form.firstName,
-        lastName:     form.lastName,
-        gender:       form.gender,
-        bloodGroup:   form.bloodGroup,
-        maritalStatus:form.maritalStatus,
-        dateOfBirth:  form.dateOfBirth,
+        firstName:     form.firstName,
+        lastName:      form.lastName,
+        gender:        form.gender,
+        bloodGroup:    form.bloodGroup,
+        maritalStatus: form.maritalStatus,
+        dateOfBirth:   form.dateOfBirth,
       },
       onSave: async (vals: any) => savePartial(vals),
     });
@@ -141,7 +148,7 @@ export default function ProfileScreen({ navigation }: any) {
   const editContact = () =>
     navigation.navigate("EditContactInfo", {
       initialValues: {
-        email:   form.email, // passed as read-only display
+        email:   form.email,
         phone:   form.phone,
         address: form.address,
         city:    form.city,
@@ -240,28 +247,22 @@ export default function ProfileScreen({ navigation }: any) {
           </View>
 
           {/* Sections */}
-          <SectionCard
-            icon="👤" title="Personal Information"
-            onEdit={editPersonal}
-          >
-            <InfoRow label="First Name"    value={profile.firstName} />
-            <InfoRow label="Last Name"     value={profile.lastName} />
-            <InfoRow label="Gender"        value={profile.gender} />
-            <InfoRow label="Date of Birth" value={
+          <SectionCard icon="👤" title="Personal Information" onEdit={editPersonal}>
+            <InfoRow label="First Name"     value={profile.firstName} />
+            <InfoRow label="Last Name"      value={profile.lastName} />
+            <InfoRow label="Gender"         value={profile.gender} />
+            <InfoRow label="Date of Birth"  value={
               profile.dateOfBirth
                 ? new Date(profile.dateOfBirth).toLocaleDateString("en-IN", {
                     day: "2-digit", month: "long", year: "numeric",
                   })
                 : undefined
             } />
-            <InfoRow label="Blood Group"   value={profile.bloodGroup} />
+            <InfoRow label="Blood Group"    value={profile.bloodGroup} />
             <InfoRow label="Marital Status" value={profile.maritalStatus} />
           </SectionCard>
 
-          <SectionCard
-            icon="📞" title="Contact Information"
-            onEdit={editContact}
-          >
+          <SectionCard icon="📞" title="Contact Information" onEdit={editContact}>
             <InfoRow label="Phone"   value={profile.phone} />
             <InfoRow label="Email"   value={profile.email} />
             <InfoRow label="Address" value={profile.address} />
@@ -271,34 +272,23 @@ export default function ProfileScreen({ navigation }: any) {
             <InfoRow label="Country" value={profile.country} />
           </SectionCard>
 
-          <SectionCard
-            icon="🚨" title="Emergency Contact"
-            onEdit={editEmergency}
-          >
+          <SectionCard icon="🚨" title="Emergency Contact" onEdit={editEmergency}>
             <InfoRow label="Name"         value={profile.emergencyContactName} />
             <InfoRow label="Phone"        value={profile.emergencyContactPhone} />
             <InfoRow label="Relationship" value={profile.relationship} />
           </SectionCard>
 
-          <SectionCard
-            icon="🏥" title="Medical Information"
-            onEdit={editMedical}
-            optional
-          >
-            <InfoRow label="Assigned Doctor" value={profile.assignedDoctor?.name} />
-            <InfoRow label="Department"      value={profile.department} />
-            <InfoRow label="Allergies"       value={toDisplay(profile.allergies)} />
+          <SectionCard icon="🏥" title="Medical Information" onEdit={editMedical} optional>
+            <InfoRow label="Assigned Doctor"  value={profile.assignedDoctor?.name} />
+            <InfoRow label="Department"       value={profile.department} />
+            <InfoRow label="Allergies"        value={toDisplay(profile.allergies)} />
             <InfoRow label="Chronic Diseases" value={toDisplay(profile.chronicDiseases)} />
-            <InfoRow label="Medications"     value={toDisplay(profile.currentMedications)} />
-            <InfoRow label="Medical History" value={profile.medicalHistory} />
-            <InfoRow label="Family History"  value={profile.familyMedicalHistory} />
+            <InfoRow label="Medications"      value={toDisplay(profile.currentMedications)} />
+            <InfoRow label="Medical History"  value={profile.medicalHistory} />
+            <InfoRow label="Family History"   value={profile.familyMedicalHistory} />
           </SectionCard>
 
-          <SectionCard
-            icon="🛡️" title="Insurance"
-            onEdit={editInsurance}
-            optional
-          >
+          <SectionCard icon="🛡️" title="Insurance" onEdit={editInsurance} optional>
             <InfoRow label="Provider"      value={profile.insuranceProvider} />
             <InfoRow label="Policy Number" value={profile.insurancePolicyNumber} />
             <InfoRow label="Expiry"        value={
@@ -306,7 +296,7 @@ export default function ProfileScreen({ navigation }: any) {
                 ? new Date(profile.insuranceExpiryDate).toLocaleDateString("en-IN")
                 : undefined
             } />
-            <InfoRow label="Coverage"      value={
+            <InfoRow label="Coverage" value={
               profile.insuranceCoverageAmount
                 ? `₹${profile.insuranceCoverageAmount.toLocaleString()}`
                 : undefined
@@ -389,14 +379,14 @@ const s = StyleSheet.create({
     elevation: 4, shadowColor: "#000", shadowOpacity: 0.08,
     shadowRadius: 10, shadowOffset: { width: 0, height: 4 },
   },
-  avatarRing:  { width: 96, height: 96, borderRadius: 48, borderWidth: 3, borderColor: BLUE, alignItems: "center", justifyContent: "center", marginBottom: 14 },
-  avatarCircle:{ width: 84, height: 84, borderRadius: 42, backgroundColor: BLUE, alignItems: "center", justifyContent: "center" },
-  avatarText:  { fontSize: 36, color: "#fff", fontWeight: "bold" },
-  heroName:    { fontSize: 20, fontWeight: "bold", color: "#111827", marginBottom: 2 },
-  heroSub:     { fontSize: 13, color: "#6b7280", marginBottom: 2 },
-  heroId:      { fontSize: 12, color: "#9ca3af", marginTop: 6, marginBottom: 10 },
-  heroBadgeRow:{ flexDirection: "row", flexWrap: "wrap", gap: 6, justifyContent: "center" },
-  heroBadge:   { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 },
+  avatarRing:   { width: 96, height: 96, borderRadius: 48, borderWidth: 3, borderColor: BLUE, alignItems: "center", justifyContent: "center", marginBottom: 14 },
+  avatarCircle: { width: 84, height: 84, borderRadius: 42, backgroundColor: BLUE, alignItems: "center", justifyContent: "center" },
+  avatarText:   { fontSize: 36, color: "#fff", fontWeight: "bold" },
+  heroName:     { fontSize: 20, fontWeight: "bold", color: "#111827", marginBottom: 2 },
+  heroSub:      { fontSize: 13, color: "#6b7280", marginBottom: 2 },
+  heroId:       { fontSize: 12, color: "#9ca3af", marginTop: 6, marginBottom: 10 },
+  heroBadgeRow: { flexDirection: "row", flexWrap: "wrap", gap: 6, justifyContent: "center" },
+  heroBadge:    { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 },
   heroBadgeText:{ fontSize: 12, fontWeight: "700" },
 
   // Section card
@@ -405,21 +395,21 @@ const s = StyleSheet.create({
     elevation: 2, shadowColor: "#000", shadowOpacity: 0.05, shadowRadius: 5,
     shadowOffset: { width: 0, height: 1 },
   },
-  cardHeader:  { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 },
-  cardTitleRow:{ flexDirection: "row", alignItems: "center", gap: 10 },
+  cardHeader:     { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 },
+  cardTitleRow:   { flexDirection: "row", alignItems: "center", gap: 10 },
   cardIconCircle: { width: 32, height: 32, borderRadius: 16, backgroundColor: BLUE_LIGHT, alignItems: "center", justifyContent: "center" },
-  cardIcon:    { fontSize: 15 },
-  cardTitle:   { fontSize: 14, fontWeight: "700", color: "#111827" },
-  optionalTag: { fontSize: 10, color: "#6b7280", fontWeight: "500", marginTop: 1 },
-  divider:     { height: 1, backgroundColor: "#f3f4f6", marginBottom: 10 },
+  cardIcon:       { fontSize: 15 },
+  cardTitle:      { fontSize: 14, fontWeight: "700", color: "#111827" },
+  optionalTag:    { fontSize: 10, color: "#6b7280", fontWeight: "500", marginTop: 1 },
+  divider:        { height: 1, backgroundColor: "#f3f4f6", marginBottom: 10 },
 
-  // Edit button per section
+  // Edit button
   editBtn:     { flexDirection: "row", alignItems: "center", backgroundColor: BLUE_LIGHT, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
   editBtnText: { fontSize: 12, fontWeight: "700", color: BLUE },
 
-  // View info row
-  infoRow:       { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: "#f9fafb" },
-  infoLabel:     { fontSize: 13, color: "#6b7280", fontWeight: "600", flex: 1 },
-  infoValue:     { fontSize: 13, color: "#111827", flex: 1.5, textAlign: "right" },
-  infoValueEmpty:{ color: "#d1d5db" },
+  // Info row
+  infoRow:        { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: "#f9fafb" },
+  infoLabel:      { fontSize: 13, color: "#6b7280", fontWeight: "600", flex: 1 },
+  infoValue:      { fontSize: 13, color: "#111827", flex: 1.5, textAlign: "right" },
+  infoValueEmpty: { color: "#d1d5db" },
 });

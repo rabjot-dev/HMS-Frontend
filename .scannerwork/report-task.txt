@@ -1,0 +1,6 @@
+projectKey=Mobile_App
+serverUrl=http://localhost:9000
+serverVersion=26.1.0.118079
+dashboardUrl=http://localhost:9000/dashboard?id=Mobile_App
+ceTaskId=21c54b65-75c0-4d0d-8197-af8872d96589
+ceTaskUrl=http://localhost:9000/api/ce/task?id=21c54b65-75c0-4d0d-8197-af8872d96589

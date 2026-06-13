@@ -47,49 +47,75 @@ const DAY_ABBR: Record<string, string> = {
   Thursday: "Thu", Friday: "Fri", Saturday: "Sat", Sunday: "Sun",
 };
 
+// ─── Extracted Helpers ────────────────────────────────────────────────────────
+const validateBookingForm = (
+  selectedDoctor: Doctor | null,
+  selectedSlot: string,
+  reason: string
+): string | null => {
+  if (!selectedDoctor) return "Please select a doctor.";
+  if (!selectedSlot)   return "Please select a time slot.";
+  if (!reason)         return "Please select a reason for visit.";
+  return null;
+};
+
+const toApiDate = (d: Date) => {
+  const y   = d.getFullYear();
+  const m   = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+};
+
+const toDisplayDate = (d: Date) =>
+  d.toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" });
+
+const isToday = (d: Date) => {
+  const t = new Date();
+  return (
+    d.getDate()     === t.getDate()  &&
+    d.getMonth()    === t.getMonth() &&
+    d.getFullYear() === t.getFullYear()
+  );
+};
+
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export default function BookAppointmentScreen({ navigation }: any) {
   // Doctor
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [doctors, setDoctors]                 = useState<Doctor[]>([]);
+  const [selectedDoctor, setSelectedDoctor]   = useState<Doctor | null>(null);
   const [showDoctorModal, setShowDoctorModal] = useState(false);
-  const [loadingDoctors, setLoadingDoctors] = useState(false);
+  const [loadingDoctors, setLoadingDoctors]   = useState(false);
 
   // Date
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate]               = useState<Date>(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
 
   // Slots
-  const [slots, setSlots] = useState<string[]>([]);
+  const [slots, setSlots]               = useState<string[]>([]);
   const [selectedSlot, setSelectedSlot] = useState("");
   const [loadingSlots, setLoadingSlots] = useState(false);
 
   // Form
-  const [visitMode, setVisitMode] = useState<"In-Person" | "Online">("In-Person");
-  const [reason, setReason] = useState("");
+  const [visitMode, setVisitMode]           = useState<"In-Person" | "Online">("In-Person");
+  const [reason, setReason]                 = useState("");
   const [showReasonModal, setShowReasonModal] = useState(false);
 
   // Submit
   const [submitting, setSubmitting] = useState(false);
 
   // ── Load doctors on mount ──────────────────────────────────────────────────
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
+  useEffect(() => { fetchDoctors(); }, []);
 
   // ── Fetch slots whenever doctor or date changes ────────────────────────────
   useEffect(() => {
-    if (selectedDoctor) {
-      fetchSlots();
-    }
+    if (selectedDoctor) fetchSlots();
   }, [selectedDoctor, date]);
 
   // ── API calls ──────────────────────────────────────────────────────────────
   const fetchDoctors = async () => {
     try {
       setLoadingDoctors(true);
-      const res = await getDoctorsApi();
-      // GET /employees/doctors returns array directly (not wrapped in success/data)
+      const res  = await getDoctorsApi();
       const data = Array.isArray(res.data) ? res.data : res.data?.data ?? [];
       setDoctors(data);
     } catch (err: any) {
@@ -104,63 +130,47 @@ export default function BookAppointmentScreen({ navigation }: any) {
     try {
       setLoadingSlots(true);
       setSelectedSlot("");
-      const dateStr = toApiDate(date); // "YYYY-MM-DD"
-      const res = await getAvailableSlotsApi(selectedDoctor._id, dateStr);
+      const res  = await getAvailableSlotsApi(selectedDoctor._id, toApiDate(date));
       const data = res.data?.data ?? [];
       setSlots(Array.isArray(data) ? data : []);
-    } catch (err: any) {
+    } catch {
       setSlots([]);
-     
     } finally {
       setLoadingSlots(false);
     }
   };
 
   const handleBook = async () => {
-  if (!selectedDoctor) return Alert.alert("Required", "Please select a doctor.");
-  if (!selectedSlot)   return Alert.alert("Required", "Please select a time slot.");
-  if (!reason)         return Alert.alert("Required", "Please select a reason for visit.");
-
-  try {
-    setSubmitting(true);
-    const res = await bookAppointmentApi({
-      doctorEmployeeId: selectedDoctor._id,
-      appointmentDate:  toApiDate(date),
-      timeSlot:         selectedSlot,
-      visitMode:        visitMode === "In-Person" ? "OFFLINE" : "ONLINE",  // ✅ fix
-      symptoms:         [reason], // reason goes into symptoms array
-    });
-
-    if (res.data?.success) {
-      Alert.alert("Appointment Booked!", "Your appointment has been booked successfully.", [
-        { text: "OK", onPress: () => navigation?.goBack() },
-      ]);
-    } else {
-      Alert.alert("Error", res.data?.message || "Booking failed");
+    const validationError = validateBookingForm(selectedDoctor, selectedSlot, reason);
+    if (validationError) {
+      Alert.alert("Required", validationError);
+      return;
     }
-  } catch (err: any) {
-    Alert.alert("Error", err?.response?.data?.message || "Failed to book appointment");
-  } finally {
-    setSubmitting(false);
-  }
-};
 
-  // ── Helpers ────────────────────────────────────────────────────────────────
-  const toApiDate = (d: Date) => {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${y}-${m}-${day}`;
-  };
+    try {
+      setSubmitting(true);
+      const res = await bookAppointmentApi({
+        doctorEmployeeId: selectedDoctor!._id,
+        appointmentDate:  toApiDate(date),
+        timeSlot:         selectedSlot,
+        visitMode:        visitMode === "In-Person" ? "OFFLINE" : "ONLINE",
+        symptoms:         [reason],
+      });
 
-  const toDisplayDate = (d: Date) =>
-    d.toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" });
-
-  const isToday = (d: Date) => {
-    const t = new Date();
-    return d.getDate() === t.getDate() &&
-           d.getMonth() === t.getMonth() &&
-           d.getFullYear() === t.getFullYear();
+      if (res.data?.success) {
+        Alert.alert(
+          "Appointment Booked!",
+          "Your appointment has been booked successfully.",
+          [{ text: "OK", onPress: () => navigation?.goBack() }]
+        );
+      } else {
+        Alert.alert("Error", res.data?.message || "Booking failed");
+      }
+    } catch (err: any) {
+      Alert.alert("Error", err?.response?.data?.message || "Failed to book appointment");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const onDateChange = (_event: any, selected?: Date) => {
@@ -245,7 +255,7 @@ export default function BookAppointmentScreen({ navigation }: any) {
           <Text style={s.chevron}>▾</Text>
         </TouchableOpacity>
 
-        {/* iOS — inline calendar stays visible until Done is tapped */}
+        {/* iOS — inline calendar */}
         {showCalendar && Platform.OS === "ios" && (
           <>
             <TouchableOpacity style={s.doneBtn} onPress={() => setShowCalendar(false)}>
@@ -342,11 +352,11 @@ export default function BookAppointmentScreen({ navigation }: any) {
         {selectedDoctor && selectedSlot && reason ? (
           <View style={s.summaryCard}>
             <Text style={s.summaryTitle}>📋  Booking Summary</Text>
-            <SummaryRow label="Doctor"    value={`Dr. ${selectedDoctor.name}`} />
-            <SummaryRow label="Date"      value={toDisplayDate(date)} />
-            <SummaryRow label="Time"      value={selectedSlot} />
-            <SummaryRow label="Mode"      value={visitMode} />
-            <SummaryRow label="Reason"    value={reason} />
+            <SummaryRow label="Doctor" value={`Dr. ${selectedDoctor.name}`} />
+            <SummaryRow label="Date"   value={toDisplayDate(date)} />
+            <SummaryRow label="Time"   value={selectedSlot} />
+            <SummaryRow label="Mode"   value={visitMode} />
+            <SummaryRow label="Reason" value={reason} />
             {selectedDoctor.consultationFee > 0 && (
               <SummaryRow label="Fee" value={`₹${selectedDoctor.consultationFee}`} highlight />
             )}
@@ -486,7 +496,7 @@ function SummaryRow({ label, value, highlight }: { label: string; value: string;
 }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
-const BLUE = "#2563eb";
+const BLUE       = "#2563eb";
 const BLUE_LIGHT = "#eff6ff";
 
 const s = StyleSheet.create({
@@ -523,8 +533,8 @@ const s = StyleSheet.create({
   placeholder:     { flex: 1, color: "#9ca3af", fontSize: 14 },
   chevron:         { color: "#6b7280", fontSize: 16, marginLeft: 8 },
 
-  // Doctor preview inside select box
-  doctorPreviewRow: { flexDirection: "row", alignItems: "center", flex: 1 },
+  // Doctor preview
+  doctorPreviewRow:  { flexDirection: "row", alignItems: "center", flex: 1 },
   doctorPreviewName: { fontWeight: "700", color: "#111827", fontSize: 14 },
   doctorPreviewSpec: { color: "#6b7280", fontSize: 12, marginTop: 1 },
 
@@ -546,7 +556,7 @@ const s = StyleSheet.create({
   },
 
   // Working days
-  workingDaysRow: { flexDirection: "row", alignItems: "center", marginTop: 8, flexWrap: "wrap" },
+  workingDaysRow:   { flexDirection: "row", alignItems: "center", marginTop: 8, flexWrap: "wrap" },
   workingDaysLabel: { fontSize: 12, color: "#6b7280", marginRight: 4 },
   dayChip: {
     backgroundColor: "#dbeafe", borderRadius: 6,
@@ -566,7 +576,7 @@ const s = StyleSheet.create({
   doneBtnText: { color: "#fff", fontWeight: "700", fontSize: 14 },
 
   // Slots
-  slotsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
+  slotsGrid:      { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   slotChip: {
     paddingHorizontal: 16, paddingVertical: 11,
     borderRadius: 10, borderWidth: 1.5, borderColor: "#d1d5db", backgroundColor: "#fff",
@@ -586,9 +596,7 @@ const s = StyleSheet.create({
   toggleTextActive: { color: BLUE },
 
   // Hint / loading
-  hintBox: {
-    backgroundColor: BLUE_LIGHT, borderRadius: 10, padding: 14, alignItems: "center",
-  },
+  hintBox:     { backgroundColor: BLUE_LIGHT, borderRadius: 10, padding: 14, alignItems: "center" },
   hintText:    { color: "#3b82f6", fontSize: 13, textAlign: "center" },
   loadingBox:  { flexDirection: "row", alignItems: "center", padding: 14 },
   loadingText: { color: "#6b7280", marginLeft: 10, fontSize: 13 },
@@ -617,7 +625,7 @@ const s = StyleSheet.create({
   bookBtnText:     { color: "#fff", fontSize: 16, fontWeight: "bold", letterSpacing: 0.4 },
 
   // Bottom sheet modal
-  overlay:     { flex: 1, backgroundColor: "rgba(0,0,0,0.45)", justifyContent: "flex-end" },
+  overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.45)", justifyContent: "flex-end" },
   sheet: {
     backgroundColor: "#fff", borderTopLeftRadius: 22, borderTopRightRadius: 22,
     maxHeight: "78%", paddingBottom: 30,
@@ -650,7 +658,7 @@ const s = StyleSheet.create({
     paddingHorizontal: 20, paddingVertical: 16,
     borderBottomWidth: 1, borderBottomColor: "#f3f4f6",
   },
-  reasonRowActive: { backgroundColor: BLUE_LIGHT },
-  reasonText:      { flex: 1, fontSize: 15, color: "#374151" },
-  reasonTextActive:{ color: BLUE, fontWeight: "600" },
+  reasonRowActive:  { backgroundColor: BLUE_LIGHT },
+  reasonText:       { flex: 1, fontSize: 15, color: "#374151" },
+  reasonTextActive: { color: BLUE, fontWeight: "600" },
 });
