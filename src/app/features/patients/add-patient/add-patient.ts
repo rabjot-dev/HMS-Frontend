@@ -1,9 +1,18 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 
 import { ToastService } from '../../../core/services/toast';
 import { PatientService } from '../../../core/services/patient';
+
+// Custom validator: no future dates
+function noFutureDate(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) return null;
+  const selected = new Date(control.value);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return selected > today ? { futureDate: true } : null;
+}
 
 @Component({
   selector: 'app-add-patient',
@@ -15,7 +24,36 @@ import { PatientService } from '../../../core/services/patient';
 export class AddPatient {
   currentStep = 1;
   isSubmitting = false;
+// State → City map
+readonly stateCityMap: { [state: string]: string[] } = {
+  'Tamil Nadu':    ['Chennai', 'Coimbatore', 'Madurai', 'Salem', 'Tiruchirappalli', 'Tirunelveli', 'Vellore'],
+  'Maharashtra':   ['Mumbai', 'Pune', 'Nagpur', 'Nashik', 'Aurangabad', 'Solapur'],
+  'Karnataka':     ['Bengaluru', 'Mysuru', 'Hubli', 'Mangaluru', 'Belagavi', 'Davangere'],
+  'Delhi':         ['New Delhi', 'Dwarka', 'Rohini', 'Janakpuri', 'Saket', 'Laxmi Nagar'],
+  'Uttar Pradesh': ['Lucknow', 'Kanpur', 'Agra', 'Varanasi', 'Prayagraj', 'Noida', 'Ghaziabad'],
+  'Gujarat':       ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Gandhinagar', 'Bhavnagar'],
+  'Rajasthan':     ['Jaipur', 'Jodhpur', 'Udaipur', 'Kota', 'Ajmer', 'Bikaner'],
+  'West Bengal':   ['Kolkata', 'Howrah', 'Durgapur', 'Asansol', 'Siliguri', 'Bardhaman'],
+  'Telangana':     ['Hyderabad', 'Warangal', 'Nizamabad', 'Karimnagar', 'Khammam'],
+  'Kerala':        ['Thiruvananthapuram', 'Kochi', 'Kozhikode', 'Thrissur', 'Kollam', 'Palakkad'],
+  'Punjab':        ['Ludhiana', 'Amritsar', 'Jalandhar', 'Patiala', 'Bathinda', 'Mohali'],
+  'Haryana':       ['Gurugram', 'Faridabad', 'Ambala', 'Hisar', 'Panipat', 'Rohtak'],
+  'Madhya Pradesh':['Bhopal', 'Indore', 'Jabalpur', 'Gwalior', 'Ujjain', 'Sagar'],
+  'Bihar':         ['Patna', 'Gaya', 'Muzaffarpur', 'Bhagalpur', 'Darbhanga'],
+  'Odisha':        ['Bhubaneswar', 'Cuttack', 'Rourkela', 'Berhampur', 'Sambalpur'],
+};
 
+get stateList(): string[] {
+  return Object.keys(this.stateCityMap);
+}
+
+cities: string[] = [];
+
+onStateChange(event: Event): void {
+  const selected = (event.target as HTMLSelectElement).value;
+  this.cities = this.stateCityMap[selected] || [];
+  this.patientForm.get('city')?.setValue('');
+}
   patientForm!: FormGroup;
 
   constructor(
@@ -25,9 +63,9 @@ export class AddPatient {
   ) {
     this.patientForm = this.fb.group({
       // Basic Information
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      dateOfBirth: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      lastName:  ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      dateOfBirth: ['', [Validators.required, noFutureDate]],
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
       maritalStatus: ['', Validators.required],
@@ -35,7 +73,7 @@ export class AddPatient {
       // Contact Information
       countryCode: ['+91', Validators.required],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       address: ['', Validators.required],
       city: ['', Validators.required],
       state: ['', Validators.required],
@@ -43,10 +81,10 @@ export class AddPatient {
       country: ['India'],
 
       // Emergency Contact
-      emergencyContactName: ['', Validators.required],
-      emergencyContactPhone: ['', Validators.required],
+      emergencyContactName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]],
+      emergencyContactPhone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
 
-      // Medical Information
+      // Medical Information (optional — untouched)
       medicalHistory: [''],
       allergies: [''],
       chronicDiseases: [''],
@@ -54,7 +92,7 @@ export class AddPatient {
       pastSurgeries: [''],
       familyMedicalHistory: [''],
 
-      // Insurance Information
+      // Insurance Information (optional — untouched)
       insuranceProvider: [''],
       insurancePolicyNumber: [''],
       insuranceExpiryDate: [''],
@@ -66,81 +104,33 @@ export class AddPatient {
     });
   }
 
-  // Move to next step after validating current step
   nextStep(): void {
     const stepFields: { [key: number]: string[] } = {
-      1: [
-        'firstName',
-        'lastName',
-        'dateOfBirth',
-        'gender',
-        'bloodGroup',
-        'maritalStatus'
-      ],
-      2: [
-        'phone',
-        'email',
-        'address',
-        'city',
-        'state',
-        'pincode',
-        'emergencyContactName',
-        'emergencyContactPhone'
-      ],
+      1: ['firstName', 'lastName', 'dateOfBirth', 'gender', 'bloodGroup', 'maritalStatus'],
+      2: ['phone', 'email', 'address', 'city', 'state', 'pincode', 'emergencyContactName', 'emergencyContactPhone'],
       3: [],
       4: ['patientType']
     };
 
     const fieldsToValidate = stepFields[this.currentStep] || [];
+    fieldsToValidate.forEach(field => this.patientForm.get(field)?.markAsTouched());
 
-    fieldsToValidate.forEach((field) => {
-      this.patientForm.get(field)?.markAsTouched();
-    });
+    const isStepValid = fieldsToValidate.every(field => this.patientForm.get(field)?.valid);
+    if (!isStepValid) return;
 
-    const isStepValid = fieldsToValidate.every(
-      (field) => this.patientForm.get(field)?.valid
-    );
-
-    if (!isStepValid) {
-      return;
-    }
-
-    if (this.currentStep < 4) {
-      this.currentStep++;
-    }
+    if (this.currentStep < 4) this.currentStep++;
   }
 
-  // Go back to previous step
   previousStep(): void {
-    if (this.currentStep > 1) {
-      this.currentStep--;
-    }
+    if (this.currentStep > 1) this.currentStep--;
   }
 
-  // Register patient
   onSubmit(): void {
-    console.log('Register Patient Clicked');
-    console.log(this.patientForm.value);
-
     this.patientForm.get('patientType')?.markAsTouched();
-
-    if (this.patientForm.get('patientType')?.invalid) {
-      return;
-    }
+    if (this.patientForm.get('patientType')?.invalid) return;
 
     if (this.patientForm.invalid) {
-      console.log('FORM INVALID');
-
-      Object.keys(this.patientForm.controls).forEach((key) => {
-        const control = this.patientForm.get(key);
-
-        if (control?.invalid) {
-          console.log(key, control.errors);
-        }
-      });
-
       this.patientForm.markAllAsTouched();
-
       return;
     }
 
@@ -148,41 +138,16 @@ export class AddPatient {
 
     this.patientService.createPatient(this.patientForm.value).subscribe({
       next: (response) => {
-        console.log(response);
-
-        this.toastService.show(
-          'Patient Registered Successfully',
-          'success'
-        );
-
-        // Reset form
+        this.toastService.show('Patient Registered Successfully', 'success');
         this.patientForm.reset();
-
-        // Restore default values
-        this.patientForm.patchValue({
-          countryCode: '+91',
-          country: 'India',
-          patientType: ''
-        });
-
-        // Reset UI state
+        this.patientForm.patchValue({ countryCode: '+91', country: 'India', patientType: '' });
         this.currentStep = 1;
         this.isSubmitting = false;
+
       },
-
       error: (error) => {
-        console.log('FULL ERROR =>', error);
-        console.log('VALIDATION ERRORS =>', error?.error?.errors);
-         const message = error?.error?.message || 'Failed to register patient';
-  alert(message);
-        // alert(
-        //   JSON.stringify(
-        //     error?.error?.errors,
-        //     null,
-        //     2
-        //   )
-        // );
-
+        const message = error?.error?.message || 'Failed to register patient';
+        alert(message);
         this.isSubmitting = false;
       }
     });
