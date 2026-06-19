@@ -2,7 +2,7 @@ import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit } from '
 
 import { Router, RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
-
+import { NodeService } from '../../core/services/node';
 import { AuthService } from '../../core/services/auth';
 import { TokenService } from '../../core/services/token';
 import { ToastService } from '../../core/services/toast';
@@ -18,6 +18,7 @@ export class DashboardLayout implements OnInit {
   isProfileOpen = false;
 
   constructor(
+    private readonly nodeService:NodeService,
     public authService: AuthService,
     private readonly tokenService: TokenService,
     private readonly router: Router,
@@ -27,9 +28,34 @@ export class DashboardLayout implements OnInit {
   ) {}
 
   // Load current user details
-  ngOnInit(): void {
-    this.authService.loadCurrentUser();
-  }
+ ngOnInit(): void {
+  this.authService
+    .getCurrentUser()
+    .subscribe({
+      next: (response) => {
+        this.authService
+          .currentUser
+          .next(
+            response.data
+          );
+
+        this.loadNodes();
+      }
+    });
+}
+loadNodes(): void {
+  this.nodeService
+    .getNodes()
+    .subscribe({
+      next: (response) => {
+        this.authService
+          .nodes
+          .next(
+            response.data
+          );
+      }
+    });
+}
 
   // Close active toast
   dismissToast(): void {

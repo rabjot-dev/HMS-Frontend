@@ -48,6 +48,7 @@ import { ForgotPassword } from './features/auth/forgot-password/forgot-password'
 import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { MyProfile } from './features/profile/my-profile/my-profile';
 import { Home } from './features/floater/home/home';
+import { nodeGuard } from './core/guards/node.guard';
 
 export const routes: Routes = [
   // Home Routes
@@ -98,169 +99,263 @@ export const routes: Routes = [
   // Protected Dashboard Routes
     
   {
-    path: '',
+  path: '',
 
-    component: DashboardLayout,
+  component: DashboardLayout,
 
-    canActivate: [authGuard],
+  canActivate: [authGuard],
 
-    children: [
-    
-      {
-        path: '',
+  children: [
+    {
+      path: '',
 
-        redirectTo: 'dashboard',
+      redirectTo: 'dashboard/admin',
 
-        pathMatch: 'full'
-      },
+      pathMatch: 'full'
+    },
 
-   // Admin Dashboard
+    // Admin Dashboard
+    {
+      path: 'dashboard/admin',
 
-      {
-        path: 'dashboard/admin',
+      component: AdminDashboard,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        component: AdminDashboard,
-        canActivate: [adminGuard]
-      },
+    // Doctor Dashboard
+    {
+      path: 'dashboard/doctor',
 
-     // Doctor Dashboard
-      {
-        path: 'dashboard/doctor',
+      component: DoctorDashboard,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        component: DoctorDashboard,
-        canActivate: [doctorGuard]
-      },
+    // Receptionist Dashboard
+    {
+      path: 'dashboard/receptionist',
 
-      // Receptionist Dashboard
-      {
-        path: 'dashboard/receptionist',
+      component: ReceptionistDashboard,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        component: ReceptionistDashboard,
-        canActivate: [receptionistGuard]
-      },
+    // Employees
+    {
+      path: 'employees',
 
-    //Employees
-      {
-        path: 'employees',
+      component: EmployeeList,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        component: EmployeeList,
+    {
+      path: 'employees/create',
 
-        canActivate: [adminGuard]
-      },
+      component: AddEmployee,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-      {
-        path: 'employees/create',
+    {
+      path: 'employees/pending',
 
-        component: AddEmployee,
+      component: PendingEmployees,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        canActivate: [adminGuard]
-      },
+    {
+      path: 'employees/:id',
 
-      {
-        path: 'employees/pending',
+      component: EmployeeDetails,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        component: PendingEmployees,
+    {
+      path: 'employees/edit/:id',
 
-        canActivate: [adminGuard]
-      },
-
-      {
-        path: 'employees/:id',
-
-        component: EmployeeDetails,
-
-        canActivate: [adminGuard]
-      },
-
-      {
-        path: 'employees/edit/:id',
-
-        component: EditEmployee,
-
-        canActivate: [adminGuard]
-      },
+      component: EditEmployee,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
     // Patients
-      {
-        path: 'patients/create',
+    {
+      path: 'patients/create',
 
-        component: AddPatient
-      },
-      {
-        path: 'patients',
+      component: AddPatient,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        component: PatientList
-      },
-      {
-        path: 'patients/edit/:id',
+    {
+      path: 'patients',
 
-        component: EditPatient,
+      component: PatientList,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST'])]
-      },
-      {
-        path: 'patients/:id',
+    {
+      path: 'patients/edit/:id',
 
-        component: PatientDetails
-      },
-      {
-        path: 'appointments/book',
+      component: EditPatient,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        component: BookAppointment
-      },
-      {
-        path: 'appointments',
+    {
+      path: 'patients/:id',
 
-        component: AppointmentList
-      },
-      {
-        path: 'appointments/requests',
+      component: PatientDetails,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        loadComponent: () =>
-          import(
-            './features/appointments/appointment-requests/appointment-requests'
-          ).then((m) => m.AppointmentRequestsComponent)
-      },
-      {
-        path: 'appointments/edit/:id',
+    // Appointments
+    {
+      path: 'appointments/book',
 
-        component: EditAppointment
-      },
-      {
-        path: 'doctor-queue',
+      component: BookAppointment,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        component: DoctorQueue
-      },
-      {
-        path: 'consultation/:appointmentId',
+    {
+      path: 'appointments',
 
-        component: ConsultationForm
-      },
-      {
-        path: 'consultations',
+      component: AppointmentList,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        component: ConsultationList
-      },
-      {
-        path: 'doctor-availability',
+    {
+      path: 'appointments/requests',
 
-        component: DoctorAvailability
-      },
-      {
-        path: 'my-profile',
+      loadComponent: () =>
+        import(
+          './features/appointments/appointment-requests/appointment-requests'
+        ).then(
+          (m) => m.AppointmentRequestsComponent
+        ),
 
-        component: MyProfile
-      },
-      {
-        path: 'consultations/:id',
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
 
-        loadComponent: () =>
-          import('./features/consultations/consultation-details/consultation-details').then(
-            (m) => m.ConsultationDetails
-          )
-      }
-    ]
-  },
+    {
+      path: 'appointments/edit/:id',
+
+      component: EditAppointment,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
+
+    // Doctor
+    {
+      path: 'doctor-queue',
+
+      component: DoctorQueue,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
+
+    {
+      path: 'doctor-availability',
+
+      component: DoctorAvailability,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
+
+    // Consultations
+    {
+      path: 'consultation/:appointmentId',
+
+      component: ConsultationForm,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
+
+    {
+      path: 'consultations',
+
+      component: ConsultationList,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
+
+    {
+      path: 'consultations/:id',
+
+      loadComponent: () =>
+        import(
+          './features/consultations/consultation-details/consultation-details'
+        ).then(
+          (m) => m.ConsultationDetails
+        ),
+
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    },
+
+    // Profile
+    {
+      path: 'my-profile',
+
+      component: MyProfile,
+      canActivate: [
+        authGuard,
+        nodeGuard
+      ]
+    }
+  ]
+},
 
   
 //routes
