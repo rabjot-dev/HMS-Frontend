@@ -7,47 +7,63 @@ import {
   Router,
 } from '@angular/router';
 
-import {
-  AuthService,
-} from '../services/auth';
+import { NodeService } from '../services/node';
 
 export const nodeGuard:
   CanActivateFn =
   (route) => {
-    const authService =
+    const router =
+      inject(Router);
+
+    const nodeService =
       inject(
-        AuthService
+        NodeService,
       );
 
-    const router =
-      inject(
-        Router
-      );
+    const url =
+      '/' +
+      route.url
+        .map(
+          (
+            segment,
+          ) =>
+            segment.path,
+        )
+        .join('/');
 
     const nodes =
-      authService
-        .nodes
-        .value;
+      nodeService.nodes
+        .value.length
+        ? nodeService.nodes
+            .value
+        : JSON.parse(
+            localStorage.getItem(
+              'nodes',
+            ) || '[]',
+          );
 
-    const path =
-      '/' +
-      route.routeConfig?.path;
-
-    const hasAccess =
-      nodes.some((node) =>
-        path.startsWith(
-          node.path
-        )
-      );
-
+    // first load
     if (
-      hasAccess
+      !nodes.length
     ) {
       return true;
     }
 
+    const allowed =
+      nodes.some(
+        (
+          node: any,
+        ) =>
+          node.path ===
+          url,
+      );
+
+    if (allowed) {
+      return true;
+    }
+
     router.navigate([
-      '/login',
+      '/',
     ]);
 
     return false;

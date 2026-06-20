@@ -1,53 +1,94 @@
-<div class="sidebar">
-  <!-- Logo -->
+@if(
+nodeService.nodes
+  | async;
+as nodes
+){
 
-  <div class="logo">HMS</div>
+<nav class="nav-links">
 
-  <!-- Menu -->
+  @for(
+  node of nodes;
+  track node._id
+  ){
 
-  <div class="menu">
-    <!-- ADMIN -->
+  <div
+    class="nav-item"
+  >
+    @if(
+    node.children
+      ?.length
+    ){
 
-    <ng-container *ngIf="isAdmin()">
-      <a routerLink="/dashboard">Dashboard</a>
-
-      <a routerLink="/employees">Employees</a>
-
-      <a routerLink="/add-employee">Add Employee</a>
-
-      <a routerLink="/pending-employees">Pending Requests</a>
-    </ng-container>
-
-    <!-- DOCTOR -->
-
-    <ng-container *ngIf="isDoctor()">
-      <a routerLink="/dashboard">Dashboard</a>
-
-      <a routerLink="/appointments">Appointments</a>
-
-      <a routerLink="/patients">Patients</a>
-
-      <a routerLink="/availability">Availability</a>
-    </ng-container>
-
-    <!-- RECEPTIONIST -->
-
-    <ng-container
-      *ngIf="
-        isReceptionist()
+    <button
+      class="parent-menu"
+      (click)="
+        toggleMenu(
+          node._id
+        )
       "
     >
-      <a routerLink="/dashboard">Dashboard</a>
+      <span>
+        {{ node.name }}
+      </span>
 
-      <a routerLink="/patients">Patients</a>
+      <span>
+        {{
+          expandedMenus[
+            node._id
+          ]
+            ? '▼'
+            : '▶'
+        }}
+      </span>
+    </button>
 
-      <a routerLink="/appointments">Appointments</a>
+    @if(
+    expandedMenus[
+      node._id
+    ]
+    ){
 
-      <a routerLink="/billing">Billing</a>
-    </ng-container>
+    <div
+      class="submenu"
+    >
+      @for(
+      child of
+      node.children;
+      track child._id
+      ){
+
+      <a
+        [routerLink]="
+          child.path
+        "
+        routerLinkActive="active-link"
+      >
+        {{
+          child.name
+        }}
+      </a>
+
+      }
+    </div>
+
+    }
+
+    } @else {
+
+    <a
+      [routerLink]="
+        node.path
+      "
+      routerLinkActive="active-link"
+    >
+      {{ node.name }}
+    </a>
+
+    }
   </div>
 
-  <!-- Logout -->
+  }
 
-  <button class="logout-btn" (click)="logout()">Logout</button>
-</div>
+</nav>
+
+}

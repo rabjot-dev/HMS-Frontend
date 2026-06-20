@@ -32,20 +32,22 @@
     <!-- Navigation -->
 <nav class="nav-links">
   @for (
-    node of authService.nodes | async;
+    node of nodeService.nodes | async;
     track node._id
   ) {
 
-  <a
-    [routerLink]="node.path"
-    routerLinkActive="active-link"
-  >
-    <span>
-      {{ node.icon }}
-    </span>
+<a
+  [routerLink]="node.path"
+  routerLinkActive="active-link"
+>
+  <span class="material-icons">
+    {{ node.icon }}
+  </span>
 
+  <span>
     {{ node.name }}
-  </a>
+  </span>
+</a>
 
   }
 </nav>

@@ -9,14 +9,13 @@
 }
 
 html {
-  font-size: 22px; /* base was 16px — increase this to scale everything */
+  font-size: 16px;
 }
 
 body {
-  font-size: 3rem;
-  line-height: 1.7;
+  font-size: 16px;
+  line-height: 1.5;
 }
-
 h1 {
   font-size: 2.2rem;
 }
@@ -36,25 +35,28 @@ h6 {
   font-size: 1rem;
 }
 
+body {
+  font-size: 16px;
+}
+
 p,
 span,
 a,
 li,
 td,
 th,
-label {
-  font-size: 3rem;
+label,
+input,
+select,
+textarea,
+button {
+  font-size: inherit;
 }
 #active {
   font-size: 1.5rem;
 }
 
-input,
-select,
-textarea,
-button {
-  font-size: 3rem;
-}
+
 /* ── Global Toast ─────────────────────────────────────── */
 .global-toast-wrapper {
   position: fixed;
@@ -260,14 +262,16 @@ button {
 .nav-links a {
   display: flex;
   align-items: center;
-  gap: 14px; /* 12 → 14 */
-  padding: 17px 22px; /* 14/18 → 17/22 */
-  border-radius: 16px; /* 14 → 16 */
-  color: rgba(255, 255, 255, 0.72);
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  color: rgba(255,255,255,0.75);
   text-decoration: none;
   transition: all 0.3s ease;
-  font-weight: 500;
-  font-size: 16px; /* added explicit size */
+}
+
+.material-icons {
+  font-size: 22px;
 }
 
 .nav-links a:hover {

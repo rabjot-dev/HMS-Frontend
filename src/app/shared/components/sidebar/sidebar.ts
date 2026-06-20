@@ -1,70 +1,46 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
-import { CommonModule } from '@angular/common';
-import { RouterLink, Router, NavigationEnd } from '@angular/router';
+import {
+  AsyncPipe,
+} from '@angular/common';
+
+import {
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
+
+import {
+  NodeService,
+} from '../../../core/services/node';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink],
-  templateUrl: './sidebar.html',
-  styleUrl: './sidebar.css'
+  imports: [
+    AsyncPipe,
+    RouterLink,
+    RouterLinkActive,
+  ],
+  templateUrl:
+    './sidebar.html',
+  styleUrl:
+    './sidebar.css',
+  changeDetection:
+    ChangeDetectionStrategy.OnPush,
 })
-export class Sidebar implements OnInit {
-  role = '';
-
+export class Sidebar {
   constructor(
-    private readonly router: Router,
-    private readonly cdr: ChangeDetectorRef
+    public nodeService:
+      NodeService
   ) {}
 
-  // Load role and listen for route changes
-  ngOnInit(): void {
-    this.loadRole();
+expandedMenus: Record<string, boolean> = {};
 
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.loadRole();
-        this.cdr.detectChanges();
-      }
-    });
-  }
-
-  // Get role from local storage
-  loadRole(): void {
-    this.role = localStorage.getItem('role') || '';
-
-    console.log(this.role);
-  }
-
-  // Check if current user is admin
-  isAdmin(): boolean {
-    return this.role === 'ADMIN';
-  }
-
-  // Check if current user is doctor
-  isDoctor(): boolean {
-    return this.role === 'DOCTOR';
-  }
-
-  // Check if current user is nurse
-  isNurse(): boolean {
-    return this.role === 'NURSE';
-  }
-
-  // Check if current user is receptionist
-  isReceptionist(): boolean {
-    return this.role === 'RECEPTIONIST';
-  }
-
-  // Logout user
-  logout(): void {
-    localStorage.clear();
-
-    this.role = '';
-
-    this.cdr.detectChanges();
-
-    this.router.navigate(['/login']);
-  }
+toggleMenu(nodeId: string): void {
+  this.expandedMenus[nodeId] =
+    !this.expandedMenus[nodeId];
+}
 }

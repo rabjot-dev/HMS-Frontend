@@ -4,7 +4,6 @@ import { AuthLayout } from './layouts/auth-layout/auth-layout';
 
 import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 
-import { adminGuard } from './core/guards/admin-guard';
 
 import { authGuard } from './core/guards/auth-guard';
 
@@ -13,11 +12,9 @@ import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 
 import { CreatePassword } from './features/auth/create-password/create-password';
-import { roleGuard } from './core/guards/role.guard';
-import { AdminDashboard } from './features/dashboard/admin-dashboard/admin-dashboard';
-import { doctorGuard } from './core/guards/doctor-guard';
 
-import { receptionistGuard } from './core/guards/receptionist-guard';
+import { AdminDashboard } from './features/dashboard/admin-dashboard/admin-dashboard';
+
 import { DoctorDashboard } from './features/dashboard/doctor-dashboard/doctor-dashboard';
 
 import { ReceptionistDashboard } from './features/dashboard/receptionist-dashboard/receptionist-dashboard';
@@ -97,8 +94,7 @@ export const routes: Routes = [
   },
 
   // Protected Dashboard Routes
-    
-  {
+ {
   path: '',
 
   component: DashboardLayout,
@@ -108,260 +104,180 @@ export const routes: Routes = [
   children: [
     {
       path: '',
-
       redirectTo: 'dashboard/admin',
-
       pathMatch: 'full'
     },
 
-    // Admin Dashboard
+    // =====================
+    // Dashboards
+    // =====================
+
     {
       path: 'dashboard/admin',
-
       component: AdminDashboard,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
     },
 
-    // Doctor Dashboard
     {
       path: 'dashboard/doctor',
-
       component: DoctorDashboard,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
     },
 
-    // Receptionist Dashboard
     {
       path: 'dashboard/receptionist',
-
       component: ReceptionistDashboard,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
     },
 
+    // =====================
     // Employees
+    // =====================
+
     {
       path: 'employees',
-
       component: EmployeeList,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
     },
 
     {
       path: 'employees/create',
-
       component: AddEmployee,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
     },
 
     {
       path: 'employees/pending',
-
       component: PendingEmployees,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
     },
 
+    // Internal pages
     {
       path: 'employees/:id',
-
-      component: EmployeeDetails,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      component: EmployeeDetails
     },
 
     {
       path: 'employees/edit/:id',
-
-      component: EditEmployee,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      component: EditEmployee
     },
 
+    // =====================
     // Patients
-    {
-      path: 'patients/create',
-
-      component: AddPatient,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
-    },
+    // =====================
 
     {
       path: 'patients',
-
       component: PatientList,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
+    },
+
+    {
+      path: 'patients/create',
+      component: AddPatient,
+      canActivate: [nodeGuard]
+    },
+
+    // Internal pages
+    {
+      path: 'patients/:id',
+      component: PatientDetails
     },
 
     {
       path: 'patients/edit/:id',
-
-      component: EditPatient,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      component: EditPatient
     },
 
-    {
-      path: 'patients/:id',
-
-      component: PatientDetails,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
-    },
-
+    // =====================
     // Appointments
-    {
-      path: 'appointments/book',
-
-      component: BookAppointment,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
-    },
+    // =====================
 
     {
       path: 'appointments',
-
       component: AppointmentList,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
+    },
+
+    {
+      path: 'appointments/book',
+      component: BookAppointment,
+      canActivate: [nodeGuard]
     },
 
     {
       path: 'appointments/requests',
-
       loadComponent: () =>
         import(
           './features/appointments/appointment-requests/appointment-requests'
         ).then(
           (m) => m.AppointmentRequestsComponent
         ),
-
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
     },
 
+    // Internal pages
     {
       path: 'appointments/edit/:id',
-
-      component: EditAppointment,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      component: EditAppointment
     },
 
+    // =====================
     // Doctor
+    // =====================
+
     {
       path: 'doctor-queue',
-
       component: DoctorQueue,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
     },
 
     {
       path: 'doctor-availability',
-
       component: DoctorAvailability,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
     },
 
+    // =====================
     // Consultations
-    {
-      path: 'consultation/:appointmentId',
-
-      component: ConsultationForm,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
-    },
+    // =====================
 
     {
       path: 'consultations',
-
       component: ConsultationList,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
+    },
+
+    // Internal pages
+    {
+      path: 'consultation/:appointmentId',
+      component: ConsultationForm
     },
 
     {
       path: 'consultations/:id',
-
       loadComponent: () =>
         import(
           './features/consultations/consultation-details/consultation-details'
         ).then(
           (m) => m.ConsultationDetails
-        ),
-
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+        )
     },
 
+    // =====================
     // Profile
+    // =====================
+
     {
       path: 'my-profile',
-
       component: MyProfile,
-      canActivate: [
-        authGuard,
-        nodeGuard
-      ]
+      canActivate: [nodeGuard]
     }
   ]
 },
-
-  
-//routes
-  {
-    path: '**',
-
-    redirectTo: 'login'
-  }
+{
+  path: '**',
+  redirectTo: 'login'
+}
 ];

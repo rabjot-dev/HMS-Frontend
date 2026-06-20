@@ -1,0 +1,74 @@
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.material-icons {
+  font-size: 22px;
+}
+.nav-item {
+  margin-bottom: 8px;
+}
+
+.parent-menu {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.75);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px 18px;
+  border-radius: 14px;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.parent-menu:hover {
+  background: rgba(255,255,255,0.08);
+  color: rgb(184, 164, 164);
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+  margin-top: 6px;
+  gap: 6px;
+}
+
+.submenu a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 16px;
+
+  border-radius: 12px;
+
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+
+  transition: 0.3s;
+}
+
+.submenu a:hover {
+  background: rgba(255,255,255,0.08);
+  color: white;
+}

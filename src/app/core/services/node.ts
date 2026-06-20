@@ -1,21 +1,95 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {
+  Injectable,
+} from '@angular/core';
 
-import { Observable } from 'rxjs';
+import {
+  HttpClient,
+} from '@angular/common/http';
+
+import {
+  BehaviorSubject,
+} from 'rxjs';
 
 import { API_BASE_URL } from '../constants/api.constants';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn:
+    'root',
 })
 export class NodeService {
-  constructor(
-    private readonly http: HttpClient
-  ) {}
+  nodes =
+    new BehaviorSubject<
+      any[]
+    >([]);
 
-  getNodes(): Observable<any> {
-    return this.http.get(
-      `${API_BASE_URL}/nodes`
+  constructor(
+    private readonly http: HttpClient,
+  ) {
+    const storedNodes =
+      localStorage.getItem(
+        'nodes',
+      );
+
+    if (
+      storedNodes
+    ) {
+      this.nodes.next(
+        JSON.parse(
+          storedNodes,
+        ),
+      );
+    }
+  }
+
+  getNodes() {
+    return this.http.get<any>(
+      `${API_BASE_URL}/nodes`,
+    );
+  }
+
+  loadNodes(): void {
+    this.getNodes()
+      .subscribe({
+        next: (
+          response,
+        ) => {
+          this.nodes.next(
+            response.data,
+          );
+          console.log(
+        JSON.stringify(
+          this.nodes.value,
+          null,
+          2
+        )
+    );
+
+          localStorage.setItem(
+            'nodes',
+            JSON.stringify(
+              response.data,
+            ),
+            
+          );
+        },
+
+        error: () => {
+          this.nodes.next(
+            [],
+          );
+
+          localStorage.removeItem(
+            'nodes',
+          );
+        },
+      });
+  }
+
+  clearNodes(): void {
+    this.nodes.next([]);
+
+    localStorage.removeItem(
+      'nodes',
     );
   }
 }

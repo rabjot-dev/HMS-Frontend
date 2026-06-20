@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -17,7 +17,8 @@ export class ConsultationList implements OnInit {
   isLoading = false;
 
   constructor(
-    private readonly consultationService: ConsultationService
+    private readonly consultationService: ConsultationService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   // Load consultations on page load
@@ -36,6 +37,7 @@ export class ConsultationList implements OnInit {
         this.consultations = response.data;
 
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
 
       error: (error) => {
