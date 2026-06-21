@@ -200,6 +200,45 @@ textarea:focus {
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
 }
 
+.search-dropdown {
+  position: relative;
+}
+
+.dropdown-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.14);
+}
+
+.dropdown-option {
+  width: 100%;
+  border: 0;
+  padding: 12px 14px;
+  background: transparent;
+  color: #0f172a;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: left;
+}
+
+.dropdown-option:hover {
+  background: #eff6ff;
+}
+
+.dropdown-empty {
+  padding: 12px 14px;
+  color: #64748b;
+  font-size: 14px;
+}
+
 /*
 |--------------------------------------------------------------------------
 | Textarea

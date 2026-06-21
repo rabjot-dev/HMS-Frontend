@@ -78,6 +78,48 @@
   box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
 }
 
+.filters-wrapper {
+  padding: 18px;
+
+  border-radius: 24px;
+}
+
+.search-box {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.search-box span {
+  color: #2563eb;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+.search-box input {
+  width: 100%;
+
+  border: 1px solid #dbe3ef;
+
+  border-radius: 16px;
+
+  padding: 14px 16px;
+
+  color: #0f172a;
+
+  outline: none;
+}
+
+.search-box input:focus {
+  border-color: #3b82f6;
+
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
 /*
 |--------------------------------------------------------------------------
 | Empty State
@@ -359,3 +401,4 @@
     flex-direction: column;
   }
 }
+

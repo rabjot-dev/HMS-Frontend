@@ -16,8 +16,26 @@ export class EmployeeService {
   }
 
   // Get all employees
-  getEmployees(): Observable<any> {
-    return this.http.get(`${API_BASE_URL}/employees`);
+  getEmployees(page = 1, limit = 10, filters: any = {}): Observable<any> {
+    const params: any = {
+      page,
+      limit
+    };
+
+    if (filters.search?.trim()) {
+      params.search = filters.search.trim();
+    }
+
+    if (filters.status) {
+      params.status = filters.status;
+    }
+
+    if (filters.sortBy) {
+      params.sortBy = filters.sortBy;
+      params.sortOrder = filters.sortOrder || 'desc';
+    }
+
+    return this.http.get(`${API_BASE_URL}/employees`, { params });
   }
 
   // Get employee details by ID
@@ -49,11 +67,28 @@ export class EmployeeService {
     );
   }
 
+  // Soft delete employee
+  deleteEmployee(id: string): Observable<any> {
+    return this.http.delete(`${API_BASE_URL}/employees/${id}`);
+  }
+
   // Get employees waiting for approval
-  getPendingEmployees(): Observable<any> {
-    return this.http.get(
-      `${API_BASE_URL}/employees/pending-employees`
-    );
+  getPendingEmployees(page = 1, limit = 10, filters: any = {}): Observable<any> {
+    const params: any = {
+      page,
+      limit
+    };
+
+    if (filters.search?.trim()) {
+      params.search = filters.search.trim();
+    }
+
+    if (filters.sortBy) {
+      params.sortBy = filters.sortBy;
+      params.sortOrder = filters.sortOrder || 'desc';
+    }
+
+    return this.http.get(`${API_BASE_URL}/employees/pending-employees`, { params });
   }
 
   // Approve employee registration
@@ -76,11 +111,14 @@ export class EmployeeService {
   }
 
   // Get all available doctors
-  getDoctors(): Observable<any> {
-    return this.http.get(
-      `${API_BASE_URL}/employees/doctors`
-    );
-  }
+  getDoctors(page = 1, limit = 100): Observable<any> {
+  return this.http.get(`${API_BASE_URL}/employees/doctors`, {
+    params: {
+      page,
+      limit
+    }
+  });
+}
 
   // Get logged-in doctor's availability settings
   getDoctorAvailability(): Observable<any> {

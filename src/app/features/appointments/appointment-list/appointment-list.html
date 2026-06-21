@@ -45,7 +45,7 @@
               searchTerm
               "
         (input)="
-              filterAppointments()
+              onSearchInput()
               "
       />
     </div>
@@ -57,10 +57,12 @@
             selectedStatus
             "
       (change)="
-            filterAppointments()
+            onFilterChange()
             "
     >
       <option value="">All Status</option>
+
+      <option value="PENDING">Pending</option>
 
       <option value="BOOKED">Booked</option>
 
@@ -70,6 +72,26 @@
 
       <option value="CANCELLED">Cancelled</option>
     </select>
+
+    <label class="date-filter">
+      <span>From Date</span>
+
+      <input
+        type="date"
+        [(ngModel)]="fromDate"
+        (change)="onFilterChange()"
+      />
+    </label>
+
+    <label class="date-filter">
+      <span>To Date</span>
+
+      <input
+        type="date"
+        [(ngModel)]="toDate"
+        (change)="onFilterChange()"
+      />
+    </label>
   </div>
 
   <!-- Table -->
@@ -257,4 +279,13 @@
       </tbody>
     </table>
   </div>
+
+  <app-pagination
+    [pagination]="pagination"
+    totalLabel="appointments"
+    (pagePrevious)="previousPage()"
+    (pageNext)="nextPage()"
+    (pageSizeChange)="changeLimit($event)"
+  ></app-pagination>
 </div>
+

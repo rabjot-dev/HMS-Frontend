@@ -1,19 +1,20 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { AppointmentService } from '../../../core/services/appointment';
 import { AuthService } from '../../../core/services/auth';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
   selector: 'app-appointment-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
   templateUrl: './appointment-list.html',
   styleUrls: ['./appointment-list.css']
 })
-export class AppointmentList implements OnInit {
+export class AppointmentList implements OnInit, OnDestroy {
   appointments: any[] = [];
 
   filteredAppointments: any[] = [];
@@ -21,6 +22,21 @@ export class AppointmentList implements OnInit {
   searchTerm = '';
 
   selectedStatus = '';
+  fromDate = '';
+  toDate = '';
+  sortBy = 'appointmentDate';
+  sortOrder = 'asc';
+
+  private searchTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  pagination = {
+    page: 1,
+    limit: 10,
+    totalRecords: 0,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false
+  };
 
   constructor(
     private readonly appointmentService: AppointmentService,
@@ -32,11 +48,27 @@ export class AppointmentList implements OnInit {
     this.loadAppointments();
   }
 
-  loadAppointments(): void {
-    this.appointmentService.getAppointments().subscribe({
+  ngOnDestroy(): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+  }
+
+  loadAppointments(page = this.pagination.page): void {
+    const filters = {
+      search: this.searchTerm,
+      status: this.selectedStatus,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
+      sortBy: this.sortBy,
+      sortOrder: this.sortOrder
+    };
+
+    this.appointmentService.getAppointments(page, this.pagination.limit, filters).subscribe({
       next: (response) => {
-        this.appointments = response.data;
-        this.filteredAppointments = response.data;
+        this.appointments = response.data || [];
+        this.filteredAppointments = response.data || [];
+        this.pagination = response.pagination || this.pagination;
 
         this.cdr.detectChanges();
       },
@@ -46,25 +78,35 @@ export class AppointmentList implements OnInit {
       }
     });
   }
+  previousPage(): void {
+    if (this.pagination.hasPreviousPage) {
+      this.loadAppointments(this.pagination.page - 1);
+    }
+  }
 
-  filterAppointments(): void {
-    this.filteredAppointments = this.appointments.filter((appointment) => {
-      const patientName =
-        `${appointment?.patientId?.firstName} ${appointment?.patientId?.lastName}`.toLowerCase();
+  nextPage(): void {
+    if (this.pagination.hasNextPage) {
+      this.loadAppointments(this.pagination.page + 1);
+    }
+  }
 
-      const doctorName =
-        appointment?.doctorEmployeeId?.name?.toLowerCase();
+  changeLimit(limit: number): void {
+    this.pagination.limit = Number(limit);
+    this.loadAppointments(1);
+  }
 
-      const matchesSearch =
-        patientName.includes(this.searchTerm.toLowerCase()) ||
-        doctorName.includes(this.searchTerm.toLowerCase());
+  onSearchInput(): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
 
-      const matchesStatus =
-        this.selectedStatus === '' ||
-        appointment.status === this.selectedStatus;
+    this.searchTimeout = setTimeout(() => {
+      this.loadAppointments(1);
+    }, 500);
+  }
 
-      return matchesSearch && matchesStatus;
-    });
+  onFilterChange(): void {
+    this.loadAppointments(1);
   }
 
   deleteAppointment(id: string): void {

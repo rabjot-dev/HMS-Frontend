@@ -48,6 +48,7 @@ import { ForgotPassword } from './features/auth/forgot-password/forgot-password'
 import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { MyProfile } from './features/profile/my-profile/my-profile';
 import { Home } from './features/floater/home/home';
+import { MedicalRecords } from './features/medical-records/medical-records/medical-records';
 
 export const routes: Routes = [
   // Home Routes
@@ -184,12 +185,16 @@ export const routes: Routes = [
       {
         path: 'patients/create',
 
-        component: AddPatient
+        component: AddPatient,
+
+        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST'])]
       },
       {
         path: 'patients',
 
-        component: PatientList
+        component: PatientList,
+
+        canActivate: [roleGuard(['ADMIN', 'DOCTOR', 'RECEPTIONIST'])]
       },
       {
         path: 'patients/edit/:id',
@@ -201,17 +206,23 @@ export const routes: Routes = [
       {
         path: 'patients/:id',
 
-        component: PatientDetails
+        component: PatientDetails,
+
+        canActivate: [roleGuard(['ADMIN', 'DOCTOR', 'RECEPTIONIST'])]
       },
       {
         path: 'appointments/book',
 
-        component: BookAppointment
+        component: BookAppointment,
+
+        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST'])]
       },
       {
         path: 'appointments',
 
-        component: AppointmentList
+        component: AppointmentList,
+
+        canActivate: [roleGuard(['ADMIN', 'DOCTOR', 'RECEPTIONIST'])]
       },
       {
         path: 'appointments/requests',
@@ -219,32 +230,51 @@ export const routes: Routes = [
         loadComponent: () =>
           import(
             './features/appointments/appointment-requests/appointment-requests'
-          ).then((m) => m.AppointmentRequestsComponent)
+          ).then((m) => m.AppointmentRequestsComponent),
+
+        canActivate: [adminGuard]
       },
       {
         path: 'appointments/edit/:id',
 
-        component: EditAppointment
+        component: EditAppointment,
+
+        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST'])]
       },
       {
         path: 'doctor-queue',
 
-        component: DoctorQueue
+        component: DoctorQueue,
+
+        canActivate: [doctorGuard]
       },
       {
         path: 'consultation/:appointmentId',
 
-        component: ConsultationForm
+        component: ConsultationForm,
+
+        canActivate: [doctorGuard]
       },
       {
         path: 'consultations',
 
-        component: ConsultationList
+        component: ConsultationList,
+
+        canActivate: [roleGuard(['ADMIN', 'DOCTOR'])]
       },
       {
         path: 'doctor-availability',
 
-        component: DoctorAvailability
+        component: DoctorAvailability,
+
+        canActivate: [doctorGuard]
+      },
+      {
+        path: 'medical-records/patient/:patientId',
+
+        component: MedicalRecords,
+
+        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST', 'DOCTOR'])]
       },
       {
         path: 'my-profile',
@@ -257,7 +287,9 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/consultations/consultation-details/consultation-details').then(
             (m) => m.ConsultationDetails
-          )
+          ),
+
+        canActivate: [roleGuard(['ADMIN', 'DOCTOR'])]
       }
     ]
   },

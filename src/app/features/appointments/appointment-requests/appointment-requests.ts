@@ -1,112 +1,119 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import {
-  CommonModule,
-} from '@angular/common';
-
-import {
-  AppointmentService,
-} from '../../../core/services/appointment';
+import { AppointmentService } from '../../../core/services/appointment';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
-  selector:
-    'app-appointment-requests',
-
+  selector: 'app-appointment-requests',
   standalone: true,
-
-  imports: [
-    CommonModule,
-  ],
-
-  templateUrl:
-    './appointment-requests.html',
-
-  styleUrls: [
-    './appointment-requests.css',
-  ],
+  imports: [CommonModule, FormsModule, PaginationComponent],
+  templateUrl: './appointment-requests.html',
+  styleUrls: ['./appointment-requests.css'],
 })
-export class AppointmentRequestsComponent
-implements OnInit {
+export class AppointmentRequestsComponent implements OnInit, OnDestroy {
+  appointments: any[] = [];
+  loading = false;
+  searchTerm = '';
+  fromDate = '';
+  toDate = '';
+  sortBy = 'createdAt';
+  sortOrder = 'desc';
 
-  appointments:
-    any[] = [];
+  private searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  loading =
-    false;
+  pagination = {
+    page: 1,
+    limit: 10,
+    totalRecords: 0,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  };
 
   constructor(
-    private readonly appointmentService:
-      AppointmentService,
-      private readonly cdr: ChangeDetectorRef  ) {}
+    private readonly appointmentService: AppointmentService,
+    private readonly cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-
     this.loadPendingAppointments();
-
   }
 
-  loadPendingAppointments(): void {
+  ngOnDestroy(): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+  }
 
-    this.loading =
-      true;
+  loadPendingAppointments(page = this.pagination.page): void {
+    this.loading = true;
+
+    const filters = {
+      search: this.searchTerm,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
+      sortBy: this.sortBy,
+      sortOrder: this.sortOrder,
+    };
 
     this.appointmentService
-      .getPendingAppointments()
+      .getPendingAppointments(page, this.pagination.limit, filters)
       .subscribe({
+        next: (response) => {
+          this.appointments = response.data || [];
+          this.pagination = response.pagination || this.pagination;
+          this.loading = false;
 
-        next:
-          (response) => {
+          this.cdr.detectChanges();
+        },
 
-            this.appointments =
-              response.data;
-
-            this.loading =
-              false;
-              this.cdr.detectChanges();
-          },
-
-        error:
-          () => {
-
-            this.loading =
-              false;
-          },
+        error: () => {
+          this.loading = false;
+        },
       });
   }
 
-  approve(
-    id: string
-  ): void {
+  onSearchInput(): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
 
-    this.appointmentService
-      .approveAppointment(id)
-      .subscribe({
-
-        next:
-          () => {
-
-            this.loadPendingAppointments();
-          },
-      });
+    this.searchTimeout = setTimeout(() => {
+      this.loadPendingAppointments(1);
+    }, 500);
   }
 
-  reject(
-    id: string
-  ): void {
+  onFilterChange(): void {
+    this.loadPendingAppointments(1);
+  }
 
-    this.appointmentService
-      .rejectAppointment(id)
-      .subscribe({
+  previousPage(): void {
+    if (this.pagination.hasPreviousPage) {
+      this.loadPendingAppointments(this.pagination.page - 1);
+    }
+  }
 
-        next:
-          () => {
+  nextPage(): void {
+    if (this.pagination.hasNextPage) {
+      this.loadPendingAppointments(this.pagination.page + 1);
+    }
+  }
 
-            this.loadPendingAppointments();
-          },
-      });
+  approve(id: string): void {
+    this.appointmentService.approveAppointment(id).subscribe({
+      next: () => {
+        this.loadPendingAppointments();
+      },
+    });
+  }
+
+  reject(id: string): void {
+    this.appointmentService.rejectAppointment(id).subscribe({
+      next: () => {
+        this.loadPendingAppointments();
+      },
+    });
   }
 }

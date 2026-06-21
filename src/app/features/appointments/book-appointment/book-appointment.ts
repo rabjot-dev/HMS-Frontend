@@ -36,6 +36,10 @@ export class BookAppointment implements OnInit {
   appointmentForm: any;
   selectedDoctor: any = null;
   minDate = '';
+  patientSearch = '';
+  doctorSearch = '';
+  showPatientDropdown = false;
+  showDoctorDropdown = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -55,7 +59,7 @@ export class BookAppointment implements OnInit {
 
       reason: [''],
       notes: [''],
-      symptoms: ['', Validators.required],
+      symptoms: [''],
 
       appointmentType: ['', Validators.required],
       priority: ['', Validators.required],
@@ -76,6 +80,34 @@ export class BookAppointment implements OnInit {
     this.appointmentForm.get('department')?.valueChanges.subscribe(() => {
       this.filterDoctors();
     });
+  }
+
+  get filteredPatientsForSearch(): any[] {
+    const search = this.patientSearch.trim().toLowerCase();
+
+    if (!search) {
+      return this.patients;
+    }
+
+    return this.patients.filter((patient) =>
+      `${patient.patientId} ${patient.firstName} ${patient.lastName}`
+        .toLowerCase()
+        .includes(search)
+    );
+  }
+
+  get filteredDoctorsForSearch(): any[] {
+    const search = this.doctorSearch.trim().toLowerCase();
+
+    if (!search) {
+      return this.filteredDoctors;
+    }
+
+    return this.filteredDoctors.filter((doctor) =>
+      `${doctor.name} ${doctor.department}`
+        .toLowerCase()
+        .includes(search)
+    );
   }
 
   // Fetch all patients
@@ -125,10 +157,54 @@ export class BookAppointment implements OnInit {
 
     // Reset doctor and slot selection
     this.appointmentForm.get('doctorId')?.setValue('');
+    this.doctorSearch = '';
+    this.selectedDoctor = null;
     this.availableSlots = [];
     this.noSlotsError = false;
 
     this.cdr.detectChanges();
+  }
+
+  onPatientSearchChange(value: string): void {
+    this.patientSearch = value;
+    this.showPatientDropdown = true;
+    this.appointmentForm.get('patientId')?.setValue('');
+  }
+
+  selectPatient(patient: any): void {
+    this.appointmentForm.get('patientId')?.setValue(patient._id);
+    this.patientSearch = `${patient.patientId} - ${patient.firstName} ${patient.lastName}`;
+    this.showPatientDropdown = false;
+  }
+
+  closePatientDropdown(): void {
+    window.setTimeout(() => {
+      this.showPatientDropdown = false;
+      this.cdr.detectChanges();
+    }, 150);
+  }
+
+  onDoctorSearchChange(value: string): void {
+    this.doctorSearch = value;
+    this.showDoctorDropdown = true;
+    this.appointmentForm.get('doctorId')?.setValue('');
+    this.selectedDoctor = null;
+    this.availableSlots = [];
+    this.noSlotsError = false;
+  }
+
+  selectDoctor(doctor: any): void {
+    this.appointmentForm.get('doctorId')?.setValue(doctor._id);
+    this.doctorSearch = doctor.name;
+    this.showDoctorDropdown = false;
+    this.onDoctorChange();
+  }
+
+  closeDoctorDropdown(): void {
+    window.setTimeout(() => {
+      this.showDoctorDropdown = false;
+      this.cdr.detectChanges();
+    }, 150);
   }
 
   // Load available slots for selected doctor and date
@@ -312,10 +388,13 @@ export class BookAppointment implements OnInit {
       ...this.appointmentForm.value,
 
       symptoms: this.appointmentForm.value.symptoms
-        ?.split(',')
-        .map((symptom: string) =>
-          symptom.trim()
-        )
+        ? this.appointmentForm.value.symptoms
+            .split(',')
+            .map((symptom: string) =>
+              symptom.trim()
+            )
+            .filter(Boolean)
+        : []
     };
 
     console.log(formData);
@@ -342,6 +421,9 @@ export class BookAppointment implements OnInit {
 
           this.availableSlots = [];
           this.filteredDoctors = [];
+          this.patientSearch = '';
+          this.doctorSearch = '';
+          this.selectedDoctor = null;
           this.isSubmitting = false;
         },
 

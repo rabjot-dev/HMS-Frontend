@@ -11,6 +11,50 @@
     <div class="consultation-count">Total: {{ consultations.length }}</div>
   </div>
 
+  <div class="filters-wrapper">
+    <div class="search-box">
+      <span>Search</span>
+
+      <input
+        type="text"
+        placeholder="Search diagnosis or notes..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearchInput()"
+      />
+    </div>
+
+    <select
+      [(ngModel)]="selectedStatus"
+      (change)="onFilterChange()"
+    >
+      <option value="">All Status</option>
+
+      <option value="IN_PROGRESS">In Progress</option>
+
+      <option value="COMPLETED">Completed</option>
+    </select>
+
+    <label class="date-filter">
+      <span>From Date</span>
+
+      <input
+        type="date"
+        [(ngModel)]="fromDate"
+        (change)="onFilterChange()"
+      />
+    </label>
+
+    <label class="date-filter">
+      <span>To Date</span>
+
+      <input
+        type="date"
+        [(ngModel)]="toDate"
+        (change)="onFilterChange()"
+      />
+    </label>
+  </div>
+
   <!-- Loading -->
 
   @if(isLoading){
@@ -128,5 +172,14 @@
     </table>
   </div>
 
+  <app-pagination
+    [pagination]="pagination"
+    totalLabel="consultations"
+    (pagePrevious)="previousPage()"
+    (pageNext)="nextPage()"
+    (pageSizeChange)="changeLimit($event)"
+  ></app-pagination>
+
   } }
 </div>
+

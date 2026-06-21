@@ -496,7 +496,8 @@
 }
 
 .start-btn,
-.complete-btn {
+.complete-btn,
+.records-btn {
   flex: 1;
 
   border: none;
@@ -512,6 +513,16 @@
   transition: all 0.3s ease;
 }
 
+.records-btn {
+  background: #0f172a;
+
+  color: white;
+
+  text-align: center;
+
+  text-decoration: none;
+}
+
 .start-btn {
   background: linear-gradient(135deg, #3b82f6, #2563eb);
 
@@ -525,7 +536,8 @@
 }
 
 .start-btn:hover,
-.complete-btn:hover {
+.complete-btn:hover,
+.records-btn:hover {
   transform: translateY(-3px);
 }
 

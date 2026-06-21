@@ -1,23 +1,37 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { PatientService } from '../../../core/services/patient';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
   selector: 'app-patient-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
   templateUrl: './patient-list.html',
   styleUrls: ['./patient-list.css']
 })
-export class PatientList implements OnInit {
+export class PatientList implements OnInit, OnDestroy {
   patients: any[] = [];
   filteredPatients: any[] = [];
 
   searchTerm = '';
+  statusFilter = '';
+  sortBy = 'createdAt';
+  sortOrder = 'desc';
   userRole = '';
+  private searchTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  pagination = {
+  page: 1,
+  limit: 10,
+  totalRecords: 0,
+  totalPages: 1,
+  hasNextPage: false,
+  hasPreviousPage: false
+};
 
   constructor(
     private readonly patientService: PatientService,
@@ -33,14 +47,28 @@ export class PatientList implements OnInit {
     this.loadPatients();
   }
 
+  ngOnDestroy(): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+  }
+
   // Get all patients
-  loadPatients(): void {
-    this.patientService.getPatients().subscribe({
+  loadPatients(page = this.pagination.page): void {
+    const filters = {
+      search: this.searchTerm,
+      status: this.statusFilter,
+      sortBy: this.sortBy,
+      sortOrder: this.sortOrder
+    };
+
+    this.patientService.getPatients(page, this.pagination.limit, filters).subscribe({
       next: (response) => {
         console.log(response);
 
-        this.patients = response.data;
-        this.filteredPatients = response.data;
+        this.patients = response.data || [];
+        this.filteredPatients = response.data || [];
+        this.pagination = response.pagination || this.pagination;
 
         this.cdr.detectChanges();
       },
@@ -51,17 +79,52 @@ export class PatientList implements OnInit {
     });
   }
 
-  // Search patients
-  searchPatients(): void {
-    const search = this.searchTerm.toLowerCase();
+  previousPage(): void {
+    if (this.pagination.hasPreviousPage) {
+      this.loadPatients(this.pagination.page - 1);
+    }
+  }
 
-    this.filteredPatients = this.patients.filter((patient) => {
-      return (
-        patient.firstName?.toLowerCase().includes(search) ||
-        patient.lastName?.toLowerCase().includes(search) ||
-        patient.patientId?.toLowerCase().includes(search) ||
-        patient.phone?.includes(search)
-      );
+  nextPage(): void {
+    if (this.pagination.hasNextPage) {
+      this.loadPatients(this.pagination.page + 1);
+    }
+  }
+
+  changeLimit(limit: number): void {
+    this.pagination.limit = Number(limit);
+    this.loadPatients(1);
+  }
+
+  // Debounce search input before filtering
+  onSearchInput(): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+
+    this.searchTimeout = setTimeout(() => {
+      this.loadPatients(1);
+    }, 500);
+  }
+
+  // Soft delete patient
+  deletePatient(id: string): void {
+    const confirmDelete = confirm('Delete this patient?');
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    this.patientService.deletePatient(id).subscribe({
+      next: () => {
+        console.log('Patient deleted');
+
+        this.loadPatients();
+      },
+
+      error: (error) => {
+        console.log(error);
+      }
     });
   }
 }

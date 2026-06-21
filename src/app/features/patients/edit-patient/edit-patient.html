@@ -14,6 +14,12 @@
           <label>First Name</label>
 
           <input type="text" placeholder="Enter first name" formControlName="firstName" />
+
+          @if(patientForm.get('firstName')?.touched && patientForm.get('firstName')?.invalid){
+          <span class="error-text">
+            @if(patientForm.get('firstName')?.errors?.['required']){ First name is required } @else if(patientForm.get('firstName')?.errors?.['pattern']){ First name can contain only letters }
+          </span>
+          }
         </div>
 
         <!-- Last Name -->
@@ -22,6 +28,12 @@
           <label>Last Name</label>
 
           <input type="text" placeholder="Enter last name" formControlName="lastName" />
+
+          @if(patientForm.get('lastName')?.touched && patientForm.get('lastName')?.invalid){
+          <span class="error-text">
+            @if(patientForm.get('lastName')?.errors?.['required']){ Last name is required } @else if(patientForm.get('lastName')?.errors?.['pattern']){ Last name can contain only letters }
+          </span>
+          }
         </div>
 
         <!-- Gender -->
@@ -71,7 +83,13 @@
         <div class="form-group">
           <label>Phone Number</label>
 
-          <input type="text" placeholder="Enter phone number" formControlName="phone" />
+          <input type="text" maxlength="10" inputmode="numeric" placeholder="Enter phone number" formControlName="phone" />
+
+          @if(patientForm.get('phone')?.touched && patientForm.get('phone')?.invalid){
+          <span class="error-text">
+            @if(patientForm.get('phone')?.errors?.['pattern']){ Phone number must contain exactly 10 digits }
+          </span>
+          }
         </div>
 
         <!-- Email -->

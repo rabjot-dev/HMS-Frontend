@@ -28,7 +28,7 @@
               searchText
               "
         (input)="
-              onSearch()
+              onSearchInput()
               "
       />
     </div>
@@ -170,10 +170,33 @@
               >
                 Activate
               </button>
+
+              <!-- Delete -->
+
+              <button
+                type="button"
+                (click)="
+                              deleteEmployee(
+                                employee._id
+                              )
+                              "
+                class="action-btn delete"
+              >
+                Delete
+              </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+
+  <app-pagination
+    [pagination]="pagination"
+    totalLabel="employees"
+    (pagePrevious)="previousPage()"
+    (pageNext)="nextPage()"
+    (pageSizeChange)="changeLimit($event)"
+  ></app-pagination>
 </div>
+

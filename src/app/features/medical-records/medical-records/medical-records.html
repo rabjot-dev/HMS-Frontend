@@ -1,0 +1,160 @@
+<div class="medical-records-page">
+  <div class="top-section">
+    <div>
+      <p class="section-label">Patient Health Records</p>
+
+      <h1>Medical Records</h1>
+
+      @if(patientId) {
+      <p class="page-subtitle">Showing prescription history for the selected patient.</p>
+      }
+    </div>
+
+    <div class="record-count">Total: {{ pagination.totalRecords }}</div>
+  </div>
+
+  <div class="tabs">
+    <button
+      type="button"
+      [class.active]="activeTab === 'prescriptions'"
+      (click)="setActiveTab('prescriptions')"
+    >
+      Prescriptions
+    </button>
+
+    <button
+      type="button"
+      [class.active]="activeTab === 'labReports'"
+      (click)="setActiveTab('labReports')"
+    >
+      Lab Reports
+    </button>
+  </div>
+
+  @if(activeTab === 'prescriptions') {
+  <div class="filters-wrapper">
+    <div class="search-box">
+      <span>Search</span>
+
+      <input
+        type="text"
+        placeholder="Search patient, doctor, diagnosis, medicine..."
+        [ngModel]="searchTerm"
+        (ngModelChange)="onSearchInput($event)"
+      />
+    </div>
+
+    <label class="date-filter">
+      <span>From Date</span>
+
+      <input type="date" [(ngModel)]="fromDate" (change)="onFilterChange()" />
+    </label>
+
+    <label class="date-filter">
+      <span>To Date</span>
+
+      <input type="date" [(ngModel)]="toDate" (change)="onFilterChange()" />
+    </label>
+  </div>
+
+  @if(isLoading) {
+  <div class="loading-card">
+    <div class="loader"></div>
+
+    <p>Loading prescriptions...</p>
+  </div>
+  } @else { @if(prescriptions.length === 0) {
+  <div class="empty-state">
+    <div class="empty-icon">Rx</div>
+
+    <h2>No Prescriptions Found</h2>
+
+    <p>Doctor consultation prescriptions will appear here.</p>
+  </div>
+  } @else {
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Patient</th>
+
+          <th>Doctor</th>
+
+          <th>Diagnosis</th>
+
+          <th>Medicines</th>
+
+          <th>Date</th>
+
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for(record of prescriptions; track record._id) {
+        <tr>
+          <td>
+            <div class="patient-info">
+              <div class="patient-avatar">
+                {{ record?.patientId?.firstName?.charAt(0) || 'P' }}
+              </div>
+
+              <div>
+                <h4>
+                  {{ record?.patientId?.firstName }}
+                  {{ record?.patientId?.lastName }}
+                </h4>
+
+                <p>{{ record?.patientId?.patientId }}</p>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <span class="doctor-badge">{{ record?.doctorEmployeeId?.name }}</span>
+          </td>
+
+          <td>
+            <span class="diagnosis-text">{{ record?.diagnosis || 'Not added' }}</span>
+          </td>
+
+          <td>
+            <span class="medicine-count">
+              {{ record?.prescriptions?.length || 0 }} medicines
+            </span>
+          </td>
+
+          <td>
+            <span class="date-text">{{ record?.createdAt | date: 'mediumDate' }}</span>
+          </td>
+
+          <td>
+            <a class="view-btn" [routerLink]="['/consultations', record._id]">
+              View
+            </a>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <app-pagination
+    [pagination]="pagination"
+    totalLabel="prescriptions"
+    (pagePrevious)="previousPage()"
+    (pageNext)="nextPage()"
+    (pageSizeChange)="changeLimit($event)"
+  ></app-pagination>
+  } } }
+
+  @if(activeTab === 'labReports') {
+  <div class="empty-state">
+    <div class="empty-icon">LAB</div>
+
+    <h2>No Lab Reports Found</h2>
+
+    <p>Lab reports will appear here when available.</p>
+  </div>
+  }
+</div>

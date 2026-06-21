@@ -69,7 +69,7 @@ export class AddEmployee {
         [
           Validators.minLength(2),
           Validators.maxLength(100),
-          Validators.pattern(/^[A-Za-z0-9\s.,()-]+$/)
+          Validators.pattern(/^[A-Za-z\s.,]+$/)
         ]
       ],
 
@@ -117,7 +117,7 @@ export class AddEmployee {
           Validators.required,
           Validators.minLength(2),
           Validators.maxLength(100),
-          Validators.pattern(/^[A-Za-z0-9\s.,()-]+$/)
+          Validators.pattern(/^[A-Za-z\s.,]+$/)
         ]);
 
         this.employeeForm.get('specialization')?.setValidators([

@@ -441,6 +441,20 @@ tbody td:last-child {
   background: rgba(245, 158, 11, 0.2);
 }
 
+.action-btn.delete {
+  border: none;
+
+  background: rgba(127, 29, 29, 0.12);
+
+  color: #991b1b;
+
+  cursor: pointer;
+}
+
+.action-btn.delete:hover {
+  background: rgba(127, 29, 29, 0.18);
+}
+
 /*
 |--------------------------------------------------------------------------
 | Scrollbar
@@ -498,3 +512,4 @@ tbody td:last-child {
     padding: 16px 0;
   }
 }
+

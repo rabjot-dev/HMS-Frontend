@@ -402,9 +402,9 @@ registerForm.get('medicalRegistrationNo')?.touched){
 
           <input type="password" formControlName="password" placeholder="Enter password" />
 
-          @if(registerForm.get('password')?.errors?.['required']){
+          @if(registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['required']){
           <span class="error-text">Password is required</span>
-          } @if(registerForm.get('password')?.errors?.['pattern']){
+          } @if(registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['pattern']){
           <span class="error-text">Password must contain uppercase, lowercase, number and special character</span>
           }
         </div>
@@ -415,6 +415,10 @@ registerForm.get('medicalRegistrationNo')?.touched){
           <label>Confirm Password</label>
 
           <input type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+
+          @if(registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors?.['required']){
+          <span class="error-text">Confirm Password is required</span>
+          }
 
           @if( registerForm.value.password && registerForm.value.confirmPassword && registerForm.value.password !==
           registerForm.value.confirmPassword ){
@@ -437,7 +441,7 @@ registerForm.get('medicalRegistrationNo')?.touched){
             }
           </select>
 
-          @if(registerForm.get('securityQuestion')?.errors?.['required']){
+          @if(registerForm.get('securityQuestion')?.touched && registerForm.get('securityQuestion')?.errors?.['required']){
           <span class="error-text">Security Question is required</span>
           }
         </div>

@@ -28,8 +28,20 @@ today =
   ) {
     this.patientForm = this.fb.group({
       // Basic Information
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
       dateOfBirth: [ '', [Validators.required,this.futureDateValidator ]],
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
@@ -40,14 +52,38 @@ today =
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       email: ['', Validators.required],
       address: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
+      city: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
+      state: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
       pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
       country: ['India'],
 
       // Emergency Contact
-      emergencyContactName: ['', Validators.required],
-      emergencyContactPhone: ['', Validators.required],
+      emergencyContactName: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
+      emergencyContactPhone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\d{10}$/)
+        ]
+      ],
 
       // Medical Information
       medicalHistory: [''],

@@ -39,7 +39,7 @@
               searchTerm
               "
         (input)="
-              searchPatients()
+              onSearchInput()
               "
       />
     </div>
@@ -143,6 +143,18 @@
                 Edit
               </a>
 
+              <button
+                type="button"
+                class="action-btn delete"
+                (click)="
+                                deletePatient(
+                                  patient._id
+                                )
+                                "
+              >
+                Delete
+              </button>
+
               }
             </div>
           </td>
@@ -152,4 +164,11 @@
       </tbody>
     </table>
   </div>
+  <app-pagination
+    [pagination]="pagination"
+    totalLabel="patients"
+    (pagePrevious)="previousPage()"
+    (pageNext)="nextPage()"
+    (pageSizeChange)="changeLimit($event)"
+  ></app-pagination>
 </div>

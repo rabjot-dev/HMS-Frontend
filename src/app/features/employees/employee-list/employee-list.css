@@ -380,6 +380,12 @@ tbody td:last-child {
   color: #15803d;
 }
 
+.action-btn.delete {
+  background: rgba(127, 29, 29, 0.12);
+
+  color: #991b1b;
+}
+
 /*
 |--------------------------------------------------------------------------
 | Responsive
@@ -398,3 +404,4 @@ tbody td:last-child {
     min-width: 1100px;
   }
 }
+

@@ -9,35 +9,25 @@
     <!-- ADMIN -->
 
     <ng-container *ngIf="isAdmin()">
-      <a routerLink="/dashboard">Dashboard</a>
+      <a routerLink="/dashboard/admin">Dashboard</a>
 
       <a routerLink="/employees">Employees</a>
 
-      <a routerLink="/add-employee">Add Employee</a>
+      <a routerLink="/employees/create">Add Employee</a>
 
-      <a routerLink="/pending-employees">Pending Requests</a>
+      <a routerLink="/employees/pending">Pending Requests</a>
     </ng-container>
 
     <!-- DOCTOR -->
 
     <ng-container *ngIf="isDoctor()">
-      <a routerLink="/dashboard">Dashboard</a>
+      <a routerLink="/dashboard/doctor">Dashboard</a>
 
       <a routerLink="/appointments">Appointments</a>
 
       <a routerLink="/patients">Patients</a>
 
-      <a routerLink="/availability">Availability</a>
-    </ng-container>
-
-    <!-- NURSE -->
-
-    <ng-container *ngIf="isNurse()">
-      <a routerLink="/dashboard">Dashboard</a>
-
-      <a routerLink="/assigned-patients">Assigned Patients</a>
-
-      <a routerLink="/vitals">Vitals</a>
+      <a routerLink="/doctor-availability">Availability</a>
     </ng-container>
 
     <!-- RECEPTIONIST -->
@@ -47,13 +37,13 @@
         isReceptionist()
       "
     >
-      <a routerLink="/dashboard">Dashboard</a>
+      <a routerLink="/dashboard/receptionist">Dashboard</a>
 
       <a routerLink="/patients">Patients</a>
 
       <a routerLink="/appointments">Appointments</a>
 
-      <a routerLink="/billing">Billing</a>
+      <a routerLink="/appointments/book">Book Appointment</a>
     </ng-container>
   </div>
 

@@ -320,7 +320,7 @@
             @if(employeeForm.get('qualification')?.errors?.['required']){ Qualification is required }
              @else if(employeeForm.get('qualification')?.errors?.['minlength']){ Minimum 2 characters required }
               @else if(employeeForm.get('qualification')?.errors?.['maxlength']){ Maximum 100 characters allowed }
-               @else if(employeeForm.get('qualification')?.errors?.['pattern']){ Invalid qualification format }
+               @else if(employeeForm.get('qualification')?.errors?.['pattern']){ Qualification can contain only letters, dots and commas }
           </span>
 
           }

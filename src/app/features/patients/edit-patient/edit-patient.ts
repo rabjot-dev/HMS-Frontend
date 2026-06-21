@@ -26,11 +26,23 @@ export class EditPatient implements OnInit {
     private readonly patientService: PatientService
   ) {
     this.patientForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
       gender: [''],
       bloodGroup: [''],
-      phone: [''],
+      phone: ['', Validators.pattern(/^\d{10}$/)],
       email: [''],
       medicalHistory: [''],
       allergies: [''],
@@ -93,6 +105,8 @@ export class EditPatient implements OnInit {
   // Update patient
   onSubmit(): void {
     if (this.patientForm.invalid) {
+      this.patientForm.markAllAsTouched();
+
       return;
     }
 

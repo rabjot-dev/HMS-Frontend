@@ -80,7 +80,9 @@
 
         @if(employeeForm.get('department')?.touched && employeeForm.get('department')?.invalid){
 
-        <span class="error-text">Department is required</span>
+        <span class="error-text">
+          @if(employeeForm.get('department')?.errors?.['required']){ Department is required } @else if(employeeForm.get('department')?.errors?.['pattern']){ Department can contain only letters }
+        </span>
 
         }
       </div>

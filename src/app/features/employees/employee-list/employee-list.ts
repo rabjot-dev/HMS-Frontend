@@ -1,20 +1,35 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { EmployeeService } from '../../../core/services/employee';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
   selector: 'app-employee-list',
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, PaginationComponent],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.css'
 })
-export class EmployeeList implements OnInit {
+export class EmployeeList implements OnInit, OnDestroy {
   employees: any[] = [];
   filteredEmployees: any[] = [];
   searchText = '';
+  statusFilter = '';
+  sortBy = 'createdAt';
+  sortOrder = 'desc';
+
+  private searchTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  pagination = {
+    page: 1,
+    limit: 10,
+    totalRecords: 0,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPreviousPage: false
+  };
 
   constructor(
     private readonly employeeService: EmployeeService,
@@ -26,14 +41,28 @@ export class EmployeeList implements OnInit {
     this.loadEmployees();
   }
 
+  ngOnDestroy(): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+  }
+
   // Get all employees
-  loadEmployees(): void {
-    this.employeeService.getEmployees().subscribe({
+  loadEmployees(page = this.pagination.page): void {
+    const filters = {
+      search: this.searchText,
+      status: this.statusFilter,
+      sortBy: this.sortBy,
+      sortOrder: this.sortOrder
+    };
+
+    this.employeeService.getEmployees(page, this.pagination.limit, filters).subscribe({
       next: (response: any) => {
         console.log(response);
 
-        this.employees = response.data;
-        this.filteredEmployees = [...response.data];
+        this.employees = response.data || [];
+        this.filteredEmployees = [...(response.data || [])];
+        this.pagination = response.pagination || this.pagination;
 
         this.cdr.detectChanges();
       },
@@ -43,18 +72,31 @@ export class EmployeeList implements OnInit {
       }
     });
   }
+  previousPage(): void {
+    if (this.pagination.hasPreviousPage) {
+      this.loadEmployees(this.pagination.page - 1);
+    }
+  }
 
-  // Search employees
-  onSearch(): void {
-    const search = this.searchText.toLowerCase();
+  nextPage(): void {
+    if (this.pagination.hasNextPage) {
+      this.loadEmployees(this.pagination.page + 1);
+    }
+  }
 
-    this.filteredEmployees = this.employees.filter((employee) => {
-      return (
-        employee.name.toLowerCase().includes(search) ||
-        employee.employeeCode.toLowerCase().includes(search) ||
-        employee.designation.toLowerCase().includes(search)
-      );
-    });
+  changeLimit(limit: number): void {
+    this.pagination.limit = Number(limit);
+    this.loadEmployees(1);
+  }
+
+  onSearchInput(): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+
+    this.searchTimeout = setTimeout(() => {
+      this.loadEmployees(1);
+    }, 500);
   }
 
   // Deactivate employee
@@ -79,6 +121,27 @@ export class EmployeeList implements OnInit {
     this.employeeService.activateEmployee(id).subscribe({
       next: () => {
         console.log('Employee activated');
+
+        this.loadEmployees();
+      },
+
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  // Soft delete employee
+  deleteEmployee(id: string): void {
+    const confirmDelete = confirm('Delete this employee?');
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    this.employeeService.deleteEmployee(id).subscribe({
+      next: () => {
+        console.log('Employee deleted');
 
         this.loadEmployees();
       },

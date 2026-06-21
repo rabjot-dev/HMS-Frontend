@@ -13,6 +13,19 @@
     <div class="pending-count">{{ pendingEmployees.length }} Pending</div>
   </div>
 
+  <div class="filters-wrapper glass-card">
+    <div class="search-box">
+      <span>Search</span>
+
+      <input
+        type="text"
+        placeholder="Search pending employee..."
+        [(ngModel)]="searchText"
+        (input)="onSearchInput()"
+      />
+    </div>
+  </div>
+
   <!-- Empty State -->
 
   @if( pendingEmployees.length === 0 ){
@@ -100,5 +113,14 @@
     }
   </div>
 
+  <app-pagination
+    [pagination]="pagination"
+    totalLabel="pending employees"
+    (pagePrevious)="previousPage()"
+    (pageNext)="nextPage()"
+    (pageSizeChange)="changeLimit($event)"
+  ></app-pagination>
+
   }
 </div>
+

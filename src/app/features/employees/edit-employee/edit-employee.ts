@@ -57,7 +57,13 @@ export class EditEmployee implements OnInit {
 
       gender: ['', Validators.required],
 
-      department: ['', Validators.required],
+      department: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z\s]+$/)
+        ]
+      ],
 
       designation: ['', Validators.required],
 

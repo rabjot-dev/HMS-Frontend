@@ -17,6 +17,7 @@ export class ResetPassword implements OnInit {
 
   email = '';
   securityQuestion = '';
+  errorMessage = '';
 
   resetForm: any;
 
@@ -57,6 +58,8 @@ export class ResetPassword implements OnInit {
 
   // Reset password
   onSubmit(): void {
+    this.errorMessage = '';
+
     if (this.resetForm.invalid) {
       this.resetForm.markAllAsTouched();
       return;
@@ -100,6 +103,8 @@ export class ResetPassword implements OnInit {
         console.log(error?.error?.errors);
 
         this.isSubmitting = false;
+        this.errorMessage =
+          error?.error?.message || 'Failed to reset password';
       }
     });
   }

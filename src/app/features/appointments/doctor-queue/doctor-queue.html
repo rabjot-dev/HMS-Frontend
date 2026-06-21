@@ -169,6 +169,16 @@
       <!-- Actions -->
 
       <div class="actions">
+        <a
+          class="records-btn"
+          [routerLink]="[
+                    '/medical-records/patient',
+                    appointment?.patientId?._id
+                  ]"
+        >
+          View Records
+        </a>
+
         @if( appointment ?.status === 'BOOKED' ){
 
         <button

@@ -29,17 +29,29 @@
         <div class="form-group">
           <label>Patient</label>
 
-          <select formControlName="patientId">
-            <option value="">Select Patient</option>
+          <div class="search-dropdown">
+            <input
+              type="text"
+              [value]="patientSearch"
+              placeholder="Search or select patient"
+              (focus)="showPatientDropdown = true"
+              (blur)="closePatientDropdown()"
+              (input)="onPatientSearchChange($any($event.target).value)"
+            />
 
-            @for( patient of patients; track patient._id ){
-
-            <option [value]="patient._id">
-              {{ patient.patientId }} - {{ patient.firstName }} {{ patient.lastName }}
-            </option>
-
+            @if(showPatientDropdown){
+            <div class="dropdown-list">
+              @for( patient of filteredPatientsForSearch; track patient._id ){
+              <button type="button" class="dropdown-option" (mousedown)="selectPatient(patient)">
+                {{ patient.patientId }} - {{ patient.firstName }} {{ patient.lastName }}
+              </button>
+              } @empty {
+              <div class="dropdown-empty">No patients found</div>
+              }
+            </div>
             }
-          </select>
+          </div>
+
           @if(appointmentForm.get('patientId')?.invalid && appointmentForm.get('patientId')?.touched){
           <span class="error-text">Patient Id is required</span>
           }
@@ -107,11 +119,29 @@
         <div class="form-group">
           <label>Doctor</label>
 
-          <select formControlName="doctorId" (change)="onDoctorChange()">
-            <option value="">Select Doctor</option>
+          <div class="search-dropdown">
+            <input
+              type="text"
+              [value]="doctorSearch"
+              placeholder="Search or select doctor"
+              [disabled]="!appointmentForm.get('department')?.value"
+              (focus)="showDoctorDropdown = true"
+              (blur)="closeDoctorDropdown()"
+              (input)="onDoctorSearchChange($any($event.target).value)"
+            />
 
-            <option *ngFor="let doctor of filteredDoctors" [value]="doctor._id">{{ doctor.name }}</option>
-          </select>
+            @if(showDoctorDropdown){
+            <div class="dropdown-list">
+              @for( doctor of filteredDoctorsForSearch; track doctor._id ){
+              <button type="button" class="dropdown-option" (mousedown)="selectDoctor(doctor)">
+                {{ doctor.name }}
+              </button>
+              } @empty {
+              <div class="dropdown-empty">No doctors found</div>
+              }
+            </div>
+            }
+          </div>
 
           <!-- Consultation Fee -->
 
