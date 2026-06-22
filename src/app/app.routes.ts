@@ -243,27 +243,35 @@ export const routes: Routes = [
     // Consultations
     // =====================
 
-    {
-      path: 'consultations',
-      component: ConsultationList,
-      canActivate: [nodeGuard]
-    },
-
+   {
+  path: 'health-records',
+  loadComponent: () =>
+    import(
+      './features/health-records/health-record-list/health-record-list'
+    ).then(
+      (m) => m.HealthRecordList
+    ),
+  canActivate: [nodeGuard]
+},
     // Internal pages
     {
       path: 'consultation/:appointmentId',
       component: ConsultationForm
     },
+    
+{
+  path: 'health-records/:patientId',
+  loadComponent: () =>
+    import(
+      './features/health-records/health-record-details/health-record-details'
+    ).then(
+      (m) => m.HealthRecordDetails
+    )
+},
 
-    {
-      path: 'consultations/:id',
-      loadComponent: () =>
-        import(
-          './features/consultations/consultation-details/consultation-details'
-        ).then(
-          (m) => m.ConsultationDetails
-        )
-    },
+
+
+   
 
     // =====================
     // Profile

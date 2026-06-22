@@ -10,6 +10,12 @@ export interface ToastState {
   providedIn: 'root'
 })
 export class ToastService {
+  error(arg0: string) {
+    throw new Error('Method not implemented.');
+  }
+  success(arg0: string) {
+    throw new Error('Method not implemented.');
+  }
   toast$ = new BehaviorSubject<any>(null);
 
   show(message: string, type: 'success' | 'error') {

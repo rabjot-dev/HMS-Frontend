@@ -56,13 +56,7 @@ export class NodeService {
           this.nodes.next(
             response.data,
           );
-          console.log(
-        JSON.stringify(
-          this.nodes.value,
-          null,
-          2
-        )
-    );
+          
 
           localStorage.setItem(
             'nodes',
