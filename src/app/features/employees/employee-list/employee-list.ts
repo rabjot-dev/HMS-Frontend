@@ -58,7 +58,6 @@ export class EmployeeList implements OnInit, OnDestroy {
 
     this.employeeService.getEmployees(page, this.pagination.limit, filters).subscribe({
       next: (response: any) => {
-        console.log(response);
 
         this.employees = response.data || [];
         this.filteredEmployees = [...(response.data || [])];
@@ -68,7 +67,6 @@ export class EmployeeList implements OnInit, OnDestroy {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -101,17 +99,14 @@ export class EmployeeList implements OnInit, OnDestroy {
 
   // Deactivate employee
   deactivateEmployee(id: string): void {
-    console.log(id);
 
     this.employeeService.deactivateEmployee(id).subscribe({
       next: () => {
-        console.log('Employee deactivated');
 
         this.loadEmployees();
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -120,13 +115,11 @@ export class EmployeeList implements OnInit, OnDestroy {
   activateEmployee(id: string): void {
     this.employeeService.activateEmployee(id).subscribe({
       next: () => {
-        console.log('Employee activated');
 
         this.loadEmployees();
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -141,13 +134,11 @@ export class EmployeeList implements OnInit, OnDestroy {
 
     this.employeeService.deleteEmployee(id).subscribe({
       next: () => {
-        console.log('Employee deleted');
 
         this.loadEmployees();
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }

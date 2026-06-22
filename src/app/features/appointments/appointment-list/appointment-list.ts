@@ -74,7 +74,6 @@ export class AppointmentList implements OnInit, OnDestroy {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -124,7 +123,6 @@ export class AppointmentList implements OnInit, OnDestroy {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }

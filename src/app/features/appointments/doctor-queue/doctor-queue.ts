@@ -30,7 +30,6 @@ export class DoctorQueue implements OnInit {
   ngOnInit(): void {
     this.authService.currentUser.subscribe({
       next: (user: any) => {
-        console.log(user);
 
         this.doctorEmployeeId = user?.employeeId?._id;
 
@@ -49,7 +48,6 @@ export class DoctorQueue implements OnInit {
       .getDoctorQueue(this.doctorEmployeeId)
       .subscribe({
         next: (response) => {
-          console.log(response);
 
           this.appointments = response.data;
 
@@ -58,7 +56,6 @@ export class DoctorQueue implements OnInit {
         },
 
         error: (error) => {
-          console.log(error);
 
           this.isLoading = false;
         }
@@ -79,7 +76,6 @@ export class DoctorQueue implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log(response);
 
           alert('Consultation completed');
 
@@ -87,7 +83,6 @@ export class DoctorQueue implements OnInit {
         },
 
         error: (error) => {
-          console.log(error);
         }
       });
   }
@@ -106,7 +101,6 @@ export class DoctorQueue implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log(response);
 
           alert('Consultation started');
 
@@ -114,7 +108,6 @@ export class DoctorQueue implements OnInit {
         },
 
         error: (error) => {
-          console.log(error);
         }
       });
   }

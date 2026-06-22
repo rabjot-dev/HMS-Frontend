@@ -23,7 +23,7 @@
 */
 .error-text {
   color: #e53e3e;
-  font-size: 17px;
+  font-size: var(--font-lg);
   margin-top: 6px;
   display: block;
   padding-left: 4px;
@@ -41,14 +41,14 @@
 
 .page-label {
   color: #3b82f6;
-  font-size: 13px;
+  font-size: var(--font-sm);
   font-weight: 700;
   text-transform: uppercase;
   margin-bottom: 10px;
 }
 
 .page-header h1 {
-  font-size: 42px;
+  font-size: var(--font-hero);
   margin-bottom: 10px;
   color: #0f172a;
 }
@@ -150,7 +150,7 @@
 }
 
 .field-label {
-  font-size: 16px;
+  font-size: var(--font-lg);
   color: #64748b;
   position: relative;
   bottom: 25px;
@@ -173,7 +173,7 @@ textarea {
   border-radius: 18px;
   border: 1px solid rgba(148, 163, 184, 0.25);
   background: rgba(255, 255, 255, 0.7);
-  font-size: 15px;
+  font-size: var(--font-base);
   transition: all 0.3s ease;
   box-sizing: border-box;
   font-family: inherit;
@@ -251,7 +251,7 @@ button {
   border: none;
   padding: 16px 26px;
   border-radius: 18px;
-  font-size: 15px;
+  font-size: var(--font-base);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -315,7 +315,7 @@ button:disabled {
 }
 .error-message {
   color: #ef4444;
-  font-size: 13px;
+  font-size: var(--font-sm);
   font-weight: 500;
   margin-top: 6px;
   margin-bottom: 12px;

@@ -176,8 +176,6 @@ today =
 
   // Register patient
   onSubmit(): void {
-    console.log('Register Patient Clicked');
-    console.log(this.patientForm.value);
 
     this.patientForm.get('patientType')?.markAsTouched();
 
@@ -186,13 +184,11 @@ today =
     }
 
     if (this.patientForm.invalid) {
-      console.log('FORM INVALID');
 
       Object.keys(this.patientForm.controls).forEach((key) => {
         const control = this.patientForm.get(key);
 
         if (control?.invalid) {
-          console.log(key, control.errors);
         }
       });
 
@@ -205,7 +201,6 @@ today =
 
     this.patientService.createPatient(this.patientForm.value).subscribe({
       next: (response) => {
-        console.log(response);
 
         this.toastService.show(
           'Patient Registered Successfully',
@@ -228,8 +223,6 @@ today =
       },
 
       error: (error) => {
-        console.log('FULL ERROR =>', error);
-        console.log('VALIDATION ERRORS =>', error?.error?.errors);
 
         alert(
           JSON.stringify(

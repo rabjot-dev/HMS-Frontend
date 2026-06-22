@@ -42,7 +42,6 @@ export class PatientList implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userRole = localStorage.getItem('role') || '';
 
-    console.log('ROLE:', this.userRole);
 
     this.loadPatients();
   }
@@ -64,7 +63,6 @@ export class PatientList implements OnInit, OnDestroy {
 
     this.patientService.getPatients(page, this.pagination.limit, filters).subscribe({
       next: (response) => {
-        console.log(response);
 
         this.patients = response.data || [];
         this.filteredPatients = response.data || [];
@@ -74,7 +72,6 @@ export class PatientList implements OnInit, OnDestroy {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -117,13 +114,11 @@ export class PatientList implements OnInit, OnDestroy {
 
     this.patientService.deletePatient(id).subscribe({
       next: () => {
-        console.log('Patient deleted');
 
         this.loadPatients();
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }

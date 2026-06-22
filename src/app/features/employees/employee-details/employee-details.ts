@@ -30,7 +30,6 @@ export class EmployeeDetails implements OnInit {
 
     this.employeeService.getEmployeeById(id).subscribe({
       next: (response: any) => {
-        console.log(response);
 
         this.employee = response.data;
 
@@ -38,7 +37,6 @@ export class EmployeeDetails implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }

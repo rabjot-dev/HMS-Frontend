@@ -14,7 +14,7 @@
 }
 .error-text {
   color: #e53e3e;
-  font-size: 12px;
+  font-size: var(--font-xs);
   margin-top: 4px;
   display: block;
 }
@@ -84,7 +84,7 @@
 
   justify-content: center;
 
-  font-size: 38px;
+  font-size: var(--font-hero);
 
   font-weight: 700;
 
@@ -94,7 +94,7 @@
 }
 
 .brand-content h1 {
-  font-size: 54px;
+  font-size: var(--font-hero);
 
   font-weight: 800;
 
@@ -104,7 +104,7 @@
 }
 
 .brand-content p {
-  font-size: 18px;
+  font-size: var(--font-xl);
 
   color: rgba(255, 255, 255, 0.82);
 
@@ -138,13 +138,13 @@
 
   backdrop-filter: blur(12px);
 
-  font-size: 15px;
+  font-size: var(--font-base);
 
   font-weight: 500;
 }
 
 .feature-item span {
-  font-size: 20px;
+  font-size: var(--font-2xl);
 }
 
 /*
@@ -153,7 +153,11 @@
 |--------------------------------------------------------------------------
 */
 .login-right {
-  width: 520px;
+  width: 40%;
+
+  min-width: 520px;
+
+  max-width: 680px;
 
   display: flex;
 
@@ -190,7 +194,7 @@
 }
 
 .login-header h2 {
-  font-size: 34px;
+  font-size: var(--font-4xl);
 
   margin-bottom: 10px;
 
@@ -219,7 +223,7 @@
 
   font-weight: 600;
 
-  font-size: 14px;
+  font-size: var(--font-md);
 }
 
 .input-group input {
@@ -233,7 +237,7 @@
 
   background: rgba(255, 255, 255, 0.7);
 
-  font-size: 15px;
+  font-size: var(--font-base);
 
   transition: all 0.3s ease;
 }
@@ -291,7 +295,7 @@
 
   margin-bottom: 20px;
 
-  font-size: 14px;
+  font-size: var(--font-md);
 }
 
 /*
@@ -312,7 +316,7 @@
 
   color: white;
 
-  font-size: 15px;
+  font-size: var(--font-base);
 
   font-weight: 600;
 
@@ -377,6 +381,7 @@
   }
 
   .login-header h2 {
-    font-size: 28px;
+    font-size: var(--font-3xl);
   }
 }
+

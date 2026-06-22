@@ -46,8 +46,6 @@ export class Login {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (response: any) => {
-        console.log('API SUCCESS');
-        console.log(response);
 
         const accessToken =response?.data?.accessToken;
 
@@ -92,8 +90,6 @@ this.tokenService.setRefreshToken(
       },
 
       error: (error) => {
-        console.log('API ERROR');
-        console.log(error);
 
         this.toastService.show(
           error?.error?.message || 'Login failed',

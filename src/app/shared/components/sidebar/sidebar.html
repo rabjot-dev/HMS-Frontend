@@ -1,53 +1,74 @@
-<div class="sidebar">
-  <!-- Logo -->
+<aside class="sidebar glass">
+  <div class="logo-section">
+    <div class="logo-circle">B</div>
 
-  <div class="logo">HMS</div>
+    <div>
+      <h2>BootStrap HMS</h2>
 
-  <!-- Menu -->
-
-  <div class="menu">
-    <!-- ADMIN -->
-
-    <ng-container *ngIf="isAdmin()">
-      <a routerLink="/dashboard/admin">Dashboard</a>
-
-      <a routerLink="/employees">Employees</a>
-
-      <a routerLink="/employees/create">Add Employee</a>
-
-      <a routerLink="/employees/pending">Pending Requests</a>
-    </ng-container>
-
-    <!-- DOCTOR -->
-
-    <ng-container *ngIf="isDoctor()">
-      <a routerLink="/dashboard/doctor">Dashboard</a>
-
-      <a routerLink="/appointments">Appointments</a>
-
-      <a routerLink="/patients">Patients</a>
-
-      <a routerLink="/doctor-availability">Availability</a>
-    </ng-container>
-
-    <!-- RECEPTIONIST -->
-
-    <ng-container
-      *ngIf="
-        isReceptionist()
-      "
-    >
-      <a routerLink="/dashboard/receptionist">Dashboard</a>
-
-      <a routerLink="/patients">Patients</a>
-
-      <a routerLink="/appointments">Appointments</a>
-
-      <a routerLink="/appointments/book">Book Appointment</a>
-    </ng-container>
+      <p>Smart Healthcare</p>
+    </div>
   </div>
 
-  <!-- Logout -->
+  @if(authService.currentUser | async; as user) {
+    <div class="profile-card">
+      <div class="avatar">{{ user.email?.charAt(0)?.toUpperCase() }}</div>
 
-  <button class="logout-btn" (click)="logout()">Logout</button>
-</div>
+      <div>
+        <h4>{{ user.roles?.[0] }}</h4>
+
+        <span>{{ user.email }}</span>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      @for(menu of menuNodes; track menu._id) {
+        @if(hasChildren(menu)) {
+          <div class="menu-group">
+            <button
+              type="button"
+              class="menu-parent"
+              [class.expanded]="isExpanded(menu._id)"
+              (click)="toggleMenu(menu._id)"
+            >
+              <span class="menu-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path [attr.d]="getIconPath(menu.icon)"></path>
+                </svg>
+              </span>
+
+              <strong>{{ menu.label }}</strong>
+
+              <small>{{ isExpanded(menu._id) ? "-" : "+" }}</small>
+            </button>
+
+            @if(isExpanded(menu._id)) {
+              <div class="submenu">
+                @for(child of menu.children; track child._id) {
+                  <a [routerLink]="child.path" routerLinkActive="active-link">
+                    <span class="menu-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <path [attr.d]="getIconPath(child.icon)"></path>
+                      </svg>
+                    </span>
+
+                    {{ child.label }}
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <a [routerLink]="menu.path" routerLinkActive="active-link">
+            <span class="menu-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path [attr.d]="getIconPath(menu.icon)"></path>
+              </svg>
+            </span>
+
+            {{ menu.label }}
+          </a>
+        }
+      }
+    </nav>
+  }
+</aside>

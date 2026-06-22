@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 
 import { AuthService } from '../../../core/services/auth';
@@ -8,7 +7,7 @@ import { DashboardService } from '../../../core/services/dashboard';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [RouterLink, AsyncPipe],
+  imports: [AsyncPipe],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css'
 })
@@ -33,7 +32,6 @@ export class AdminDashboard implements OnInit {
   loadStats(): void {
     this.dashboardService.getAdminStats().subscribe({
       next: (response) => {
-        console.log(response);
 
         this.stats = response.data;
 
@@ -41,7 +39,6 @@ export class AdminDashboard implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -50,13 +47,11 @@ export class AdminDashboard implements OnInit {
   loadRecentEmployees(): void {
     this.dashboardService.getRecentEmployees().subscribe({
       next: (response) => {
-        console.log(response);
 
         this.recentEmployees = response.data;
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }

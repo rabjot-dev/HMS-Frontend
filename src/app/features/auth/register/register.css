@@ -20,7 +20,7 @@
 
 .step p {
   margin: 0;
-  font-size: 13px;
+  font-size: var(--font-sm);
   font-weight: 600;
   color: #94a3b8;
 }
@@ -126,7 +126,7 @@
 }
 .error-text {
   display: block;
-  font-size: 0.82rem;
+  font-size: var(--font-sm);
   color: #dc2626;
   margin-top: 4px;
   font-weight: 500;
@@ -162,7 +162,7 @@
 }
 
 .register-left h1 {
-  font-size: 52px;
+  font-size: var(--font-hero);
 
   line-height: 1.08;
 
@@ -174,7 +174,7 @@
 .left-subtitle {
   max-width: 520px;
 
-  font-size: 18px;
+  font-size: var(--font-xl);
 
   line-height: 1.8;
 
@@ -224,7 +224,7 @@
 }
 
 .feature-card span {
-  font-size: 22px;
+  font-size: var(--font-2xl);
 }
 
 /*
@@ -272,7 +272,7 @@
 }
 
 .register-card h2 {
-  font-size: 44px;
+  font-size: var(--font-hero);
 
   margin-bottom: 10px;
 
@@ -280,7 +280,7 @@
 }
 
 .subtitle {
-  font-size: 17px;
+  font-size: var(--font-lg);
   color: #64748b;
 
   margin-bottom: 30px;
@@ -309,7 +309,7 @@ form {
 }
 
 .form-group label {
-  font-size: 16px;
+  font-size: var(--font-lg);
 
   font-weight: 600;
 
@@ -334,7 +334,7 @@ select {
 
   background: rgba(255, 255, 255, 0.82);
 
-  font-size: 16px;
+  font-size: var(--font-lg);
 
   transition: all 0.3s ease;
 }
@@ -383,7 +383,7 @@ select:focus {
 
   color: white;
 
-  font-size: 16px;
+  font-size: var(--font-lg);
 
   font-weight: 700;
 
@@ -441,7 +441,7 @@ select:focus {
 .error-text {
   color: #dc2626;
 
-  font-size: 13px;
+  font-size: var(--font-sm);
 
   font-weight: 500;
 }
@@ -499,7 +499,7 @@ select:focus {
   padding: 12px;
   border-radius: 10px;
   margin-bottom: 16px;
-  font-size: 14px;
+  font-size: var(--font-md);
 }
 
 .success-message {
@@ -509,5 +509,6 @@ select:focus {
   padding: 12px;
   border-radius: 10px;
   margin-bottom: 16px;
-  font-size: 14px;
+  font-size: var(--font-md);
 }
+

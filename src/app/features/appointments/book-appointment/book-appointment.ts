@@ -31,6 +31,7 @@ export class BookAppointment implements OnInit {
   toastType: 'success' | 'error' = 'success';
   showToast = false;
   noSlotsError = false;
+  slotErrorMessage = '';
 
   // Form related variables
   appointmentForm: any;
@@ -40,6 +41,24 @@ export class BookAppointment implements OnInit {
   doctorSearch = '';
   showPatientDropdown = false;
   showDoctorDropdown = false;
+
+  get effectiveMinDate(): string {
+    if (!this.selectedDoctor?.joiningDate) {
+      return this.minDate;
+    }
+
+    const joiningDate = this.toDateInputValue(this.selectedDoctor.joiningDate);
+
+    return joiningDate > this.minDate ? joiningDate : this.minDate;
+  }
+
+  get selectedDoctorAvailableFrom(): string {
+    if (!this.selectedDoctor?.joiningDate) {
+      return '';
+    }
+
+    return this.toDateInputValue(this.selectedDoctor.joiningDate);
+  }
 
   constructor(
     private readonly fb: FormBuilder,
@@ -114,14 +133,12 @@ export class BookAppointment implements OnInit {
   loadPatients(): void {
     this.patientService.getPatients().subscribe({
       next: (response) => {
-        console.log(response);
 
         this.patients = response.data;
         this.cdr.detectChanges();
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -130,15 +147,12 @@ export class BookAppointment implements OnInit {
   loadDoctors(): void {
     this.employeeService.getDoctors().subscribe({
       next: (response) => {
-        console.log(response);
 
         this.doctors = response.data;
 
-        console.log('Doctors Array:', this.doctors);
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -148,8 +162,6 @@ export class BookAppointment implements OnInit {
     const department =
       this.appointmentForm.get('department')?.value;
 
-    console.log('Selected Department:', department);
-    console.log('All Doctors:', this.doctors);
 
     this.filteredDoctors = this.doctors.filter(
       (doctor) => doctor.department === department
@@ -161,6 +173,7 @@ export class BookAppointment implements OnInit {
     this.selectedDoctor = null;
     this.availableSlots = [];
     this.noSlotsError = false;
+    this.slotErrorMessage = '';
 
     this.cdr.detectChanges();
   }
@@ -191,6 +204,7 @@ export class BookAppointment implements OnInit {
     this.selectedDoctor = null;
     this.availableSlots = [];
     this.noSlotsError = false;
+    this.slotErrorMessage = '';
   }
 
   selectDoctor(doctor: any): void {
@@ -219,6 +233,10 @@ export class BookAppointment implements OnInit {
       return;
     }
 
+    this.noSlotsError = false;
+    this.slotErrorMessage = '';
+    this.appointmentForm.get('appointmentTime')?.setValue('');
+
     // Prevent selecting past dates
     const selectedDate = new Date(appointmentDate);
 
@@ -229,13 +247,29 @@ export class BookAppointment implements OnInit {
     if (selectedDate < today) {
       this.availableSlots = [];
       this.noSlotsError = true;
+      this.slotErrorMessage = 'Cannot select past dates';
 
       this.toastService.show(
-        'Cannot select past dates',
+        this.slotErrorMessage,
         'error'
       );
 
       return;
+    }
+
+    if (this.selectedDoctor?.joiningDate) {
+      const joiningDate = this.normalizeDate(this.selectedDoctor.joiningDate);
+
+      if (selectedDate < joiningDate) {
+        this.availableSlots = [];
+        this.noSlotsError = true;
+        this.slotErrorMessage = `Appointments can be booked only from doctor's joining date (${this.selectedDoctorAvailableFrom})`;
+
+        this.toastService.show(this.slotErrorMessage, 'error');
+        this.cdr.detectChanges();
+
+        return;
+      }
     }
 
     const year = Number.parseInt(
@@ -254,7 +288,6 @@ export class BookAppointment implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log(response);
 
           let slots = response.data || [];
 
@@ -300,27 +333,30 @@ export class BookAppointment implements OnInit {
 
           if (this.availableSlots.length === 0) {
             this.noSlotsError = true;
+            this.slotErrorMessage = 'No slots available for the selected date.';
 
             this.toastService.show(
-              'No slots available for the selected date.',
+              this.slotErrorMessage,
               'error'
             );
           } else {
             this.noSlotsError = false;
+            this.slotErrorMessage = '';
           }
 
           this.cdr.detectChanges();
         },
 
         error: (error) => {
-          console.log('Slots error:', error);
 
           this.availableSlots = [];
           this.noSlotsError = true;
+          this.slotErrorMessage =
+            error?.error?.message ||
+            'No slots available for the selected date.';
 
           this.toastService.show(
-            error?.error?.message ||
-              'No slots available for the selected date.',
+            this.slotErrorMessage,
             'error'
           );
 
@@ -334,7 +370,6 @@ export class BookAppointment implements OnInit {
     const doctorId =
       this.appointmentForm.get('doctorId')?.value;
 
-    console.log(this.selectedDoctor);
 
     this.selectedDoctor =
       this.filteredDoctors.find(
@@ -349,12 +384,12 @@ export class BookAppointment implements OnInit {
 
     this.availableSlots = [];
     this.noSlotsError = false;
+    this.slotErrorMessage = '';
 
     this.cdr.detectChanges();
 
     this.fetchAvailableSlots();
 
-    console.log(this.selectedDoctor);
   }
 
   // Submit appointment booking request
@@ -368,6 +403,8 @@ export class BookAppointment implements OnInit {
         this.availableSlots.length === 0
       ) {
         this.noSlotsError = true;
+        this.slotErrorMessage =
+          this.slotErrorMessage || 'Select an available appointment slot';
       }
 
       return;
@@ -375,6 +412,8 @@ export class BookAppointment implements OnInit {
 
     if (this.availableSlots.length === 0) {
       this.noSlotsError = true;
+      this.slotErrorMessage =
+        this.slotErrorMessage || 'Select an available appointment slot';
 
       this.cdr.detectChanges();
 
@@ -397,13 +436,11 @@ export class BookAppointment implements OnInit {
         : []
     };
 
-    console.log(formData);
 
     this.appointmentService
       .bookAppointment(formData)
       .subscribe({
         next: (response) => {
-          console.log(response);
 
           this.toastService.show(
             'Appointment booked successfully',
@@ -420,6 +457,7 @@ export class BookAppointment implements OnInit {
           });
 
           this.availableSlots = [];
+          this.slotErrorMessage = '';
           this.filteredDoctors = [];
           this.patientSearch = '';
           this.doctorSearch = '';
@@ -428,7 +466,6 @@ export class BookAppointment implements OnInit {
         },
 
         error: (error) => {
-          console.log(error);
 
           this.isSubmitting = false;
 
@@ -439,5 +476,17 @@ export class BookAppointment implements OnInit {
           );
         }
       });
+  }
+
+  private normalizeDate(value: string): Date {
+    const date = new Date(value);
+
+    date.setHours(0, 0, 0, 0);
+
+    return date;
+  }
+
+  private toDateInputValue(value: string): string {
+    return new Date(value).toISOString().split('T')[0];
   }
 }

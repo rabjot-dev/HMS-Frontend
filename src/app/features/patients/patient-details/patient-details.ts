@@ -35,7 +35,6 @@ export class PatientDetails implements OnInit {
   loadPatient(id: string): void {
     this.patientService.getPatientById(id).subscribe({
       next: (response) => {
-        console.log(response);
 
         this.patient = response.data;
 
@@ -43,7 +42,6 @@ export class PatientDetails implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }

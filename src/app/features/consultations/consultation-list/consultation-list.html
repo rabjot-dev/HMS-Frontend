@@ -72,7 +72,7 @@
   @if( consultations.length === 0 ){
 
   <div class="empty-state">
-    <div class="empty-icon">📄</div>
+    <div class="empty-icon">No records</div>
 
     <h2>No Consultations Found</h2>
 
@@ -120,7 +120,7 @@
           <!-- Doctor -->
 
           <td>
-            <div class="doctor-badge">🩺 {{ consultation ?.doctorEmployeeId ?.name }}</div>
+            <div class="doctor-badge">{{ consultation ?.doctorEmployeeId ?.name }}</div>
           </td>
 
           <!-- Diagnosis -->
@@ -182,4 +182,5 @@
 
   } }
 </div>
+
 

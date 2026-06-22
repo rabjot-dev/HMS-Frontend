@@ -71,14 +71,12 @@ export class EditEmployee implements OnInit {
     });
   }
 
-  // Load employee details on page load
   ngOnInit(): void {
     this.employeeId = this.route.snapshot.paramMap.get('id') || '';
 
     this.loadEmployee();
   }
 
-  // Fetch employee details
   loadEmployee(): void {
     this.employeeService.getEmployeeById(this.employeeId).subscribe({
       next: (response: any) => {
@@ -98,15 +96,12 @@ export class EditEmployee implements OnInit {
       },
 
       error: (error) => {
-        console.error(error);
-
         this.errorMessage =
           error?.error?.message || 'Failed to load employee';
       }
     });
   }
 
-  // Update employee details
   onSubmit(): void {
     this.errorMessage = '';
     this.successMessage = '';
@@ -139,8 +134,6 @@ export class EditEmployee implements OnInit {
         },
 
         error: (error) => {
-          console.error(error);
-
           this.isSubmitting = false;
 
           this.errorMessage =

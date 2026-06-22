@@ -39,7 +39,7 @@
 .page-label {
   color: #3b82f6;
 
-  font-size: 13px;
+  font-size: var(--font-sm);
 
   font-weight: 700;
 
@@ -51,7 +51,7 @@
 }
 
 .details-header h1 {
-  font-size: 34px;
+  font-size: var(--font-4xl);
 
   color: #0f172a;
 
@@ -61,7 +61,7 @@
 .page-subtitle {
   color: #64748b;
 
-  font-size: 15px;
+  font-size: var(--font-base);
 }
 
 /*
@@ -173,7 +173,7 @@
 
   color: #0f172a;
 
-  font-size: 22px;
+  font-size: var(--font-2xl);
 }
 
 .section-box p {
@@ -212,7 +212,7 @@
 
   color: #64748b;
 
-  font-size: 13px;
+  font-size: var(--font-sm);
 }
 
 .vital-card h3 {
@@ -264,7 +264,7 @@
 
   text-align: center;
 
-  font-size: 18px;
+  font-size: var(--font-xl);
 
   color: #64748b;
 }
@@ -352,7 +352,7 @@
 
   text-align: left;
 
-  font-size: 14px;
+  font-size: var(--font-md);
 }
 
 .medicine-table td {
@@ -362,7 +362,7 @@
 
   color: #475569;
 
-  font-size: 14px;
+  font-size: var(--font-md);
 }
 
 /*
@@ -401,7 +401,7 @@
 .signature-section span {
   color: #64748b;
 
-  font-size: 13px;
+  font-size: var(--font-sm);
 }
 
 /*
@@ -511,7 +511,7 @@
   /* Better print table */
   .medicine-table {
     width: 100%;
-    font-size: 12px;
+    font-size: var(--font-xs);
   }
 
   .medicine-table th,

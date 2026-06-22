@@ -19,7 +19,6 @@ export class MyProfile implements OnInit {
   ngOnInit(): void {
     this.authService.currentUser.subscribe({
       next: (response: any) => {
-        console.log(response);
 
         if (response?.employeeId) {
           this.user = response.employeeId;
@@ -37,7 +36,6 @@ export class MyProfile implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }

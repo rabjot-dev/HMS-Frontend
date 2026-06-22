@@ -110,7 +110,7 @@
 
   color: white;
 
-  font-size: 24px;
+  font-size: var(--font-2xl);
 
   font-weight: 700;
 
@@ -118,7 +118,7 @@
 }
 
 .logo-section h2 {
-  font-size: 24px;
+  font-size: var(--font-2xl);
 
   font-weight: 800;
 
@@ -162,7 +162,7 @@
 
   color: #2563eb;
 
-  font-size: 13px;
+  font-size: var(--font-sm);
 
   font-weight: 700;
 
@@ -172,7 +172,7 @@
 }
 
 .hero-content h1 {
-  font-size: 78px;
+  font-size: var(--font-hero);
 
   line-height: 1.05;
 
@@ -184,7 +184,7 @@
 .hero-description {
   max-width: 620px;
 
-  font-size: 18px;
+  font-size: var(--font-xl);
 
   line-height: 1.8;
 
@@ -217,7 +217,7 @@
 
   color: white;
 
-  font-size: 15px;
+  font-size: var(--font-base);
 
   font-weight: 700;
 
@@ -246,7 +246,7 @@
 
   color: #64748b;
 
-  font-size: 13px;
+  font-size: var(--font-sm);
 
   letter-spacing: 1px;
 }
@@ -391,7 +391,7 @@ kbd {
 */
 @media (max-width: 1200px) {
   .hero-content h1 {
-    font-size: 60px;
+    font-size: var(--font-hero);
   }
 }
 
@@ -423,11 +423,11 @@ kbd {
 
 @media (max-width: 768px) {
   .hero-content h1 {
-    font-size: 42px;
+    font-size: var(--font-hero);
   }
 
   .hero-description {
-    font-size: 16px;
+    font-size: var(--font-lg);
   }
 
   .hero-actions {
@@ -442,3 +442,5 @@ kbd {
     grid-template-columns: 1fr;
   }
 }
+
+

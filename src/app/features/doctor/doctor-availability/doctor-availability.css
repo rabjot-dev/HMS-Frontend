@@ -37,7 +37,7 @@
 .page-label {
   color: #3b82f6;
 
-  font-size: 13px;
+  font-size: var(--font-sm);
 
   font-weight: 700;
 
@@ -47,7 +47,7 @@
 }
 
 .availability-header h1 {
-  font-size: 40px;
+  font-size: var(--font-hero);
 
   margin-bottom: 10px;
 
@@ -233,7 +233,7 @@
 
   color: #334155;
 
-  font-size: 14px;
+  font-size: var(--font-md);
 
   font-weight: 700;
 
@@ -287,7 +287,7 @@
 .form-group label {
   color: #334155;
 
-  font-size: 14px;
+  font-size: var(--font-md);
 
   font-weight: 600;
 }
@@ -310,7 +310,7 @@ select {
 
   background: #f8fafc;
 
-  font-size: 14px;
+  font-size: var(--font-md);
 
   transition: 0.3s;
 
@@ -347,7 +347,7 @@ select:focus {
 
   color: white;
 
-  font-size: 16px;
+  font-size: var(--font-lg);
 
   font-weight: 700;
 
@@ -401,3 +401,4 @@ select:focus {
     grid-template-columns: 1fr;
   }
 }
+

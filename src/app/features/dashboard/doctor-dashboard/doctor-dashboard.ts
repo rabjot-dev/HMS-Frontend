@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 
 import { AuthService } from '../../../core/services/auth';
@@ -8,7 +7,7 @@ import { DashboardService } from '../../../core/services/dashboard';
 @Component({
   selector: 'app-doctor-dashboard',
   standalone: true,
-  imports: [RouterLink, AsyncPipe],
+  imports: [AsyncPipe],
   templateUrl: './doctor-dashboard.html',
   styleUrl: './doctor-dashboard.css'
 })
@@ -33,7 +32,6 @@ export class DoctorDashboard implements OnInit {
   loadDoctorStats(): void {
     this.dashboardService.getDoctorStats().subscribe({
       next: (response) => {
-        console.log(response);
 
         this.stats = response.data;
 
@@ -41,7 +39,6 @@ export class DoctorDashboard implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -50,13 +47,11 @@ export class DoctorDashboard implements OnInit {
   loadTodayAppointments(): void {
     this.dashboardService.getTodayAppointments().subscribe({
       next: (response) => {
-        console.log(response);
 
         this.todayAppointments = response.data;
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }

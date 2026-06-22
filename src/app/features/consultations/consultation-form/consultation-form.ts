@@ -98,13 +98,11 @@ export class ConsultationForm implements OnInit {
   loadAppointment(id: string): void {
     this.appointmentService.getAppointmentById(id).subscribe({
       next: (response) => {
-        console.log(response);
 
         this.appointment = response.data;
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -140,11 +138,9 @@ export class ConsultationForm implements OnInit {
       prescriptions: this.consultationForm.value.prescriptions
     };
 
-    console.log(consultationData);
 
     this.consultationService.createConsultation(consultationData).subscribe({
       next: (response) => {
-        console.log(response);
 
         alert('Consultation completed successfully');
 
@@ -157,7 +153,6 @@ export class ConsultationForm implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
 
         this.isSubmitting = false;
       }

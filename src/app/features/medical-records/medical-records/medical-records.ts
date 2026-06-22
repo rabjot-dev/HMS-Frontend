@@ -96,7 +96,6 @@ export class MedicalRecords implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (error) => {
-          console.log(error);
           this.isLoading = false;
         }
       });
@@ -111,7 +110,6 @@ export class MedicalRecords implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (error) => {
-        console.log(error);
         this.labReports = [];
         this.isLoading = false;
       }

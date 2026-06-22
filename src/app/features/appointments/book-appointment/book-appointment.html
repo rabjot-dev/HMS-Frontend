@@ -149,6 +149,10 @@
 
           <p class="consultation-fee">Consultation Fee: ₹{{ selectedDoctor ?.consultationFee || 0 }}</p>
 
+          @if(selectedDoctorAvailableFrom){
+          <p class="available-from">Available from: {{ selectedDoctorAvailableFrom }}</p>
+          }
+
           }
          
         </div>
@@ -158,11 +162,17 @@
         <div class="form-group">
           <label for="appointmentDate">Appointment Date</label>
 
-          <input id="appointmentDate" type="date" formControlName="appointmentDate" [min]="minDate" (change)="fetchAvailableSlots()" />
+          <input
+            id="appointmentDate"
+            type="date"
+            formControlName="appointmentDate"
+            [min]="effectiveMinDate"
+            (change)="fetchAvailableSlots()"
+          />
           @if(appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched){
           <span class="error-text">Appointment Date is required</span>
           } @if(noSlotsError){
-          <span class="error-text">Doctor is not available on this day</span>
+          <span class="error-text">{{ slotErrorMessage }}</span>
           }
         </div>
       </div>
@@ -205,6 +215,10 @@
           {{ slot }}
         </button>
 
+        }
+
+        @if(noSlotsError && availableSlots.length === 0){
+        <div class="slot-empty-message">{{ slotErrorMessage }}</div>
         }
       </div>
     </div>

@@ -69,15 +69,12 @@ export class CreatePassword {
 
     this.authService.createPassword(payload).subscribe({
       next: (response) => {
-        console.log(response);
 
         this.tokenService.removeTokens();
         this.router.navigate(['/login']);
       },
 
       error: (error) => {
-        console.log(error);
-        console.log(error.error.errors);
       }
     });
   }

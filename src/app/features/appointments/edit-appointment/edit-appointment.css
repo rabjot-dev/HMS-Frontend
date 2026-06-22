@@ -13,7 +13,7 @@
 }
 .error-text {
   display: block;
-  font-size: 0.82rem;
+  font-size: var(--font-sm);
   color: #dc2626;
   margin-top: 4px;
   font-weight: 500;
@@ -25,7 +25,7 @@
 */
 
 .edit-appointment-container h1 {
-  font-size: 32px;
+  font-size: var(--font-4xl);
 
   margin-bottom: 30px;
 
@@ -97,7 +97,7 @@ form {
 */
 
 label {
-  font-size: 14px;
+  font-size: var(--font-md);
 
   font-weight: 600;
 
@@ -123,7 +123,7 @@ textarea {
 
   background: #f8fafc;
 
-  font-size: 15px;
+  font-size: var(--font-base);
 
   transition: 0.3s;
 
@@ -249,7 +249,7 @@ textarea {
 
   color: white;
 
-  font-size: 16px;
+  font-size: var(--font-lg);
 
   font-weight: 600;
 
@@ -303,3 +303,4 @@ textarea {
     width: 100%;
   }
 }
+

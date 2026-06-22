@@ -165,17 +165,11 @@ export class Register {
 
   // Submit registration form
   onSubmit(): void {
-    console.log('REGISTER BUTTON CLICKED');
-    console.log('FORM VALID', this.registerForm.valid);
-    console.log('Designation Value:', this.registerForm.get('designation')?.value);
-    console.log('Consultation Fee Errors:', this.registerForm.get('consultationFee')?.errors);
-    console.log('Consultation Fee Valid:', this.registerForm.get('consultationFee')?.valid);
 
     Object.keys(this.registerForm.controls).forEach((key) => {
       const control = this.registerForm.get(key);
 
       if (control?.invalid) {
-        console.log(key, control.errors);
       }
     });
 
@@ -211,7 +205,6 @@ export class Register {
 
     this.authService.register(payload).subscribe({
       next: (response: any) => {
-        console.log(response);
 
         this.isSubmitting = false;
 

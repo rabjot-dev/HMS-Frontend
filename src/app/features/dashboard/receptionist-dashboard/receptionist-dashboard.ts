@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 
 import { DashboardService } from '../../../core/services/dashboard';
@@ -8,7 +7,7 @@ import { AuthService } from '../../../core/services/auth';
 @Component({
   selector: 'app-receptionist-dashboard',
   standalone: true,
-  imports: [RouterLink, AsyncPipe],
+  imports: [AsyncPipe],
   templateUrl: './receptionist-dashboard.html',
   styleUrl: './receptionist-dashboard.css'
 })
@@ -33,7 +32,6 @@ export class ReceptionistDashboard implements OnInit {
   loadReceptionStats(): void {
     this.dashboardService.getReceptionistStats().subscribe({
       next: (response) => {
-        console.log(response);
 
         this.stats = response.data;
 
@@ -41,7 +39,6 @@ export class ReceptionistDashboard implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -50,13 +47,11 @@ export class ReceptionistDashboard implements OnInit {
   loadTodayAppointments(): void {
     this.dashboardService.getTodayAppointments().subscribe({
       next: (response) => {
-        console.log(response);
 
         this.todayAppointments = response.data;
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }

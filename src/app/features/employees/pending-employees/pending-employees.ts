@@ -57,7 +57,6 @@ export class PendingEmployees implements OnInit, OnDestroy {
 
     this.employeeService.getPendingEmployees(page, this.pagination.limit, filters).subscribe({
       next: (response: any) => {
-        console.log(response);
 
         this.pendingEmployees = response.data || [];
         this.pagination = response.pagination || this.pagination;
@@ -66,7 +65,6 @@ export class PendingEmployees implements OnInit, OnDestroy {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -118,7 +116,6 @@ export class PendingEmployees implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (response: any) => {
-          console.log(response);
 
           this.toastService.show(
             employee.designation === 'DOCTOR'
@@ -131,7 +128,6 @@ export class PendingEmployees implements OnInit, OnDestroy {
         },
 
         error: (error) => {
-          console.log(error);
 
           this.toastService.show(error?.error?.message || 'Failed to approve employee', 'error');
         }
@@ -142,7 +138,6 @@ export class PendingEmployees implements OnInit, OnDestroy {
   rejectEmployee(employeeId: string): void {
     this.employeeService.rejectEmployee(employeeId).subscribe({
       next: (response: any) => {
-        console.log(response);
 
         this.toastService.show('Employee Rejected', 'success');
 
@@ -150,7 +145,6 @@ export class PendingEmployees implements OnInit, OnDestroy {
       },
 
       error: (error) => {
-        console.log(error);
 
         this.toastService.show('Failed to reject employee', 'error');
       }

@@ -2,47 +2,7 @@
 <div class="dashboard-shell">
   <!-- Sidebar -->
 
-  <aside class="sidebar glass">
-    <!-- Logo -->
-
-    <div class="logo-section">
-      <div class="logo-circle">B</div>
-
-      <div>
-        <h2>BootStrap HMS</h2>
-
-        <p>Smart Healthcare</p>
-      </div>
-    </div>
-
-    @if( authService.currentUser | async; as user ){
-
-    <!-- Profile -->
-
-    <div class="profile-card">
-      <div class="avatar">{{ user.email ?.charAt(0) ?.toUpperCase() }}</div>
-
-      <div>
-        <h4>{{ user.roles?.[0] }}</h4>
-
-        <span>{{ user.email }}</span>
-      </div>
-    </div>
-
-    <!-- Navigation -->
-
-    <nav class="nav-links">
-      @for(menu of menuNodes; track menu._id) {
-      <a [routerLink]="menu.path" routerLinkActive="active-link">
-        <span>{{ menu.icon }}</span>
-
-        {{ menu.label }}
-      </a>
-      }
-    </nav>
-
-    }
-  </aside>
+  <app-sidebar></app-sidebar>
 
   <!-- Main Content -->
 

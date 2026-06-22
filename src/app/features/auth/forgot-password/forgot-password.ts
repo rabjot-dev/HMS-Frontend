@@ -36,7 +36,6 @@ export class ForgotPassword {
 
     this.authService.forgotPassword(this.forgotForm.value.email).subscribe({
       next: (response: any) => {
-        console.log(response);
 
         this.router.navigate(['/reset-password'], {
           state: {
@@ -48,7 +47,6 @@ export class ForgotPassword {
         this.isSubmitting = false;
       },
       error: (error) => {
-        console.log(error);
         this.isSubmitting = false;
       }
     });

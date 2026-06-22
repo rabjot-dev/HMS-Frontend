@@ -86,7 +86,6 @@ export class ResetPassword implements OnInit {
 
     this.authService.resetPassword(payload).subscribe({
       next: (response) => {
-        console.log(response);
 
         alert('Password reset successful');
 
@@ -96,11 +95,7 @@ export class ResetPassword implements OnInit {
       },
 
       error: (error) => {
-        console.log('FULL ERROR');
-        console.log(error);
 
-        console.log('BACKEND ERRORS');
-        console.log(error?.error?.errors);
 
         this.isSubmitting = false;
         this.errorMessage =

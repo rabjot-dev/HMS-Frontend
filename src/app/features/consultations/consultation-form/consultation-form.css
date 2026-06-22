@@ -23,7 +23,7 @@
 }
 
 .top-section h1 {
-  font-size: 34px;
+  font-size: var(--font-4xl);
 
   color: #0f172a;
 }
@@ -112,7 +112,7 @@ textarea {
 
   border: 1px solid #cbd5e1;
 
-  font-size: 15px;
+  font-size: var(--font-base);
 
   outline: none;
 
@@ -285,7 +285,7 @@ textarea {
 
   border-radius: 16px;
 
-  font-size: 16px;
+  font-size: var(--font-lg);
 
   font-weight: 700;
 
@@ -331,3 +331,4 @@ textarea {
     gap: 15px;
   }
 }
+

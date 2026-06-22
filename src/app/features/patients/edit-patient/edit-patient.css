@@ -19,7 +19,7 @@
 */
 
 .edit-patient-container h1 {
-  font-size: 32px;
+  font-size: var(--font-4xl);
 
   margin-bottom: 30px;
 
@@ -67,7 +67,7 @@ form {
 
   color: #0f172a;
 
-  font-size: 22px;
+  font-size: var(--font-2xl);
 }
 
 /*
@@ -103,7 +103,7 @@ textarea {
 
   background: #f8fafc;
 
-  font-size: 15px;
+  font-size: var(--font-base);
 
   font-family: inherit;
 
@@ -161,7 +161,7 @@ textarea:hover {
 
   color: #dc2626;
 
-  font-size: 13px;
+  font-size: var(--font-sm);
 
   font-weight: 600;
 }
@@ -185,7 +185,7 @@ button {
 
   color: white;
 
-  font-size: 16px;
+  font-size: var(--font-lg);
 
   font-weight: 700;
 
@@ -237,3 +237,4 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 }
+

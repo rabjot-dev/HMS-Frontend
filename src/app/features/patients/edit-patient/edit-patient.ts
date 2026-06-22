@@ -68,7 +68,6 @@ export class EditPatient implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -77,7 +76,6 @@ export class EditPatient implements OnInit {
   loadPatient(): void {
     this.patientService.getPatientById(this.patientId).subscribe({
       next: (response) => {
-        console.log(response);
 
         const patient = response.data;
 
@@ -97,7 +95,6 @@ export class EditPatient implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -117,7 +114,6 @@ export class EditPatient implements OnInit {
       this.patientForm.value
     ).subscribe({
       next: (response) => {
-        console.log(response);
 
         alert('Patient Updated Successfully');
 
@@ -127,7 +123,6 @@ export class EditPatient implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
 
         this.isSubmitting = false;
       }

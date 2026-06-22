@@ -65,7 +65,6 @@ export class ConsultationList implements OnInit, OnDestroy {
 
     this.consultationService.getConsultations(page, this.pagination.limit, filters).subscribe({
       next: (response) => {
-        console.log(response);
 
         this.consultations = response.data || [];
         this.pagination = response.pagination || this.pagination;
@@ -74,7 +73,6 @@ export class ConsultationList implements OnInit, OnDestroy {
       },
 
       error: (error) => {
-        console.log(error);
 
         this.isLoading = false;
       }
@@ -124,7 +122,6 @@ export class ConsultationList implements OnInit, OnDestroy {
         },
 
         error: (error) => {
-          console.log(error);
         }
       });
   }

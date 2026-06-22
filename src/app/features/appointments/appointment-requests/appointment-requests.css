@@ -37,7 +37,7 @@
 .page-label {
   color: #3b82f6;
 
-  font-size: 13px;
+  font-size: var(--font-sm);
 
   font-weight: 700;
 
@@ -47,7 +47,7 @@
 }
 
 .pending-header h1 {
-  font-size: 40px;
+  font-size: var(--font-hero);
 
   margin-bottom: 10px;
 
@@ -103,7 +103,7 @@
 
 .search-box span {
   color: #2563eb;
-  font-size: 13px;
+  font-size: var(--font-sm);
   font-weight: 700;
 }
 
@@ -134,7 +134,7 @@
 
 .date-filter span {
   color: #64748b;
-  font-size: 12px;
+  font-size: var(--font-xs);
   font-weight: 700;
 }
 
@@ -153,13 +153,13 @@
 }
 
 .empty-icon {
-  font-size: 50px;
+  font-size: var(--font-hero);
 
   margin-bottom: 20px;
 }
 
 .empty-state h3 {
-  font-size: 24px;
+  font-size: var(--font-2xl);
 
   color: #0f172a;
 
@@ -237,7 +237,7 @@
 
   color: white;
 
-  font-size: 22px;
+  font-size: var(--font-2xl);
 
   font-weight: 700;
 }
@@ -265,7 +265,7 @@
 
   color: #2563eb;
 
-  font-size: 12px;
+  font-size: var(--font-xs);
 
   font-weight: 700;
 }
@@ -281,7 +281,7 @@
 
   color: #b45309;
 
-  font-size: 12px;
+  font-size: var(--font-xs);
 
   font-weight: 700;
 }
@@ -319,13 +319,13 @@
 .detail-item span {
   color: #64748b;
 
-  font-size: 14px;
+  font-size: var(--font-md);
 }
 
 .detail-item strong {
   color: #0f172a;
 
-  font-size: 14px;
+  font-size: var(--font-md);
 
   text-align: right;
 }
@@ -419,4 +419,5 @@
     flex-direction: column;
   }
 }
+
 

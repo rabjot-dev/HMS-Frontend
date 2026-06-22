@@ -10,22 +10,6 @@
       <p class="page-subtitle">Manage and monitor patient appointments.</p>
     </div>
 
-    <!-- Button -->
-
-    @if( authService.hasRole( 'ADMIN' ) || authService.hasRole( 'RECEPTIONIST' ) ){
-
-    <a routerLink="/appointments/book" class="book-btn">
-      <span>+</span>
-
-      Book Appointment
-    </a>
-  <a
-    routerLink="/appointments/requests"
-    class="request-btn"
-  >
-    Pending Requests
-  </a>
-    }
   </div>
 
   <!-- Filters -->
@@ -34,7 +18,6 @@
     <!-- Search -->
 
     <div class="search-box">
-      <span>🔍</span>
 
       <input
         type="text"
@@ -149,7 +132,7 @@
           <!-- Doctor -->
 
           <td>
-            <div class="doctor-name">🩺 {{ appointment ?.doctorEmployeeId ?.name }}</div>
+            <div class="doctor-name">{{ appointment ?.doctorEmployeeId ?.name }}</div>
           </td>
 
           <!-- Date -->
@@ -288,4 +271,5 @@
     (pageSizeChange)="changeLimit($event)"
   ></app-pagination>
 </div>
+
 

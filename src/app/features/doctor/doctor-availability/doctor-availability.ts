@@ -57,7 +57,6 @@ export class DoctorAvailability implements OnInit {
   loadAvailability(): void {
     this.employeeService.getDoctorAvailability().subscribe({
       next: (response: any) => {
-        console.log(response);
 
         this.availabilityForm.patchValue({
           workingDays: response?.data?.workingDays,
@@ -74,7 +73,6 @@ export class DoctorAvailability implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -120,7 +118,6 @@ export class DoctorAvailability implements OnInit {
         },
 
         error: (error) => {
-          console.log(error);
 
           this.isSubmitting = false;
 

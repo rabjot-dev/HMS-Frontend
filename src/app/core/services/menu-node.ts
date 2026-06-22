@@ -7,9 +7,11 @@ export interface MenuNode {
   _id: string;
   label: string;
   path: string;
+  parentId?: string | null;
   icon: string;
   allowedRoles: string[];
   order: number;
+  children?: MenuNode[];
 }
 
 @Injectable({

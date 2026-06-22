@@ -80,7 +80,6 @@ export class EditAppointment implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -100,7 +99,6 @@ export class EditAppointment implements OnInit {
           '-' +
           String(date.getDate()).padStart(2, '0');
 
-        console.log('FORMATTED DATE', formattedDate);
 
         this.appointmentForm.patchValue({
           doctorEmployeeId: appointment?.doctorEmployeeId?._id,
@@ -123,7 +121,6 @@ export class EditAppointment implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -248,7 +245,6 @@ export class EditAppointment implements OnInit {
       .updateAppointment(this.appointmentId, formData)
       .subscribe({
         next: (response) => {
-          console.log(response);
 
           this.toastService.show(
             'Appointment updated successfully',
@@ -261,7 +257,6 @@ export class EditAppointment implements OnInit {
         },
 
         error: (error) => {
-          console.log(error);
 
           this.isSubmitting = false;
 

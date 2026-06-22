@@ -160,18 +160,14 @@ export class AddEmployee {
 
   // Submit employee form
   onSubmit(): void {
-    console.log('FORM VALID:', this.employeeForm.valid);
 
     Object.keys(this.employeeForm.controls).forEach((key) => {
       const control = this.employeeForm.get(key);
 
       if (control?.invalid) {
-        console.log(key, control.errors);
       }
     });
 
-    console.log('Create Employee Clicked');
-    console.log(this.employeeForm.value);
 
     if (this.employeeForm.invalid) {
       this.employeeForm.markAllAsTouched();
@@ -227,7 +223,6 @@ export class AddEmployee {
     // Create employee
     this.employeeService.createEmployee(payload).subscribe({
       next: (response) => {
-        console.log(response);
 
         this.isSubmitting = false;
 
@@ -247,14 +242,8 @@ export class AddEmployee {
       },
 
       error: (error) => {
-        console.log('FULL ERROR');
-        console.log(error);
 
-        console.log('BACKEND RESPONSE');
-        console.log(error?.error);
 
-        console.log('VALIDATION');
-        console.log(error?.error?.errors);
 
         this.isSubmitting = false;
 

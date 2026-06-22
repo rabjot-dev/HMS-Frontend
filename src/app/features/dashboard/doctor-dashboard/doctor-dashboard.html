@@ -1,14 +1,10 @@
 <div class="dashboard-wrapper">
-  <!-- Hero Section -->
-
   <div class="hero-section glass-card">
     <div>
       <p class="hero-label">Doctor Workspace</p>
 
       @if( authService.currentUser | async; as user ){
-
-      <h1>Welcome Dr. {{ user?.employeeId?.name || 'Doctor' }} 👋</h1>
-
+      <h1>Welcome Dr. {{ user?.employeeId?.name || 'Doctor' }}</h1>
       }
 
       <p class="hero-subtitle">Manage appointments, patient queue and availability.</p>
@@ -21,13 +17,13 @@
     </div>
   </div>
 
-  <!-- Stats -->
-
   <div class="stats-grid">
-    <!-- Today's Patients -->
-
     <div class="stat-card glass-card">
-      <div class="stat-icon blue">🧑‍🤝‍🧑</div>
+      <div class="stat-icon blue" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M19 8v6M16 11h6"></path>
+        </svg>
+      </div>
 
       <div>
         <h2>{{ stats?.todayPatients || 0 }}</h2>
@@ -36,10 +32,12 @@
       </div>
     </div>
 
-    <!-- Total Appointments -->
-
     <div class="stat-card glass-card">
-      <div class="stat-icon purple">📅</div>
+      <div class="stat-icon purple" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"></path>
+        </svg>
+      </div>
 
       <div>
         <h2>{{ stats?.totalAppointments || 0 }}</h2>
@@ -48,10 +46,12 @@
       </div>
     </div>
 
-    <!-- Completed -->
-
     <div class="stat-card glass-card">
-      <div class="stat-icon green">✅</div>
+      <div class="stat-icon green" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 6 9 17l-5-5"></path>
+        </svg>
+      </div>
 
       <div>
         <h2>{{ stats?.completedConsultations || 0 }}</h2>
@@ -60,10 +60,12 @@
       </div>
     </div>
 
-    <!-- Pending -->
-
     <div class="stat-card glass-card">
-      <div class="stat-icon orange">⏳</div>
+      <div class="stat-icon orange" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20ZM12 6v6l4 2"></path>
+        </svg>
+      </div>
 
       <div>
         <h2>{{ stats?.pendingConsultations || 0 }}</h2>
@@ -73,11 +75,7 @@
     </div>
   </div>
 
-  <!-- Bottom Grid -->
-
-  <div class="bottom-grid">
-    <!-- Today's Appointments -->
-
+  <div class="bottom-grid single-column">
     <div class="recent-section glass-card">
       <div class="section-header">
         <h2>Today's Appointments</h2>
@@ -87,54 +85,16 @@
 
       <div class="employee-list">
         @for( appointment of todayAppointments || []; track appointment._id ){
-
         <div class="employee-card">
-          <div class="employee-avatar">{{ appointment ?.patientId ?.firstName ?.charAt(0) }}</div>
+          <div class="employee-avatar">{{ appointment?.patientId?.firstName?.charAt(0) }}</div>
 
           <div>
-            <h4>{{ appointment ?.patientId ?.firstName }} {{ appointment ?.patientId ?.lastName }}</h4>
+            <h4>{{ appointment?.patientId?.firstName }} {{ appointment?.patientId?.lastName }}</h4>
 
-            <p>{{ appointment ?.timeSlot }}</p>
+            <p>{{ appointment?.timeSlot }}</p>
           </div>
         </div>
-
         }
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-
-    <div class="quick-section glass-card">
-      <div class="section-header">
-        <h2>Quick Actions</h2>
-
-        <span>Fast Navigation</span>
-      </div>
-
-      <div class="quick-grid">
-        <a routerLink="/doctor-queue" class="quick-card">
-          <span>🩺</span>
-
-          Queue
-        </a>
-
-        <a routerLink="/appointments" class="quick-card">
-          <span>📅</span>
-
-          Appointments
-        </a>
-
-        <a routerLink="/patients" class="quick-card">
-          <span>🧑</span>
-
-          Patients
-        </a>
-
-        <a routerLink="/doctor-availability" class="quick-card">
-          <span>⏰</span>
-
-          Availability
-        </a>
       </div>
     </div>
   </div>

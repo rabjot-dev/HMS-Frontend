@@ -38,7 +38,7 @@
 
       <input
         type="text"
-        placeholder="Search patient, doctor, diagnosis, medicine..."
+        placeholder="Search patient, doctor, department..."
         [ngModel]="searchTerm"
         (ngModelChange)="onSearchInput($event)"
       />
@@ -80,9 +80,7 @@
 
           <th>Doctor</th>
 
-          <th>Diagnosis</th>
-
-          <th>Medicines</th>
+          <th>Department</th>
 
           <th>Date</th>
 
@@ -115,12 +113,8 @@
           </td>
 
           <td>
-            <span class="diagnosis-text">{{ record?.diagnosis || 'Not added' }}</span>
-          </td>
-
-          <td>
-            <span class="medicine-count">
-              {{ record?.prescriptions?.length || 0 }} medicines
+            <span class="department-badge">
+              {{ record?.doctorEmployeeId?.department || 'Not added' }}
             </span>
           </td>
 

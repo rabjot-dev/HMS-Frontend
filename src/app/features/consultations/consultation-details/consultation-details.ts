@@ -34,7 +34,6 @@ export class ConsultationDetails implements OnInit {
   loadConsultation(id: string): void {
     this.consultationService.getConsultationById(id).subscribe({
       next: (response) => {
-        console.log(response);
 
         this.consultation = response.data;
 
@@ -43,7 +42,6 @@ export class ConsultationDetails implements OnInit {
       },
 
       error: (error) => {
-        console.log(error);
 
         this.isLoading = false;
       }
