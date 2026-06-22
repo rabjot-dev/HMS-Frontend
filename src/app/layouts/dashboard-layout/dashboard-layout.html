@@ -29,28 +29,7 @@
       </div>
     </div>
 
-    <!-- Navigation -->
-<nav class="nav-links">
-  @for (
-    node of nodeService.nodes | async;
-    track node._id
-  ) {
-
-<a
-  [routerLink]="node.path"
-  routerLinkActive="active-link"
->
-  <span class="material-icons">
-    {{ node.icon }}
-  </span>
-
-  <span>
-    {{ node.name }}
-  </span>
-</a>
-
-  }
-</nav>
+    <app-sidebar />
 
     }
   </aside>

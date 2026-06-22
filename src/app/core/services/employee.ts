@@ -16,8 +16,8 @@ export class EmployeeService {
   }
 
   // Get all employees
-  getEmployees(): Observable<any> {
-    return this.http.get(`${API_BASE_URL}/employees`);
+  getEmployees(params: any): Observable<any> {
+    return this.http.get(`${API_BASE_URL}/employees`,{params});
   }
 
   // Get employee details by ID

@@ -19,8 +19,8 @@ export class PatientService {
   }
 
   // Get all patients
-  getPatients(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  getPatients(params?: any): Observable<any> {
+    return this.http.get(this.apiUrl,{params});
   }
 
   // Get list of doctors for patient assignment

@@ -11,39 +11,53 @@
     </div>
 
     <div class="header-right">
-      <div class="patient-count">{{ filteredPatients.length }} Patients</div>
+      <div class="patient-count">{{ totalRecords }} Patients</div>
 
-      <!-- Add Patient Button -->
 
-      @if( userRole !== 'DOCTOR' ){
-
-      <a routerLink="/patients/create" class="add-btn">+ Add Patient</a>
-
-      }
     </div>
   </div>
 
   <!-- Search -->
 
   <div class="filters-wrapper glass-card">
-    <div class="search-box">
-      <span>🔍</span>
 
-      <input
-        type="text"
-        placeholder="
-              Search patient name,
-              ID or phone
-              "
-        [(ngModel)]="
-              searchTerm
-              "
-        (input)="
-              searchPatients()
-              "
-      />
-    </div>
+  <div class="search-box">
+    <span>🔍</span>
+
+    <input
+      type="text"
+      placeholder="Search patient..."
+      [(ngModel)]="search"
+      (input)="onFilterChange()"
+    />
   </div>
+
+  <select
+    [(ngModel)]="gender"
+    (change)="onFilterChange()"
+  >
+    <option value="">
+      All Genders
+    </option>
+
+    <option value="MALE">
+      Male
+    </option>
+
+    <option value="FEMALE">
+      Female
+    </option>
+
+    <option value="OTHER">
+      Other
+    </option>
+  </select>
+
+
+</div>
+<div class="pagination-wrapper">
+
+  
 
   <!-- Table -->
 
@@ -68,7 +82,7 @@
       </thead>
 
       <tbody>
-        @for( patient of filteredPatients; track patient._id ){
+        @for( patient of patients; track patient._id ){
 
         <tr>
           <!-- Patient -->
@@ -151,5 +165,23 @@
         }
       </tbody>
     </table>
+    
   </div>
+   <!-- Pagination -->
+
+ <app-pagination
+  [page]="page"
+  [totalPages]="totalPages"
+  [totalRecords]="totalRecords"
+  [limit]="limit"
+  (previous)="previousPage()"
+  (next)="nextPage()"
+  (pageSizeChange)="
+    limit = $event;
+    page = 1;
+    loadPatients()
+  "
+>
+</app-pagination>
+  
 </div>

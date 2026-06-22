@@ -8,63 +8,45 @@ import {
 } from '@angular/router';
 
 import { NodeService } from '../services/node';
-
 export const nodeGuard:
-  CanActivateFn =
-  (route) => {
-    const router =
-      inject(Router);
+CanActivateFn =
+(route) => {
 
-    const nodeService =
-      inject(
-        NodeService,
-      );
+  const router =
+    inject(Router);
 
-    const url =
-      '/' +
-      route.url
-        .map(
-          (
-            segment,
-          ) =>
-            segment.path,
+  const nodeService =
+    inject(NodeService);
+
+  const url =
+    '/' +
+    route.url
+      .map(
+        segment =>
+          segment.path
+      )
+      .join('/');
+
+  const nodes =
+    nodeService.nodes.value;
+
+  const allowed =
+    nodes.some(
+      node =>
+        node.path === url ||
+        node.children?.some(
+          (child: { path: string }) =>
+            child.path === url
         )
-        .join('/');
+    );
 
-    const nodes =
-      nodeService.nodes
-        .value.length
-        ? nodeService.nodes
-            .value
-        : JSON.parse(
-            localStorage.getItem(
-              'nodes',
-            ) || '[]',
-          );
+  if (allowed) {
+    return true;
+  }
 
-    // first load
-    if (
-      !nodes.length
-    ) {
-      return true;
-    }
+  router.navigate([
+    '/login'
+  ]);
 
-    const allowed =
-      nodes.some(
-        (
-          node: any,
-        ) =>
-          node.path ===
-          url,
-      );
-
-    if (allowed) {
-      return true;
-    }
-
-    router.navigate([
-      '/',
-    ]);
-
-    return false;
-  };
+  return false;
+};

@@ -16,8 +16,8 @@ export class ConsultationService {
   }
 
   // Get all consultations
-  getConsultations(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  getConsultations(params?: any): Observable<any> {
+    return this.http.get(this.apiUrl, {params});
   }
 
   // Get consultation by appointment ID

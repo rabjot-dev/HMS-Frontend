@@ -8,12 +8,8 @@ import { API_BASE_URL } from '../constants/api.constants';
 })
 export class AuthService {
   currentUser = new BehaviorSubject<any>(null);
-  nodes = new BehaviorSubject<any[]>([]);
-    currentUser$ =
+  currentUser$ =
     this.currentUser.asObservable();
-
-  nodes$ =
-    this.nodes.asObservable();
   constructor(private readonly http: HttpClient) {}
 
   login(data: { loginId: string; password: string }): Observable<any> {

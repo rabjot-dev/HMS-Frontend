@@ -1,91 +1,209 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 
-import { EmployeeService } from '../../../core/services/employee';
+import {
+  CommonModule,
+} from '@angular/common';
+
+import {
+  FormsModule,
+} from '@angular/forms';
+
+import {
+  RouterLink,
+} from '@angular/router';
+
+import {
+  EmployeeService,
+} from '../../../core/services/employee';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
   selector: 'app-employee-list',
-  imports: [CommonModule, RouterLink, FormsModule],
-  templateUrl: './employee-list.html',
-  styleUrl: './employee-list.css'
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    FormsModule,PaginationComponent
+  ],
+  templateUrl:
+    './employee-list.html',
+  styleUrl:
+    './employee-list.css',
 })
-export class EmployeeList implements OnInit {
+export class EmployeeList
+  implements OnInit
+{
   employees: any[] = [];
-  filteredEmployees: any[] = [];
-  searchText = '';
+
+  search = '';
+
+  status = '';
+
+  department = '';
+
+  designation = '';
+
+  page = 1;
+
+  limit = 10;
+
+  total = 0;
+
+  totalPages = 1;
+
+  isLoading = false;
 
   constructor(
-    private readonly employeeService: EmployeeService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly employeeService:
+      EmployeeService,
+    private readonly cdr:
+      ChangeDetectorRef
   ) {}
 
-  // Load employees on page load
   ngOnInit(): void {
     this.loadEmployees();
   }
 
-  // Get all employees
   loadEmployees(): void {
-    this.employeeService.getEmployees().subscribe({
-      next: (response: any) => {
-        console.log(response);
+    this.isLoading = true;
 
-        this.employees = response.data;
-        this.filteredEmployees = [...response.data];
+    const params: any = {
+      page: this.page,
+      limit: this.limit,
+    };
 
-        this.cdr.detectChanges();
-      },
+    if (this.search) {
+      params.search =
+        this.search;
+    }
 
-      error: (error) => {
-        console.log(error);
-      }
-    });
+    if (this.status) {
+      params.status =
+        this.status;
+    }
+
+    if (this.department) {
+      params.department =
+        this.department;
+    }
+
+    if (
+      this.designation
+    ) {
+      params.designation =
+        this.designation;
+    }
+
+    this.employeeService
+      .getEmployees(params)
+      .subscribe({
+        next: (
+          response
+        ) => {
+          this.employees =
+            response.data;
+
+          this.total =
+            response.meta.total;
+
+          this.totalPages =
+            response.meta
+              .totalPages;
+
+          this.isLoading =
+            false;
+
+          this.cdr.detectChanges();
+        },
+
+        error: (
+          error
+        ) => {
+          console.log(
+            error
+          );
+
+          this.isLoading =
+            false;
+        },
+      });
   }
 
-  // Search employees
   onSearch(): void {
-    const search = this.searchText.toLowerCase();
-
-    this.filteredEmployees = this.employees.filter((employee) => {
-      return (
-        employee.name.toLowerCase().includes(search) ||
-        employee.employeeCode.toLowerCase().includes(search) ||
-        employee.designation.toLowerCase().includes(search)
-      );
-    });
+    this.page = 1;
+    this.loadEmployees();
   }
 
-  // Deactivate employee
-  deactivateEmployee(id: string): void {
-    console.log(id);
-
-    this.employeeService.deactivateEmployee(id).subscribe({
-      next: () => {
-        console.log('Employee deactivated');
-
-        this.loadEmployees();
-      },
-
-      error: (error) => {
-        console.log(error);
-      }
-    });
+  onFilterChange(): void {
+    this.page = 1;
+    this.loadEmployees();
   }
 
-  // Activate employee
-  activateEmployee(id: string): void {
-    this.employeeService.activateEmployee(id).subscribe({
-      next: () => {
-        console.log('Employee activated');
+  previousPage(): void {
+    if (
+      this.page === 1
+    ) {
+      return;
+    }
 
-        this.loadEmployees();
-      },
+    this.page--;
 
-      error: (error) => {
-        console.log(error);
-      }
-    });
+    this.loadEmployees();
+  }
+
+  nextPage(): void {
+    if (
+      this.page ===
+      this.totalPages
+    ) {
+      return;
+    }
+
+    this.page++;
+
+    this.loadEmployees();
+  }
+
+  resetFilters(): void {
+    this.search = '';
+    this.status = '';
+    this.department = '';
+    this.designation = '';
+
+    this.page = 1;
+
+    this.loadEmployees();
+  }
+
+  deactivateEmployee(
+    id: string
+  ): void {
+    this.employeeService
+      .deactivateEmployee(
+        id
+      )
+      .subscribe({
+        next: () => {
+          this.loadEmployees();
+        },
+      });
+  }
+
+  activateEmployee(
+    id: string
+  ): void {
+    this.employeeService
+      .activateEmployee(
+        id
+      )
+      .subscribe({
+        next: () => {
+          this.loadEmployees();
+        },
+      });
   }
 }

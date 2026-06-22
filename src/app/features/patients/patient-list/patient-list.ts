@@ -1,67 +1,203 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 
-import { PatientService } from '../../../core/services/patient';
+import {
+  CommonModule,
+} from '@angular/common';
+
+import {
+  FormsModule,
+} from '@angular/forms';
+
+import {
+  RouterLink,
+} from '@angular/router';
+
+import {
+  PatientService,
+} from '../../../core/services/patient';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
-  selector: 'app-patient-list',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './patient-list.html',
-  styleUrls: ['./patient-list.css']
-})
-export class PatientList implements OnInit {
-  patients: any[] = [];
-  filteredPatients: any[] = [];
+  selector:
+    'app-patient-list',
 
-  searchTerm = '';
+  standalone: true,
+
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink, PaginationComponent
+  ],
+
+  templateUrl:
+    './patient-list.html',
+
+  styleUrls: [
+    './patient-list.css',
+  ],
+})
+export class PatientList
+  implements OnInit
+{
+  patients: any[] = [];
+
   userRole = '';
 
+  search = '';
+  gender = '';
+  bloodGroup = '';
+
+  startDate = '';
+  endDate = '';
+
+  page = 1;
+  limit = 10;
+
+  totalRecords = 0;
+  totalPages = 0;
+
   constructor(
-    private readonly patientService: PatientService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly patientService:
+      PatientService,
+
+    private readonly cdr:
+      ChangeDetectorRef
   ) {}
 
-  // Load patients on page load
   ngOnInit(): void {
-    this.userRole = localStorage.getItem('role') || '';
-
-    console.log('ROLE:', this.userRole);
+    this.userRole =
+      localStorage.getItem(
+        'role'
+      ) || '';
 
     this.loadPatients();
   }
 
-  // Get all patients
   loadPatients(): void {
-    this.patientService.getPatients().subscribe({
-      next: (response) => {
-        console.log(response);
+    const params: any = {
+      page: this.page,
+      limit: this.limit,
+    };
 
-        this.patients = response.data;
-        this.filteredPatients = response.data;
+    if (
+      this.search.trim()
+    ) {
+      params.search =
+        this.search;
+    }
 
-        this.cdr.detectChanges();
-      },
+    if (this.gender) {
+      params.gender =
+        this.gender;
+    }
 
-      error: (error) => {
-        console.log(error);
-      }
-    });
+    if (
+      this.bloodGroup
+    ) {
+      params.bloodGroup =
+        this.bloodGroup;
+    }
+
+    if (
+      this.startDate
+    ) {
+      params.startDate =
+        this.startDate;
+    }
+
+    if (
+      this.endDate
+    ) {
+      params.endDate =
+        this.endDate;
+    }
+
+    this.patientService
+      .getPatients(
+        params
+      )
+      .subscribe({
+        next:
+          (
+            response
+          ) => {
+            console.log(
+              response
+            );
+
+            this.patients =
+              response.data;
+
+            this.totalRecords =
+              response
+                .meta
+                ?.total ||
+              0;
+
+            this.totalPages =
+              response
+                .meta
+                ?.totalPages ||
+              0;
+
+            this.cdr.detectChanges();
+          },
+
+        error:
+          (
+            error
+          ) => {
+            console.log(
+              error
+            );
+          },
+      });
   }
 
-  // Search patients
-  searchPatients(): void {
-    const search = this.searchTerm.toLowerCase();
+  onFilterChange(): void {
+    this.page = 1;
 
-    this.filteredPatients = this.patients.filter((patient) => {
-      return (
-        patient.firstName?.toLowerCase().includes(search) ||
-        patient.lastName?.toLowerCase().includes(search) ||
-        patient.patientId?.toLowerCase().includes(search) ||
-        patient.phone?.includes(search)
+    this.loadPatients();
+  }
+
+  previousPage(): void {
+    if (
+      this.page > 1
+    ) {
+      this.page--;
+
+      this.loadPatients();
+    }
+  }
+
+  nextPage(): void {
+    if (
+      this.page <
+      this.totalPages
+    ) {
+      this.page++;
+
+      this.loadPatients();
+    }
+  }
+
+  changePageSize(
+    event: Event
+  ): void {
+    const select =
+      event.target as HTMLSelectElement;
+
+    this.limit =
+      Number(
+        select.value
       );
-    });
+
+    this.page = 1;
+
+    this.loadPatients();
   }
 }

@@ -29,8 +29,8 @@ export class AppointmentService {
   }
 
   // Get all appointments
-  getAppointments(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  getAppointments(params?: any): Observable<any> {
+    return this.http.get(this.apiUrl, {params});
   }
 
   // Delete an appointment

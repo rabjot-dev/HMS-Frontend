@@ -1,94 +1,142 @@
-@if(
-nodeService.nodes
-  | async;
-as nodes
-){
+<nav
+  class="nav-links"
+  aria-label="Main navigation"
+>
+  @for (
+    node of nodeService.nodes | async;
+    track node._id
+  ) {
 
-<nav class="nav-links">
+  <div class="nav-item">
 
-  @for(
-  node of nodes;
-  track node._id
-  ){
+    <!-- Parent Menu -->
+    @if (
+      node.children?.length
+    ) {
 
-  <div
-    class="nav-item"
-  >
-    @if(
-    node.children
-      ?.length
-    ){
-
-    <button
+    <div
       class="parent-menu"
-      (click)="
-        toggleMenu(
-          node._id
-        )
-      "
     >
-      <span>
-        {{ node.name }}
-      </span>
+      <!-- Text + Icon -->
+      <button
+        type="button"
+        class="menu-left"
+        (click)="
+          navigate(
+            node.path
+          )
+        "
+      >
+        @if (
+          node.icon
+        ) {
+        <span
+          class="material-icons"
+        >
+          {{ node.icon }}
+        </span>
+        }
 
-      <span>
-        {{
+        {{ node.name }}
+      </button>
+
+      <!-- Expand Button -->
+      <button
+        type="button"
+        class="expand-btn"
+        (click)="
+          toggleMenu(
+            node._id
+          )
+        "
+        [attr.aria-expanded]="
           expandedMenus[
             node._id
           ]
-            ? '▼'
-            : '▶'
-        }}
-      </span>
-    </button>
+        "
+      >
+        <span
+          class="material-icons"
+        >
+          {{
+            expandedMenus[
+              node._id
+            ]
+              ? 'expand_less'
+              : 'expand_more'
+          }}
+        </span>
+      </button>
+    </div>
 
-    @if(
-    expandedMenus[
-      node._id
-    ]
-    ){
-
+    <!-- Children -->
+    @if (
+      expandedMenus[
+        node._id
+      ]
+    ) {
     <div
       class="submenu"
     >
-      @for(
-      child of
-      node.children;
-      track child._id
-      ){
+      @for (
+        child of node.children;
+        track child._id
+      ) {
 
       <a
         [routerLink]="
           child.path
         "
-        routerLinkActive="active-link"
+        routerLinkActive="
+          active-link
+        "
       >
-        {{
-          child.name
-        }}
+        @if (
+          child.icon
+        ) {
+        <span
+          class="material-icons"
+        >
+          {{ child.icon }}
+        </span>
+        }
+
+        {{ child.name }}
       </a>
 
       }
     </div>
+    }
 
     }
 
-    } @else {
+    <!-- Simple Menu -->
+    @else {
 
     <a
       [routerLink]="
         node.path
       "
-      routerLinkActive="active-link"
+      routerLinkActive="
+        active-link
+      "
     >
+      @if (
+        node.icon
+      ) {
+      <span
+        class="material-icons"
+      >
+        {{ node.icon }}
+      </span>
+      }
+
       {{ node.name }}
     </a>
 
     }
+
   </div>
 
   }
-
 </nav>
-
-}

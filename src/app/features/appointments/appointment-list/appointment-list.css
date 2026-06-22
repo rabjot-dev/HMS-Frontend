@@ -97,7 +97,29 @@ button {
   transition: all 0.3s ease;
   box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
 }
+.date-range {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
 
+.date-range div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-range label {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.date-range input {
+  padding: 14px;
+  border: 1px solid #dbe3ee;
+  border-radius: 14px;
+}
 .book-btn:hover {
   transform: translateY(-3px);
 }

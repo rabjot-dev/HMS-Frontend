@@ -203,6 +203,7 @@ tbody td {
   color: #334155;
 }
 
+
 /*
 |--------------------------------------------------------------------------
 | Patient Info
@@ -365,4 +366,39 @@ tbody td {
   .top-section h1 {
     font-size: 30px;
   }
+}.filters-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
 }
+
+.filters-wrapper input,
+.filters-wrapper select {
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-top: 30px;
+}
+
+.pagination button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 14px;
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

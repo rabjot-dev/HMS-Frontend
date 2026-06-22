@@ -1,16 +1,16 @@
 import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit } from '@angular/core';
 
-import { Router, RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 import { NodeService } from '../../core/services/node';
 import { AuthService } from '../../core/services/auth';
 import { TokenService } from '../../core/services/token';
 import { ToastService } from '../../core/services/toast';
+import { Sidebar } from '../../shared/components/sidebar/sidebar';
 
 @Component({
   selector: 'app-dashboard-layout',
-  standalone: true,
-  imports: [RouterOutlet, RouterLink, AsyncPipe, RouterLinkActive,JsonPipe],
+  imports: [RouterOutlet, RouterLink, AsyncPipe, Sidebar],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.css'
 })
@@ -81,5 +81,4 @@ logout(): void {
 
   this.cdr.detectChanges();
 }
-
 }

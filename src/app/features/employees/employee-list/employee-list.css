@@ -115,6 +115,26 @@ button {
   box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
 }
 
+.filters-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.filters-row input,
+.filters-row select {
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 24px;
+}
 /*
 |--------------------------------------------------------------------------
 | Search
@@ -213,6 +233,58 @@ tbody td:last-child {
   border-bottom-right-radius: 22px;
 }
 
+.appointment-count {
+  padding: 14px 22px;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3b82f6,
+      #8b5cf6
+    );
+
+  color: white;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 15px 35px
+      rgba(
+        59,
+        130,
+        246,
+        0.25
+      );
+}
+
+.filters-wrapper select,
+.filters-wrapper input[type='date'] {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #dbe3ee;
+}
+
+.pagination-wrapper {
+  margin-top: 24px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.pagination-controls button,
+.pagination-controls select {
+  padding: 10px 16px;
+  border-radius: 12px;
+}
 /*
 |--------------------------------------------------------------------------
 | Employee
@@ -322,7 +394,68 @@ tbody td:last-child {
 
   color: #b45309;
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
 
+.pending-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 14px 22px;
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    #f59e0b,
+    #d97706
+  );
+
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+
+  transition: all 0.3s ease;
+
+  box-shadow: 0 15px 35px
+    rgba(245, 158, 11, 0.25);
+}
+
+.pending-btn:hover {
+  transform: translateY(-3px);
+}
+
+.add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 14px 22px;
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    #3b82f6,
+    #8b5cf6
+  );
+
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+
+  transition: all 0.3s ease;
+
+  box-shadow: 0 15px 35px
+    rgba(59, 130, 246, 0.25);
+}
+
+.add-btn:hover {
+  transform: translateY(-3px);
+}
 /*
 |--------------------------------------------------------------------------
 | Actions
