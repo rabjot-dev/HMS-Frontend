@@ -502,19 +502,13 @@
     View
   </button>
 
-  <button
-    class="download-btn"
-    (click)="
-      downloadFile(
-        report.documentUrl
-      )
-    "
-  >
-    Download
-  </button>
-
   }
-
+<button
+  class="view-btn"
+  (click)="editLabReport(report)"
+>
+  Edit
+</button>
   <button
     class="delete-btn"
     (click)="
@@ -600,18 +594,13 @@
     View
   </button>
 
-  <button
-    class="download-btn"
-    (click)="
-      downloadFile(
-        document.documentUrl
-      )
-    "
-  >
-    Download
-  </button>
-
   }
+  <button
+  class="view-btn"
+  (click)="editMedicalDocument(document)"
+>
+  Edit
+</button>
 
   <button
     class="delete-btn"
@@ -642,9 +631,12 @@
   <div class="modal-card">
 
     <h2>
-      Add Lab Report
-    </h2>
-
+  {{
+    editingLabReportId
+      ? 'Edit Lab Report'
+      : 'Add Lab Report'
+  }}
+</h2>
     <form
       [formGroup]="labReportForm"
     >
@@ -683,7 +675,14 @@
   accept=".pdf,.jpg,.jpeg,.png"
   (change)="onLabFileChange($event)"
 />
+@if(editingLabReportId){
 
+<p class="file-name">
+  Leave empty to keep the
+  existing file.
+</p>
+
+}
 @if(selectedLabFile){
 <p class="file-name">
   {{
@@ -715,11 +714,19 @@
     isUploadingLabReport
   "
 >
-  {{
-    isUploadingLabReport
-      ? 'Uploading...'
-      : 'Save Report'
-  }}
+ {{
+  isUploadingLabReport
+    ? (
+        editingLabReportId
+          ? 'Updating...'
+          : 'Uploading...'
+      )
+    : (
+        editingLabReportId
+          ? 'Update Report'
+          : 'Save Report'
+      )
+}}
 </button>
       </div>
 
@@ -735,10 +742,13 @@
 <div class="modal-backdrop">
 
   <div class="modal-card">
-
-    <h2>
-      Add Medical Document
-    </h2>
+<h2>
+  {{
+    editingMedicalDocumentId
+      ? 'Edit Medical Document'
+      : 'Add Medical Document'
+  }}
+</h2>
 
     <form
       [formGroup]="medicalDocumentForm"
@@ -777,7 +787,14 @@
   accept=".pdf,.jpg,.jpeg,.png"
   (change)="onMedicalFileChange($event)"
 />
+@if(editingMedicalDocumentId){
 
+<p class="file-name">
+  Leave empty to keep the
+  existing file.
+</p>
+
+}
 @if(selectedMedicalFile){
 <p class="file-name">
   {{
@@ -817,11 +834,19 @@
     isUploadingDocument
   "
 >
-  {{
-    isUploadingDocument
-      ? 'Uploading...'
-      : 'Save Document'
-  }}
+ {{
+  isUploadingDocument
+    ? (
+        editingMedicalDocumentId
+          ? 'Updating...'
+          : 'Uploading...'
+      )
+    : (
+        editingMedicalDocumentId
+          ? 'Update Document'
+          : 'Save Document'
+      )
+}}
 </button>
       </div>
 

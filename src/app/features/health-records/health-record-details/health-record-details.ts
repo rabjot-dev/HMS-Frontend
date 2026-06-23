@@ -231,24 +231,57 @@ this.medicalDocumentForm =
   |----------------------------------------------------------
   */
 openLabModal(): void {
+  this.editingLabReportId =
+    null;
+
   this.labReportForm.reset();
+
+  this.selectedLabFile =
+    null;
 
   this.showLabReportModal =
     true;
-
+}
+editLabReport(
+  report: any
+): void {
   this.editingLabReportId =
+    report._id;
+
+  this.labReportForm.patchValue({
+    title:
+      report.title,
+
+    reportType:
+      report.reportType,
+
+    reportDate:
+      report.reportDate
+        ?.split('T')[0],
+
+    labName:
+      report.labName,
+
+    doctorName:
+      report.doctorName,
+
+    notes:
+      report.notes,
+  });
+
+  this.selectedLabFile =
     null;
+
+  this.showLabReportModal =
+    true;
 }
 deleteLabReport(
   reportId: string
 ): void {
-  const confirmed =
-    confirm(
-      'Delete report?'
-    );
-
   if (
-    !confirmed
+    !confirm(
+      'Delete report?'
+    )
   ) {
     return;
   }
@@ -259,28 +292,32 @@ deleteLabReport(
       reportId
     )
     .subscribe({
-     next: () => {
-  this.toast.success(
-    'Lab report deleted successfully'
-  );
+      next: () => {
+        this.patient.labReports =
+          this.patient.labReports.filter(
+            (
+              report: any
+            ) =>
+              report._id?.toString() !==
+              reportId
+          );
 
-  this.patient.labReports =
-    this.patient.labReports.filter(
-      (
-        report: any
-      ) =>
-        report._id !==
-        reportId
-    );
+        this.cdr.markForCheck();
 
-  this.cdr.detectChanges();
-},
+        this.toast.success(
+          'Lab report deleted successfully'
+        );
+      },
 
       error: (
         error
       ) => {
-        console.log(
+        console.error(
           error
+        );
+
+        this.toast.error(
+          'Unable to delete lab report'
         );
       },
     });
@@ -343,13 +380,21 @@ saveLabReport(): void {
 
   this.isUploadingLabReport =
     true;
+const request$ =
+  this.editingLabReportId
+    ? this.healthRecordService
+        .updateLabReport(
+          this.patient._id,
+          this.editingLabReportId,
+          formData
+        )
+    : this.healthRecordService
+        .addLabReport(
+          this.patient._id,
+          formData
+        );
 
-  this.healthRecordService
-    .addLabReport(
-      this.patient._id,
-      formData
-    )
-    .subscribe({
+request$.subscribe({
       next: (response) => {
         this.toast.success(
           'Lab report added successfully'
@@ -357,39 +402,68 @@ saveLabReport(): void {
 
         this.patient.labReports ??= [];
 
-        this.patient.labReports = [
-  response.data,
-  ...(this.patient.labReports ?? [])
-];
+        if (
+  this.editingLabReportId
+) {
+  const index =
+    this.patient.labReports.findIndex(
+      (
+        report: any
+      ) =>
+        report._id ===
+        response.data._id
+    );
 
+  if (
+    index !== -1
+  ) {
+    this.patient.labReports[
+      index
+    ] =
+      response.data;
+
+    this.patient.labReports =
+      [
+        ...this
+          .patient
+          .labReports,
+      ];
+  }
+
+  this.toast.success(
+    'Lab report updated successfully'
+  );
+} else {
+  this.patient.labReports =
+    [
+      response.data,
+      ...(
+        this.patient
+          .labReports ??
+        []
+      ),
+    ];
+}
 this.cdr.markForCheck();
-        this.closeLabModal();
+this.closeLabModal();
 
-        this.labReportForm.reset();
+this.isUploadingLabReport = false;
 
-        this.selectedLabFile =
-          null;
-
-        this.isUploadingLabReport =
-          false;
+this.toast.success(
+  'Lab report updated successfully'
+);
       },
+error: (error) => {
+  console.error(error);
 
-      error: (
-        error
-      ) => {
-        console.log(
-          error
-        );
+  this.isUploadingLabReport = false;
 
-        this.toast.error(
-          'Unable to add lab report'
-        );
+  this.cdr.markForCheck();
 
-        this.isUploadingLabReport =
-          false;
-
-        this.cdr.detectChanges();
-      },
+  this.toast.error(
+    'Unable to add lab report'
+  );
+},
     });
 }
   /*
@@ -399,13 +473,49 @@ this.cdr.markForCheck();
   */
 
 openDocumentModal(): void {
+  this.editingMedicalDocumentId =
+    null;
+
   this.medicalDocumentForm.reset();
+
+  this.selectedMedicalFile =
+    null;
 
   this.showMedicalDocumentModal =
     true;
-
+}
+editMedicalDocument(
+  document: any
+): void {
   this.editingMedicalDocumentId =
+    document._id;
+
+  this.medicalDocumentForm.patchValue({
+    title:
+      document.title,
+
+    documentType:
+      document.documentType,
+
+    hospitalName:
+      document.hospitalName,
+
+    doctorName:
+      document.doctorName,
+
+    recordDate:
+      document.recordDate
+        ?.split('T')[0],
+
+    notes:
+      document.notes,
+  });
+
+  this.selectedMedicalFile =
     null;
+
+  this.showMedicalDocumentModal =
+    true;
 }
 deleteMedicalDocument(
   documentId: string
@@ -425,21 +535,33 @@ deleteMedicalDocument(
     )
     .subscribe({
       next: () => {
-  this.toast.success(
-    'Medical document deleted successfully'
-  );
+        this.patient.medicalDocuments =
+          this.patient.medicalDocuments.filter(
+            (
+              document: any
+            ) =>
+              document._id?.toString() !==
+              documentId
+          );
 
-  this.patient.medicalDocuments =
-    this.patient.medicalDocuments.filter(
-      (
-        document: any
-      ) =>
-        document._id !==
-        documentId
-    );
+        this.cdr.markForCheck();
 
-  this.cdr.detectChanges();
-},
+        this.toast.success(
+          'Medical document deleted successfully'
+        );
+      },
+
+      error: (
+        error
+      ) => {
+        console.error(
+          error
+        );
+
+        this.toast.error(
+          'Unable to delete document'
+        );
+      },
     });
 }
 
@@ -517,13 +639,25 @@ saveMedicalDocument(): void {
   this.isUploadingDocument =
     true;
 
+ const request$ =
   this
-    .healthRecordService
-    .addMedicalDocument(
-      this.patient._id,
-      formData
-    )
-    .subscribe({
+    .editingMedicalDocumentId
+    ? this
+        .healthRecordService
+        .updateMedicalDocument(
+          this.patient._id,
+          this
+            .editingMedicalDocumentId,
+          formData
+        )
+    : this
+        .healthRecordService
+        .addMedicalDocument(
+          this.patient._id,
+          formData
+        );
+
+request$.subscribe({
       next: (response) => {
         this.toast.success(
           'Medical document added successfully'
@@ -532,11 +666,60 @@ saveMedicalDocument(): void {
         this.patient
           .medicalDocuments ??= [];
 
-       this.patient.medicalDocuments = [
-  response.data,
-  ...(this.patient.medicalDocuments ?? [])
-];
+     if (
+  this
+    .editingMedicalDocumentId
+) {
+  const index =
+    this.patient
+      .medicalDocuments
+      .findIndex(
+        (
+          document: any
+        ) =>
+          document._id ===
+          response
+            .data
+            ._id
+      );
 
+  if (
+    index !== -1
+  ) {
+    this.patient
+      .medicalDocuments[
+      index
+    ] =
+      response.data;
+
+    this.patient
+      .medicalDocuments =
+      [
+        ...this
+          .patient
+          .medicalDocuments,
+      ];
+  }
+
+  this.toast.success(
+    'Medical document updated successfully'
+  );
+} else {
+  this.patient
+    .medicalDocuments =
+    [
+      response.data,
+      ...(
+        this.patient
+          .medicalDocuments ??
+        []
+      ),
+    ];
+
+  this.toast.success(
+    'Medical document added successfully'
+  );
+}
 this.cdr.markForCheck();
         this.closeDocumentModal();
 
@@ -557,9 +740,7 @@ this.cdr.markForCheck();
       error: (
         error
       ) => {
-        console.log(
-          error
-        );
+      console.error(error);
 
         this.toast.error(
           'Unable to add document'
@@ -568,8 +749,7 @@ this.cdr.markForCheck();
         this
           .isUploadingDocument =
           false;
-
-        this.cdr.detectChanges();
+this.cdr.markForCheck();
       },
     });
 }

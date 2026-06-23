@@ -5,23 +5,40 @@ export interface ToastState {
   message: string;
   type: 'success' | 'error';
 }
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToastService {
-  error(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
-  success(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
-  toast$ = new BehaviorSubject<any>(null);
+  toast$ =
+    new BehaviorSubject<ToastState | null>(
+      null
+    );
 
-  show(message: string, type: 'success' | 'error') {
+  success(
+    message: string
+  ): void {
+    this.show(
+      message,
+      'success'
+    );
+  }
+
+  error(
+    message: string
+  ): void {
+    this.show(
+      message,
+      'error'
+    );
+  }
+
+  show(
+    message: string,
+    type: 'success' | 'error'
+  ): void {
     this.toast$.next({
       message,
-      type
+      type,
     });
 
     setTimeout(() => {

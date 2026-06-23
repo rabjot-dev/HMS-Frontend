@@ -30,7 +30,6 @@ export class DoctorQueue implements OnInit {
   ngOnInit(): void {
     this.authService.currentUser.subscribe({
       next: (user: any) => {
-        console.log(user);
 
         this.doctorEmployeeId = user?.employeeId?._id;
 

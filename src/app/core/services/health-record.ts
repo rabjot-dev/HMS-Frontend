@@ -67,7 +67,16 @@ export class HealthRecordService {
       data
     );
   }
-
+updateLabReport(
+  patientId: string,
+  reportId: string,
+  data: FormData
+): Observable<any> {
+  return this.http.put(
+    `${this.apiUrl}/${patientId}/lab-reports/${reportId}`,
+    data
+  );
+}
   deleteLabReport(
     patientId: string,
     reportId: string
@@ -92,7 +101,16 @@ export class HealthRecordService {
       data
     );
   }
-
+  updateMedicalDocument(
+  patientId: string,
+  documentId: string,
+  data: FormData
+): Observable<any> {
+  return this.http.put(
+    `${this.apiUrl}/${patientId}/medical-documents/${documentId}`,
+    data
+  );
+}
   deleteMedicalDocument(
     patientId: string,
     documentId: string
