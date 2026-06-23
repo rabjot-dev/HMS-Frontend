@@ -165,7 +165,8 @@
   </div>
 
   <div class="timeline-container">
-
+    
+ @if(consultations.length){
     @for (
       consultation of consultations;
       track consultation._id
@@ -432,7 +433,26 @@
     </div>
 
     }
+  }@else {
 
+    <div class="empty-state">
+      <div class="empty-icon">
+        🩺
+      </div>
+
+      <h3>
+        No Medical Timeline Available
+      </h3>
+
+      <p>
+        No consultations have been recorded
+        for this patient yet.
+      </p>
+    </div>
+
+  }
+
+ 
   </div>
 
 </div>
@@ -486,7 +506,7 @@
     </div>
 
    <div class="document-list">
-
+  @if(patient?.labReports?.length){
   @for (
     report of patient?.labReports;
     track report._id
@@ -549,7 +569,26 @@
   </div>
 
   }
+  }@else {
 
+    <div class="empty-state">
+
+      <div class="empty-icon">
+        🧪
+      </div>
+
+      <h3>
+        No Lab Reports Available
+      </h3>
+
+      <p>
+        No lab reports have been uploaded
+        for this patient.
+      </p>
+
+    </div>
+
+  }
 </div>
 
   </div>
@@ -607,7 +646,9 @@
     </div>
 
     <div class="document-list">
-
+ @if(
+    patient?.medicalDocuments?.length
+  ){
       @for (
         document of
           patient?.medicalDocuments;
@@ -671,7 +712,27 @@
       </div>
 
       }
+    }
+@else {
 
+    <div class="empty-state">
+
+      <div class="empty-icon">
+        📄
+      </div>
+
+      <h3>
+        No Medical Documents Available
+      </h3>
+
+      <p>
+        No medical documents have been uploaded
+        for this patient.
+      </p>
+
+    </div>
+
+  }
     </div>
 
   </div>

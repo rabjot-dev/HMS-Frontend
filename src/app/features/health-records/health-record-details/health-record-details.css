@@ -553,3 +553,46 @@
   opacity: 0.7;
   cursor: not-allowed;
 }
+.empty-state {
+  width: 100%;
+
+  min-height: 250px;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  padding: 40px;
+
+  border-radius: 24px;
+
+  background: #f8fafc;
+
+  border: 2px dashed #cbd5e1;
+
+  gap: 16px;
+}
+
+.empty-icon {
+  font-size: 48px;
+}
+
+.empty-state h3 {
+  color: #0f172a;
+
+  margin: 0;
+}
+
+.empty-state p {
+  color: #64748b;
+
+  max-width: 420px;
+
+  line-height: 1.6;
+
+  margin: 0;
+}
