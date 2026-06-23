@@ -91,7 +91,65 @@ export class MedicalRecordService {
     return this.http.get(`${this.apiUrl}/prescriptions/${id}`);
   }
 
+  getHealthRecords(
+    page = 1,
+    limit = 10,
+    filters: any = {}
+  ): Observable<any> {
+    const params = this.buildRecordParams(page, limit, filters);
+
+    return this.http.get(`${this.apiUrl}/health-records`, { params });
+  }
+
+  getPatientHealthRecords(
+    patientId: string,
+    page = 1,
+    limit = 10,
+    filters: any = {}
+  ): Observable<any> {
+    const params = this.buildRecordParams(page, limit, filters);
+
+    return this.http.get(
+      `${this.apiUrl}/health-records/patient/${patientId}`,
+      { params }
+    );
+  }
+
+  createHealthRecord(data: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/health-records`, data);
+  }
+
+  updateHealthRecord(id: string, data: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/health-records/${id}`, data);
+  }
+
+  deleteHealthRecord(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/health-records/${id}`);
+  }
+
   getLabReports(): Observable<any> {
     return this.http.get(`${this.apiUrl}/lab-reports`);
+  }
+
+  private buildRecordParams(page: number, limit: number, filters: any): any {
+    const params: any = {
+      page,
+      limit
+    };
+
+    if (filters.search?.trim()) {
+      params.search = filters.search.trim();
+    }
+
+    if (filters.documentType) {
+      params.documentType = filters.documentType;
+    }
+
+    if (filters.sortBy) {
+      params.sortBy = filters.sortBy;
+      params.sortOrder = filters.sortOrder || 'desc';
+    }
+
+    return params;
   }
 }

@@ -126,6 +126,22 @@ textarea:focus {
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border-color: #dc2626;
+}
+
+input.ng-invalid.ng-touched:focus,
+textarea.ng-invalid.ng-touched:focus {
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+.error-text {
+  color: #dc2626;
+  font-size: var(--font-sm);
+  font-weight: 600;
+}
+
 textarea {
   min-height: 120px;
 

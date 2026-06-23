@@ -11,7 +11,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConsultationService } from '../../../core/services/consultation';
 import { AppointmentService } from '../../../core/services/appointment';
-import { AuthService } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-consultation-form',
@@ -33,7 +32,6 @@ export class ConsultationForm implements OnInit {
     private readonly router: Router,
     private readonly consultationService: ConsultationService,
     private readonly appointmentService: AppointmentService,
-    private readonly authService: AuthService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
@@ -84,6 +82,26 @@ export class ConsultationForm implements OnInit {
     return this.consultationForm.get('prescriptions') as FormArray;
   }
 
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.consultationForm.get(fieldName);
+
+    return !!(
+      field &&
+      field.invalid &&
+      (field.touched || field.dirty)
+    );
+  }
+
+  isPrescriptionFieldInvalid(index: number, fieldName: string): boolean {
+    const field = this.prescriptions.at(index).get(fieldName);
+
+    return !!(
+      field &&
+      field.invalid &&
+      (field.touched || field.dirty)
+    );
+  }
+
   // Add new prescription row
   addPrescription(): void {
     this.prescriptions.push(this.createPrescription());
@@ -111,19 +129,15 @@ export class ConsultationForm implements OnInit {
   onSubmit(): void {
     if (this.consultationForm.invalid) {
       this.consultationForm.markAllAsTouched();
+      this.cdr.detectChanges();
       return;
     }
 
     this.isSubmitting = true;
 
-    const currentUser = JSON.parse(
-      localStorage.getItem('user') || '{}'
-    );
-
     const consultationData = {
       appointmentId: this.appointment?._id,
       patientId: this.appointment?.patientId?._id,
-      doctorEmployeeId: currentUser?.employeeId?._id,
 
       diagnosis: this.consultationForm.value.diagnosis,
 

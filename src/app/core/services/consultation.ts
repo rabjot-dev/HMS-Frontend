@@ -57,14 +57,6 @@ export class ConsultationService {
     );
   }
 
-  // Update consultation details
-  updateConsultation(
-    id: string,
-    data: any
-  ): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, data);
-  }
-
   // Download prescription PDF
   downloadPrescriptionPdf(consultationId: string) {
     return this.http.get(

@@ -44,6 +44,10 @@
       <label>Diagnosis</label>
 
       <textarea formControlName="diagnosis" placeholder="Enter diagnosis"></textarea>
+
+      @if(isFieldInvalid('diagnosis')) {
+      <small class="error-text">Diagnosis is required.</small>
+      }
     </div>
 
     <!-- Symptoms -->
@@ -127,6 +131,10 @@
             <label>Medicine Name</label>
 
             <input type="text" formControlName="medicineName" />
+
+            @if(isPrescriptionFieldInvalid($index, 'medicineName')) {
+            <small class="error-text">Medicine name is required.</small>
+            }
           </div>
 
           <!-- Dosage -->
@@ -135,6 +143,10 @@
             <label>Dosage</label>
 
             <input type="text" formControlName="dosage" />
+
+            @if(isPrescriptionFieldInvalid($index, 'dosage')) {
+            <small class="error-text">Dosage is required.</small>
+            }
           </div>
 
           <!-- Frequency -->
@@ -143,6 +155,10 @@
             <label>Frequency/Day</label>
 
             <input type="text" formControlName="frequency" />
+
+            @if(isPrescriptionFieldInvalid($index, 'frequency')) {
+            <small class="error-text">Frequency is required.</small>
+            }
           </div>
 
           <!-- Duration -->
@@ -151,6 +167,10 @@
             <label>Duration</label>
 
             <input type="text" formControlName="duration" />
+
+            @if(isPrescriptionFieldInvalid($index, 'duration')) {
+            <small class="error-text">Duration is required.</small>
+            }
           </div>
 
           <!-- Remove Button -->
