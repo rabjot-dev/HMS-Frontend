@@ -28,22 +28,26 @@
       Next
     </button>
 
-    <select
-      [value]="limit"
-      (change)="changePageSize($event)"
-    >
-      <option value="10">
-        10
-      </option>
+ @if(showPageSize){
 
-      <option value="20">
-        20
-      </option>
+<select
+  [value]="limit"
+  (change)="changePageSize($event)"
+>
+  <option value="10">
+    10
+  </option>
 
-      <option value="50">
-        50
-      </option>
-    </select>
+  <option value="20">
+    20
+  </option>
+
+  <option value="50">
+    50
+  </option>
+</select>
+
+}
 
   </div>
 

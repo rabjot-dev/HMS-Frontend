@@ -241,11 +241,7 @@
             PDF
           </button>
 
-          <button
-            class="followup-btn"
-          >
-            Follow Up
-          </button>
+      
 
         </div>
 
@@ -441,6 +437,35 @@
 
 </div>
 
+@if(
+  timelineMeta?.totalPages > 1
+){
+
+<app-pagination
+  [page]="
+    timelineMeta.page
+  "
+  [totalPages]="
+    timelineMeta.totalPages
+  "
+  [totalRecords]="
+    timelineMeta.totalRecords
+  "
+  [limit]="5"
+  [showPageSize]="false"
+  (previous)="
+    onTimelinePageChange(
+      timelinePage - 1
+    )
+  "
+  (next)="
+    onTimelinePageChange(
+      timelinePage + 1
+    )
+  "
+></app-pagination>
+
+}
   <!-- =========================
        Lab Reports
   ========================== -->
@@ -528,6 +553,35 @@
 </div>
 
   </div>
+  @if(
+  labMeta?.totalPages > 1
+){
+
+<app-pagination
+  [page]="
+    labMeta.page
+  "
+  [totalPages]="
+    labMeta.totalPages
+  "
+  [totalRecords]="
+    labMeta.totalRecords
+  "
+  [limit]="5"
+  [showPageSize]="false"
+  (previous)="
+    onLabPageChange(
+      labPage - 1
+    )
+  "
+  (next)="
+    onLabPageChange(
+      labPage + 1
+    )
+  "
+></app-pagination>
+
+}
 
   <!-- =========================
        Medical Documents
@@ -624,6 +678,35 @@
 
   }
 </div>
+@if(
+  documentMeta?.totalPages > 1
+){
+
+<app-pagination
+  [page]="
+    documentMeta.page
+  "
+  [totalPages]="
+    documentMeta.totalPages
+  "
+  [totalRecords]="
+    documentMeta.totalRecords
+  "
+  [limit]="5"
+  [showPageSize]="false"
+  (previous)="
+    onDocumentPageChange(
+      documentPage - 1
+    )
+  "
+  (next)="
+    onDocumentPageChange(
+      documentPage + 1
+    )
+  "
+></app-pagination>
+
+}
 @if(showLabReportModal){
 
 <div class="modal-backdrop">

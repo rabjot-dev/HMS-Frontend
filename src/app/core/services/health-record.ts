@@ -16,6 +16,7 @@ import {
 export class HealthRecordService {
   private readonly apiUrl =
     'http://localhost:5000/api/health-records';
+    
 
   constructor(
     private readonly http: HttpClient
@@ -44,14 +45,17 @@ export class HealthRecordService {
   |----------------------------------------------------------
   */
 
-  getHealthRecordDetails(
-    patientId: string
-  ): Observable<any> {
-    return this.http.get(
-      `${this.apiUrl}/${patientId}`
-    );
-  }
-
+ getHealthRecordDetails(
+  patientId: string,
+  params?: any
+): Observable<any> {
+  return this.http.get(
+    `${this.apiUrl}/${patientId}`,
+    {
+      params,
+    }
+  );
+}
   /*
   |----------------------------------------------------------
   | Lab Reports

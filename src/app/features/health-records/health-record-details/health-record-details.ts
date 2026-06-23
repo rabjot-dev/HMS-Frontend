@@ -23,7 +23,10 @@ import {
 import {
   HealthRecordService,
 } from '../../../core/services/health-record';
-
+import {
+  PaginationComponent,
+} from
+'../../../shared/components/pagination/pagination';
 import {
   ConsultationService,
 } from '../../../core/services/consultation';
@@ -35,7 +38,7 @@ import {
   standalone: true,
 
   imports: [
-    CommonModule,ReactiveFormsModule
+    CommonModule,ReactiveFormsModule, PaginationComponent
   ],
 
   templateUrl:
@@ -86,6 +89,15 @@ isUploadingLabReport =
 
 isUploadingDocument =
   false;
+  timelinePage = 1;
+labPage = 1;
+documentPage = 1;
+
+readonly pageSize = 5;
+
+timelineMeta: any = {};
+labMeta: any = {};
+documentMeta: any = {};
   constructor(
     private readonly route:
       ActivatedRoute,
@@ -172,45 +184,76 @@ this.medicalDocumentForm =
     notes: [''],
   });
 }
- loadHealthRecord(
+loadHealthRecord(
   patientId: string
 ): void {
   this.isLoading = true;
 
+  const params = {
+    timelinePage:
+      this.timelinePage,
+
+    labPage:
+      this.labPage,
+
+    documentPage:
+      this.documentPage,
+
+    limit:
+      this.pageSize,
+  };
+
   this.healthRecordService
     .getHealthRecordDetails(
-      patientId
+      patientId,
+      params
     )
     .subscribe({
-      next:
-        (
-          response
-        ) => {
-          this.patient =
-            response.data.patient;
+      next: (
+        response
+      ) => {
+        this.patient =
+          response.data.patient;
 
-          this.consultations =
-            response.data.consultations;
+        this.consultations =
+          response.data.consultations;
 
-          this.isLoading =
-            false;
+        this.patient.labReports =
+          response.data.labReports;
 
-          this.cdr.detectChanges();
-        },
+        this.patient.medicalDocuments =
+          response.data.medicalDocuments;
 
-      error:
-        (
+        this.timelineMeta =
+          response.data.meta
+            .consultations;
+
+        this.labMeta =
+          response.data.meta
+            .labReports;
+
+        this.documentMeta =
+          response.data.meta
+            .medicalDocuments;
+
+        this.isLoading =
+          false;
+
+        this.cdr.markForCheck();
+      },
+
+      error: (
+        error
+      ) => {
+        console.error(
           error
-        ) => {
-          console.log(
-            error
-          );
+        );
 
-          this.isLoading =
-            false;
+        this.isLoading =
+          false;
 
-          this.cdr.detectChanges();
-        },
+        this.cdr.markForCheck();
+      },
     });
 }
 
@@ -241,6 +284,65 @@ openLabModal(): void {
 
   this.showLabReportModal =
     true;
+}
+onTimelinePageChange(
+  page: number
+): void {
+  if (
+    page < 1 ||
+    page >
+      this.timelineMeta
+        ?.totalPages
+  ) {
+    return;
+  }
+
+  this.timelinePage =
+    page;
+
+  this.loadHealthRecord(
+    this.patient._id
+  );
+}
+
+onLabPageChange(
+  page: number
+): void {
+  if (
+    page < 1 ||
+    page >
+      this.labMeta
+        ?.totalPages
+  ) {
+    return;
+  }
+
+  this.labPage =
+    page;
+
+  this.loadHealthRecord(
+    this.patient._id
+  );
+}
+
+onDocumentPageChange(
+  page: number
+): void {
+  if (
+    page < 1 ||
+    page >
+      this.documentMeta
+        ?.totalPages
+  ) {
+    return;
+  }
+
+  this.documentPage =
+    page;
+
+  this.loadHealthRecord(
+    this.patient._id
+  );
 }
 editLabReport(
   report: any
@@ -292,22 +394,15 @@ deleteLabReport(
       reportId
     )
     .subscribe({
-      next: () => {
-        this.patient.labReports =
-          this.patient.labReports.filter(
-            (
-              report: any
-            ) =>
-              report._id?.toString() !==
-              reportId
-          );
+   next: () => {
+  this.toast.success(
+    'Lab report deleted successfully'
+  );
 
-        this.cdr.markForCheck();
-
-        this.toast.success(
-          'Lab report deleted successfully'
-        );
-      },
+  this.loadHealthRecord(
+    this.patient._id
+  );
+},
 
       error: (
         error
@@ -395,64 +490,22 @@ const request$ =
         );
 
 request$.subscribe({
-      next: (response) => {
-        this.toast.success(
-          'Lab report added successfully'
-        );
-
-        this.patient.labReports ??= [];
-
-        if (
-  this.editingLabReportId
-) {
-  const index =
-    this.patient.labReports.findIndex(
-      (
-        report: any
-      ) =>
-        report._id ===
-        response.data._id
-    );
-
-  if (
-    index !== -1
-  ) {
-    this.patient.labReports[
-      index
-    ] =
-      response.data;
-
-    this.patient.labReports =
-      [
-        ...this
-          .patient
-          .labReports,
-      ];
-  }
-
+     next: (response) => {
   this.toast.success(
-    'Lab report updated successfully'
+    this.editingLabReportId
+      ? 'Lab report updated successfully'
+      : 'Lab report added successfully'
   );
-} else {
-  this.patient.labReports =
-    [
-      response.data,
-      ...(
-        this.patient
-          .labReports ??
-        []
-      ),
-    ];
-}
-this.cdr.markForCheck();
-this.closeLabModal();
 
-this.isUploadingLabReport = false;
+  this.closeLabModal();
 
-this.toast.success(
-  'Lab report updated successfully'
-);
-      },
+  this.isUploadingLabReport =
+    false;
+
+  this.loadHealthRecord(
+    this.patient._id
+  );
+},
 error: (error) => {
   console.error(error);
 
@@ -535,20 +588,13 @@ deleteMedicalDocument(
     )
     .subscribe({
       next: () => {
-        this.patient.medicalDocuments =
-          this.patient.medicalDocuments.filter(
-            (
-              document: any
-            ) =>
-              document._id?.toString() !==
-              documentId
-          );
-
-        this.cdr.markForCheck();
-
         this.toast.success(
-          'Medical document deleted successfully'
-        );
+  'Medical document deleted successfully'
+);
+
+this.loadHealthRecord(
+  this.patient._id
+);
       },
 
       error: (
@@ -638,6 +684,7 @@ saveMedicalDocument(): void {
 
   this.isUploadingDocument =
     true;
+    
 
  const request$ =
   this
@@ -658,84 +705,22 @@ saveMedicalDocument(): void {
         );
 
 request$.subscribe({
-      next: (response) => {
-        this.toast.success(
-          'Medical document added successfully'
-        );
-
-        this.patient
-          .medicalDocuments ??= [];
-
-     if (
-  this
-    .editingMedicalDocumentId
-) {
-  const index =
-    this.patient
-      .medicalDocuments
-      .findIndex(
-        (
-          document: any
-        ) =>
-          document._id ===
-          response
-            .data
-            ._id
-      );
-
-  if (
-    index !== -1
-  ) {
-    this.patient
-      .medicalDocuments[
-      index
-    ] =
-      response.data;
-
-    this.patient
-      .medicalDocuments =
-      [
-        ...this
-          .patient
-          .medicalDocuments,
-      ];
-  }
-
+     next: (response) => {
   this.toast.success(
-    'Medical document updated successfully'
+    this.editingMedicalDocumentId
+      ? 'Medical document updated successfully'
+      : 'Medical document added successfully'
   );
-} else {
-  this.patient
-    .medicalDocuments =
-    [
-      response.data,
-      ...(
-        this.patient
-          .medicalDocuments ??
-        []
-      ),
-    ];
 
-  this.toast.success(
-    'Medical document added successfully'
+  this.closeDocumentModal();
+
+  this.isUploadingDocument =
+    false;
+
+  this.loadHealthRecord(
+    this.patient._id
   );
-}
-this.cdr.markForCheck();
-        this.closeDocumentModal();
-
-        this
-          .medicalDocumentForm
-          .reset();
-
-        this
-          .selectedMedicalFile =
-          null;
-
-        this
-          .isUploadingDocument =
-          false;
-
-      },
+},
 
       error: (
         error

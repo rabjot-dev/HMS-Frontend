@@ -28,6 +28,8 @@ export class PaginationComponent {
 
   @Input()
   limit = 10;
+  @Input()
+showPageSize = true;
 
   @Output()
   previous =
