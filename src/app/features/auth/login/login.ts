@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { AuthService } from '../../../core/services/auth';
+import { MenuNodeService } from '../../../core/services/menu-node';
 import { TokenService } from '../../../core/services/token';
 import { ToastService } from '../../../core/services/toast';
 
@@ -22,6 +23,7 @@ export class Login {
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
+    private readonly menuNodeService: MenuNodeService,
     private readonly tokenService: TokenService,
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
@@ -62,8 +64,6 @@ this.tokenService.setRefreshToken(
 
         this.toastService.show('Login successful', 'success');
 
-        localStorage.setItem('role', response.data.user.roles?.[0]);
-
         localStorage.setItem('loginId', this.loginForm.value.loginId);
 
         const isFirstLogin = response.data.user.isFirstLogin;
@@ -74,19 +74,7 @@ this.tokenService.setRefreshToken(
           return;
         }
 
-        const role = response.data.user.roles?.[0];
-
-        this.isSubmitting = false;
-
-        if (role === 'ADMIN') {
-          this.router.navigate(['/dashboard/admin']);
-        } else if (role === 'DOCTOR') {
-          this.router.navigate(['/dashboard/doctor']);
-        } else if (role === 'RECEPTIONIST') {
-          this.router.navigate(['/dashboard/receptionist']);
-        } else {
-          this.router.navigate(['/login']);
-        }
+        this.redirectUsingMenuNodes();
       },
 
       error: (error) => {
@@ -97,6 +85,24 @@ this.tokenService.setRefreshToken(
         );
 
         this.isSubmitting = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  private redirectUsingMenuNodes(): void {
+    this.menuNodeService.loadMyMenu().subscribe({
+      next: (response) => {
+        const dashboardPath = this.menuNodeService.getDefaultRedirectPath(
+          response.data || []
+        );
+
+        this.isSubmitting = false;
+        this.router.navigate([dashboardPath]);
+      },
+      error: () => {
+        this.isSubmitting = false;
+        this.router.navigate(['/login']);
         this.cdr.detectChanges();
       }
     });

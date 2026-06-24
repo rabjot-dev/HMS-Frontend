@@ -6,6 +6,7 @@ import { AsyncPipe } from '@angular/common';
 import { AuthService } from '../../core/services/auth';
 import { TokenService } from '../../core/services/token';
 import { ToastService } from '../../core/services/toast';
+import { MenuNodeService } from '../../core/services/menu-node';
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 
 @Component({
@@ -23,6 +24,7 @@ export class DashboardLayout implements OnInit {
     private readonly tokenService: TokenService,
     private readonly router: Router,
     private readonly toastService: ToastService,
+    private readonly menuNodeService: MenuNodeService,
     private readonly cdr: ChangeDetectorRef,
     private readonly elementRef: ElementRef
   ) {}
@@ -62,6 +64,7 @@ this.authService
   .subscribe();
 
 this.tokenService.removeTokens();
+this.menuNodeService.clearMenu();
 
     this.authService.currentUser.next(null);
 

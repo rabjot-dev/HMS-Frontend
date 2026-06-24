@@ -24,7 +24,6 @@
 }
 
 .record-count,
-.filters-wrapper,
 .table-container,
 .empty-state,
 .loading-card,
@@ -63,15 +62,6 @@
 .tabs button.active {
   background: #2563eb;
   color: #ffffff;
-}
-
-.filters-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 18px;
-  border-radius: 20px;
-  flex-wrap: wrap;
 }
 
 .health-record-form {
@@ -183,41 +173,6 @@
   padding: 11px 14px;
   background: #e2e8f0;
   color: #334155;
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  min-width: 280px;
-}
-
-.search-box span,
-.date-filter span {
-  color: #2563eb;
-  font-size: var(--font-sm);
-  font-weight: 700;
-}
-
-.search-box input,
-.filters-wrapper select,
-.filters-wrapper input[type="date"] {
-  border: 1px solid #dbe3ef;
-  border-radius: 14px;
-  padding: 13px 15px;
-  color: #0f172a;
-  outline: none;
-}
-
-.search-box input {
-  width: 100%;
-}
-
-.date-filter {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
 }
 
 .table-container {

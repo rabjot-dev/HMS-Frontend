@@ -1,9 +1,16 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
+import { AuthService } from '../../../core/services/auth';
+
+type DesignationOption = {
+  label: string;
+  value: string;
+};
 
 @Component({
   selector: 'app-add-employee',
@@ -12,17 +19,26 @@ import { EmployeeService } from '../../../core/services/employee';
   templateUrl: './add-employee.html',
   styleUrl: './add-employee.css'
 })
-export class AddEmployee {
+export class AddEmployee implements OnInit, OnDestroy {
   employeeForm: FormGroup;
 
   successMessage = '';
   errorMessage = '';
 
   isSubmitting = false;
+  designationOptions: DesignationOption[] = [];
+
+  private readonly staffDesignationOptions: DesignationOption[] = [
+    { label: 'Doctor', value: 'DOCTOR' },
+    { label: 'Nurse', value: 'NURSE' },
+    { label: 'Receptionist', value: 'RECEPTIONIST' }
+  ];
+  private userSubscription?: Subscription;
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly employeeService: EmployeeService,
+    private readonly authService: AuthService,
     private readonly cdr: ChangeDetectorRef,
     private readonly toastService: ToastService
   ) {
@@ -151,6 +167,28 @@ export class AddEmployee {
         });
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.userSubscription = this.authService.currentUser.subscribe((user) => {
+      this.setDesignationOptions(user);
+      this.cdr.detectChanges();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.userSubscription?.unsubscribe();
+  }
+
+  private setDesignationOptions(user: any): void {
+    const isSuperAdmin = user?.roles?.includes('SUPER_ADMIN');
+
+    this.designationOptions = isSuperAdmin
+      ? [
+          { label: 'Admin', value: 'ADMIN' },
+          ...this.staffDesignationOptions
+        ]
+      : this.staffDesignationOptions;
   }
 
   // Current selected designation

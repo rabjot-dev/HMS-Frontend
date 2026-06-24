@@ -122,7 +122,7 @@
 
               <!-- Edit -->
 
-              @if( userRole !== 'DOCTOR' ){
+              @if( canUpdatePatient() ){
 
               <a
                 class="action-btn edit"
@@ -133,6 +133,10 @@
               >
                 Edit
               </a>
+
+              }
+
+              @if( canDeletePatient() ){
 
               <button
                 type="button"

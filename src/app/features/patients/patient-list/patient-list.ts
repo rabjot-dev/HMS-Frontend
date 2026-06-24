@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import { ApiPermissionService } from '../../../core/services/api-permission';
 import { PatientService } from '../../../core/services/patient';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
@@ -21,7 +22,7 @@ export class PatientList implements OnInit, OnDestroy {
   statusFilter = '';
   sortBy = 'createdAt';
   sortOrder = 'desc';
-  userRole = '';
+  permissions = new Set<string>();
   private searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
   pagination = {
@@ -34,15 +35,14 @@ export class PatientList implements OnInit, OnDestroy {
 };
 
   constructor(
+    private readonly apiPermissionService: ApiPermissionService,
     private readonly patientService: PatientService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
   // Load patients on page load
   ngOnInit(): void {
-    this.userRole = localStorage.getItem('role') || '';
-
-
+    this.loadPermissions();
     this.loadPatients();
   }
 
@@ -74,6 +74,27 @@ export class PatientList implements OnInit, OnDestroy {
       error: (error) => {
       }
     });
+  }
+
+  loadPermissions(): void {
+    this.apiPermissionService.getMyPermissions().subscribe({
+      next: (response) => {
+        this.permissions = new Set(response.data || []);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.permissions = new Set<string>();
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  canUpdatePatient(): boolean {
+    return this.permissions.has('patient:update');
+  }
+
+  canDeletePatient(): boolean {
+    return this.permissions.has('patient:delete');
   }
 
   previousPage(): void {

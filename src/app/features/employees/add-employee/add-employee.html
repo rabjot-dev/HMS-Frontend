@@ -123,13 +123,9 @@
           <select formControlName="designation">
             <option value="">Select Designation</option>
 
-            <option value="DOCTOR">Doctor</option>
-
-            <option value="NURSE">Nurse</option>
-
-            <option value="RECEPTIONIST">Receptionist</option>
-
-            <option value="ADMIN">Admin</option>
+            @for(option of designationOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+            }
           </select>
           @if(employeeForm.get('designation')?.invalid && employeeForm.get('designation')?.touched){
           <span class="error-text">Designation is required</span>

@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 
 import { TokenService } from '../services/token';
 import { AuthService } from '../services/auth';
+import { MenuNodeService } from '../services/menu-node';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(TokenService);
@@ -22,6 +23,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
 
   const router = inject(Router);
+
+  const menuNodeService = inject(MenuNodeService);
 
   const accessToken =
     tokenService.getAccessToken();
@@ -76,8 +79,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
           catchError((refreshError) => {
             tokenService.removeTokens();
-
-            localStorage.removeItem('role');
+            menuNodeService.clearMenu();
 
             authService.currentUser.next(null);
 

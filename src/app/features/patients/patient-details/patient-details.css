@@ -120,20 +120,6 @@
   flex-wrap: wrap;
 }
 
-.records-link {
-  padding: 14px 20px;
-
-  border-radius: 999px;
-
-  background: #0f172a;
-
-  color: white;
-
-  text-decoration: none;
-
-  font-weight: 700;
-}
-
 /*
 |--------------------------------------------------------------------------
 | Cards

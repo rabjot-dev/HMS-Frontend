@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { API_BASE_URL } from '../constants/api.constants';
 
 @Injectable({
@@ -39,16 +38,6 @@ export class AuthService {
     return this.http.post(`${API_BASE_URL}/auth/register`, data);
   }
 
-  // Check if current user has a specific role
-  hasRole(role: string): boolean {
-    const user = this.currentUser.value;
-
-    if (!user) {
-      return false;
-    }
-
-    return user.roles?.includes(role);
-  }
   refreshToken(refreshToken: string): Observable<any> {
   return this.http.post(
     `${API_BASE_URL}/auth/refresh-token`,

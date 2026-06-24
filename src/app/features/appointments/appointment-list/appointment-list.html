@@ -212,7 +212,7 @@
             <div class="actions">
               <!-- Admin -->
 
-              @if( authService.hasRole( 'ADMIN' ) || authService.hasRole( 'RECEPTIONIST' ) ){
+              @if( canUpdateAppointment() ){
 
               <button
                 class="action-btn edit"
@@ -223,6 +223,10 @@
               >
                 Edit
               </button>
+
+              }
+
+              @if( canDeleteAppointment() ){
 
               <button
                 class="action-btn delete"
@@ -239,7 +243,7 @@
 
               <!-- Doctor -->
 
-              @if( authService.hasRole( 'DOCTOR' ) ){
+              @if( canViewPatient() ){
 
               <button
                 class="action-btn view"

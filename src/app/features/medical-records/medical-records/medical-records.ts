@@ -1,16 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { finalize, timeout } from 'rxjs';
 
-import { AuthService } from '../../../core/services/auth';
+import { ApiPermissionService } from '../../../core/services/api-permission';
 import { MedicalRecordService } from '../../../core/services/medical-record';
 import { API_BASE_URL } from '../../../core/constants/api.constants';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 type MedicalRecordTab = 'prescriptions' | 'healthRecords' | 'labReports';
+
+const createPagination = () => ({
+  page: 1,
+  limit: 10,
+  totalRecords: 0,
+  totalPages: 1,
+  hasNextPage: false,
+  hasPreviousPage: false
+});
 
 @Component({
   selector: 'app-medical-records',
@@ -19,29 +28,31 @@ type MedicalRecordTab = 'prescriptions' | 'healthRecords' | 'labReports';
   templateUrl: './medical-records.html',
   styleUrl: './medical-records.css'
 })
-export class MedicalRecords implements OnInit, OnDestroy {
+export class MedicalRecords implements OnInit {
   activeTab: MedicalRecordTab = 'prescriptions';
   prescriptions: any[] = [];
   healthRecords: any[] = [];
   labReports: any[] = [];
   isLoading = false;
   isSavingHealthRecord = false;
+  isSavingLabReport = false;
   editingHealthRecordId = '';
+  editingLabReportId = '';
   healthRecordMessage = '';
   healthRecordError = '';
+  labReportMessage = '';
+  labReportError = '';
   patientId = '';
+  permissions = new Set<string>();
+  prescriptionPagination = createPagination();
+  healthRecordPagination = createPagination();
+  labReportPagination = createPagination();
 
-  searchTerm = '';
-  fromDate = '';
-  toDate = '';
-  sortBy = 'createdAt';
-  sortOrder = 'desc';
-  healthDocumentTypeFilter = '';
   selectedHealthRecordFile: File | null = null;
+  selectedLabReportFile: File | null = null;
 
   documentTypes = [
     'PREVIOUS_DISCHARGE_SUMMARY',
-    'LAB_REPORT',
     'SCAN_REPORT',
     'OTHER'
   ];
@@ -53,80 +64,62 @@ export class MedicalRecords implements OnInit, OnDestroy {
     notes: ''
   };
 
-  private readonly fileBaseUrl = API_BASE_URL.replace('/api', '');
-  private searchTimeout: ReturnType<typeof setTimeout> | null = null;
-
-  pagination = {
-    page: 1,
-    limit: 10,
-    totalRecords: 0,
-    totalPages: 1,
-    hasNextPage: false,
-    hasPreviousPage: false
+  labReportForm: any = {
+    title: '',
+    documentDate: '',
+    notes: ''
   };
+
+  private readonly fileBaseUrl = API_BASE_URL.replace('/api', '');
 
   constructor(
     private readonly medicalRecordService: MedicalRecordService,
+    private readonly apiPermissionService: ApiPermissionService,
     private readonly route: ActivatedRoute,
-    private readonly cdr: ChangeDetectorRef,
-    public readonly authService: AuthService
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.patientId = this.route.snapshot.paramMap.get('patientId') || '';
+    this.loadPermissions();
     this.loadPrescriptions();
-  }
-
-  ngOnDestroy(): void {
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
   }
 
   setActiveTab(tab: MedicalRecordTab): void {
     this.activeTab = tab;
 
     if (tab === 'prescriptions') {
-      this.loadPrescriptions(1);
+      this.loadPrescriptions();
       return;
     }
 
     if (tab === 'healthRecords') {
-      this.loadHealthRecords(1);
+      this.loadHealthRecords();
       return;
     }
 
     this.loadLabReports();
   }
 
-  loadPrescriptions(page = this.pagination.page): void {
+  loadPrescriptions(): void {
     this.isLoading = true;
-
-    const filters = {
-      search: this.searchTerm,
-      fromDate: this.fromDate,
-      toDate: this.toDate,
-      sortBy: this.sortBy,
-      sortOrder: this.sortOrder
-    };
 
     const request$ = this.patientId
       ? this.medicalRecordService.getPatientPrescriptions(
           this.patientId,
-          page,
-          this.pagination.limit,
-          filters
+          this.prescriptionPagination.page,
+          this.prescriptionPagination.limit
         )
       : this.medicalRecordService.getPrescriptions(
-          page,
-          this.pagination.limit,
-          filters
+          this.prescriptionPagination.page,
+          this.prescriptionPagination.limit
         );
 
     request$.subscribe({
         next: (response) => {
           this.prescriptions = response.data || [];
-          this.pagination = response.pagination || this.pagination;
+          this.prescriptionPagination =
+            response.pagination || this.prescriptionPagination;
           this.isLoading = false;
           this.cdr.detectChanges();
         },
@@ -140,9 +133,21 @@ export class MedicalRecords implements OnInit, OnDestroy {
   loadLabReports(): void {
     this.isLoading = true;
 
-    this.medicalRecordService.getLabReports().subscribe({
+    const request$ = this.patientId
+      ? this.medicalRecordService.getPatientLabReports(
+          this.patientId,
+          this.labReportPagination.page,
+          this.labReportPagination.limit
+        )
+      : this.medicalRecordService.getLabReports(
+          this.labReportPagination.page,
+          this.labReportPagination.limit
+        );
+
+    request$.subscribe({
       next: (response) => {
         this.labReports = response.data || [];
+        this.labReportPagination = response.pagination || this.labReportPagination;
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -154,33 +159,25 @@ export class MedicalRecords implements OnInit, OnDestroy {
     });
   }
 
-  loadHealthRecords(page = this.pagination.page): void {
+  loadHealthRecords(): void {
     this.isLoading = true;
-
-    const filters = {
-      search: this.searchTerm,
-      documentType: this.healthDocumentTypeFilter,
-      sortBy: this.sortBy,
-      sortOrder: this.sortOrder
-    };
 
     const request$ = this.patientId
       ? this.medicalRecordService.getPatientHealthRecords(
           this.patientId,
-          page,
-          this.pagination.limit,
-          filters
+          this.healthRecordPagination.page,
+          this.healthRecordPagination.limit
         )
       : this.medicalRecordService.getHealthRecords(
-          page,
-          this.pagination.limit,
-          filters
+          this.healthRecordPagination.page,
+          this.healthRecordPagination.limit
         );
 
     request$.subscribe({
       next: (response) => {
         this.healthRecords = response.data || [];
-        this.pagination = response.pagination || this.pagination;
+        this.healthRecordPagination =
+          response.pagination || this.healthRecordPagination;
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -192,50 +189,52 @@ export class MedicalRecords implements OnInit, OnDestroy {
     });
   }
 
-  previousPage(): void {
-    if (this.pagination.hasPreviousPage) {
-      this.loadActivePagedRecords(this.pagination.page - 1);
-    }
-  }
-
-  nextPage(): void {
-    if (this.pagination.hasNextPage) {
-      this.loadActivePagedRecords(this.pagination.page + 1);
-    }
-  }
-
-  changeLimit(limit: number): void {
-    this.pagination.limit = Number(limit);
-    this.loadActivePagedRecords(1);
-  }
-
-  onSearchInput(value: string): void {
-    this.searchTerm = value;
-
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-
-    this.searchTimeout = setTimeout(() => {
-      this.loadActivePagedRecords(1);
-    }, 500);
-  }
-
-  onFilterChange(): void {
-    this.loadActivePagedRecords(1);
+  loadPermissions(): void {
+    this.apiPermissionService.getMyPermissions().subscribe({
+      next: (response) => {
+        this.permissions = new Set(response.data || []);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.permissions = new Set<string>();
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   canManageHealthRecords(): boolean {
-    return (
-      this.authService.hasRole('ADMIN') ||
-      this.authService.hasRole('RECEPTIONIST')
-    );
+    return this.hasPermission('medical-record:health-record-create');
+  }
+
+  canUpdateHealthRecords(): boolean {
+    return this.hasPermission('medical-record:health-record-update');
   }
 
   canDeleteHealthRecords(): boolean {
-    return (
-      this.authService.hasRole('ADMIN') ||
-      this.authService.hasRole('RECEPTIONIST')
+    return this.hasPermission('medical-record:health-record-delete');
+  }
+
+  canManageLabReports(): boolean {
+    return this.hasPermission('medical-record:lab-report-create');
+  }
+
+  canUpdateLabReports(): boolean {
+    return this.hasPermission('medical-record:lab-report-update');
+  }
+
+  canDeleteLabReports(): boolean {
+    return this.hasPermission('medical-record:lab-report-delete');
+  }
+
+  canShowHealthRecordForm(): boolean {
+    return this.canManageHealthRecords() || (
+      Boolean(this.editingHealthRecordId) && this.canUpdateHealthRecords()
+    );
+  }
+
+  canShowLabReportForm(): boolean {
+    return this.canManageLabReports() || (
+      Boolean(this.editingLabReportId) && this.canUpdateLabReports()
     );
   }
 
@@ -272,6 +271,7 @@ export class MedicalRecords implements OnInit, OnDestroy {
 
     if (!this.patientId) {
       this.healthRecordError = 'Select a patient before adding health records.';
+      this.cdr.detectChanges();
       return;
     }
 
@@ -281,11 +281,13 @@ export class MedicalRecords implements OnInit, OnDestroy {
       !this.healthRecordForm.documentDate
     ) {
       this.healthRecordError = 'Title, document type and document date are required.';
+      this.cdr.detectChanges();
       return;
     }
 
     if (!this.editingHealthRecordId && !this.selectedHealthRecordFile) {
       this.healthRecordError = 'Document file is required.';
+      this.cdr.detectChanges();
       return;
     }
 
@@ -312,14 +314,14 @@ export class MedicalRecords implements OnInit, OnDestroy {
           : 'Health record created successfully.';
         this.resetHealthRecordForm();
         this.healthRecordMessage = message;
-        this.loadHealthRecords(1);
+        this.loadHealthRecords();
         this.cdr.detectChanges();
       },
       error: (error) => {
         this.healthRecordError =
           error?.name === 'TimeoutError'
             ? 'Saving is taking too long. Please check backend server and try again.'
-            : error?.error?.message || 'Failed to save health record.';
+            : this.getApiErrorMessage(error, 'Failed to save health record.');
         this.cdr.detectChanges();
       }
     });
@@ -333,12 +335,115 @@ export class MedicalRecords implements OnInit, OnDestroy {
     this.medicalRecordService.deleteHealthRecord(record._id).subscribe({
       next: () => {
         this.healthRecordMessage = 'Health record deleted successfully.';
-        this.loadHealthRecords(this.pagination.page);
+        this.loadHealthRecords();
         this.cdr.detectChanges();
       },
       error: (error) => {
-        this.healthRecordError =
-          error?.error?.message || 'Failed to delete health record.';
+        this.healthRecordError = this.getApiErrorMessage(
+          error,
+          'Failed to delete health record.'
+        );
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  startEditLabReport(record: any): void {
+    this.editingLabReportId = record._id;
+    this.labReportMessage = '';
+    this.labReportError = '';
+
+    this.labReportForm = {
+      title: record.title || '',
+      documentDate: record.documentDate ? record.documentDate.split('T')[0] : '',
+      notes: record.notes || ''
+    };
+    this.selectedLabReportFile = null;
+  }
+
+  resetLabReportForm(): void {
+    this.editingLabReportId = '';
+    this.labReportMessage = '';
+    this.labReportError = '';
+    this.selectedLabReportFile = null;
+    this.labReportForm = {
+      title: '',
+      documentDate: '',
+      notes: ''
+    };
+  }
+
+  saveLabReport(): void {
+    this.labReportMessage = '';
+    this.labReportError = '';
+
+    if (!this.patientId) {
+      this.labReportError = 'Select a patient before adding lab reports.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    if (!this.labReportForm.title || !this.labReportForm.documentDate) {
+      this.labReportError = 'Title and report date are required.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    if (!this.editingLabReportId && !this.selectedLabReportFile) {
+      this.labReportError = 'Lab report file is required.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    this.isSavingLabReport = true;
+
+    const payload = this.getLabReportPayload();
+    const request$ = this.editingLabReportId
+      ? this.medicalRecordService.updateLabReport(this.editingLabReportId, payload)
+      : this.medicalRecordService.createLabReport(payload);
+
+    request$.pipe(
+      timeout(30000),
+      finalize(() => {
+        this.isSavingLabReport = false;
+        this.cdr.detectChanges();
+      })
+    ).subscribe({
+      next: () => {
+        const message = this.editingLabReportId
+          ? 'Lab report updated successfully.'
+          : 'Lab report uploaded successfully.';
+        this.resetLabReportForm();
+        this.labReportMessage = message;
+        this.loadLabReports();
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        this.labReportError =
+          error?.name === 'TimeoutError'
+            ? 'Saving is taking too long. Please check backend server and try again.'
+            : this.getApiErrorMessage(error, 'Failed to save lab report.');
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  deleteLabReport(record: any): void {
+    if (!confirm('Delete this lab report?')) {
+      return;
+    }
+
+    this.medicalRecordService.deleteLabReport(record._id).subscribe({
+      next: () => {
+        this.labReportMessage = 'Lab report deleted successfully.';
+        this.loadLabReports();
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        this.labReportError = this.getApiErrorMessage(
+          error,
+          'Failed to delete lab report.'
+        );
         this.cdr.detectChanges();
       }
     });
@@ -354,6 +459,12 @@ export class MedicalRecords implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  onLabReportFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.selectedLabReportFile = input.files?.[0] || null;
+    this.cdr.detectChanges();
+  }
+
   getDocumentUrl(record: any): string {
     if (!record?.filePath) {
       return '';
@@ -362,15 +473,57 @@ export class MedicalRecords implements OnInit, OnDestroy {
     return `${this.fileBaseUrl}${record.filePath}`;
   }
 
-  private loadActivePagedRecords(page: number): void {
+  getTotalRecords(): number {
     if (this.activeTab === 'healthRecords') {
-      this.loadHealthRecords(page);
+      return this.healthRecordPagination.totalRecords;
+    }
+
+    if (this.activeTab === 'labReports') {
+      return this.labReportPagination.totalRecords;
+    }
+
+    return this.prescriptionPagination.totalRecords;
+  }
+
+  previousPage(): void {
+    const pagination = this.getActivePagination();
+
+    if (!pagination.hasPreviousPage) {
       return;
     }
 
-    if (this.activeTab === 'prescriptions') {
-      this.loadPrescriptions(page);
+    pagination.page -= 1;
+    this.loadActiveTabRecords();
+  }
+
+  nextPage(): void {
+    const pagination = this.getActivePagination();
+
+    if (!pagination.hasNextPage) {
+      return;
     }
+
+    pagination.page += 1;
+    this.loadActiveTabRecords();
+  }
+
+  onLimitChange(limit: number): void {
+    const pagination = this.getActivePagination();
+    pagination.page = 1;
+    pagination.limit = limit;
+    this.loadActiveTabRecords();
+  }
+
+  getActivePagination(): any {
+    if (this.activeTab === 'healthRecords') {
+      return this.healthRecordPagination;
+    }
+
+    if (this.activeTab === 'labReports') {
+      return this.labReportPagination;
+    }
+
+    return this.prescriptionPagination;
   }
 
   private getHealthRecordPayload(): any {
@@ -389,5 +542,53 @@ export class MedicalRecords implements OnInit, OnDestroy {
     }
 
     return formData;
+  }
+
+  private getLabReportPayload(): any {
+    const formData = new FormData();
+    formData.append('patientId', this.patientId);
+    formData.append('title', this.labReportForm.title);
+    formData.append('documentDate', this.labReportForm.documentDate);
+
+    if (this.labReportForm.notes) {
+      formData.append('notes', this.labReportForm.notes);
+    }
+
+    if (this.selectedLabReportFile) {
+      formData.append('documentFile', this.selectedLabReportFile);
+    }
+
+    return formData;
+  }
+
+  private getApiErrorMessage(error: any, fallback: string): string {
+    const validationErrors = error?.error?.errors;
+
+    if (Array.isArray(validationErrors) && validationErrors.length > 0) {
+      return validationErrors
+        .map((item: any) => item?.msg)
+        .filter(Boolean)
+        .join(', ');
+    }
+
+    return error?.error?.message || fallback;
+  }
+
+  private hasPermission(permissionKey: string): boolean {
+    return this.permissions.has(permissionKey);
+  }
+
+  private loadActiveTabRecords(): void {
+    if (this.activeTab === 'healthRecords') {
+      this.loadHealthRecords();
+      return;
+    }
+
+    if (this.activeTab === 'labReports') {
+      this.loadLabReports();
+      return;
+    }
+
+    this.loadPrescriptions();
   }
 }

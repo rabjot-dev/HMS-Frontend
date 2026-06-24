@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import { ApiPermissionService } from '../../../core/services/api-permission';
 import { AppointmentService } from '../../../core/services/appointment';
-import { AuthService } from '../../../core/services/auth';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
@@ -26,6 +26,7 @@ export class AppointmentList implements OnInit, OnDestroy {
   toDate = '';
   sortBy = 'appointmentDate';
   sortOrder = 'asc';
+  permissions = new Set<string>();
 
   private searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -40,11 +41,12 @@ export class AppointmentList implements OnInit, OnDestroy {
 
   constructor(
     private readonly appointmentService: AppointmentService,
-    public readonly authService: AuthService,
+    private readonly apiPermissionService: ApiPermissionService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    this.loadPermissions();
     this.loadAppointments();
   }
 
@@ -76,6 +78,31 @@ export class AppointmentList implements OnInit, OnDestroy {
       error: (error) => {
       }
     });
+  }
+
+  loadPermissions(): void {
+    this.apiPermissionService.getMyPermissions().subscribe({
+      next: (response) => {
+        this.permissions = new Set(response.data || []);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.permissions = new Set<string>();
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  canUpdateAppointment(): boolean {
+    return this.permissions.has('appointment:update');
+  }
+
+  canDeleteAppointment(): boolean {
+    return this.permissions.has('appointment:delete');
+  }
+
+  canViewPatient(): boolean {
+    return this.permissions.has('patient:detail');
   }
   previousPage(): void {
     if (this.pagination.hasPreviousPage) {

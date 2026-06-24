@@ -4,8 +4,6 @@ import { AuthLayout } from './layouts/auth-layout/auth-layout';
 
 import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 
-import { adminGuard } from './core/guards/admin-guard';
-
 import { authGuard } from './core/guards/auth-guard';
 
 import { Login } from './features/auth/login/login';
@@ -13,11 +11,8 @@ import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 
 import { CreatePassword } from './features/auth/create-password/create-password';
-import { roleGuard } from './core/guards/role.guard';
+import { menuAccessGuard } from './core/guards/menu-access.guard';
 import { AdminDashboard } from './features/dashboard/admin-dashboard/admin-dashboard';
-import { doctorGuard } from './core/guards/doctor-guard';
-
-import { receptionistGuard } from './core/guards/receptionist-guard';
 import { DoctorDashboard } from './features/dashboard/doctor-dashboard/doctor-dashboard';
 
 import { ReceptionistDashboard } from './features/dashboard/receptionist-dashboard/receptionist-dashboard';
@@ -49,6 +44,7 @@ import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { MyProfile } from './features/profile/my-profile/my-profile';
 import { Home } from './features/floater/home/home';
 import { MedicalRecords } from './features/medical-records/medical-records/medical-records';
+import { MedicalRecordRepository } from './features/medical-records/medical-record-repository/medical-record-repository';
 
 export const routes: Routes = [
   // Home Routes
@@ -123,7 +119,7 @@ export const routes: Routes = [
         path: 'dashboard/admin',
 
         component: AdminDashboard,
-        canActivate: [adminGuard]
+        canActivate: [menuAccessGuard('/dashboard/admin')]
       },
 
      // Doctor Dashboard
@@ -131,7 +127,7 @@ export const routes: Routes = [
         path: 'dashboard/doctor',
 
         component: DoctorDashboard,
-        canActivate: [doctorGuard]
+        canActivate: [menuAccessGuard('/dashboard/doctor')]
       },
 
       // Receptionist Dashboard
@@ -139,7 +135,7 @@ export const routes: Routes = [
         path: 'dashboard/receptionist',
 
         component: ReceptionistDashboard,
-        canActivate: [receptionistGuard]
+        canActivate: [menuAccessGuard('/dashboard/receptionist')]
       },
 
     //Employees
@@ -148,7 +144,7 @@ export const routes: Routes = [
 
         component: EmployeeList,
 
-        canActivate: [adminGuard]
+        canActivate: [menuAccessGuard('/employees')]
       },
 
       {
@@ -156,7 +152,7 @@ export const routes: Routes = [
 
         component: AddEmployee,
 
-        canActivate: [adminGuard]
+        canActivate: [menuAccessGuard('/employees/create')]
       },
 
       {
@@ -164,7 +160,7 @@ export const routes: Routes = [
 
         component: PendingEmployees,
 
-        canActivate: [adminGuard]
+        canActivate: [menuAccessGuard('/employees/pending')]
       },
 
       {
@@ -172,7 +168,7 @@ export const routes: Routes = [
 
         component: EmployeeDetails,
 
-        canActivate: [adminGuard]
+        canActivate: [menuAccessGuard('/employees')]
       },
 
       {
@@ -180,7 +176,7 @@ export const routes: Routes = [
 
         component: EditEmployee,
 
-        canActivate: [adminGuard]
+        canActivate: [menuAccessGuard('/employees')]
       },
 
     // Patients
@@ -189,42 +185,42 @@ export const routes: Routes = [
 
         component: AddPatient,
 
-        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST'])]
+        canActivate: [menuAccessGuard('/patients/create')]
       },
       {
         path: 'patients',
 
         component: PatientList,
 
-        canActivate: [roleGuard(['ADMIN', 'DOCTOR', 'RECEPTIONIST'])]
+        canActivate: [menuAccessGuard('/patients')]
       },
       {
         path: 'patients/edit/:id',
 
         component: EditPatient,
 
-        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST'])]
+        canActivate: [menuAccessGuard('/patients')]
       },
       {
         path: 'patients/:id',
 
         component: PatientDetails,
 
-        canActivate: [roleGuard(['ADMIN', 'DOCTOR', 'RECEPTIONIST'])]
+        canActivate: [menuAccessGuard('/patients')]
       },
       {
         path: 'appointments/book',
 
         component: BookAppointment,
 
-        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST'])]
+        canActivate: [menuAccessGuard('/appointments/book')]
       },
       {
         path: 'appointments',
 
         component: AppointmentList,
 
-        canActivate: [roleGuard(['ADMIN', 'DOCTOR', 'RECEPTIONIST'])]
+        canActivate: [menuAccessGuard('/appointments')]
       },
       {
         path: 'appointments/requests',
@@ -234,49 +230,56 @@ export const routes: Routes = [
             './features/appointments/appointment-requests/appointment-requests'
           ).then((m) => m.AppointmentRequestsComponent),
 
-        canActivate: [adminGuard]
+        canActivate: [menuAccessGuard('/appointments/requests')]
       },
       {
         path: 'appointments/edit/:id',
 
         component: EditAppointment,
 
-        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST'])]
+        canActivate: [menuAccessGuard('/appointments')]
       },
       {
         path: 'doctor-queue',
 
         component: DoctorQueue,
 
-        canActivate: [doctorGuard]
+        canActivate: [menuAccessGuard('/doctor-queue')]
       },
       {
         path: 'consultation/:appointmentId',
 
         component: ConsultationForm,
 
-        canActivate: [doctorGuard]
+        canActivate: [menuAccessGuard('/doctor-queue')]
       },
       {
         path: 'consultations',
 
         component: ConsultationList,
 
-        canActivate: [roleGuard(['ADMIN', 'DOCTOR'])]
+        canActivate: [menuAccessGuard('/medical-records')]
       },
       {
         path: 'doctor-availability',
 
         component: DoctorAvailability,
 
-        canActivate: [doctorGuard]
+        canActivate: [menuAccessGuard('/doctor-availability')]
+      },
+      {
+        path: 'medical-records',
+
+        component: MedicalRecordRepository,
+
+        canActivate: [menuAccessGuard('/medical-records')]
       },
       {
         path: 'medical-records/patient/:patientId',
 
         component: MedicalRecords,
 
-        canActivate: [roleGuard(['ADMIN', 'RECEPTIONIST', 'DOCTOR'])]
+        canActivate: [menuAccessGuard('/medical-records')]
       },
       {
         path: 'my-profile',
@@ -291,7 +294,7 @@ export const routes: Routes = [
             (m) => m.ConsultationDetails
           ),
 
-        canActivate: [roleGuard(['ADMIN', 'DOCTOR'])]
+        canActivate: [menuAccessGuard('/medical-records')]
       }
     ]
   },

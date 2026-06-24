@@ -10,7 +10,7 @@
       }
     </div>
 
-    <div class="record-count">Total: {{ pagination.totalRecords }}</div>
+    <div class="record-count">Total: {{ getTotalRecords() }}</div>
   </div>
 
   <div class="tabs">
@@ -40,31 +40,6 @@
   </div>
 
   @if(activeTab === 'prescriptions') {
-  <div class="filters-wrapper">
-    <div class="search-box">
-      <span>Search</span>
-
-      <input
-        type="text"
-        placeholder="Search patient, doctor, department..."
-        [ngModel]="searchTerm"
-        (ngModelChange)="onSearchInput($event)"
-      />
-    </div>
-
-    <label class="date-filter">
-      <span>From Date</span>
-
-      <input type="date" [(ngModel)]="fromDate" (change)="onFilterChange()" />
-    </label>
-
-    <label class="date-filter">
-      <span>To Date</span>
-
-      <input type="date" [(ngModel)]="toDate" (change)="onFilterChange()" />
-    </label>
-  </div>
-
   @if(isLoading) {
   <div class="loading-card">
     <div class="loader"></div>
@@ -142,41 +117,16 @@
   </div>
 
   <app-pagination
-    [pagination]="pagination"
+    [pagination]="prescriptionPagination"
     totalLabel="prescriptions"
     (pagePrevious)="previousPage()"
     (pageNext)="nextPage()"
-    (pageSizeChange)="changeLimit($event)"
+    (pageSizeChange)="onLimitChange($event)"
   ></app-pagination>
   } } }
 
   @if(activeTab === 'healthRecords') {
-  <div class="filters-wrapper">
-    <div class="search-box">
-      <span>Search</span>
-
-      <input
-        type="text"
-        placeholder="Search title, document type, file name..."
-        [ngModel]="searchTerm"
-        (ngModelChange)="onSearchInput($event)"
-      />
-    </div>
-
-    <label class="date-filter">
-      <span>Type</span>
-
-      <select [(ngModel)]="healthDocumentTypeFilter" (change)="onFilterChange()">
-        <option value="">All Types</option>
-
-        @for(type of documentTypes; track type) {
-        <option [value]="type">{{ formatOption(type) }}</option>
-        }
-      </select>
-    </label>
-  </div>
-
-  @if(canManageHealthRecords() && patientId) {
+  @if(canShowHealthRecordForm() && patientId) {
   <form
     class="health-record-form"
     (ngSubmit)="saveHealthRecord()"
@@ -344,7 +294,7 @@
 
           <td>
             <div class="action-group">
-              @if(canManageHealthRecords()) {
+              @if(canUpdateHealthRecords()) {
               <button
                 type="button"
                 class="edit-btn"
@@ -372,21 +322,193 @@
   </div>
 
   <app-pagination
-    [pagination]="pagination"
+    [pagination]="healthRecordPagination"
     totalLabel="health records"
     (pagePrevious)="previousPage()"
     (pageNext)="nextPage()"
-    (pageSizeChange)="changeLimit($event)"
+    (pageSizeChange)="onLimitChange($event)"
   ></app-pagination>
   } } }
 
   @if(activeTab === 'labReports') {
+  @if(canShowLabReportForm() && patientId) {
+  <form
+    class="health-record-form"
+    (ngSubmit)="saveLabReport()"
+    enctype="multipart/form-data"
+  >
+    <div class="form-header">
+      <div>
+        <h2>
+          {{ editingLabReportId ? 'Edit Lab Report' : 'Add Lab Report' }}
+        </h2>
+
+        <p>Upload patient lab report documents.</p>
+      </div>
+
+      @if(editingLabReportId) {
+      <button type="button" class="secondary-btn" (click)="resetLabReportForm()">
+        Cancel Edit
+      </button>
+      }
+    </div>
+
+    @if(labReportMessage) {
+    <div class="form-message success">{{ labReportMessage }}</div>
+    }
+
+    @if(labReportError) {
+    <div class="form-message error">{{ labReportError }}</div>
+    }
+
+    <div class="form-grid">
+      <label>
+        <span>Title</span>
+
+        <input
+          type="text"
+          [(ngModel)]="labReportForm.title"
+          name="labReportTitle"
+          placeholder="Eg: Blood test report"
+          required
+        />
+      </label>
+
+      <label>
+        <span>Report Date</span>
+
+        <input
+          type="date"
+          [(ngModel)]="labReportForm.documentDate"
+          name="labReportDate"
+          required
+        />
+      </label>
+
+      <label>
+        <span>Attach Report</span>
+
+        <input
+          type="file"
+          name="labReportFile"
+          accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+          (change)="onLabReportFileSelected($event)"
+          [required]="!editingLabReportId"
+        />
+
+        @if(editingLabReportId) {
+        <small>Leave empty to keep the existing document.</small>
+        }
+      </label>
+
+      <label class="wide-field">
+        <span>Notes</span>
+
+        <textarea
+          [(ngModel)]="labReportForm.notes"
+          name="labReportNotes"
+          rows="3"
+          placeholder="Optional"
+        ></textarea>
+      </label>
+    </div>
+
+    <button type="submit" class="primary-btn" [disabled]="isSavingLabReport">
+      {{ isSavingLabReport ? 'Saving...' : editingLabReportId ? 'Update Report' : 'Add Report' }}
+    </button>
+  </form>
+  }
+
+  @if(isLoading) {
+  <div class="loading-card">
+    <div class="loader"></div>
+
+    <p>Loading lab reports...</p>
+  </div>
+  } @else { @if(labReports.length === 0) {
   <div class="empty-state">
     <div class="empty-icon">LAB</div>
 
     <h2>No Lab Reports Found</h2>
 
-    <p>Lab reports will appear here when available.</p>
+    <p>Uploaded lab reports will appear here.</p>
   </div>
+  } @else {
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Report</th>
+
+          <th>File</th>
+
+          <th>Date</th>
+
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for(report of labReports; track report._id) {
+        <tr>
+          <td>
+            <div>
+              <h4>{{ report.title }}</h4>
+
+              <p class="muted-text">
+                {{ report.notes || 'No notes added' }}
+              </p>
+            </div>
+          </td>
+
+          <td>
+            <a class="file-link" [href]="getDocumentUrl(report)" target="_blank">
+              {{ report.originalFileName || 'Open report' }}
+            </a>
+          </td>
+
+          <td>
+            <span class="date-text">
+              {{ (report.documentDate || report.createdAt) | date: 'mediumDate' }}
+            </span>
+          </td>
+
+          <td>
+            <div class="action-group">
+              @if(canUpdateLabReports()) {
+              <button
+                type="button"
+                class="edit-btn"
+                (click)="startEditLabReport(report)"
+              >
+                Edit
+              </button>
+              }
+
+              @if(canDeleteLabReports()) {
+              <button
+                type="button"
+                class="delete-btn"
+                (click)="deleteLabReport(report)"
+              >
+                Delete
+              </button>
+              }
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <app-pagination
+    [pagination]="labReportPagination"
+    totalLabel="lab reports"
+    (pagePrevious)="previousPage()"
+    (pageNext)="nextPage()"
+    (pageSizeChange)="onLimitChange($event)"
+  ></app-pagination>
+  } }
   }
 </div>

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { TokenService } from '../../../core/services/token';
 import { AuthService } from '../../../core/services/auth';
+import { MenuNodeService } from '../../../core/services/menu-node';
 
 @Component({
   selector: 'app-create-password',
@@ -26,7 +27,8 @@ export class CreatePassword {
     private readonly fb: FormBuilder,
     private readonly router: Router,
     private readonly tokenService: TokenService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly menuNodeService: MenuNodeService
   ) {
     this.passwordForm = this.fb.group({
       temporaryPassword: ['', Validators.required],
@@ -71,6 +73,7 @@ export class CreatePassword {
       next: (response) => {
 
         this.tokenService.removeTokens();
+        this.menuNodeService.clearMenu();
         this.router.navigate(['/login']);
       },
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '../constants/api.constants';
 
@@ -11,36 +11,16 @@ export class MedicalRecordService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getPrescriptions(
-    page = 1,
-    limit = 10,
-    filters: any = {}
-  ): Observable<any> {
-    const params: any = {
-      page,
-      limit
-    };
+  getRecordPatients(page = 1, limit = 10): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('limit', limit);
 
-    if (filters.search?.trim()) {
-      params.search = filters.search.trim();
-    }
+    return this.http.get(`${this.apiUrl}/patients`, { params });
+  }
 
-    if (filters.status) {
-      params.status = filters.status;
-    }
-
-    if (filters.fromDate) {
-      params.fromDate = filters.fromDate;
-    }
-
-    if (filters.toDate) {
-      params.toDate = filters.toDate;
-    }
-
-    if (filters.sortBy) {
-      params.sortBy = filters.sortBy;
-      params.sortOrder = filters.sortOrder || 'desc';
-    }
+  getPrescriptions(page = 1, limit = 10): Observable<any> {
+    const params = this.getPaginationParams(page, limit);
 
     return this.http.get(`${this.apiUrl}/prescriptions`, { params });
   }
@@ -48,71 +28,33 @@ export class MedicalRecordService {
   getPatientPrescriptions(
     patientId: string,
     page = 1,
-    limit = 10,
-    filters: any = {}
+    limit = 10
   ): Observable<any> {
-    const params: any = {
-      page,
-      limit
-    };
+    const params = this.getPaginationParams(page, limit);
 
-    if (filters.search?.trim()) {
-      params.search = filters.search.trim();
-    }
-
-    if (filters.status) {
-      params.status = filters.status;
-    }
-
-    if (filters.fromDate) {
-      params.fromDate = filters.fromDate;
-    }
-
-    if (filters.toDate) {
-      params.toDate = filters.toDate;
-    }
-
-    return this.http.get(
-      `${this.apiUrl}/prescriptions/patient/${patientId}`,
-      { params }
-    );
+    return this.http.get(`${this.apiUrl}/prescriptions/patient/${patientId}`, { params });
   }
 
   getMyPrescriptions(page = 1, limit = 10): Observable<any> {
-    return this.http.get(`${this.apiUrl}/prescriptions/my`, {
-      params: {
-        page,
-        limit
-      }
-    });
+    const params = this.getPaginationParams(page, limit);
+
+    return this.http.get(`${this.apiUrl}/prescriptions/my`, { params });
   }
 
   getPrescriptionById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/prescriptions/${id}`);
   }
 
-  getHealthRecords(
-    page = 1,
-    limit = 10,
-    filters: any = {}
-  ): Observable<any> {
-    const params = this.buildRecordParams(page, limit, filters);
+  getHealthRecords(page = 1, limit = 10): Observable<any> {
+    const params = this.getPaginationParams(page, limit);
 
     return this.http.get(`${this.apiUrl}/health-records`, { params });
   }
 
-  getPatientHealthRecords(
-    patientId: string,
-    page = 1,
-    limit = 10,
-    filters: any = {}
-  ): Observable<any> {
-    const params = this.buildRecordParams(page, limit, filters);
+  getPatientHealthRecords(patientId: string, page = 1, limit = 10): Observable<any> {
+    const params = this.getPaginationParams(page, limit);
 
-    return this.http.get(
-      `${this.apiUrl}/health-records/patient/${patientId}`,
-      { params }
-    );
+    return this.http.get(`${this.apiUrl}/health-records/patient/${patientId}`, { params });
   }
 
   createHealthRecord(data: FormData): Observable<any> {
@@ -127,29 +69,33 @@ export class MedicalRecordService {
     return this.http.delete(`${this.apiUrl}/health-records/${id}`);
   }
 
-  getLabReports(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/lab-reports`);
+  getLabReports(page = 1, limit = 10): Observable<any> {
+    const params = this.getPaginationParams(page, limit);
+
+    return this.http.get(`${this.apiUrl}/lab-reports`, { params });
   }
 
-  private buildRecordParams(page: number, limit: number, filters: any): any {
-    const params: any = {
-      page,
-      limit
-    };
+  getPatientLabReports(patientId: string, page = 1, limit = 10): Observable<any> {
+    const params = this.getPaginationParams(page, limit);
 
-    if (filters.search?.trim()) {
-      params.search = filters.search.trim();
-    }
+    return this.http.get(`${this.apiUrl}/lab-reports/patient/${patientId}`, { params });
+  }
 
-    if (filters.documentType) {
-      params.documentType = filters.documentType;
-    }
+  createLabReport(data: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/lab-reports`, data);
+  }
 
-    if (filters.sortBy) {
-      params.sortBy = filters.sortBy;
-      params.sortOrder = filters.sortOrder || 'desc';
-    }
+  updateLabReport(id: string, data: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/lab-reports/${id}`, data);
+  }
 
-    return params;
+  deleteLabReport(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/lab-reports/${id}`);
+  }
+
+  private getPaginationParams(page: number, limit: number): HttpParams {
+    return new HttpParams()
+      .set('page', page)
+      .set('limit', limit);
   }
 }

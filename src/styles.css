@@ -78,25 +78,25 @@
 
   /* Typography */
 
-  --font-xs: 12px;
+  --font-xs: 14px;
 
-  --font-sm: 13px;
+  --font-sm: 15px;
 
-  --font-md: 14px;
+  --font-md: 16px;
 
-  --font-base: 15px;
+  --font-base: 17px;
 
-  --font-lg: 16px;
+  --font-lg: 19px;
 
-  --font-xl: 18px;
+  --font-xl: 22px;
 
-  --font-2xl: 22px;
+  --font-2xl: 26px;
 
-  --font-3xl: 28px;
+  --font-3xl: 32px;
 
-  --font-4xl: 34px;
+  --font-4xl: 38px;
 
-  --font-hero: 42px;
+  --font-hero: 48px;
 }
 
 /*
