@@ -96,6 +96,28 @@
   border-radius: 30px;
 }
 
+.form-message {
+  padding: 14px 16px;
+
+  border-radius: 14px;
+
+  font-weight: 700;
+
+  margin-bottom: 20px;
+}
+
+.form-message.error {
+  background: #fee2e2;
+
+  color: #b91c1c;
+}
+
+.form-message.success {
+  background: #dcfce7;
+
+  color: #15803d;
+}
+
 /*
 |--------------------------------------------------------------------------
 | Toggle Card

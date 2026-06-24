@@ -26,6 +26,22 @@
   <!-- Form -->
 
   <form [formGroup]="availabilityForm" (ngSubmit)="onSubmit()" class="availability-form glass-card">
+    @if(errorMessage){
+
+    <div class="form-message error">
+      {{ errorMessage }}
+    </div>
+
+    }
+
+    @if(successMessage){
+
+    <div class="form-message success">
+      {{ successMessage }}
+    </div>
+
+    }
+
     <!-- Availability Toggle -->
 
     <div class="toggle-card">

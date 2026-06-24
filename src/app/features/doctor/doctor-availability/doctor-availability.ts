@@ -13,6 +13,8 @@ import { EmployeeService } from '../../../core/services/employee';
 })
 export class DoctorAvailability implements OnInit {
   isSubmitting = false;
+  errorMessage = '';
+  successMessage = '';
 
   availabilityForm: any;
 
@@ -57,29 +59,32 @@ export class DoctorAvailability implements OnInit {
   loadAvailability(): void {
     this.employeeService.getDoctorAvailability().subscribe({
       next: (response: any) => {
+        const availability = response?.data || {};
 
         this.availabilityForm.patchValue({
-          workingDays: response?.data?.workingDays,
-          startTime: response?.data?.startTime,
-          endTime: response?.data?.endTime,
-          slotDuration: response?.data?.slotDuration,
-          breakStartTime: response?.data?.breakStartTime,
-          breakEndTime: response?.data?.breakEndTime,
-          maxPatientsPerDay: response?.data?.maxPatientsPerDay,
-          isAvailable: response?.data?.isAvailable
+          workingDays: availability.workingDays || [],
+          startTime: availability.startTime || '',
+          endTime: availability.endTime || '',
+          slotDuration: availability.slotDuration || 15,
+          breakStartTime: availability.breakStartTime || '',
+          breakEndTime: availability.breakEndTime || '',
+          maxPatientsPerDay: availability.maxPatientsPerDay || 40,
+          isAvailable: availability.isAvailable ?? true
         });
 
         this.cdr.detectChanges();
       },
 
       error: (error) => {
+        this.errorMessage = error?.error?.message || 'Unable to load doctor availability';
+        this.cdr.detectChanges();
       }
     });
   }
 
   // Add or remove a working day
   toggleDay(day: string): void {
-    const currentDays = this.availabilityForm.value.workingDays;
+    const currentDays = this.availabilityForm.value.workingDays || [];
 
     const exists = currentDays.includes(day);
 
@@ -98,31 +103,63 @@ export class DoctorAvailability implements OnInit {
 
   // Save availability settings
   onSubmit(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
+
     if (this.availabilityForm.invalid) {
       this.availabilityForm.markAllAsTouched();
+      this.errorMessage = 'Please fill all required availability fields';
+
+      return;
+    }
+
+    if (!this.hasValidTimeRange()) {
+      this.errorMessage = 'End time must be after start time';
 
       return;
     }
 
     this.isSubmitting = true;
+    const availabilityData = {
+      ...this.availabilityForm.value,
+      workingDays: this.availabilityForm.value.workingDays || [],
+      slotDuration: Number(this.availabilityForm.value.slotDuration),
+      maxPatientsPerDay: Number(this.availabilityForm.value.maxPatientsPerDay)
+    };
 
     this.employeeService
-      .updateDoctorAvailability(this.availabilityForm.value)
+      .updateDoctorAvailability(availabilityData)
       .subscribe({
         next: () => {
           this.isSubmitting = false;
+          this.successMessage = 'Availability updated successfully';
 
           this.cdr.detectChanges();
-
-          alert('Availability updated successfully');
         },
 
         error: (error) => {
-
           this.isSubmitting = false;
+          this.errorMessage = error?.error?.message || 'Unable to update availability';
 
           this.cdr.detectChanges();
         }
       });
+  }
+
+  private hasValidTimeRange(): boolean {
+    const startTime = this.availabilityForm.value.startTime;
+    const endTime = this.availabilityForm.value.endTime;
+
+    if (!startTime || !endTime) {
+      return true;
+    }
+
+    return this.toMinutes(endTime) > this.toMinutes(startTime);
+  }
+
+  private toMinutes(time: string): number {
+    const [hours, minutes] = time.split(':').map(Number);
+
+    return hours * 60 + minutes;
   }
 }
