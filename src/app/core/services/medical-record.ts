@@ -11,10 +11,14 @@ export class MedicalRecordService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getRecordPatients(page = 1, limit = 10): Observable<any> {
-    const params = new HttpParams()
+  getRecordPatients(page = 1, limit = 10, search = ''): Observable<any> {
+    let params = new HttpParams()
       .set('page', page)
       .set('limit', limit);
+
+    if (search.trim()) {
+      params = params.set('search', search.trim());
+    }
 
     return this.http.get(`${this.apiUrl}/patients`, { params });
   }

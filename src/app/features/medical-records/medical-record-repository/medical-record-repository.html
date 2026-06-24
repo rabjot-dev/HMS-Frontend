@@ -11,6 +11,24 @@
     <div class="record-count">{{ pagination.totalRecords }} Patients</div>
   </div>
 
+  <div class="search-card glass-card">
+    <label for="medicalRecordSearch">Search</label>
+
+    <div class="search-control">
+      <input
+        id="medicalRecordSearch"
+        type="text"
+        [(ngModel)]="search"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Search patient name, UHID, phone, email, status..."
+      />
+
+      @if(search) {
+      <button type="button" (click)="clearSearch()">Clear</button>
+      }
+    </div>
+  </div>
+
   @if(isLoading) {
   <div class="loading-card glass-card">
     <div class="loader"></div>

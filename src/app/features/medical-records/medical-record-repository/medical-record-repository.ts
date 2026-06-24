@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { MedicalRecordService } from '../../../core/services/medical-record';
@@ -8,13 +9,14 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 @Component({
   selector: 'app-medical-record-repository',
   standalone: true,
-  imports: [CommonModule, RouterLink, PaginationComponent],
+  imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
   templateUrl: './medical-record-repository.html',
   styleUrl: './medical-record-repository.css'
 })
 export class MedicalRecordRepository implements OnInit {
   patients: any[] = [];
   isLoading = false;
+  search = '';
   pagination = {
     page: 1,
     limit: 10,
@@ -37,7 +39,11 @@ export class MedicalRecordRepository implements OnInit {
     this.isLoading = true;
 
     this.medicalRecordService
-      .getRecordPatients(this.pagination.page, this.pagination.limit)
+      .getRecordPatients(
+        this.pagination.page,
+        this.pagination.limit,
+        this.search
+      )
       .subscribe({
         next: (response) => {
           this.patients = response.data || [];
@@ -78,5 +84,18 @@ export class MedicalRecordRepository implements OnInit {
       limit
     };
     this.loadPatients();
+  }
+
+  onSearchChange(): void {
+    this.pagination = {
+      ...this.pagination,
+      page: 1
+    };
+    this.loadPatients();
+  }
+
+  clearSearch(): void {
+    this.search = '';
+    this.onSearchChange();
   }
 }
