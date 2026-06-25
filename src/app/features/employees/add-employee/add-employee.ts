@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -12,13 +12,39 @@ import { EmployeeService } from '../../../core/services/employee';
   templateUrl: './add-employee.html',
   styleUrl: './add-employee.css'
 })
-export class AddEmployee {
+export class AddEmployee implements OnInit {
   employeeForm: FormGroup;
 
   successMessage = '';
   errorMessage = '';
 
   isSubmitting = false;
+  designations = [
+  'ADMIN',
+  'DOCTOR',
+  'RECEPTIONIST',
+  'LAB_TECHNICIAN',
+  'PHARMACIST'
+];
+
+ngOnInit(): void {
+  const role =
+    localStorage.getItem(
+      'role'
+    );
+
+  if (
+    role !==
+    'SUPER_ADMIN'
+  ) {
+    this.designations =
+      this.designations.filter(
+        designation =>
+          designation !==
+          'ADMIN'
+      );
+  }
+}
 
   constructor(
     private readonly fb: FormBuilder,
@@ -26,6 +52,7 @@ export class AddEmployee {
     private readonly cdr: ChangeDetectorRef,
     private readonly toastService: ToastService
   ) {
+    
     this.employeeForm = this.fb.group({
       // Basic Details
       name: [
@@ -92,6 +119,7 @@ export class AddEmployee {
 
       maxPatientsPerDay: [40]
     });
+    
 
     // Apply doctor-specific validators dynamically
     this.employeeForm.get('designation')?.valueChanges.subscribe((designation) => {
@@ -201,13 +229,12 @@ export class AddEmployee {
     }
 
     // Prepare API payload
-    const payload: any = {
-      ...this.employeeForm.value,
-      qualification: this.employeeForm.value.qualification
-        ? [this.employeeForm.value.qualification]
-        : [],
-      role: this.employeeForm.value.designation
-    };
+   const payload: any = {
+  ...this.employeeForm.value,
+  qualification: this.employeeForm.value.qualification
+    ? [this.employeeForm.value.qualification]
+    : []
+};
 
     if (this.designation !== 'DOCTOR') {
       delete payload.medicalRegistrationNo;

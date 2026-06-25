@@ -181,43 +181,38 @@ export class Login {
                 this.isSubmitting =
                   false;
 
-                const role =
-                  user.roles?.[0];
+               const role = user.roles?.[0];
 
-                switch (
-                  role
-                ) {
-                  case 'ADMIN':
-                    this.router.navigate(
-                      [
-                        '/dashboard/admin',
-                      ],
-                    );
-                    break;
+switch (role) {
+  case 'SUPER_ADMIN':
+  case 'ADMIN':
+    this.router.navigate([
+      '/dashboard/admin',
+    ]);
+    break;
 
-                  case 'DOCTOR':
-                    this.router.navigate(
-                      [
-                        '/dashboard/doctor',
-                      ],
-                    );
-                    break;
+  case 'DOCTOR':
+    this.router.navigate([
+      '/dashboard/doctor',
+    ]);
+    break;
 
-                  case 'RECEPTIONIST':
-                    this.router.navigate(
-                      [
-                        '/dashboard/receptionist',
-                      ],
-                    );
-                    break;
+  case 'RECEPTIONIST':
+    this.router.navigate([
+      '/dashboard/receptionist',
+    ]);
+    break;
 
-                  default:
-                    this.router.navigate(
-                      [
-                        '/login',
-                      ],
-                    );
-                }
+  default:
+    this.toastService.show(
+      'Invalid role',
+      'error'
+    );
+
+    this.router.navigate([
+      '/login',
+    ]);
+}
               },
 
               error: () => {
