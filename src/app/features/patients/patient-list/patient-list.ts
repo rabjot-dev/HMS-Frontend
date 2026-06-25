@@ -126,4 +126,25 @@ export class PatientList implements OnInit {
 
     this.loadPatients();
   }
+  deletePatient(id: string): void {
+  if (
+    !confirm(
+      'Delete this patient?'
+    )
+  ) {
+    return;
+  }
+
+  this.patientService
+    .deletePatient(id)
+    .subscribe({
+      next: () => {
+        this.loadPatients();
+      },
+
+      error: (error) => {
+        console.log(error);
+      }
+    });
+}
 }

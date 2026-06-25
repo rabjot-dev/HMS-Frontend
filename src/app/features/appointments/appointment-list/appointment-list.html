@@ -242,7 +242,7 @@
             <div class="actions">
               <!-- Admin -->
 
-              @if( authService.hasRole( 'ADMIN' ) || authService.hasRole( 'RECEPTIONIST' ) ){
+              @if( authService.hasRole( 'ADMIN' ) || authService.hasRole( 'RECEPTIONIST' ) ||authService.hasRole('SUPER_ADMIN')){
 
               <button
                 class="action-btn edit"

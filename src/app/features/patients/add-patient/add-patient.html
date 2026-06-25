@@ -135,8 +135,8 @@
           </div>
           @if(patientForm.get('phone')?.invalid && patientForm.get('phone')?.touched){
           <span class="error-text">
-            @if(patientForm.get('phone')?.errors?.['required']){ Phone number is required } @else
-            if(patientForm.get('phone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
+            @if(patientForm.get('phone')?.errors?.['required']){ Phone number is required } 
+            @else if(patientForm.get('phone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
           </span>
           }
         </div>
@@ -146,8 +146,8 @@
           <input type="email" placeholder="Email" formControlName="email" />
           @if(patientForm.get('email')?.invalid && patientForm.get('email')?.touched){
           <span class="error-text">
-            @if(patientForm.get('email')?.errors?.['required']){ Email is required } @else
-            if(patientForm.get('email')?.errors?.['email']){ Enter a valid email address }
+            @if(patientForm.get('email')?.errors?.['required']){ Email is required } 
+            @else if(patientForm.get('email')?.errors?.['email']){ Enter a valid email address }
           </span>
           }
         </div>
@@ -201,8 +201,8 @@
           @if(patientForm.get('pincode')?.invalid && patientForm.get('pincode')?.touched){
 
           <span class="error-text">
-            @if(patientForm.get('pincode')?.errors?.['required']){ Pincode is required } @else
-            if(patientForm.get('pincode')?.errors?.['pattern']){ Enter valid 6-digit pincode }
+            @if(patientForm.get('pincode')?.errors?.['required']){ Pincode is required } 
+            @else if(patientForm.get('pincode')?.errors?.['pattern']){ Enter valid 6-digit pincode }
           </span>
 
           }

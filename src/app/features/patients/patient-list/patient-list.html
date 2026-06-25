@@ -105,37 +105,60 @@
 
             <!-- Actions -->
 
-            <td>
-              <div class="actions">
-                <!-- View -->
+          <td>
 
-                <a
-                  class="action-btn view"
-                  [routerLink]="[
-                                '/patients',
-                                patient._id
-                              ]"
-                >
-                  View
-                </a>
+  <div class="actions">
 
-                <!-- Edit -->
+    <!-- View -->
 
-                @if( userRole !== 'DOCTOR' ){
+    <a
+      class="action-btn view"
+      [routerLink]="[
+        '/patients',
+        patient._id
+      ]"
+    >
+      View
+    </a>
 
-                <a
-                  class="action-btn edit"
-                  [routerLink]="[
-                                '/patients/edit',
-                                patient._id
-                              ]"
-                >
-                  Edit
-                </a>
+    <!-- Edit -->
 
-                }
-              </div>
-            </td>
+    @if(
+      userRole === 'SUPER_ADMIN' ||
+      userRole === 'ADMIN' ||
+      userRole === 'RECEPTIONIST'
+    ){
+
+      <a
+        class="action-btn edit"
+        [routerLink]="[
+          '/patients/edit',
+          patient._id
+        ]"
+      >
+        Edit
+      </a>
+
+    }
+
+    <!-- Delete -->
+
+    @if(
+      userRole === 'SUPER_ADMIN' || userRole == 'ADMIN'
+    ){
+
+      <button
+        class="action-btn delete"
+        (click)="deletePatient(patient._id)"
+      >
+        Delete
+      </button>
+
+    }
+
+  </div>
+
+</td>
           </tr>
 
           }

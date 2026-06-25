@@ -39,7 +39,12 @@ export class EmployeeService {
   activateEmployee(id: string): Observable<any> {
     return this.http.patch(`${API_BASE_URL}/employees/${id}/activate`, {});
   }
-
+  // Delete employee
+  deleteEmployee(id: string): Observable<any> {
+    return this.http.delete(
+      `${API_BASE_URL}/employees/${id}`
+    );
+  }
   // Get employees waiting for approval
   getPendingEmployees(): Observable<any> {
     return this.http.get(`${API_BASE_URL}/employees/pending-employees`);
@@ -69,4 +74,5 @@ export class EmployeeService {
   updateDoctorAvailability(data: any): Observable<any> {
     return this.http.patch(`${API_BASE_URL}/employees/doctor/availability`, data);
   }
+
 }

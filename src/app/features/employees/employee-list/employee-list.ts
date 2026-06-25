@@ -3,9 +3,9 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
-
+import { AuthService } from '../../../core/services/auth';
 import { RouterLink } from '@angular/router';
-
+import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
@@ -39,7 +39,9 @@ export class EmployeeList implements OnInit {
 
   constructor(
     private readonly employeeService: EmployeeService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly toastService: ToastService,
+    public readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -147,4 +149,28 @@ export class EmployeeList implements OnInit {
       }
     });
   }
+  deleteEmployee(id: string): void {
+  if (!confirm('Delete this employee?')) {
+    return;
+  }
+
+  this.employeeService.deleteEmployee(id).subscribe({
+    next: () => {
+      this.toastService.show(
+        'Employee deleted successfully',
+        'success'
+      );
+
+      this.loadEmployees();
+    },
+
+    error: (error) => {
+      this.toastService.show(
+        error?.error?.message || 'Failed to delete employee',
+        'error'
+      );
+    }
+  });
 }
+}
+

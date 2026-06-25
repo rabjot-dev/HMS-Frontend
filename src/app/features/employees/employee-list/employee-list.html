@@ -152,60 +152,76 @@
           <!-- Actions -->
 
           <td>
-            <div class="actions">
-              <!-- View -->
+  <div class="actions">
 
-              <a
-                [routerLink]="[
-                                '/employees',
-                                employee._id
-                              ]"
-                class="action-btn view"
-              >
-                View
-              </a>
+    <!-- View -->
+    <a
+      [routerLink]="['/employees', employee._id]"
+      class="action-btn view"
+    >
+      View
+    </a>
 
-              <!-- Edit -->
+    <!-- Edit -->
+    @if(
+      authService.hasRole('SUPER_ADMIN') ||
+      authService.hasRole('ADMIN')
+    ){
+      <a
+        [routerLink]="['/employees/edit', employee._id]"
+        class="action-btn edit"
+      >
+        Edit
+      </a>
+    }
 
-              <a
-                [routerLink]="[
-                                '/employees/edit',
-                                employee._id
-                              ]"
-                class="action-btn edit"
-              >
-                Edit
-              </a>
+    <!-- Activate -->
+    @if(
+      employee.status === 'INACTIVE' &&
+      (
+        authService.hasRole('SUPER_ADMIN') ||
+        authService.hasRole('ADMIN')
+      )
+    ){
+      <button
+        type="button"
+        class="action-btn activate"
+        (click)="activateEmployee(employee._id)"
+      >
+        Activate
+      </button>
+    }
 
-              <!-- Deactivate -->
+    <!-- Deactivate -->
+    @if(
+      employee.status === 'ACTIVE' &&
+      (
+        authService.hasRole('SUPER_ADMIN') ||
+        authService.hasRole('ADMIN')
+      )
+    ){
+      <button
+        type="button"
+        class="action-btn deactivate"
+        (click)="deactivateEmployee(employee._id)"
+      >
+        Deactivate
+      </button>
+    }
 
-              <button
-                type="button"
-                (click)="
-                              deactivateEmployee(
-                                employee._id
-                              )
-                              "
-                class="action-btn deactivate"
-              >
-                Deactivate
-              </button>
+    <!-- Delete -->
+    @if(authService.hasRole('SUPER_ADMIN')|| authService.hasRole('ADMIN')){
+      <button
+        type="button"
+        class="action-btn delete"
+        (click)="deleteEmployee(employee._id)"
+      >
+        Delete
+      </button>
+    }
 
-              <!-- Activate -->
-
-              <button
-                type="button"
-                (click)="
-                              activateEmployee(
-                                employee._id
-                              )
-                              "
-                class="action-btn activate"
-              >
-                Activate
-              </button>
-            </div>
-          </td>
+  </div>
+</td>
         </tr>
       </tbody>
     </table>
