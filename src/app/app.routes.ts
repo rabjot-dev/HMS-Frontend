@@ -1,57 +1,16 @@
 import { Routes } from '@angular/router';
 
-import { AuthLayout } from './layouts/auth-layout/auth-layout';
-
-import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
-
 import { authGuard } from './core/guards/auth-guard';
 
-import { Login } from './features/auth/login/login';
-
-import { Register } from './features/auth/register/register';
-
-import { CreatePassword } from './features/auth/create-password/create-password';
 import { menuAccessGuard } from './core/guards/menu-access.guard';
-import { AdminDashboard } from './features/dashboard/admin-dashboard/admin-dashboard';
-import { DoctorDashboard } from './features/dashboard/doctor-dashboard/doctor-dashboard';
-
-import { ReceptionistDashboard } from './features/dashboard/receptionist-dashboard/receptionist-dashboard';
-
-import { EmployeeList } from './features/employees/employee-list/employee-list';
-import { PatientList } from './features/patients/patient-list/patient-list';
-
-import { AddEmployee } from './features/employees/add-employee/add-employee';
-
-import { EmployeeDetails } from './features/employees/employee-details/employee-details';
-
-import { EditEmployee } from './features/employees/edit-employee/edit-employee';
-
-import { PendingEmployees } from './features/employees/pending-employees/pending-employees';
-
-import { AddPatient } from './features/patients/add-patient/add-patient';
-import { EditPatient } from './features/patients/edit-patient/edit-patient';
-
-import { PatientDetails } from './features/patients/patient-details/patient-details';
-import { BookAppointment } from './features/appointments/book-appointment/book-appointment';
-import { AppointmentList } from './features/appointments/appointment-list/appointment-list';
-import { EditAppointment } from './features/appointments/edit-appointment/edit-appointment';
-import { DoctorQueue } from './features/appointments/doctor-queue/doctor-queue';
-import { ConsultationForm } from './features/consultations/consultation-form/consultation-form';
-import { ConsultationList } from './features/consultations/consultation-list/consultation-list';
-import { DoctorAvailability } from './features/doctor/doctor-availability/doctor-availability';
-import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
-import { ResetPassword } from './features/auth/reset-password/reset-password';
-import { MyProfile } from './features/profile/my-profile/my-profile';
-import { Home } from './features/floater/home/home';
-import { MedicalRecords } from './features/medical-records/medical-records/medical-records';
-import { MedicalRecordRepository } from './features/medical-records/medical-record-repository/medical-record-repository';
 
 export const routes: Routes = [
   // Home Routes
   {
     path: '',
 
-    component: Home,
+    loadComponent: () =>
+      import('./features/floater/home/home').then((m) => m.Home),
 
     pathMatch: 'full'
   },
@@ -60,36 +19,48 @@ export const routes: Routes = [
   {
     path: '',
 
-    component: AuthLayout,
+    loadComponent: () =>
+      import('./layouts/auth-layout/auth-layout').then((m) => m.AuthLayout),
 
     children: [
       {
         path: 'login',
 
-        component: Login
+        loadComponent: () =>
+          import('./features/auth/login/login').then((m) => m.Login)
       },
 
       {
         path: 'register',
 
-        component: Register
+        loadComponent: () =>
+          import('./features/auth/register/register').then((m) => m.Register)
       },
 
       {
         path: 'create-password',
 
-        component: CreatePassword
+        loadComponent: () =>
+          import('./features/auth/create-password/create-password').then(
+            (m) => m.CreatePassword
+          )
       },
       {
         path: 'forgot-password',
 
-        component: ForgotPassword
+        loadComponent: () =>
+          import('./features/auth/forgot-password/forgot-password').then(
+            (m) => m.ForgotPassword
+          )
       },
 
       {
         path: 'reset-password',
 
-        component: ResetPassword
+        loadComponent: () =>
+          import('./features/auth/reset-password/reset-password').then(
+            (m) => m.ResetPassword
+          )
       }
     ]
   },
@@ -99,7 +70,10 @@ export const routes: Routes = [
   {
     path: '',
 
-    component: DashboardLayout,
+    loadComponent: () =>
+      import('./layouts/dashboard-layout/dashboard-layout').then(
+        (m) => m.DashboardLayout
+      ),
 
     canActivate: [authGuard],
 
@@ -118,7 +92,10 @@ export const routes: Routes = [
       {
         path: 'dashboard/admin',
 
-        component: AdminDashboard,
+        loadComponent: () =>
+          import('./features/dashboard/admin-dashboard/admin-dashboard').then(
+            (m) => m.AdminDashboard
+          ),
         canActivate: [menuAccessGuard('/dashboard/admin')]
       },
 
@@ -126,7 +103,10 @@ export const routes: Routes = [
       {
         path: 'dashboard/doctor',
 
-        component: DoctorDashboard,
+        loadComponent: () =>
+          import('./features/dashboard/doctor-dashboard/doctor-dashboard').then(
+            (m) => m.DoctorDashboard
+          ),
         canActivate: [menuAccessGuard('/dashboard/doctor')]
       },
 
@@ -134,7 +114,10 @@ export const routes: Routes = [
       {
         path: 'dashboard/receptionist',
 
-        component: ReceptionistDashboard,
+        loadComponent: () =>
+          import(
+            './features/dashboard/receptionist-dashboard/receptionist-dashboard'
+          ).then((m) => m.ReceptionistDashboard),
         canActivate: [menuAccessGuard('/dashboard/receptionist')]
       },
 
@@ -142,7 +125,10 @@ export const routes: Routes = [
       {
         path: 'employees',
 
-        component: EmployeeList,
+        loadComponent: () =>
+          import('./features/employees/employee-list/employee-list').then(
+            (m) => m.EmployeeList
+          ),
 
         canActivate: [menuAccessGuard('/employees')]
       },
@@ -150,7 +136,10 @@ export const routes: Routes = [
       {
         path: 'employees/create',
 
-        component: AddEmployee,
+        loadComponent: () =>
+          import('./features/employees/add-employee/add-employee').then(
+            (m) => m.AddEmployee
+          ),
 
         canActivate: [menuAccessGuard('/employees/create')]
       },
@@ -158,7 +147,10 @@ export const routes: Routes = [
       {
         path: 'employees/pending',
 
-        component: PendingEmployees,
+        loadComponent: () =>
+          import(
+            './features/employees/pending-employees/pending-employees'
+          ).then((m) => m.PendingEmployees),
 
         canActivate: [menuAccessGuard('/employees/pending')]
       },
@@ -166,7 +158,10 @@ export const routes: Routes = [
       {
         path: 'employees/:id',
 
-        component: EmployeeDetails,
+        loadComponent: () =>
+          import('./features/employees/employee-details/employee-details').then(
+            (m) => m.EmployeeDetails
+          ),
 
         canActivate: [menuAccessGuard('/employees')]
       },
@@ -174,7 +169,10 @@ export const routes: Routes = [
       {
         path: 'employees/edit/:id',
 
-        component: EditEmployee,
+        loadComponent: () =>
+          import('./features/employees/edit-employee/edit-employee').then(
+            (m) => m.EditEmployee
+          ),
 
         canActivate: [menuAccessGuard('/employees')]
       },
@@ -183,42 +181,60 @@ export const routes: Routes = [
       {
         path: 'patients/create',
 
-        component: AddPatient,
+        loadComponent: () =>
+          import('./features/patients/add-patient/add-patient').then(
+            (m) => m.AddPatient
+          ),
 
         canActivate: [menuAccessGuard('/patients/create')]
       },
       {
         path: 'patients',
 
-        component: PatientList,
+        loadComponent: () =>
+          import('./features/patients/patient-list/patient-list').then(
+            (m) => m.PatientList
+          ),
 
         canActivate: [menuAccessGuard('/patients')]
       },
       {
         path: 'patients/edit/:id',
 
-        component: EditPatient,
+        loadComponent: () =>
+          import('./features/patients/edit-patient/edit-patient').then(
+            (m) => m.EditPatient
+          ),
 
         canActivate: [menuAccessGuard('/patients')]
       },
       {
         path: 'patients/:id',
 
-        component: PatientDetails,
+        loadComponent: () =>
+          import('./features/patients/patient-details/patient-details').then(
+            (m) => m.PatientDetails
+          ),
 
         canActivate: [menuAccessGuard('/patients')]
       },
       {
         path: 'appointments/book',
 
-        component: BookAppointment,
+        loadComponent: () =>
+          import(
+            './features/appointments/book-appointment/book-appointment'
+          ).then((m) => m.BookAppointment),
 
         canActivate: [menuAccessGuard('/appointments/book')]
       },
       {
         path: 'appointments',
 
-        component: AppointmentList,
+        loadComponent: () =>
+          import(
+            './features/appointments/appointment-list/appointment-list'
+          ).then((m) => m.AppointmentList),
 
         canActivate: [menuAccessGuard('/appointments')]
       },
@@ -235,56 +251,80 @@ export const routes: Routes = [
       {
         path: 'appointments/edit/:id',
 
-        component: EditAppointment,
+        loadComponent: () =>
+          import(
+            './features/appointments/edit-appointment/edit-appointment'
+          ).then((m) => m.EditAppointment),
 
         canActivate: [menuAccessGuard('/appointments')]
       },
       {
         path: 'doctor-queue',
 
-        component: DoctorQueue,
+        loadComponent: () =>
+          import('./features/appointments/doctor-queue/doctor-queue').then(
+            (m) => m.DoctorQueue
+          ),
 
         canActivate: [menuAccessGuard('/doctor-queue')]
       },
       {
         path: 'consultation/:appointmentId',
 
-        component: ConsultationForm,
+        loadComponent: () =>
+          import(
+            './features/consultations/consultation-form/consultation-form'
+          ).then((m) => m.ConsultationForm),
 
         canActivate: [menuAccessGuard('/doctor-queue')]
       },
       {
         path: 'consultations',
 
-        component: ConsultationList,
+        loadComponent: () =>
+          import(
+            './features/consultations/consultation-list/consultation-list'
+          ).then((m) => m.ConsultationList),
 
         canActivate: [menuAccessGuard('/medical-records')]
       },
       {
         path: 'doctor-availability',
 
-        component: DoctorAvailability,
+        loadComponent: () =>
+          import(
+            './features/doctor/doctor-availability/doctor-availability'
+          ).then((m) => m.DoctorAvailability),
 
         canActivate: [menuAccessGuard('/doctor-availability')]
       },
       {
         path: 'medical-records',
 
-        component: MedicalRecordRepository,
+        loadComponent: () =>
+          import(
+            './features/medical-records/medical-record-repository/medical-record-repository'
+          ).then((m) => m.MedicalRecordRepository),
 
         canActivate: [menuAccessGuard('/medical-records')]
       },
       {
         path: 'medical-records/patient/:patientId',
 
-        component: MedicalRecords,
+        loadComponent: () =>
+          import(
+            './features/medical-records/medical-records/medical-records'
+          ).then((m) => m.MedicalRecords),
 
         canActivate: [menuAccessGuard('/medical-records')]
       },
       {
         path: 'my-profile',
 
-        component: MyProfile
+        loadComponent: () =>
+          import('./features/profile/my-profile/my-profile').then(
+            (m) => m.MyProfile
+          )
       },
       {
         path: 'consultations/:id',
