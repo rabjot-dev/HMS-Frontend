@@ -9,133 +9,103 @@
 
       <p class="page-subtitle">Manage and monitor patient appointments.</p>
     </div>
-<div class="appointment-count">
-  {{ totalRecords }}
-  Appointments
-</div>
-  
-
+    <div class="appointment-count">{{ totalRecords }} Appointments</div>
   </div>
 
   <!-- Filters -->
 
- <div class="filters-wrapper glass-card">
+  <div class="filters-wrapper glass-card">
+    <!-- Search -->
 
-  <!-- Search -->
+    <div class="search-box">
+      <span>🔍</span>
 
-  <div class="search-box">
-    <span>🔍</span>
-
-    <input
-      type="text"
-      placeholder="Search patient or doctor"
-      [(ngModel)]="
+      <input
+        type="text"
+        placeholder="Search patient or doctor"
+        [(ngModel)]="
         search
       "
-      (input)="
+        (input)="
         onFilterChange()
       "
-    />
-  </div>
+      />
+    </div>
 
-  <!-- Status -->
+    <!-- Status -->
 
-  <select
-    [(ngModel)]="
+    <select
+      [(ngModel)]="
       status
     "
-    (change)="
+      (change)="
       onFilterChange()
     "
-  >
-    <option value="">
-      All Status
-    </option>
+    >
+      <option value="">All Status</option>
 
-    <option value="BOOKED">
-      Booked
-    </option>
+      <option value="BOOKED">Booked</option>
 
-    <option value="IN_CONSULTATION">
-      In Consultation
-    </option>
+      <option value="IN_CONSULTATION">In Consultation</option>
 
-    <option value="COMPLETED">
-      Completed
-    </option>
+      <option value="COMPLETED">Completed</option>
 
-    <option value="CANCELLED">
-      Cancelled
-    </option>
-  </select>
+      <option value="CANCELLED">Cancelled</option>
+    </select>
 
-  <!-- Priority -->
+    <!-- Priority -->
 
-  <select
-    [(ngModel)]="
+    <select
+      [(ngModel)]="
       priority
     "
-    (change)="
+      (change)="
       onFilterChange()
     "
-  >
-    <option value="">
-      All Priorities
-    </option>
+    >
+      <option value="">All Priorities</option>
 
-    <option value="NORMAL">
-      Normal
-    </option>
+      <option value="NORMAL">Normal</option>
 
-    <option value="URGENT">
-      Urgent
-    </option>
+      <option value="URGENT">Urgent</option>
 
-    <option value="CRITICAL">
-      Critical
-    </option>
-  </select>
+      <option value="CRITICAL">Critical</option>
+    </select>
 
-  <!-- Date -->
+    <!-- Date -->
 
- <div class="date-range">
+    <div class="date-range">
+      <div>
+        <label for="filter-start-date">From</label>
 
-  <div>
-    <label for="filter-start-date">
-      From
-    </label>
-
-    <input
-      id="filter-start-date"
-      type="date"
-      [(ngModel)]="
+        <input
+          id="filter-start-date"
+          type="date"
+          [(ngModel)]="
         startDate
       "
-      (change)="
+          (change)="
         onFilterChange()
       "
-    />
-  </div>
+        />
+      </div>
 
-  <div>
-    <label for="filter-end-date">
-      To
-    </label>
+      <div>
+        <label for="filter-end-date">To</label>
 
-    <input
-      id="filter-end-date"
-      type="date"
-      [(ngModel)]="
+        <input
+          id="filter-end-date"
+          type="date"
+          [(ngModel)]="
         endDate
       "
-      (change)="
+          (change)="
         onFilterChange()
       "
-    />
+        />
+      </div>
+    </div>
   </div>
-
-</div>
-</div>
 
   <!-- Table -->
 
@@ -323,17 +293,16 @@
     </table>
   </div>
   <app-pagination
-  [page]="page"
-  [totalPages]="totalPages"
-  [totalRecords]="totalRecords"
-  [limit]="limit"
-  (previous)="previousPage()"
-  (next)="nextPage()"
-  (pageSizeChange)="
+    [page]="page"
+    [totalPages]="totalPages"
+    [totalRecords]="totalRecords"
+    [limit]="limit"
+    (previous)="previousPage()"
+    (next)="nextPage()"
+    (pageSizeChange)="
     limit = $event;
     page = 1;
     loadAppointments()
   "
->
-</app-pagination>
+  ></app-pagination>
 </div>

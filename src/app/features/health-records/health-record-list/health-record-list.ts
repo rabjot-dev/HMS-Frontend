@@ -1,58 +1,30 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  FormsModule,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import {
-  RouterLink,
-} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
-import {
-  HealthRecordService,
-} from '../../../core/services/health-record';
+import { HealthRecordService } from '../../../core/services/health-record';
 
-import {
-  PaginationComponent,
-} from '../../../shared/components/pagination/pagination';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
-  selector:
-    'app-health-record-list',
+  selector: 'app-health-record-list',
 
   standalone: true,
 
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    PaginationComponent,
-  ],
+  imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
 
-  templateUrl:
-    './health-record-list.html',
+  templateUrl: './health-record-list.html',
 
-  styleUrls: [
-    './health-record-list.css',
-  ],
+  styleUrls: ['./health-record-list.css'],
 
-  changeDetection:
-    ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HealthRecordList
-  implements OnInit
-{
-  healthRecords: any[] =
-    [];
+export class HealthRecordList implements OnInit {
+  healthRecords: any[] = [];
 
   isLoading = false;
 
@@ -65,88 +37,61 @@ export class HealthRecordList
   meta: any = {};
 
   constructor(
-    private readonly healthRecordService:
-      HealthRecordService,
+    private readonly healthRecordService: HealthRecordService,
 
-    private readonly cdr:
-      ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.loadHealthRecords();
   }
 
-  loadHealthRecords():
-    void {
-    this.isLoading =
-      true;
+  loadHealthRecords(): void {
+    this.isLoading = true;
 
     this.healthRecordService
       .getHealthRecords({
-        page:
-          this.page,
-        limit:
-          this.limit,
-        search:
-          this.search,
+        page: this.page,
+        limit: this.limit,
+        search: this.search
       })
       .subscribe({
-        next:
-          (
-            response
-          ) => {
-            this.healthRecords =
-              response.data;
+        next: (response) => {
+          this.healthRecords = response.data;
 
-            this.meta =
-              response.meta;
+          this.meta = response.meta;
 
-            this.isLoading =
-              false;
+          this.isLoading = false;
 
-            this.cdr.detectChanges();
-          },
+          this.cdr.detectChanges();
+        },
 
-        error:
-          (
-            error
-          ) => {
-            console.log(
-              error
-            );
+        error: (error) => {
+          console.log(error);
 
-            this.isLoading =
-              false;
+          this.isLoading = false;
 
-            this.cdr.detectChanges();
-          },
+          this.cdr.detectChanges();
+        }
       });
   }
 
-  onSearch():
-    void {
+  onSearch(): void {
     this.page = 1;
 
     this.loadHealthRecords();
   }
 
-  nextPage():
-    void {
-    if (
-      this.meta
-        ?.hasNextPage
-    ) {
+  nextPage(): void {
+    if (this.meta?.hasNextPage) {
       this.page++;
 
       this.loadHealthRecords();
     }
   }
 
-  previousPage():
-    void {
-    if (
-      this.page > 1
-    ) {
+  previousPage(): void {
+    if (this.page > 1) {
       this.page--;
 
       this.loadHealthRecords();

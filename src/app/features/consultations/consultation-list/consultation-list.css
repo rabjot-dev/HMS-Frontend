@@ -203,7 +203,6 @@ tbody td {
   color: #334155;
 }
 
-
 /*
 |--------------------------------------------------------------------------
 | Patient Info
@@ -366,7 +365,8 @@ tbody td {
   .top-section h1 {
     font-size: 30px;
   }
-}.filters-wrapper {
+}
+.filters-wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
@@ -401,4 +401,3 @@ tbody td {
   opacity: 0.5;
   cursor: not-allowed;
 }
-

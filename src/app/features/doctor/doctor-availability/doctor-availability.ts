@@ -16,15 +16,7 @@ export class DoctorAvailability implements OnInit {
 
   availabilityForm: any;
 
-  workingDays = [
-    'MONDAY',
-    'TUESDAY',
-    'WEDNESDAY',
-    'THURSDAY',
-    'FRIDAY',
-    'SATURDAY',
-    'SUNDAY'
-  ];
+  workingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -108,24 +100,22 @@ export class DoctorAvailability implements OnInit {
 
     this.isSubmitting = true;
 
-    this.employeeService
-      .updateDoctorAvailability(this.availabilityForm.value)
-      .subscribe({
-        next: () => {
-          this.isSubmitting = false;
+    this.employeeService.updateDoctorAvailability(this.availabilityForm.value).subscribe({
+      next: () => {
+        this.isSubmitting = false;
 
-          this.cdr.detectChanges();
+        this.cdr.detectChanges();
 
-          alert('Availability updated successfully');
-        },
+        alert('Availability updated successfully');
+      },
 
-        error: (error) => {
-          console.log(error);
+      error: (error) => {
+        console.log(error);
 
-          this.isSubmitting = false;
+        this.isSubmitting = false;
 
-          this.cdr.detectChanges();
-        }
-      });
+        this.cdr.detectChanges();
+      }
+    });
   }
 }

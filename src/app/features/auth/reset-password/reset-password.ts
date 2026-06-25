@@ -64,10 +64,7 @@ export class ResetPassword implements OnInit {
 
     this.isSubmitting = true;
 
-    if (
-      this.resetForm.value.newPassword !==
-      this.resetForm.value.confirmPassword
-    ) {
+    if (this.resetForm.value.newPassword !== this.resetForm.value.confirmPassword) {
       this.isSubmitting = false;
 
       alert('Passwords do not match');

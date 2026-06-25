@@ -325,10 +325,5 @@ input.ng-invalid.ng-touched,
 select.ng-invalid.ng-touched,
 textarea.ng-invalid.ng-touched {
   border: 1px solid #ef4444 !important;
-  box-shadow: 0 0 0 3px rgba(
-    239,
-    68,
-    68,
-    0.1
-  );
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }

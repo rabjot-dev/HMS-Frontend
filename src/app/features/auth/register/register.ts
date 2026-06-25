@@ -38,12 +38,7 @@ export class Register {
       // Basic details
       name: [
         '',
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(100),
-          Validators.pattern('^[A-Za-z ]+$')
-        ]
+        [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern('^[A-Za-z ]+$')]
       ],
 
       email: ['', [Validators.required, Validators.email]],
@@ -67,12 +62,7 @@ export class Register {
       // Password fields
       password: [
         '',
-        [
-          Validators.required,
-          Validators.pattern(
-            String.raw`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$`
-          )
-        ]
+        [Validators.required, Validators.pattern(String.raw`^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,20}$`)]
       ],
 
       confirmPassword: ['', Validators.required]
@@ -80,11 +70,7 @@ export class Register {
 
     // Apply doctor validations dynamically
     this.registerForm.get('designation')?.valueChanges.subscribe((designation) => {
-      const doctorFields = [
-        'qualification',
-        'specialization',
-        'medicalRegistrationNo'
-      ];
+      const doctorFields = ['qualification', 'specialization', 'medicalRegistrationNo'];
 
       if (designation === 'DOCTOR') {
         doctorFields.forEach((field) => {
@@ -131,9 +117,7 @@ export class Register {
         this.registerForm.get(field)?.markAsTouched();
       });
 
-      const isInvalid = step1Fields.some(
-        (field) => this.registerForm.get(field)?.invalid
-      );
+      const isInvalid = step1Fields.some((field) => this.registerForm.get(field)?.invalid);
 
       if (isInvalid) {
         return;
@@ -141,19 +125,13 @@ export class Register {
     }
 
     if (this.currentStep === 2 && this.isDoctor()) {
-      const doctorFields = [
-        'specialization',
-        'qualification',
-        'medicalRegistrationNo'
-      ];
+      const doctorFields = ['specialization', 'qualification', 'medicalRegistrationNo'];
 
       doctorFields.forEach((field) => {
         this.registerForm.get(field)?.markAsTouched();
       });
 
-      const isInvalid = doctorFields.some(
-        (field) => this.registerForm.get(field)?.invalid
-      );
+      const isInvalid = doctorFields.some((field) => this.registerForm.get(field)?.invalid);
 
       if (isInvalid) {
         return;
@@ -179,12 +157,7 @@ export class Register {
       }
     });
 
-    const step3Fields = [
-      'password',
-      'confirmPassword',
-      'securityQuestion',
-      'securityAnswer'
-    ];
+    const step3Fields = ['password', 'confirmPassword', 'securityQuestion', 'securityAnswer'];
 
     step3Fields.forEach((field) => {
       this.registerForm.get(field)?.markAsTouched();
@@ -195,10 +168,7 @@ export class Register {
       return;
     }
 
-    if (
-      this.registerForm.value.password !==
-      this.registerForm.value.confirmPassword
-    ) {
+    if (this.registerForm.value.password !== this.registerForm.value.confirmPassword) {
       this.toastService.show('Passwords do not match', 'error');
       return;
     }
@@ -215,10 +185,7 @@ export class Register {
 
         this.isSubmitting = false;
 
-        this.toastService.show(
-          'Registration submitted successfully. Wait for admin approval.',
-          'success'
-        );
+        this.toastService.show('Registration submitted successfully. Wait for admin approval.', 'success');
 
         this.cdr.detectChanges();
 
@@ -234,10 +201,7 @@ export class Register {
       },
 
       error: (error) => {
-        this.toastService.show(
-          error?.error?.message || 'Registration failed',
-          'error'
-        );
+        this.toastService.show(error?.error?.message || 'Registration failed', 'error');
 
         this.isSubmitting = false;
         this.cdr.detectChanges();

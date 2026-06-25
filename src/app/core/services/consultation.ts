@@ -17,34 +17,24 @@ export class ConsultationService {
 
   // Get all consultations
   getConsultations(params?: any): Observable<any> {
-    return this.http.get(this.apiUrl, {params});
+    return this.http.get(this.apiUrl, { params });
   }
 
   // Get consultation by appointment ID
-  getConsultationByAppointment(
-    appointmentId: string
-  ): Observable<any> {
-    return this.http.get(
-      `${this.apiUrl}/appointment/${appointmentId}`
-    );
+  getConsultationByAppointment(appointmentId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/appointment/${appointmentId}`);
   }
 
   // Update consultation details
-  updateConsultation(
-    id: string,
-    data: any
-  ): Observable<any> {
+  updateConsultation(id: string, data: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, data);
   }
 
   // Download prescription PDF
   downloadPrescriptionPdf(consultationId: string) {
-    return this.http.get(
-      `${this.apiUrl}/prescription/${consultationId}`,
-      {
-        responseType: 'blob'
-      }
-    );
+    return this.http.get(`${this.apiUrl}/prescription/${consultationId}`, {
+      responseType: 'blob'
+    });
   }
 
   // Get consultation by ID

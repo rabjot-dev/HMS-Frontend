@@ -57,31 +57,30 @@ export class PendingEmployees implements OnInit {
       consultationFee = Number(fee);
     }
 
-    this.employeeService.approveEmployee(employee._id, {
-      consultationFee
-    }).subscribe({
-      next: (response: any) => {
-        console.log(response);
+    this.employeeService
+      .approveEmployee(employee._id, {
+        consultationFee
+      })
+      .subscribe({
+        next: (response: any) => {
+          console.log(response);
 
-        this.toastService.show(
-          employee.designation === 'DOCTOR'
-            ? `Doctor approved with consultation fee ₹${consultationFee}`
-            : 'Employee approved successfully',
-          'success'
-        );
+          this.toastService.show(
+            employee.designation === 'DOCTOR'
+              ? `Doctor approved with consultation fee ₹${consultationFee}`
+              : 'Employee approved successfully',
+            'success'
+          );
 
-        this.loadPendingEmployees();
-      },
+          this.loadPendingEmployees();
+        },
 
-      error: (error) => {
-        console.log(error);
+        error: (error) => {
+          console.log(error);
 
-        this.toastService.show(
-          error?.error?.message || 'Failed to approve employee',
-          'error'
-        );
-      }
-    });
+          this.toastService.show(error?.error?.message || 'Failed to approve employee', 'error');
+        }
+      });
   }
 
   // Reject employee

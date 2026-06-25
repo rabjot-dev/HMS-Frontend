@@ -238,25 +238,13 @@ tbody td:last-child {
 
   border-radius: 18px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #3b82f6,
-      #8b5cf6
-    );
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 
   color: white;
 
   font-weight: 700;
 
-  box-shadow:
-    0 15px 35px
-      rgba(
-        59,
-        130,
-        246,
-        0.25
-      );
+  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
 }
 
 .filters-wrapper select,
@@ -409,11 +397,7 @@ tbody td:last-child {
   padding: 14px 22px;
   border-radius: 18px;
 
-  background: linear-gradient(
-    135deg,
-    #f59e0b,
-    #d97706
-  );
+  background: linear-gradient(135deg, #f59e0b, #d97706);
 
   color: white;
   text-decoration: none;
@@ -421,8 +405,7 @@ tbody td:last-child {
 
   transition: all 0.3s ease;
 
-  box-shadow: 0 15px 35px
-    rgba(245, 158, 11, 0.25);
+  box-shadow: 0 15px 35px rgba(245, 158, 11, 0.25);
 }
 
 .pending-btn:hover {
@@ -437,11 +420,7 @@ tbody td:last-child {
   padding: 14px 22px;
   border-radius: 18px;
 
-  background: linear-gradient(
-    135deg,
-    #3b82f6,
-    #8b5cf6
-  );
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 
   color: white;
   text-decoration: none;
@@ -449,8 +428,7 @@ tbody td:last-child {
 
   transition: all 0.3s ease;
 
-  box-shadow: 0 15px 35px
-    rgba(59, 130, 246, 0.25);
+  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
 }
 
 .add-btn:hover {

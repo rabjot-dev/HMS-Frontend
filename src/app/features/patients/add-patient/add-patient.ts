@@ -15,10 +15,7 @@ import { PatientService } from '../../../core/services/patient';
 export class AddPatient {
   currentStep = 1;
   isSubmitting = false;
-today =
-  new Date()
-    .toISOString()
-    .split("T")[0];
+  today = new Date().toISOString().split('T')[0];
   patientForm!: FormGroup;
 
   constructor(
@@ -30,7 +27,7 @@ today =
       // Basic Information
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      dateOfBirth: [ '', [Validators.required,this.futureDateValidator ]],
+      dateOfBirth: ['', [Validators.required, this.futureDateValidator]],
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
       maritalStatus: ['', Validators.required],
@@ -68,46 +65,23 @@ today =
       patientType: ['', Validators.required]
     });
   }
-  futureDateValidator = (
-  control: any
-) => {
+  futureDateValidator = (control: any) => {
+    if (!control.value) {
+      return null;
+    }
 
-  if (!control.value) {
-    return null;
-  }
-
-  return new Date(
-    control.value
-  ) > new Date()
-
-    ? {
-        futureDate: true,
-      }
-
-    : null;
-};
+    return new Date(control.value) > new Date()
+      ? {
+          futureDate: true
+        }
+      : null;
+  };
 
   // Move to next step after validating current step
   nextStep(): void {
     const stepFields: { [key: number]: string[] } = {
-      1: [
-        'firstName',
-        'lastName',
-        'dateOfBirth',
-        'gender',
-        'bloodGroup',
-        'maritalStatus'
-      ],
-      2: [
-        'phone',
-        'email',
-        'address',
-        'city',
-        'state',
-        'pincode',
-        'emergencyContactName',
-        'emergencyContactPhone'
-      ],
+      1: ['firstName', 'lastName', 'dateOfBirth', 'gender', 'bloodGroup', 'maritalStatus'],
+      2: ['phone', 'email', 'address', 'city', 'state', 'pincode', 'emergencyContactName', 'emergencyContactPhone'],
       3: [],
       4: ['patientType']
     };
@@ -118,9 +92,7 @@ today =
       this.patientForm.get(field)?.markAsTouched();
     });
 
-    const isStepValid = fieldsToValidate.every(
-      (field) => this.patientForm.get(field)?.valid
-    );
+    const isStepValid = fieldsToValidate.every((field) => this.patientForm.get(field)?.valid);
 
     if (!isStepValid) {
       return;
@@ -171,10 +143,7 @@ today =
       next: (response) => {
         console.log(response);
 
-        this.toastService.show(
-          'Patient Registered Successfully',
-          'success'
-        );
+        this.toastService.show('Patient Registered Successfully', 'success');
 
         // Reset form
         this.patientForm.reset();
@@ -195,13 +164,7 @@ today =
         console.log('FULL ERROR =>', error);
         console.log('VALIDATION ERRORS =>', error?.error?.errors);
 
-        alert(
-          JSON.stringify(
-            error?.error?.errors,
-            null,
-            2
-          )
-        );
+        alert(JSON.stringify(error?.error?.errors, null, 2));
 
         this.isSubmitting = false;
       }

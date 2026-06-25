@@ -1,48 +1,26 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  FormsModule,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import {
-  RouterLink,
-} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
-import {
-  PatientService,
-} from '../../../core/services/patient';
+import { PatientService } from '../../../core/services/patient';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
-  selector:
-    'app-patient-list',
+  selector: 'app-patient-list',
 
   standalone: true,
 
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink, PaginationComponent
-  ],
+  imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
 
-  templateUrl:
-    './patient-list.html',
+  templateUrl: './patient-list.html',
 
-  styleUrls: [
-    './patient-list.css',
-  ],
+  styleUrls: ['./patient-list.css']
 })
-export class PatientList
-  implements OnInit
-{
+export class PatientList implements OnInit {
   patients: any[] = [];
 
   userRole = '';
@@ -61,18 +39,13 @@ export class PatientList
   totalPages = 0;
 
   constructor(
-    private readonly patientService:
-      PatientService,
+    private readonly patientService: PatientService,
 
-    private readonly cdr:
-      ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.userRole =
-      localStorage.getItem(
-        'role'
-      ) || '';
+    this.userRole = localStorage.getItem('role') || '';
 
     this.loadPatients();
   }
@@ -80,82 +53,46 @@ export class PatientList
   loadPatients(): void {
     const params: any = {
       page: this.page,
-      limit: this.limit,
+      limit: this.limit
     };
 
-    if (
-      this.search.trim()
-    ) {
-      params.search =
-        this.search;
+    if (this.search.trim()) {
+      params.search = this.search;
     }
 
     if (this.gender) {
-      params.gender =
-        this.gender;
+      params.gender = this.gender;
     }
 
-    if (
-      this.bloodGroup
-    ) {
-      params.bloodGroup =
-        this.bloodGroup;
+    if (this.bloodGroup) {
+      params.bloodGroup = this.bloodGroup;
     }
 
-    if (
-      this.startDate
-    ) {
-      params.startDate =
-        this.startDate;
+    if (this.startDate) {
+      params.startDate = this.startDate;
     }
 
-    if (
-      this.endDate
-    ) {
-      params.endDate =
-        this.endDate;
+    if (this.endDate) {
+      params.endDate = this.endDate;
     }
 
-    this.patientService
-      .getPatients(
-        params
-      )
-      .subscribe({
-        next:
-          (
-            response
-          ) => {
-            console.log(
-              response
-            );
+    this.patientService.getPatients(params).subscribe({
+      next: (response) => {
+        console.log(response);
 
-            this.patients =
-              response.data;
+        this.patients = response.data;
 
-            this.totalRecords =
-              response
-                .meta
-                ?.total ||
-              0;
+        this.totalRecords = response.meta?.total || 0;
 
-            this.totalPages =
-              response
-                .meta
-                ?.totalPages ||
-              0;
+        this.totalPages = response.meta?.totalPages || 0;
 
-            this.cdr.detectChanges();
-          },
+        this.cdr.detectChanges();
+      },
 
-        error:
-          (
-            error
-          ) => {
-            console.log(
-              error
-            );
-          },
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
   onFilterChange(): void {
@@ -165,9 +102,7 @@ export class PatientList
   }
 
   previousPage(): void {
-    if (
-      this.page > 1
-    ) {
+    if (this.page > 1) {
       this.page--;
 
       this.loadPatients();
@@ -175,26 +110,17 @@ export class PatientList
   }
 
   nextPage(): void {
-    if (
-      this.page <
-      this.totalPages
-    ) {
+    if (this.page < this.totalPages) {
       this.page++;
 
       this.loadPatients();
     }
   }
 
-  changePageSize(
-    event: Event
-  ): void {
-    const select =
-      event.target as HTMLSelectElement;
+  changePageSize(event: Event): void {
+    const select = event.target as HTMLSelectElement;
 
-    this.limit =
-      Number(
-        select.value
-      );
+    this.limit = Number(select.value);
 
     this.page = 1;
 

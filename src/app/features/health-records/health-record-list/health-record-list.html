@@ -3,21 +3,14 @@
 
   <div class="top-section">
     <div>
-      <p class="section-label">
-        Patient Medical Repository
-      </p>
+      <p class="section-label">Patient Medical Repository</p>
 
       <h1>Health Records</h1>
 
-      <p class="section-subtitle">
-        Complete medical history and consultation records of patients.
-      </p>
+      <p class="section-subtitle">Complete medical history and consultation records of patients.</p>
     </div>
 
-    <div class="record-count">
-      Total:
-      {{ meta.total || 0 }}
-    </div>
+    <div class="record-count">Total: {{ meta.total || 0 }}</div>
   </div>
 
   <!-- Search -->
@@ -30,13 +23,8 @@
       (keyup.enter)="onSearch()"
     />
 
-    <button
-      class="search-btn"
-      (click)="onSearch()"
-    >
-      <span class="material-icons">
-        search
-      </span>
+    <button class="search-btn" (click)="onSearch()">
+      <span class="material-icons">search</span>
 
       Search
     </button>
@@ -49,36 +37,24 @@
   <div class="loading-card">
     <div class="loader"></div>
 
-    <p>
-      Loading health records...
-    </p>
+    <p>Loading health records...</p>
   </div>
 
-  }
-
-  @else {
+  } @else {
 
   <!-- Empty State -->
 
   @if (healthRecords.length === 0) {
 
   <div class="empty-state">
-    <div class="empty-icon">
-      🩺
-    </div>
+    <div class="empty-icon">🩺</div>
 
-    <h2>
-      No Health Records Found
-    </h2>
+    <h2>No Health Records Found</h2>
 
-    <p>
-      Patient consultations will automatically appear here.
-    </p>
+    <p>Patient consultations will automatically appear here.</p>
   </div>
 
-  }
-
-  @else {
+  } @else {
 
   <!-- Table -->
 
@@ -96,37 +72,19 @@
       </thead>
 
       <tbody>
-        @for (
-          record of healthRecords;
-          track record.patient._id
-        ) {
+        @for ( record of healthRecords; track record.patient._id ) {
 
         <tr>
           <!-- Patient -->
 
           <td>
             <div class="patient-info">
-              <div class="avatar">
-                {{
-                  record.patient.firstName?.charAt(
-                    0
-                  )
-                }}
-              </div>
+              <div class="avatar">{{ record.patient.firstName?.charAt( 0 ) }}</div>
 
               <div>
-                <h4>
-                  {{
-                    record.patient.firstName
-                  }}
-                  {{
-                    record.patient.lastName
-                  }}
-                </h4>
+                <h4>{{ record.patient.firstName }} {{ record.patient.lastName }}</h4>
 
-                <p>
-                  Patient Record
-                </p>
+                <p>Patient Record</p>
               </div>
             </div>
           </td>
@@ -134,42 +92,23 @@
           <!-- UHID -->
 
           <td>
-            <span class="uhid-badge">
-              {{
-                record.patient.patientId
-              }}
-            </span>
+            <span class="uhid-badge">{{ record.patient.patientId }}</span>
           </td>
 
           <!-- Gender -->
 
-          <td>
-            {{
-              record.patient.gender ||
-                "N/A"
-            }}
-          </td>
+          <td>{{ record.patient.gender || "N/A" }}</td>
 
           <!-- Visits -->
 
           <td>
-            <span class="visit-badge">
-              {{
-                record.totalVisits
-              }}
-              Visits
-            </span>
+            <span class="visit-badge">{{ record.totalVisits }} Visits</span>
           </td>
 
           <!-- Last Visit -->
 
           <td>
-            <div class="date-text">
-              {{
-                record.lastVisit
-                  | date: "mediumDate"
-              }}
-            </div>
+            <div class="date-text">{{ record.lastVisit | date: "mediumDate" }}</div>
           </td>
 
           <!-- Actions -->
@@ -182,11 +121,7 @@
                 record.patient._id
               ]"
             >
-              <span
-                class="material-icons"
-              >
-                visibility
-              </span>
+              <span class="material-icons">visibility</span>
 
               View Record
             </a>
@@ -218,9 +153,7 @@
       page = 1;
       loadHealthRecords()
     "
-  >
-  </app-pagination>
+  ></app-pagination>
 
-  }
-  }
+  } }
 </div>

@@ -4,7 +4,6 @@ import { AuthLayout } from './layouts/auth-layout/auth-layout';
 
 import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 
-
 import { authGuard } from './core/guards/auth-guard';
 
 import { Login } from './features/auth/login/login';
@@ -94,198 +93,186 @@ export const routes: Routes = [
   },
 
   // Protected Dashboard Routes
- {
-  path: '',
+  {
+    path: '',
 
-  component: DashboardLayout,
+    component: DashboardLayout,
 
-  canActivate: [authGuard],
+    canActivate: [authGuard],
 
-  children: [
-    {
-      path: '',
-      redirectTo: 'dashboard/admin',
-      pathMatch: 'full'
-    },
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard/admin',
+        pathMatch: 'full'
+      },
 
-    // =====================
-    // Dashboards
-    // =====================
+      // =====================
+      // Dashboards
+      // =====================
 
-    {
-      path: 'dashboard/admin',
-      component: AdminDashboard,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'dashboard/admin',
+        component: AdminDashboard,
+        canActivate: [nodeGuard]
+      },
 
-    {
-      path: 'dashboard/doctor',
-      component: DoctorDashboard,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'dashboard/doctor',
+        component: DoctorDashboard,
+        canActivate: [nodeGuard]
+      },
 
-    {
-      path: 'dashboard/receptionist',
-      component: ReceptionistDashboard,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'dashboard/receptionist',
+        component: ReceptionistDashboard,
+        canActivate: [nodeGuard]
+      },
 
-    // =====================
-    // Employees
-    // =====================
+      // =====================
+      // Employees
+      // =====================
 
-    {
-      path: 'employees',
-      component: EmployeeList,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'employees',
+        component: EmployeeList,
+        canActivate: [nodeGuard]
+      },
 
-    {
-      path: 'employees/create',
-      component: AddEmployee,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'employees/create',
+        component: AddEmployee,
+        canActivate: [nodeGuard]
+      },
 
-    {
-      path: 'employees/pending',
-      component: PendingEmployees,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'employees/pending',
+        component: PendingEmployees,
+        canActivate: [nodeGuard]
+      },
 
-    // Internal pages
-    {
-      path: 'employees/:id',
-      component: EmployeeDetails
-    },
+      // Internal pages
+      {
+        path: 'employees/:id',
+        component: EmployeeDetails
+      },
 
-    {
-      path: 'employees/edit/:id',
-      component: EditEmployee
-    },
+      {
+        path: 'employees/edit/:id',
+        component: EditEmployee
+      },
 
-    // =====================
-    // Patients
-    // =====================
+      // =====================
+      // Patients
+      // =====================
 
-    {
-      path: 'patients',
-      component: PatientList,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'patients',
+        component: PatientList,
+        canActivate: [nodeGuard]
+      },
 
-    {
-      path: 'patients/create',
-      component: AddPatient,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'patients/create',
+        component: AddPatient,
+        canActivate: [nodeGuard]
+      },
 
-    // Internal pages
-    {
-      path: 'patients/:id',
-      component: PatientDetails
-    },
+      // Internal pages
+      {
+        path: 'patients/:id',
+        component: PatientDetails
+      },
 
-    {
-      path: 'patients/edit/:id',
-      component: EditPatient
-    },
+      {
+        path: 'patients/edit/:id',
+        component: EditPatient
+      },
 
-    // =====================
-    // Appointments
-    // =====================
+      // =====================
+      // Appointments
+      // =====================
 
-    {
-      path: 'appointments',
-      component: AppointmentList,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'appointments',
+        component: AppointmentList,
+        canActivate: [nodeGuard]
+      },
 
-    {
-      path: 'appointments/book',
-      component: BookAppointment,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'appointments/book',
+        component: BookAppointment,
+        canActivate: [nodeGuard]
+      },
 
-    {
-      path: 'appointments/requests',
-      loadComponent: () =>
-        import(
-          './features/appointments/appointment-requests/appointment-requests'
-        ).then(
-          (m) => m.AppointmentRequestsComponent
-        ),
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'appointments/requests',
+        loadComponent: () =>
+          import('./features/appointments/appointment-requests/appointment-requests').then(
+            (m) => m.AppointmentRequestsComponent
+          ),
+        canActivate: [nodeGuard]
+      },
 
-    // Internal pages
-    {
-      path: 'appointments/edit/:id',
-      component: EditAppointment
-    },
+      // Internal pages
+      {
+        path: 'appointments/edit/:id',
+        component: EditAppointment
+      },
 
-    // =====================
-    // Doctor
-    // =====================
+      // =====================
+      // Doctor
+      // =====================
 
-    {
-      path: 'doctor-queue',
-      component: DoctorQueue,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'doctor-queue',
+        component: DoctorQueue,
+        canActivate: [nodeGuard]
+      },
 
-    {
-      path: 'doctor-availability',
-      component: DoctorAvailability,
-      canActivate: [nodeGuard]
-    },
+      {
+        path: 'doctor-availability',
+        component: DoctorAvailability,
+        canActivate: [nodeGuard]
+      },
 
-    // =====================
-    // Consultations
-    // =====================
+      // =====================
+      // Consultations
+      // =====================
 
-   {
-  path: 'health-records',
-  loadComponent: () =>
-    import(
-      './features/health-records/health-record-list/health-record-list'
-    ).then(
-      (m) => m.HealthRecordList
-    ),
-  canActivate: [nodeGuard]
-},
-    // Internal pages
-    {
-      path: 'consultation/:appointmentId',
-      component: ConsultationForm
-    },
-    
-{
-  path: 'health-records/:patientId',
-  loadComponent: () =>
-    import(
-      './features/health-records/health-record-details/health-record-details'
-    ).then(
-      (m) => m.HealthRecordDetails
-    )
-},
+      {
+        path: 'health-records',
+        loadComponent: () =>
+          import('./features/health-records/health-record-list/health-record-list').then((m) => m.HealthRecordList),
+        canActivate: [nodeGuard]
+      },
+      // Internal pages
+      {
+        path: 'consultation/:appointmentId',
+        component: ConsultationForm
+      },
 
+      {
+        path: 'health-records/:patientId',
+        loadComponent: () =>
+          import('./features/health-records/health-record-details/health-record-details').then(
+            (m) => m.HealthRecordDetails
+          )
+      },
 
+      // =====================
+      // Profile
+      // =====================
 
-   
-
-    // =====================
-    // Profile
-    // =====================
-
-    {
-      path: 'my-profile',
-      component: MyProfile,
-      canActivate: [nodeGuard]
-    }
-  ]
-},
-{
-  path: '**',
-  redirectTo: 'login'
-}
+      {
+        path: 'my-profile',
+        component: MyProfile,
+        canActivate: [nodeGuard]
+      }
+    ]
+  },
+  {
+    path: '**',
+    redirectTo: 'login'
+  }
 ];

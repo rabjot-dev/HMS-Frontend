@@ -10,17 +10,10 @@ import { ReceptionistDashboard } from '../receptionist-dashboard/receptionist-da
 @Component({
   selector: 'app-dashboard-home',
   standalone: true,
-  imports: [
-    AsyncPipe,
-    AdminDashboard,
-    DoctorDashboard,
-    ReceptionistDashboard
-  ],
+  imports: [AsyncPipe, AdminDashboard, DoctorDashboard, ReceptionistDashboard],
   templateUrl: './dashboard-home.html',
   styleUrl: './dashboard-home.css'
 })
 export class DashboardHome {
-  constructor(
-    public readonly authService: AuthService
-  ) {}
+  constructor(public readonly authService: AuthService) {}
 }

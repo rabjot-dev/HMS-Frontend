@@ -1,12 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  FormArray,
-  Validators,
-  ReactiveFormsModule
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from '../../../core/services/toast';
 import { ConsultationService } from '../../../core/services/consultation';
@@ -35,7 +29,7 @@ export class ConsultationForm implements OnInit {
     private readonly appointmentService: AppointmentService,
     private readonly authService: AuthService,
     private readonly cdr: ChangeDetectorRef,
-      private readonly toastService: ToastService
+    private readonly toastService: ToastService
   ) {}
 
   // Initialize form and load appointment
@@ -64,9 +58,7 @@ export class ConsultationForm implements OnInit {
         weight: ['']
       }),
 
-      prescriptions: this.fb.array([
-        this.createPrescription()
-      ])
+      prescriptions: this.fb.array([this.createPrescription()])
     });
   }
 
@@ -119,9 +111,7 @@ export class ConsultationForm implements OnInit {
 
     this.isSubmitting = true;
 
-    const currentUser = JSON.parse(
-      localStorage.getItem('user') || '{}'
-    );
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
 
     const consultationData = {
       appointmentId: this.appointment?._id,
@@ -129,9 +119,7 @@ export class ConsultationForm implements OnInit {
 
       diagnosis: this.consultationForm.value.diagnosis,
 
-      symptoms: this.consultationForm.value.symptoms
-        ?.split(',')
-        .map((symptom: string) => symptom.trim()),
+      symptoms: this.consultationForm.value.symptoms?.split(',').map((symptom: string) => symptom.trim()),
 
       doctorNotes: this.consultationForm.value.doctorNotes,
 
@@ -143,30 +131,23 @@ export class ConsultationForm implements OnInit {
     console.log(consultationData);
 
     this.consultationService.createConsultation(consultationData).subscribe({
-    next: (response) => {
-  console.log(response);
+      next: (response) => {
+        console.log(response);
 
-  this.toastService.success(
-    'Consultation completed successfully'
-  );
+        this.toastService.success('Consultation completed successfully');
 
-  this.isSubmitting = false;
+        this.isSubmitting = false;
 
-  this.router.navigate([
-    '/doctor-queue'
-  ]);
-},
+        this.router.navigate(['/doctor-queue']);
+      },
 
       error: (error) => {
-  console.log(error);
+        console.log(error);
 
-  this.toastService.error(
-    error?.error?.message ??
-    'Failed to create consultation'
-  );
+        this.toastService.error(error?.error?.message ?? 'Failed to create consultation');
 
-  this.isSubmitting = false;
-}
+        this.isSubmitting = false;
+      }
     });
   }
 }

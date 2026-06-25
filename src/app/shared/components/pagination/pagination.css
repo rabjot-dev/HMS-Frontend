@@ -15,31 +15,13 @@
 
   flex-wrap: wrap;
 
-  background: rgba(
-    255,
-    255,
-    255,
-    0.62
-  );
+  background: rgba(255, 255, 255, 0.62);
 
-  border: 1px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.4
-    );
+  border: 1px solid rgba(255, 255, 255, 0.4);
 
   backdrop-filter: blur(18px);
 
-  box-shadow:
-    0 10px 35px
-      rgba(
-        15,
-        23,
-        42,
-        0.06
-      );
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.06);
 }
 
 .total-records {
@@ -75,13 +57,7 @@
 
   border-radius: 14px;
 
-  background:
-    rgba(
-      59,
-      130,
-      246,
-      0.12
-    );
+  background: rgba(59, 130, 246, 0.12);
 
   color: #2563eb;
 
@@ -93,16 +69,9 @@
 }
 
 .pagination-controls button:hover:not(:disabled) {
-  background:
-    rgba(
-      59,
-      130,
-      246,
-      0.18
-    );
+  background: rgba(59, 130, 246, 0.18);
 
-  transform:
-    translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .pagination-controls button:disabled {
@@ -116,21 +85,9 @@
 
   border-radius: 14px;
 
-  border: 1px solid
-    rgba(
-      203,
-      213,
-      225,
-      0.8
-    );
+  border: 1px solid rgba(203, 213, 225, 0.8);
 
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.7
-    );
+  background: rgba(255, 255, 255, 0.7);
 
   font-weight: 600;
 

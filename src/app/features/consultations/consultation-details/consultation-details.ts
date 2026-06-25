@@ -52,20 +52,18 @@ export class ConsultationDetails implements OnInit {
 
   // Print consultation details
   printPage(): void {
-      document.title = 'Prescription';
+    document.title = 'Prescription';
     globalThis.print();
   }
 
   // Download prescription PDF
   downloadPdf(): void {
-    this.consultationService
-      .downloadPrescriptionPdf(this.consultation._id)
-      .subscribe({
-        next: (response: Blob) => {
-          const fileURL = globalThis.URL.createObjectURL(response);
+    this.consultationService.downloadPrescriptionPdf(this.consultation._id).subscribe({
+      next: (response: Blob) => {
+        const fileURL = globalThis.URL.createObjectURL(response);
 
-          globalThis.open(fileURL);
-        }
-      });
+        globalThis.open(fileURL);
+      }
+    });
   }
 }

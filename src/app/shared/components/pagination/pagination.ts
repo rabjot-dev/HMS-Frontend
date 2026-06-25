@@ -1,13 +1,6 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import {
-  CommonModule
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-pagination',
@@ -29,28 +22,20 @@ export class PaginationComponent {
   @Input()
   limit = 10;
   @Input()
-showPageSize = true;
+  showPageSize = true;
 
   @Output()
-  previous =
-    new EventEmitter<void>();
+  previous = new EventEmitter<void>();
 
   @Output()
-  next =
-    new EventEmitter<void>();
+  next = new EventEmitter<void>();
 
   @Output()
-  pageSizeChange =
-    new EventEmitter<number>();
+  pageSizeChange = new EventEmitter<number>();
 
-  changePageSize(
-    event: Event
-  ): void {
-    const select =
-      event.target as HTMLSelectElement;
+  changePageSize(event: Event): void {
+    const select = event.target as HTMLSelectElement;
 
-    this.pageSizeChange.emit(
-      Number(select.value)
-    );
+    this.pageSizeChange.emit(Number(select.value));
   }
 }

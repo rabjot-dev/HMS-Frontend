@@ -1,89 +1,48 @@
-import {
-  Injectable,
-} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {
-  HttpClient,
-} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
-import {
-  BehaviorSubject,
-} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { API_BASE_URL } from '../constants/api.constants';
 
 @Injectable({
-  providedIn:
-    'root',
+  providedIn: 'root'
 })
 export class NodeService {
-  nodes =
-    new BehaviorSubject<
-      any[]
-    >([]);
+  nodes = new BehaviorSubject<any[]>([]);
 
-  constructor(
-    private readonly http: HttpClient,
-  ) {
-    const storedNodes =
-      localStorage.getItem(
-        'nodes',
-      );
+  constructor(private readonly http: HttpClient) {
+    const storedNodes = localStorage.getItem('nodes');
 
-    if (
-      storedNodes
-    ) {
-      this.nodes.next(
-        JSON.parse(
-          storedNodes,
-        ),
-      );
+    if (storedNodes) {
+      this.nodes.next(JSON.parse(storedNodes));
     }
   }
 
   getNodes() {
-    return this.http.get<any>(
-      `${API_BASE_URL}/nodes`,
-    );
+    return this.http.get<any>(`${API_BASE_URL}/nodes`);
   }
 
   loadNodes(): void {
-    this.getNodes()
-      .subscribe({
-        next: (
-          response,
-        ) => {
-          this.nodes.next(
-            response.data,
-          );
-          
+    this.getNodes().subscribe({
+      next: (response) => {
+        this.nodes.next(response.data);
 
-          localStorage.setItem(
-            'nodes',
-            JSON.stringify(
-              response.data,
-            ),
-            
-          );
-        },
+        localStorage.setItem('nodes', JSON.stringify(response.data));
+      },
 
-        error: () => {
-          this.nodes.next(
-            [],
-          );
+      error: () => {
+        this.nodes.next([]);
 
-          localStorage.removeItem(
-            'nodes',
-          );
-        },
-      });
+        localStorage.removeItem('nodes');
+      }
+    });
   }
 
   clearNodes(): void {
     this.nodes.next([]);
 
-    localStorage.removeItem(
-      'nodes',
-    );
+    localStorage.removeItem('nodes');
   }
 }

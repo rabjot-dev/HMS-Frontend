@@ -18,7 +18,7 @@ export class DashboardLayout implements OnInit {
   isProfileOpen = false;
 
   constructor(
-    public readonly nodeService:NodeService,
+    public readonly nodeService: NodeService,
     public authService: AuthService,
     private readonly tokenService: TokenService,
     private readonly router: Router,
@@ -28,16 +28,15 @@ export class DashboardLayout implements OnInit {
   ) {}
 
   // Load current user details
-ngOnInit(): void {
-  const token =
-    this.tokenService.getAccessToken();
+  ngOnInit(): void {
+    const token = this.tokenService.getAccessToken();
 
-  if (token) {
-    this.authService.loadCurrentUser();
+    if (token) {
+      this.authService.loadCurrentUser();
 
-    this.nodeService.loadNodes();
+      this.nodeService.loadNodes();
+    }
   }
-}
 
   // Close active toast
   dismissToast(): void {
@@ -60,25 +59,22 @@ ngOnInit(): void {
   }
 
   // Logout user
-logout(): void {
-  const refreshToken =
-    this.tokenService.getRefreshToken();
+  logout(): void {
+    const refreshToken = this.tokenService.getRefreshToken();
 
-  this.authService
-    .logout(refreshToken!)
-    .subscribe();
+    this.authService.logout(refreshToken!).subscribe();
 
-  this.tokenService.removeTokens();
+    this.tokenService.removeTokens();
 
-  this.authService.currentUser.next(null);
+    this.authService.currentUser.next(null);
 
-  this.nodeService.clearNodes();
+    this.nodeService.clearNodes();
 
-  localStorage.removeItem('role');
-  localStorage.removeItem('loginId');
+    localStorage.removeItem('role');
+    localStorage.removeItem('loginId');
 
-  this.router.navigate(['/login']);
+    this.router.navigate(['/login']);
 
-  this.cdr.detectChanges();
-}
+    this.cdr.detectChanges();
+  }
 }

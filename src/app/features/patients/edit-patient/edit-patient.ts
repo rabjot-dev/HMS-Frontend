@@ -98,10 +98,7 @@ export class EditPatient implements OnInit {
 
     this.isSubmitting = true;
 
-    this.patientService.updatePatient(
-      this.patientId,
-      this.patientForm.value
-    ).subscribe({
+    this.patientService.updatePatient(this.patientId, this.patientForm.value).subscribe({
       next: (response) => {
         console.log(response);
 

@@ -1,52 +1,26 @@
-import {
-  inject,
-} from '@angular/core';
+import { inject } from '@angular/core';
 
-import {
-  CanActivateFn,
-  Router,
-} from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 
 import { NodeService } from '../services/node';
-export const nodeGuard:
-CanActivateFn =
-(route) => {
+export const nodeGuard: CanActivateFn = (route) => {
+  const router = inject(Router);
 
-  const router =
-    inject(Router);
+  const nodeService = inject(NodeService);
 
-  const nodeService =
-    inject(NodeService);
+  const url = '/' + route.url.map((segment) => segment.path).join('/');
 
-  const url =
-    '/' +
-    route.url
-      .map(
-        segment =>
-          segment.path
-      )
-      .join('/');
+  const nodes = nodeService.nodes.value;
 
-  const nodes =
-    nodeService.nodes.value;
-
-  const allowed =
-    nodes.some(
-      node =>
-        node.path === url ||
-        node.children?.some(
-          (child: { path: string }) =>
-            child.path === url
-        )
-    );
+  const allowed = nodes.some(
+    (node) => node.path === url || node.children?.some((child: { path: string }) => child.path === url)
+  );
 
   if (allowed) {
     return true;
   }
 
-  router.navigate([
-    '/login'
-  ]);
+  router.navigate(['/login']);
 
   return false;
 };

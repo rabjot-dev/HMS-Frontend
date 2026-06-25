@@ -184,10 +184,7 @@ export class EditAppointment implements OnInit {
         if (this.availableSlots.length === 0) {
           this.noSlotsError = true;
 
-          this.toastService.show(
-            'No slots available for the selected date.',
-            'error'
-          );
+          this.toastService.show('No slots available for the selected date.', 'error');
         } else {
           this.noSlotsError = false;
         }
@@ -198,11 +195,7 @@ export class EditAppointment implements OnInit {
 
         this.noSlotsError = true;
 
-        this.toastService.show(
-          error?.error?.message ||
-            'Doctor is not available on this date.',
-          'error'
-        );
+        this.toastService.show(error?.error?.message || 'Doctor is not available on this date.', 'error');
       }
     });
   }
@@ -213,10 +206,7 @@ export class EditAppointment implements OnInit {
       this.appointmentForm.markAllAsTouched();
 
       // Show slot error if date is selected but no slot is available
-      if (
-        this.appointmentForm.get('appointmentDate')?.valid &&
-        this.availableSlots.length === 0
-      ) {
+      if (this.appointmentForm.get('appointmentDate')?.valid && this.availableSlots.length === 0) {
         this.noSlotsError = true;
       }
 
@@ -239,38 +229,27 @@ export class EditAppointment implements OnInit {
     // Convert symptoms text into array before sending to backend
     const formData = {
       ...this.appointmentForm.value,
-      symptoms: this.appointmentForm.value.symptoms
-        ?.split(',')
-        .map((symptom: string) => symptom.trim())
+      symptoms: this.appointmentForm.value.symptoms?.split(',').map((symptom: string) => symptom.trim())
     };
 
-    this.appointmentService
-      .updateAppointment(this.appointmentId, formData)
-      .subscribe({
-        next: (response) => {
-          console.log(response);
+    this.appointmentService.updateAppointment(this.appointmentId, formData).subscribe({
+      next: (response) => {
+        console.log(response);
 
-          this.toastService.show(
-            'Appointment updated successfully',
-            'success'
-          );
+        this.toastService.show('Appointment updated successfully', 'success');
 
-          this.router.navigate(['/appointments']);
+        this.router.navigate(['/appointments']);
 
-          this.isSubmitting = false;
-        },
+        this.isSubmitting = false;
+      },
 
-        error: (error) => {
-          console.log(error);
+      error: (error) => {
+        console.log(error);
 
-          this.isSubmitting = false;
+        this.isSubmitting = false;
 
-          this.toastService.show(
-            error?.error?.message ||
-              'Failed to update appointment.',
-            'error'
-          );
-        }
-      });
+        this.toastService.show(error?.error?.message || 'Failed to update appointment.', 'error');
+      }
+    });
   }
 }

@@ -12,22 +12,17 @@ export class PatientService {
 
   // Register a new patient
   createPatient(patientData: any): Observable<any> {
-    return this.http.post(
-      this.apiUrl,
-      patientData
-    );
+    return this.http.post(this.apiUrl, patientData);
   }
 
   // Get all patients
   getPatients(params?: any): Observable<any> {
-    return this.http.get(this.apiUrl,{params});
+    return this.http.get(this.apiUrl, { params });
   }
 
   // Get list of doctors for patient assignment
   getDoctors(): Observable<any> {
-    return this.http.get(
-      'http://localhost:5000/api/employees/doctors'
-    );
+    return this.http.get('http://localhost:5000/api/employees/doctors');
   }
 
   // Get patient details by ID
@@ -36,13 +31,7 @@ export class PatientService {
   }
 
   // Update patient information
-  updatePatient(
-    id: string,
-    patientData: any
-  ): Observable<any> {
-    return this.http.put(
-      `${this.apiUrl}/${id}`,
-      patientData
-    );
+  updatePatient(id: string, patientData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, patientData);
   }
 }

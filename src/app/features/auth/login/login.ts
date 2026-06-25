@@ -1,19 +1,8 @@
-import {
-  Component,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 
-import {
-  Router,
-  RouterLink,
-} from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { AuthService } from '../../../core/services/auth';
 import { TokenService } from '../../../core/services/token';
@@ -23,12 +12,9 @@ import { NodeService } from '../../../core/services/node';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-  ],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrl: './login.css'
 })
 export class Login {
   loginForm: FormGroup;
@@ -43,205 +29,109 @@ export class Login {
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef,
     private readonly toastService: ToastService,
-    private readonly nodeService: NodeService,
+    private readonly nodeService: NodeService
   ) {
-    this.loginForm =
-      this.fb.group({
-        loginId: [
-          '',
-          Validators.required,
-        ],
-        password: [
-          '',
-          Validators.required,
-        ],
-      });
+    this.loginForm = this.fb.group({
+      loginId: ['', Validators.required],
+      password: ['', Validators.required]
+    });
   }
 
   onSubmit(): void {
-    if (
-      this.loginForm.invalid
-    ) {
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
 
-      this.toastService.show(
-        'Please enter valid credentials',
-        'error',
-      );
+      this.toastService.show('Please enter valid credentials', 'error');
 
       return;
     }
 
     this.isSubmitting = true;
 
-    this.authService
-      .login(
-        this.loginForm.value,
-      )
-      .subscribe({
-        next: (
-          response: any,
-        ) => {
-           console.log(
-    'LOGIN RESPONSE',
-    response
-  );
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (response: any) => {
+        console.log('LOGIN RESPONSE', response);
 
-  console.log(
-    'USER',
-    response.data.user
-  );
+        console.log('USER', response.data.user);
 
-  console.log(
-    'ROLES',
-    response.data.user?.roles
-  );
+        console.log('ROLES', response.data.user?.roles);
 
-  console.log(
-    'ACCESS TOKEN',
-    response.data.accessToken
-  );
-          const accessToken =
-            response.data
-              .accessToken;
+        console.log('ACCESS TOKEN', response.data.accessToken);
+        const accessToken = response.data.accessToken;
 
-          const refreshToken =
-            response.data
-              .refreshToken;
+        const refreshToken = response.data.refreshToken;
 
-          const user =
-            response.data.user;
+        const user = response.data.user;
 
-          this.tokenService.setAccessToken(
-            accessToken,
-          );
+        this.tokenService.setAccessToken(accessToken);
 
-          this.tokenService.setRefreshToken(
-            refreshToken,
-          );
+        this.tokenService.setRefreshToken(refreshToken);
 
-          this.authService.currentUser.next(
-            user,
-          );
+        this.authService.currentUser.next(user);
 
-          localStorage.setItem(
-            'role',
-            user.roles?.[0],
-          );
+        localStorage.setItem('role', user.roles?.[0]);
 
-          localStorage.setItem(
-            'loginId',
-            this.loginForm.value
-              .loginId,
-          );
+        localStorage.setItem('loginId', this.loginForm.value.loginId);
 
-          if (
-            user.isFirstLogin
-          ) {
-            this.isSubmitting =
-              false;
+        if (user.isFirstLogin) {
+          this.isSubmitting = false;
 
-            this.toastService.show(
-              'Login successful',
-              'success',
-            );
+          this.toastService.show('Login successful', 'success');
 
-            this.router.navigate(
-              [
-                '/create-password',
-              ],
-            );
+          this.router.navigate(['/create-password']);
 
-            return;
+          return;
+        }
+
+        // Load nodes before navigation
+        this.nodeService.getNodes().subscribe({
+          next: (nodeResponse: any) => {
+            this.nodeService.nodes.next(nodeResponse.data);
+
+            localStorage.setItem('nodes', JSON.stringify(nodeResponse.data));
+
+            this.toastService.show('Login successful', 'success');
+
+            this.isSubmitting = false;
+
+            const role = user.roles?.[0];
+
+            switch (role) {
+              case 'SUPER_ADMIN':
+              case 'ADMIN':
+                this.router.navigate(['/dashboard/admin']);
+                break;
+
+              case 'DOCTOR':
+                this.router.navigate(['/dashboard/doctor']);
+                break;
+
+              case 'RECEPTIONIST':
+                this.router.navigate(['/dashboard/receptionist']);
+                break;
+
+              default:
+                this.toastService.show('Invalid role', 'error');
+
+                this.router.navigate(['/login']);
+            }
+          },
+
+          error: () => {
+            this.isSubmitting = false;
+
+            this.toastService.show('Failed to load menu permissions', 'error');
           }
+        });
+      },
 
-          // Load nodes before navigation
-          this.nodeService
-            .getNodes()
-            .subscribe({
-              next: (
-                nodeResponse: any,
-              ) => {
-                this.nodeService.nodes.next(
-                  nodeResponse.data,
-                );
+      error: (error) => {
+        this.toastService.show(error?.error?.message || 'Login failed', 'error');
 
-                localStorage.setItem(
-                  'nodes',
-                  JSON.stringify(
-                    nodeResponse.data,
-                  ),
-                );
+        this.isSubmitting = false;
 
-                this.toastService.show(
-                  'Login successful',
-                  'success',
-                );
-
-                this.isSubmitting =
-                  false;
-
-               const role = user.roles?.[0];
-
-switch (role) {
-  case 'SUPER_ADMIN':
-  case 'ADMIN':
-    this.router.navigate([
-      '/dashboard/admin',
-    ]);
-    break;
-
-  case 'DOCTOR':
-    this.router.navigate([
-      '/dashboard/doctor',
-    ]);
-    break;
-
-  case 'RECEPTIONIST':
-    this.router.navigate([
-      '/dashboard/receptionist',
-    ]);
-    break;
-
-  default:
-    this.toastService.show(
-      'Invalid role',
-      'error'
-    );
-
-    this.router.navigate([
-      '/login',
-    ]);
-}
-              },
-
-              error: () => {
-                this.isSubmitting =
-                  false;
-
-                this.toastService.show(
-                  'Failed to load menu permissions',
-                  'error',
-                );
-              },
-            });
-        },
-
-        error: (
-          error,
-        ) => {
-          this.toastService.show(
-            error?.error
-              ?.message ||
-              'Login failed',
-            'error',
-          );
-
-          this.isSubmitting =
-            false;
-
-          this.cdr.detectChanges();
-        },
-      });
+        this.cdr.detectChanges();
+      }
+    });
   }
 }

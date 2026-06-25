@@ -17,16 +17,16 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 export class AppointmentList implements OnInit {
   appointments: any[] = [];
 
-search = '';
-status = '';
-priority = '';
-startDate = '';
-endDate = '';
-page = 1;
-limit = 10;
+  search = '';
+  status = '';
+  priority = '';
+  startDate = '';
+  endDate = '';
+  page = 1;
+  limit = 10;
 
-totalRecords = 0;
-totalPages = 0;
+  totalRecords = 0;
+  totalPages = 0;
 
   constructor(
     private readonly appointmentService: AppointmentService,
@@ -38,117 +38,79 @@ totalPages = 0;
     this.loadAppointments();
   }
 
- loadAppointments(): void {
-  const params: any = {
-    page: this.page,
-    limit: this.limit
-  };
+  loadAppointments(): void {
+    const params: any = {
+      page: this.page,
+      limit: this.limit
+    };
 
-  if (this.search.trim()) {
-    params.search =
-      this.search;
-  }
+    if (this.search.trim()) {
+      params.search = this.search;
+    }
 
-  if (this.status) {
-    params.status =
-      this.status;
-  }
+    if (this.status) {
+      params.status = this.status;
+    }
 
+    if (this.priority) {
+      params.priority = this.priority;
+    }
 
-  if (
-    this.priority
-  ) {
-    params.priority =
-      this.priority;
-  }
+    if (this.startDate) {
+      params.startDate = this.startDate;
+    }
 
-if (this.startDate) {
-  params.startDate =
-    this.startDate;
-}
+    if (this.endDate) {
+      params.endDate = this.endDate;
+    }
 
-if (this.endDate) {
-  params.endDate =
-    this.endDate;
-}
+    this.appointmentService.getAppointments(params).subscribe({
+      next: (response) => {
+        this.appointments = response.data;
 
-  this.appointmentService
-    .getAppointments(
-      params
-    )
-    .subscribe({
-      next:
-        (
-          response
-        ) => {
-          this.appointments =
-            response.data;
+        this.totalRecords = response.meta?.total || 0;
 
-          this.totalRecords =
-            response.meta
-              ?.total ||
-            0;
+        this.totalPages = response.meta?.totalPages || 0;
 
-          this.totalPages =
-            response.meta
-              ?.totalPages ||
-            0;
+        this.cdr.detectChanges();
+      },
 
-          this.cdr.detectChanges();
-        },
-
-      error:
-        (
-          error
-        ) => {
-          console.log(
-            error
-          );
-        }
+      error: (error) => {
+        console.log(error);
+      }
     });
-}
-onFilterChange(): void {
-  this.page = 1;
-
-  this.loadAppointments();
-}
-
-previousPage(): void {
-  if (this.page > 1) {
-    this.page--;
+  }
+  onFilterChange(): void {
+    this.page = 1;
 
     this.loadAppointments();
   }
-}
 
-nextPage(): void {
-  if (
-    this.page <
-    this.totalPages
-  ) {
-    this.page++;
+  previousPage(): void {
+    if (this.page > 1) {
+      this.page--;
+
+      this.loadAppointments();
+    }
+  }
+
+  nextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page++;
+
+      this.loadAppointments();
+    }
+  }
+
+  changePageSize(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+
+    this.limit = Number(select.value);
+
+    this.page = 1;
 
     this.loadAppointments();
   }
-}
-
-changePageSize(
-  event: Event
-): void {
-  const select =
-    event.target as
-      HTMLSelectElement;
-
-  this.limit =
-    Number(
-      select.value
-    );
-
-  this.page = 1;
-
-  this.loadAppointments();
-}
-
 
   deleteAppointment(id: string): void {
     const confirmDelete = confirm('Delete this appointment?');

@@ -1,42 +1,22 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
-import {
-  CommonModule,
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  FormsModule,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import {
-  RouterLink,
-} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
-import {
-  EmployeeService,
-} from '../../../core/services/employee';
+import { EmployeeService } from '../../../core/services/employee';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    FormsModule,PaginationComponent
-  ],
-  templateUrl:
-    './employee-list.html',
-  styleUrl:
-    './employee-list.css',
+  imports: [CommonModule, RouterLink, FormsModule, PaginationComponent],
+  templateUrl: './employee-list.html',
+  styleUrl: './employee-list.css'
 })
-export class EmployeeList
-  implements OnInit
-{
+export class EmployeeList implements OnInit {
   employees: any[] = [];
 
   search = '';
@@ -58,10 +38,8 @@ export class EmployeeList
   isLoading = false;
 
   constructor(
-    private readonly employeeService:
-      EmployeeService,
-    private readonly cdr:
-      ChangeDetectorRef
+    private readonly employeeService: EmployeeService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -73,64 +51,44 @@ export class EmployeeList
 
     const params: any = {
       page: this.page,
-      limit: this.limit,
+      limit: this.limit
     };
 
     if (this.search) {
-      params.search =
-        this.search;
+      params.search = this.search;
     }
 
     if (this.status) {
-      params.status =
-        this.status;
+      params.status = this.status;
     }
 
     if (this.department) {
-      params.department =
-        this.department;
+      params.department = this.department;
     }
 
-    if (
-      this.designation
-    ) {
-      params.designation =
-        this.designation;
+    if (this.designation) {
+      params.designation = this.designation;
     }
 
-    this.employeeService
-      .getEmployees(params)
-      .subscribe({
-        next: (
-          response
-        ) => {
-          this.employees =
-            response.data;
+    this.employeeService.getEmployees(params).subscribe({
+      next: (response) => {
+        this.employees = response.data;
 
-          this.total =
-            response.meta.total;
+        this.total = response.meta.total;
 
-          this.totalPages =
-            response.meta
-              .totalPages;
+        this.totalPages = response.meta.totalPages;
 
-          this.isLoading =
-            false;
+        this.isLoading = false;
 
-          this.cdr.detectChanges();
-        },
+        this.cdr.detectChanges();
+      },
 
-        error: (
-          error
-        ) => {
-          console.log(
-            error
-          );
+      error: (error) => {
+        console.log(error);
 
-          this.isLoading =
-            false;
-        },
-      });
+        this.isLoading = false;
+      }
+    });
   }
 
   onSearch(): void {
@@ -144,9 +102,7 @@ export class EmployeeList
   }
 
   previousPage(): void {
-    if (
-      this.page === 1
-    ) {
+    if (this.page === 1) {
       return;
     }
 
@@ -156,10 +112,7 @@ export class EmployeeList
   }
 
   nextPage(): void {
-    if (
-      this.page ===
-      this.totalPages
-    ) {
+    if (this.page === this.totalPages) {
       return;
     }
 
@@ -179,31 +132,19 @@ export class EmployeeList
     this.loadEmployees();
   }
 
-  deactivateEmployee(
-    id: string
-  ): void {
-    this.employeeService
-      .deactivateEmployee(
-        id
-      )
-      .subscribe({
-        next: () => {
-          this.loadEmployees();
-        },
-      });
+  deactivateEmployee(id: string): void {
+    this.employeeService.deactivateEmployee(id).subscribe({
+      next: () => {
+        this.loadEmployees();
+      }
+    });
   }
 
-  activateEmployee(
-    id: string
-  ): void {
-    this.employeeService
-      .activateEmployee(
-        id
-      )
-      .subscribe({
-        next: () => {
-          this.loadEmployees();
-        },
-      });
+  activateEmployee(id: string): void {
+    this.employeeService.activateEmployee(id).subscribe({
+      next: () => {
+        this.loadEmployees();
+      }
+    });
   }
 }

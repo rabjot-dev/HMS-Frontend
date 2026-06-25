@@ -11,10 +11,7 @@ export class AppointmentService {
   constructor(private readonly http: HttpClient) {}
 
   // Get available slots for a doctor
-  getAvailableSlots(
-    doctorId: string,
-    appointmentDate: string
-  ): Observable<any> {
+  getAvailableSlots(doctorId: string, appointmentDate: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/available-slots`, {
       params: {
         doctorId,
@@ -30,7 +27,7 @@ export class AppointmentService {
 
   // Get all appointments
   getAppointments(params?: any): Observable<any> {
-    return this.http.get(this.apiUrl, {params});
+    return this.http.get(this.apiUrl, { params });
   }
 
   // Delete an appointment
@@ -44,10 +41,7 @@ export class AppointmentService {
   }
 
   // Update an existing appointment
-  updateAppointment(
-    id: string,
-    appointmentData: any
-  ): Observable<any> {
+  updateAppointment(id: string, appointmentData: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, appointmentData);
   }
 
@@ -60,29 +54,17 @@ export class AppointmentService {
     });
   }
   // Get pending appointments
-getPendingAppointments(): Observable<any> {
-  return this.http.get(
-    `${this.apiUrl}/pending`
-  );
-}
+  getPendingAppointments(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/pending`);
+  }
 
-// Approve appointment
-approveAppointment(
-  id: string
-): Observable<any> {
-  return this.http.patch(
-    `${this.apiUrl}/${id}/approve`,
-    {}
-  );
-}
+  // Approve appointment
+  approveAppointment(id: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}/approve`, {});
+  }
 
-// Reject appointment
-rejectAppointment(
-  id: string
-): Observable<any> {
-  return this.http.patch(
-    `${this.apiUrl}/${id}/reject`,
-    {}
-  );
-}
+  // Reject appointment
+  rejectAppointment(id: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}/reject`, {});
+  }
 }

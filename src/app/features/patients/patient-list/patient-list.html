@@ -12,176 +12,150 @@
 
     <div class="header-right">
       <div class="patient-count">{{ totalRecords }} Patients</div>
-
-
     </div>
   </div>
 
   <!-- Search -->
 
   <div class="filters-wrapper glass-card">
+    <div class="search-box">
+      <span>🔍</span>
 
-  <div class="search-box">
-    <span>🔍</span>
+      <input type="text" placeholder="Search patient..." [(ngModel)]="search" (input)="onFilterChange()" />
+    </div>
 
-    <input
-      type="text"
-      placeholder="Search patient..."
-      [(ngModel)]="search"
-      (input)="onFilterChange()"
-    />
+    <select [(ngModel)]="gender" (change)="onFilterChange()">
+      <option value="">All Genders</option>
+
+      <option value="MALE">Male</option>
+
+      <option value="FEMALE">Female</option>
+
+      <option value="OTHER">Other</option>
+    </select>
   </div>
+  <div class="pagination-wrapper">
+    <!-- Table -->
 
-  <select
-    [(ngModel)]="gender"
-    (change)="onFilterChange()"
-  >
-    <option value="">
-      All Genders
-    </option>
+    <div class="table-wrapper glass-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Patient</th>
 
-    <option value="MALE">
-      Male
-    </option>
+            <th>Patient ID</th>
 
-    <option value="FEMALE">
-      Female
-    </option>
+            <th>Gender</th>
 
-    <option value="OTHER">
-      Other
-    </option>
-  </select>
+            <th>Phone</th>
 
+            <th>Blood Group</th>
 
-</div>
-<div class="pagination-wrapper">
+            <th>Status</th>
 
-  
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-  <!-- Table -->
+        <tbody>
+          @for( patient of patients; track patient._id ){
 
-  <div class="table-wrapper glass-card">
-    <table>
-      <thead>
-        <tr>
-          <th>Patient</th>
+          <tr>
+            <!-- Patient -->
 
-          <th>Patient ID</th>
+            <td>
+              <div class="patient-info">
+                <div class="avatar">{{ patient ?.firstName ?.charAt(0) }}</div>
 
-          <th>Gender</th>
+                <div>
+                  <h4>{{ patient ?.firstName }} {{ patient ?.lastName }}</h4>
 
-          <th>Phone</th>
-
-          <th>Blood Group</th>
-
-          <th>Status</th>
-
-          <th>Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        @for( patient of patients; track patient._id ){
-
-        <tr>
-          <!-- Patient -->
-
-          <td>
-            <div class="patient-info">
-              <div class="avatar">{{ patient ?.firstName ?.charAt(0) }}</div>
-
-              <div>
-                <h4>{{ patient ?.firstName }} {{ patient ?.lastName }}</h4>
-
-                <span>{{ patient ?.email || 'No Email' }}</span>
+                  <span>{{ patient ?.email || 'No Email' }}</span>
+                </div>
               </div>
-            </div>
-          </td>
+            </td>
 
-          <!-- Patient ID -->
+            <!-- Patient ID -->
 
-          <td>
-            <div class="patient-id">{{ patient ?.patientId }}</div>
-          </td>
+            <td>
+              <div class="patient-id">{{ patient ?.patientId }}</div>
+            </td>
 
-          <!-- Gender -->
+            <!-- Gender -->
 
-          <td>
-            <span class="gender-badge">{{ patient ?.gender }}</span>
-          </td>
+            <td>
+              <span class="gender-badge">{{ patient ?.gender }}</span>
+            </td>
 
-          <!-- Phone -->
+            <!-- Phone -->
 
-          <td>{{ patient ?.countryCode }} {{ patient ?.phone }}</td>
+            <td>{{ patient ?.countryCode }} {{ patient ?.phone }}</td>
 
-          <!-- Blood Group -->
+            <!-- Blood Group -->
 
-          <td>
-            <span class="blood-badge">🩸 {{ patient ?.bloodGroup || 'N/A' }}</span>
-          </td>
+            <td>
+              <span class="blood-badge">🩸 {{ patient ?.bloodGroup || 'N/A' }}</span>
+            </td>
 
-          <!-- Status -->
+            <!-- Status -->
 
-          <td>
-            <span class="status-badge">Active</span>
-          </td>
+            <td>
+              <span class="status-badge">Active</span>
+            </td>
 
-          <!-- Actions -->
+            <!-- Actions -->
 
-          <td>
-            <div class="actions">
-              <!-- View -->
+            <td>
+              <div class="actions">
+                <!-- View -->
 
-              <a
-                class="action-btn view"
-                [routerLink]="[
+                <a
+                  class="action-btn view"
+                  [routerLink]="[
                                 '/patients',
                                 patient._id
                               ]"
-              >
-                View
-              </a>
+                >
+                  View
+                </a>
 
-              <!-- Edit -->
+                <!-- Edit -->
 
-              @if( userRole !== 'DOCTOR' ){
+                @if( userRole !== 'DOCTOR' ){
 
-              <a
-                class="action-btn edit"
-                [routerLink]="[
+                <a
+                  class="action-btn edit"
+                  [routerLink]="[
                                 '/patients/edit',
                                 patient._id
                               ]"
-              >
-                Edit
-              </a>
+                >
+                  Edit
+                </a>
 
-              }
-            </div>
-          </td>
-        </tr>
+                }
+              </div>
+            </td>
+          </tr>
 
-        }
-      </tbody>
-    </table>
-    
-  </div>
-   <!-- Pagination -->
+          }
+        </tbody>
+      </table>
+    </div>
+    <!-- Pagination -->
 
- <app-pagination
-  [page]="page"
-  [totalPages]="totalPages"
-  [totalRecords]="totalRecords"
-  [limit]="limit"
-  (previous)="previousPage()"
-  (next)="nextPage()"
-  (pageSizeChange)="
+    <app-pagination
+      [page]="page"
+      [totalPages]="totalPages"
+      [totalRecords]="totalRecords"
+      [limit]="limit"
+      (previous)="previousPage()"
+      (next)="nextPage()"
+      (pageSizeChange)="
     limit = $event;
     page = 1;
     loadPatients()
   "
->
-</app-pagination>
-  
+    ></app-pagination>
+  </div>
 </div>

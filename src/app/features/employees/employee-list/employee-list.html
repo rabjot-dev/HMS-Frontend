@@ -1,99 +1,72 @@
 <div class="employees-page">
   <!-- Header -->
 
-<div class="employees-header glass-card">
-  <div>
-    <p class="page-label">
-      Workforce Management
-    </p>
+  <div class="employees-header glass-card">
+    <div>
+      <p class="page-label">Workforce Management</p>
 
-    <h1>
-      Employees
-    </h1>
+      <h1>Employees</h1>
 
-    <p class="page-subtitle">
-      Manage doctors, nurses and hospital staff.
-    </p>
-  </div>
-
-  <div class="header-actions">
-
-    <div class="employee-count">
-      {{ total }} Employees
+      <p class="page-subtitle">Manage doctors, nurses and hospital staff.</p>
     </div>
 
-  
+    <div class="header-actions">
+      <div class="employee-count">{{ total }} Employees</div>
+    </div>
   </div>
-</div>
 
   <!-- Search -->
 
   <div class="filters-wrapper glass-card">
-  <div class="filters-row">
-    <div class="search-box">
-      <span>🔍</span>
+    <div class="filters-row">
+      <div class="search-box">
+        <span>🔍</span>
+
+        <input type="text" placeholder="Search employee..." [(ngModel)]="search" (input)="onSearch()" />
+      </div>
+
+      <select [(ngModel)]="status" (change)="onFilterChange()">
+        <option value="">All Status</option>
+
+        <option value="ACTIVE">Active</option>
+
+        <option value="INACTIVE">Inactive</option>
+
+        <option value="PENDING">Pending</option>
+      </select>
 
       <input
         type="text"
-        placeholder="Search employee..."
-        [(ngModel)]="search"
-        (input)="onSearch()"
-      />
-    </div>
-
-    <select
-      [(ngModel)]="status"
-      (change)="onFilterChange()"
-    >
-      <option value="">
-        All Status
-      </option>
-
-      <option value="ACTIVE">
-        Active
-      </option>
-
-      <option value="INACTIVE">
-        Inactive
-      </option>
-
-      <option value="PENDING">
-        Pending
-      </option>
-    </select>
-
-    <input
-      type="text"
-      placeholder="Department"
-      [(ngModel)]="
+        placeholder="Department"
+        [(ngModel)]="
         department
       "
-      (input)="
+        (input)="
         onFilterChange()
       "
-    />
+      />
 
-    <input
-      type="text"
-      placeholder="Designation"
-      [(ngModel)]="
+      <input
+        type="text"
+        placeholder="Designation"
+        [(ngModel)]="
         designation
       "
-      (input)="
+        (input)="
         onFilterChange()
       "
-    />
+      />
 
-    <button
-      class="action-btn view"
-      (click)="
+      <button
+        class="action-btn view"
+        (click)="
         resetFilters()
       "
-    >
-      Reset
-    </button>
+      >
+        Reset
+      </button>
+    </div>
   </div>
-</div>
 
   <!-- Table -->
 
@@ -122,7 +95,6 @@
                  of employees
                   "
         >
-        
           <!-- Employee -->
 
           <td>
@@ -238,18 +210,17 @@
       </tbody>
     </table>
   </div>
- <app-pagination
-  [page]="page"
-  [totalPages]="totalPages"
-  [totalRecords]="total"
-  [limit]="limit"
-  (previous)="previousPage()"
-  (next)="nextPage()"
-  (pageSizeChange)="
+  <app-pagination
+    [page]="page"
+    [totalPages]="totalPages"
+    [totalRecords]="total"
+    [limit]="limit"
+    (previous)="previousPage()"
+    (next)="nextPage()"
+    (pageSizeChange)="
     limit = $event;
     page = 1;
     loadEmployees()
   "
->
-</app-pagination>
+  ></app-pagination>
 </div>

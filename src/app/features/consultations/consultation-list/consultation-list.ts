@@ -15,112 +15,93 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
   styleUrls: ['./consultation-list.css']
 })
 export class ConsultationList implements OnInit {
- consultations: any[] = [];
+  consultations: any[] = [];
 
-meta: any = {};
+  meta: any = {};
 
-search = '';
-doctor = '';
-patient = '';
-status = '';
+  search = '';
+  doctor = '';
+  patient = '';
+  status = '';
 
-startDate = '';
-endDate = '';
+  startDate = '';
+  endDate = '';
 
-page = 1;
-limit = 10;
+  page = 1;
+  limit = 10;
 
-doctors: any[] = [];
-patients: any[] = [];
+  doctors: any[] = [];
+  patients: any[] = [];
 
-isLoading = false;
-
+  isLoading = false;
 
   constructor(
-      private readonly consultationService: ConsultationService,
-  private readonly employeeService: EmployeeService,
-  private readonly patientService: PatientService,
-  private readonly cdr: ChangeDetectorRef
-
+    private readonly consultationService: ConsultationService,
+    private readonly employeeService: EmployeeService,
+    private readonly patientService: PatientService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   // Load consultations on page load
-ngOnInit(): void {
-  this.loadDoctors();
-  this.loadPatients();
-  this.loadConsultations();
-}
-loadDoctors(): void {
-  this.employeeService
-    .getDoctors()
-    .subscribe({
+  ngOnInit(): void {
+    this.loadDoctors();
+    this.loadPatients();
+    this.loadConsultations();
+  }
+  loadDoctors(): void {
+    this.employeeService.getDoctors().subscribe({
       next: (response) => {
-        this.doctors =
-          response.data;
+        this.doctors = response.data;
       }
     });
-}
-loadPatients(): void {
-  this.patientService
-    .getPatients()
-    .subscribe({
+  }
+  loadPatients(): void {
+    this.patientService.getPatients().subscribe({
       next: (response) => {
-        this.patients =
-          response.data;
+        this.patients = response.data;
       }
     });
-}
+  }
   // Fetch all consultations
- loadConsultations(): void {
-  this.isLoading = true;
+  loadConsultations(): void {
+    this.isLoading = true;
 
-  const params: any = {
-    page: this.page,
-    limit: this.limit
-  };
+    const params: any = {
+      page: this.page,
+      limit: this.limit
+    };
 
-  if (this.search) {
-    params.search =
-      this.search;
-  }
+    if (this.search) {
+      params.search = this.search;
+    }
 
-  if (this.doctor) {
-    params.doctor =
-      this.doctor;
-  }
+    if (this.doctor) {
+      params.doctor = this.doctor;
+    }
 
-  if (this.patient) {
-    params.patient =
-      this.patient;
-  }
+    if (this.patient) {
+      params.patient = this.patient;
+    }
 
-  if (this.status) {
-    params.status =
-      this.status;
-  }
+    if (this.status) {
+      params.status = this.status;
+    }
 
-  if (this.startDate) {
-    params.startDate =
-      this.startDate;
-  }
+    if (this.startDate) {
+      params.startDate = this.startDate;
+    }
 
-  if (this.endDate) {
-    params.endDate =
-      this.endDate;
-  }
+    if (this.endDate) {
+      params.endDate = this.endDate;
+    }
 
-  this.consultationService
-    .getConsultations(params)
-    .subscribe({
+    this.consultationService.getConsultations(params).subscribe({
       next: (response) => {
-        this.consultations =
-          response.data;
+        this.consultations = response.data;
 
-        this.meta =
-          response.meta;
+        this.meta = response.meta;
 
-        this.isLoading =
-          false;
+        this.isLoading = false;
 
         this.cdr.detectChanges();
       },
@@ -128,52 +109,46 @@ loadPatients(): void {
       error: (error) => {
         console.log(error);
 
-        this.isLoading =
-          false;
+        this.isLoading = false;
       }
     });
-}
-onFilterChange(): void {
-  this.page = 1;
+  }
+  onFilterChange(): void {
+    this.page = 1;
 
-  this.loadConsultations();
-}
-previousPage(): void {
-  if (this.page <= 1) {
-    return;
+    this.loadConsultations();
+  }
+  previousPage(): void {
+    if (this.page <= 1) {
+      return;
+    }
+
+    this.page--;
+
+    this.loadConsultations();
   }
 
-  this.page--;
+  nextPage(): void {
+    if (this.page >= this.meta.totalPages) {
+      return;
+    }
 
-  this.loadConsultations();
-}
+    this.page++;
 
-nextPage(): void {
-  if (
-    this.page >=
-    this.meta.totalPages
-  ) {
-    return;
+    this.loadConsultations();
   }
-
-  this.page++;
-
-  this.loadConsultations();
-}
   // Download prescription PDF
   downloadPdf(consultationId: string): void {
-    this.consultationService
-      .downloadPrescriptionPdf(consultationId)
-      .subscribe({
-        next: (response: Blob) => {
-          const fileURL = globalThis.URL.createObjectURL(response);
+    this.consultationService.downloadPrescriptionPdf(consultationId).subscribe({
+      next: (response: Blob) => {
+        const fileURL = globalThis.URL.createObjectURL(response);
 
-          globalThis.open(fileURL);
-        },
+        globalThis.open(fileURL);
+      },
 
-        error: (error) => {
-          console.log(error);
-        }
-      });
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 }
