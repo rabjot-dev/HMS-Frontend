@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { ToastService } from '../../../core/services/toast';
 import { ConsultationService } from '../../../core/services/consultation';
 import { AppointmentService } from '../../../core/services/appointment';
 import { AuthService } from '../../../core/services/auth';
@@ -34,7 +34,8 @@ export class ConsultationForm implements OnInit {
     private readonly consultationService: ConsultationService,
     private readonly appointmentService: AppointmentService,
     private readonly authService: AuthService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+      private readonly toastService: ToastService
   ) {}
 
   // Initialize form and load appointment
@@ -125,7 +126,6 @@ export class ConsultationForm implements OnInit {
     const consultationData = {
       appointmentId: this.appointment?._id,
       patientId: this.appointment?.patientId?._id,
-      doctorEmployeeId: currentUser?.employeeId?._id,
 
       diagnosis: this.consultationForm.value.diagnosis,
 
@@ -143,24 +143,30 @@ export class ConsultationForm implements OnInit {
     console.log(consultationData);
 
     this.consultationService.createConsultation(consultationData).subscribe({
-      next: (response) => {
-        console.log(response);
+    next: (response) => {
+  console.log(response);
 
-        alert('Consultation completed successfully');
+  this.toastService.success(
+    'Consultation completed successfully'
+  );
 
-        this.isSubmitting = false;
+  this.isSubmitting = false;
 
-        this.router.navigate([
-          '/consultations',
-          response.data._id
-        ]);
-      },
+  this.router.navigate([
+    '/doctor-queue'
+  ]);
+},
 
       error: (error) => {
-        console.log(error);
+  console.log(error);
 
-        this.isSubmitting = false;
-      }
+  this.toastService.error(
+    error?.error?.message ??
+    'Failed to create consultation'
+  );
+
+  this.isSubmitting = false;
+}
     });
   }
 }

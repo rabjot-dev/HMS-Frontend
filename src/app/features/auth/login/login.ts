@@ -82,6 +82,25 @@ export class Login {
         next: (
           response: any,
         ) => {
+           console.log(
+    'LOGIN RESPONSE',
+    response
+  );
+
+  console.log(
+    'USER',
+    response.data.user
+  );
+
+  console.log(
+    'ROLES',
+    response.data.user?.roles
+  );
+
+  console.log(
+    'ACCESS TOKEN',
+    response.data.accessToken
+  );
           const accessToken =
             response.data
               .accessToken;
