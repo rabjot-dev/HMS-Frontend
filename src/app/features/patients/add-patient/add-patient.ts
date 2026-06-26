@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -21,7 +21,8 @@ type PostOfficeArea = {
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './add-patient.html',
-  styleUrls: ['./add-patient.css']
+  styleUrls: ['./add-patient.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddPatient implements OnInit {
   currentStep = 1;
@@ -46,7 +47,8 @@ export class AddPatient implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly toastService: ToastService,
-    private readonly patientService: PatientService
+    private readonly patientService: PatientService,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.patientForm = this.fb.group({
       // Basic Information
@@ -99,15 +101,18 @@ export class AddPatient implements OnInit {
 
   loadStates(): void {
     this.isLoadingStates = true;
+    this.cdr.markForCheck();
 
     this.patientService.getIndiaStates().subscribe({
       next: (response) => {
         this.states = response?.data || [];
         this.isLoadingStates = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isLoadingStates = false;
         this.toastService.show('Unable to load states', 'error');
+        this.cdr.markForCheck();
       }
     });
   }
@@ -142,6 +147,7 @@ export class AddPatient implements OnInit {
     if (cachedDistricts) {
       this.districts = cachedDistricts;
       this.isLoadingDistricts = false;
+      this.cdr.markForCheck();
 
       return;
     }
@@ -151,10 +157,12 @@ export class AddPatient implements OnInit {
         this.districts = response?.data || [];
         this.districtCache.set(stateId, this.districts);
         this.isLoadingDistricts = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isLoadingDistricts = false;
         this.toastService.show('Unable to load districts', 'error');
+        this.cdr.markForCheck();
       }
     });
   }
@@ -200,10 +208,12 @@ export class AddPatient implements OnInit {
         this.talukCache.set(cacheKey, taluks);
         this.applyTaluks(taluks);
         this.isLoadingTaluks = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isLoadingTaluks = false;
         this.toastService.show('Unable to load taluks', 'error');
+        this.cdr.markForCheck();
       }
     });
   }
@@ -229,6 +239,7 @@ export class AddPatient implements OnInit {
     if (cachedAreas) {
       this.applyPostOfficeAreas(cachedAreas);
       this.isLoadingAreas = false;
+      this.cdr.markForCheck();
 
       return;
     }
@@ -240,10 +251,12 @@ export class AddPatient implements OnInit {
         this.areaCache.set(cacheKey, areas);
         this.applyPostOfficeAreas(areas);
         this.isLoadingAreas = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isLoadingAreas = false;
         this.toastService.show('Unable to load post offices', 'error');
+        this.cdr.markForCheck();
       }
     });
   }
@@ -383,6 +396,7 @@ export class AddPatient implements OnInit {
     }
 
     this.isSubmitting = true;
+    this.cdr.markForCheck();
 
     this.patientService.createPatient(this.patientForm.value).subscribe({
       next: (response) => {
@@ -409,6 +423,7 @@ export class AddPatient implements OnInit {
         this.filteredPostOfficeAreas = [];
         this.selectedPostOfficeIndex = '';
         this.isSubmitting = false;
+        this.cdr.markForCheck();
       },
 
       error: (error) => {
@@ -418,6 +433,7 @@ export class AddPatient implements OnInit {
         alert(JSON.stringify(error?.error?.errors, null, 2));
 
         this.isSubmitting = false;
+        this.cdr.markForCheck();
       }
     });
   }

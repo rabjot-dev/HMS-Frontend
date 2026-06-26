@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -19,7 +19,8 @@ import { NodeService } from '../../../core/services/node';
 
   templateUrl: './patient-list.html',
 
-  styleUrls: ['./patient-list.css']
+  styleUrls: ['./patient-list.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PatientList implements OnInit {
   patients: any[] = [];

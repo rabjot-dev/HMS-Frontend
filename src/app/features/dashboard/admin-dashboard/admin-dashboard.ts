@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 
@@ -11,7 +11,8 @@ import { NodeService } from '../../../core/services/node';
   standalone: true,
   imports: [RouterLink, AsyncPipe],
   templateUrl: './admin-dashboard.html',
-  styleUrl: './admin-dashboard.css'
+  styleUrl: './admin-dashboard.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AdminDashboard implements OnInit {
   stats: any = {};

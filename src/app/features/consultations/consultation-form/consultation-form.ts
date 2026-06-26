@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +12,8 @@ import { AuthService } from '../../../core/services/auth';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './consultation-form.html',
-  styleUrls: ['./consultation-form.css']
+  styleUrls: ['./consultation-form.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConsultationForm implements OnInit {
   consultationForm!: FormGroup;

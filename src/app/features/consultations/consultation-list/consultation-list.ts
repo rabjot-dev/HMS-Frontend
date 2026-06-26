@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, PaginationComponent],
   templateUrl: './consultation-list.html',
-  styleUrls: ['./consultation-list.css']
+  styleUrls: ['./consultation-list.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConsultationList implements OnInit {
   consultations: any[] = [];

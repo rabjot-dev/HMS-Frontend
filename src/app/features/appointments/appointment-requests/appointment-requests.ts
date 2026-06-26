@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -14,7 +14,8 @@ import { NodeService } from '../../../core/services/node';
 
   templateUrl: './appointment-requests.html',
 
-  styleUrls: ['./appointment-requests.css']
+  styleUrls: ['./appointment-requests.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppointmentRequestsComponent implements OnInit {
   appointments: any[] = [];

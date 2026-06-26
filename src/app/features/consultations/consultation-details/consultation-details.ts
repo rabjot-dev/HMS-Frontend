@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
@@ -9,7 +9,8 @@ import { ConsultationService } from '../../../core/services/consultation';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './consultation-details.html',
-  styleUrls: ['./consultation-details.css']
+  styleUrls: ['./consultation-details.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConsultationDetails implements OnInit {
   consultation: any;

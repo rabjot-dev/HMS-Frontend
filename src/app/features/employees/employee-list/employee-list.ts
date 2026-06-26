@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -15,7 +15,8 @@ import { NodeService } from '../../../core/services/node';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, PaginationComponent],
   templateUrl: './employee-list.html',
-  styleUrl: './employee-list.css'
+  styleUrl: './employee-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmployeeList implements OnInit {
   employees: any[] = [];

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import { RouterOutlet } from '@angular/router';
 
@@ -17,7 +17,8 @@ import { TokenService } from './core/services/token';
   standalone: true,
   imports: [RouterOutlet, AsyncPipe, NgClass],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App implements OnInit {
   toastState$: Observable<ToastState | null>;

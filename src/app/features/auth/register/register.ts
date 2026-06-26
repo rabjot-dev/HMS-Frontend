@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -11,7 +11,8 @@ import { ToastService } from '../../../core/services/toast';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
-  styleUrl: './register.css'
+  styleUrl: './register.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Register {
   registerForm: FormGroup;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../core/services/toast';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -12,7 +12,8 @@ import { AppointmentService } from '../../../core/services/appointment';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './book-appointment.html',
-  styleUrls: ['./book-appointment.css']
+  styleUrls: ['./book-appointment.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookAppointment implements OnInit {
   // Store patients, doctors and available slots

@@ -1,4 +1,4 @@
-import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit, ChangeDetectionStrategy} from '@angular/core';
 
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
@@ -12,7 +12,8 @@ import { Sidebar } from '../../shared/components/sidebar/sidebar';
   selector: 'app-dashboard-layout',
   imports: [RouterOutlet, RouterLink, AsyncPipe, Sidebar],
   templateUrl: './dashboard-layout.html',
-  styleUrl: './dashboard-layout.css'
+  styleUrl: './dashboard-layout.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardLayout implements OnInit {
   isProfileOpen = false;

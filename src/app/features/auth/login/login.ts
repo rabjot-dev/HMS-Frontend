@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 
 import { Router, RouterLink } from '@angular/router';
 
@@ -14,7 +14,8 @@ import { NodeService } from '../../../core/services/node';
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrl: './login.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Login {
   loginForm: FormGroup;

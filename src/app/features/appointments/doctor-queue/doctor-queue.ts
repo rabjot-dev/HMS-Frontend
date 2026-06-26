@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -11,7 +11,8 @@ import { AuthService } from '../../../core/services/auth';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './doctor-queue.html',
-  styleUrls: ['./doctor-queue.css']
+  styleUrls: ['./doctor-queue.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DoctorQueue implements OnInit {
   appointments: any[] = [];

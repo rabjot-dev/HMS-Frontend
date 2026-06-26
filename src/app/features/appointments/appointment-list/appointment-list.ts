@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -13,7 +13,8 @@ import { NodeService } from '../../../core/services/node';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
   templateUrl: './appointment-list.html',
-  styleUrls: ['./appointment-list.css']
+  styleUrls: ['./appointment-list.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppointmentList implements OnInit {
   appointments: any[] = [];

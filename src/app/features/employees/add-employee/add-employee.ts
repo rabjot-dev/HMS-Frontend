@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -10,7 +10,8 @@ import { EmployeeService } from '../../../core/services/employee';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './add-employee.html',
-  styleUrl: './add-employee.css'
+  styleUrl: './add-employee.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddEmployee implements OnInit {
   employeeForm: FormGroup;

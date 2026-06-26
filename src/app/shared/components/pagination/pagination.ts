@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -7,7 +7,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './pagination.html',
-  styleUrls: ['./pagination.css']
+  styleUrls: ['./pagination.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginationComponent {
   @Input()

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
@@ -9,7 +9,8 @@ import { EmployeeService } from '../../../core/services/employee';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './doctor-availability.html',
-  styleUrls: ['./doctor-availability.css']
+  styleUrls: ['./doctor-availability.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DoctorAvailability implements OnInit {
   isSubmitting = false;

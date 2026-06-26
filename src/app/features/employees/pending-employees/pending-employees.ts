@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ToastService } from '../../../core/services/toast';
@@ -9,7 +9,8 @@ import { NodeService } from '../../../core/services/node';
   selector: 'app-pending-employees',
   imports: [CommonModule],
   templateUrl: './pending-employees.html',
-  styleUrl: './pending-employees.css'
+  styleUrl: './pending-employees.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PendingEmployees implements OnInit {
   pendingEmployees: any[] = [];
