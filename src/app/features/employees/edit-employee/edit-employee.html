@@ -18,7 +18,7 @@
 
         <input type="text" formControlName="name" placeholder="Enter full name" />
 
-        @if(employeeForm.get('name')?.touched && employeeForm.get('name')?.invalid){
+        @if((employeeForm.get('name')?.dirty || employeeForm.get('name')?.touched) && employeeForm.get('name')?.invalid){
 
         <span class="error-text">
           @if(employeeForm.get('name')?.errors?.['required']){ Name is required } @else if(employeeForm.get('name')?.errors?.['minlength']){ Name must be at least 2 characters } @else if(employeeForm.get('name')?.errors?.['pattern']){ Only alphabets are allowed }
@@ -41,7 +41,7 @@
 
         <input type="text" maxlength="10" formControlName="phone" placeholder="9876543210" />
 
-        @if(employeeForm.get('phone')?.touched && employeeForm.get('phone')?.invalid){
+        @if((employeeForm.get('phone')?.dirty || employeeForm.get('phone')?.touched) && employeeForm.get('phone')?.invalid){
 
         <span class="error-text">
           @if(employeeForm.get('phone')?.errors?.['required']){ Phone number is required } @else if(employeeForm.get('phone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
@@ -64,7 +64,7 @@
           <option value="OTHER">Other</option>
         </select>
 
-        @if(employeeForm.get('gender')?.touched && employeeForm.get('gender')?.invalid){
+        @if((employeeForm.get('gender')?.dirty || employeeForm.get('gender')?.touched) && employeeForm.get('gender')?.invalid){
 
         <span class="error-text">Gender is required</span>
 
@@ -78,7 +78,7 @@
 
         <input type="text" formControlName="department" placeholder="Department" />
 
-        @if(employeeForm.get('department')?.touched && employeeForm.get('department')?.invalid){
+        @if((employeeForm.get('department')?.dirty || employeeForm.get('department')?.touched) && employeeForm.get('department')?.invalid){
 
         <span class="error-text">
           @if(employeeForm.get('department')?.errors?.['required']){ Department is required } @else if(employeeForm.get('department')?.errors?.['pattern']){ Department can contain only letters }
@@ -104,7 +104,7 @@
           <option value="ADMIN">Admin</option>
         </select>
 
-        @if(employeeForm.get('designation')?.touched && employeeForm.get('designation')?.invalid){
+        @if((employeeForm.get('designation')?.dirty || employeeForm.get('designation')?.touched) && employeeForm.get('designation')?.invalid){
 
         <span class="error-text">Designation is required</span>
 
@@ -118,7 +118,7 @@
 
         <input type="date" formControlName="joiningDate" />
 
-        @if(employeeForm.get('joiningDate')?.touched && employeeForm.get('joiningDate')?.invalid){
+        @if((employeeForm.get('joiningDate')?.dirty || employeeForm.get('joiningDate')?.touched) && employeeForm.get('joiningDate')?.invalid){
 
         <span class="error-text">Joining date is required</span>
 

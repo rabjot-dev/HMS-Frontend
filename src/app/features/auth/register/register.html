@@ -88,9 +88,9 @@
 
           <input type="text" formControlName="name" placeholder="Enter full name" />
 
-          @if(registerForm.get('name')?.touched && registerForm.get('name')?.errors?.['required']){
+          @if((registerForm.get('name')?.dirty || registerForm.get('name')?.touched) && registerForm.get('name')?.errors?.['required']){
           <span class="error-text">Name is required</span>
-          } @if(registerForm.get('name')?.touched && registerForm.get('name')?.errors?.['pattern']){
+          } @if((registerForm.get('name')?.dirty || registerForm.get('name')?.touched) && registerForm.get('name')?.errors?.['pattern']){
           <span class="error-text">Name can contain only alphabets</span>
           }
         </div>
@@ -110,7 +110,7 @@
             <option [value]="'OTHER'">Other</option>
           </select>
 
-          @if(registerForm.get('gender')?.invalid && registerForm.get('gender')?.touched){
+          @if(registerForm.get('gender')?.invalid && (registerForm.get('gender')?.dirty || registerForm.get('gender')?.touched)){
           <span class="error-text">Gender is required</span>
           }
         </div>
@@ -122,7 +122,7 @@
 
           <input type="email" formControlName="email" placeholder="Enter email" />
 
-          @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched){
+          @if(registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)){
           @if(registerForm.get('email')?.hasError('required')){
           <span class="error-text">Email is required</span>
           } } @if(registerForm.get('email')?.hasError('email')){
@@ -147,7 +147,7 @@
             <input type="text" formControlName="phone" placeholder="9876543210" maxlength="10" />
           </div>
 
-          @if( registerForm .get('phone') ?.touched && registerForm .get('phone') ?.invalid ){
+          @if( (registerForm .get('phone') ?.dirty || registerForm .get('phone') ?.touched) && registerForm .get('phone') ?.invalid ){
 
           <p class="error-text">Enter valid 10 digit phone number</p>
 
@@ -173,7 +173,7 @@
 
             <option value="ACCOUNTANT">Accountant</option>
           </select>
-          @if(registerForm.get('designation')?.invalid && registerForm.get('designation')?.touched){
+          @if(registerForm.get('designation')?.invalid && (registerForm.get('designation')?.dirty || registerForm.get('designation')?.touched)){
           <span class="error-text">Designation is required</span>
           }
         </div>
@@ -236,7 +236,7 @@
 
             <option value="HR">Human Resources</option>
           </select>
-          @if(registerForm.get('department')?.invalid && registerForm.get('department')?.touched){
+          @if(registerForm.get('department')?.invalid && (registerForm.get('department')?.dirty || registerForm.get('department')?.touched)){
           <span class="error-text">Department is required</span>
           }
         </div>
@@ -247,7 +247,7 @@
 
           <input type="date" formControlName="joiningDate" />
 
-          @if(registerForm.get('joiningDate')?.invalid && registerForm.get('joiningDate')?.touched){
+          @if(registerForm.get('joiningDate')?.invalid && (registerForm.get('joiningDate')?.dirty || registerForm.get('joiningDate')?.touched)){
           <span class="error-text">Joining date is required</span>
           }
         </div>
@@ -326,7 +326,7 @@
 
             <option value="EMERGENCY_PHYSICIAN">Emergency Physician</option>
           </select>
-          @if(registerForm.get('specialization')?.invalid && registerForm.get('specialization')?.touched){
+          @if(registerForm.get('specialization')?.invalid && (registerForm.get('specialization')?.dirty || registerForm.get('specialization')?.touched)){
           <span class="error-text">specialization is required</span>
           }
         </div>
@@ -338,7 +338,7 @@
 
           <input type="text" formControlName="qualification" placeholder="Enter qualification" />
 
-          @if(registerForm.get('qualification')?.invalid && registerForm.get('qualification')?.touched){
+          @if(registerForm.get('qualification')?.invalid && (registerForm.get('qualification')?.dirty || registerForm.get('qualification')?.touched)){
           <span class="error-text">Qualification is required</span>
           }
         </div>
@@ -351,7 +351,7 @@
           <input type="text" formControlName="medicalRegistrationNo" placeholder="Enter registration number" />
 
           @if(registerForm.get('medicalRegistrationNo')?.invalid &&
-          registerForm.get('medicalRegistrationNo')?.touched){
+          (registerForm.get('medicalRegistrationNo')?.dirty || registerForm.get('medicalRegistrationNo')?.touched)){
           <span class="error-text">Medical Registration Number is required</span>
           }
         </div>
@@ -401,9 +401,9 @@
 
           <input type="password" formControlName="password" placeholder="Enter password" />
 
-          @if(registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['required']){
+          @if((registerForm.get('password')?.dirty || registerForm.get('password')?.touched) && registerForm.get('password')?.errors?.['required']){
           <span class="error-text">Password is required</span>
-          } @if(registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['pattern']){
+          } @if((registerForm.get('password')?.dirty || registerForm.get('password')?.touched) && registerForm.get('password')?.errors?.['pattern']){
           <span class="error-text">Password must contain uppercase, lowercase, number and special character</span>
           }
         </div>
@@ -415,7 +415,7 @@
 
           <input type="password" formControlName="confirmPassword" placeholder="Confirm password" />
 
-          @if(registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors?.['required']){
+          @if((registerForm.get('confirmPassword')?.dirty || registerForm.get('confirmPassword')?.touched) && registerForm.get('confirmPassword')?.errors?.['required']){
           <span class="error-text">Confirm Password is required</span>
           }
 
@@ -440,7 +440,7 @@
             }
           </select>
 
-          @if(registerForm.get('securityQuestion')?.touched && registerForm.get('securityQuestion')?.errors?.['required']){
+          @if((registerForm.get('securityQuestion')?.dirty || registerForm.get('securityQuestion')?.touched) && registerForm.get('securityQuestion')?.errors?.['required']){
           <span class="error-text">Security Question is required</span>
           }
         </div>
@@ -452,7 +452,7 @@
 
           <input type="text" formControlName="securityAnswer" placeholder="Enter answer" />
 
-          @if(registerForm.get('securityAnswer')?.invalid && registerForm.get('securityAnswer')?.touched){
+          @if(registerForm.get('securityAnswer')?.invalid && (registerForm.get('securityAnswer')?.dirty || registerForm.get('securityAnswer')?.touched)){
           <span class="error-text">Security Answer is required</span>
           }
         </div>

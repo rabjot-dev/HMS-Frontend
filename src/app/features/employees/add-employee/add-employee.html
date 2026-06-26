@@ -30,7 +30,7 @@
           <label>Full Name</label>
 
           <input type="text" placeholder="Enter full name" formControlName="name" />
-          @if(employeeForm.get('name')?.invalid && employeeForm.get('name')?.touched){
+          @if(employeeForm.get('name')?.invalid && (employeeForm.get('name')?.dirty || employeeForm.get('name')?.touched)){
           <span class="error-text">
             @if(employeeForm.get('name')?.errors?.['required']){ Name is required } @else if(employeeForm.get('name')?.errors?.['minlength']){ Name must be at least 2 characters } @else if(employeeForm.get('name')?.errors?.['maxlength']){ Name cannot exceed 100 characters } @else if(employeeForm.get('name')?.errors?.['pattern']){ Name can contain only letters and spaces }
           </span>
@@ -42,7 +42,7 @@
         <div class="input-group">
           <label>Email Address</label>
           <input type="email" placeholder="Enter email" formControlName="email" />
-          @if(employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched){
+          @if(employeeForm.get('email')?.invalid && (employeeForm.get('email')?.dirty || employeeForm.get('email')?.touched)){
           <span class="error-text">
             @if(employeeForm.get('email')?.errors?.['required']){ Email is required } 
             @else if(employeeForm.get('email')?.errors?.['email']){ Please enter a valid email address }
@@ -62,7 +62,7 @@
 
               <option value="+44">+44 🇬🇧</option>
             </select>
-            @if(employeeForm.get('countryCode')?.invalid && employeeForm.get('countryCode')?.touched){
+            @if(employeeForm.get('countryCode')?.invalid && (employeeForm.get('countryCode')?.dirty || employeeForm.get('countryCode')?.touched)){
             <span class="error-text">
               @if(employeeForm.get('countryCode')?.errors?.['required']){ Country Code is required }
             </span>
@@ -77,7 +77,7 @@
               placeholder="9876543210"
             />
           </div>
-          @if(employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched){
+          @if(employeeForm.get('phone')?.invalid && (employeeForm.get('phone')?.dirty || employeeForm.get('phone')?.touched)){
           <span class="error-text">
             @if(employeeForm.get('phone')?.errors?.['required']){ Phone Number is required }
              @else if(employeeForm.get('phone')?.errors?.['pattern']){ Please enter a valid phone number }
@@ -99,7 +99,7 @@
 
             <option value="OTHER">Other</option>
           </select>
-          @if(employeeForm.get('gender')?.invalid && employeeForm.get('gender')?.touched){
+          @if(employeeForm.get('gender')?.invalid && (employeeForm.get('gender')?.dirty || employeeForm.get('gender')?.touched)){
           <span class="error-text">@if(employeeForm.get('gender')?.errors?.['required']){ Gender is required }</span>
           }
         </div>
@@ -127,7 +127,7 @@
             <option [value]="option.value">{{ option.label }}</option>
             }
           </select>
-          @if(employeeForm.get('designation')?.invalid && employeeForm.get('designation')?.touched){
+          @if(employeeForm.get('designation')?.invalid && (employeeForm.get('designation')?.dirty || employeeForm.get('designation')?.touched)){
           <span class="error-text">Designation is required</span>
           }
         </div>
@@ -192,7 +192,7 @@
 
             <option value="HR">Human Resources</option>
           </select>
-          @if(employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched){
+          @if(employeeForm.get('department')?.invalid && (employeeForm.get('department')?.dirty || employeeForm.get('department')?.touched)){
           <span class="error-text">Department is required</span>
           }
         </div>
@@ -203,7 +203,7 @@
           <label>Joining Date</label>
 
           <input type="date" formControlName="joiningDate" />
-          @if(employeeForm.get('joiningDate')?.invalid && employeeForm.get('joiningDate')?.touched){
+          @if(employeeForm.get('joiningDate')?.invalid && (employeeForm.get('joiningDate')?.dirty || employeeForm.get('joiningDate')?.touched)){
           <span class="error-text">JoiningDate is required</span>
           }
         </div>
@@ -228,7 +228,7 @@
           <label>Medical Registration No</label>
 
           <input type="text" placeholder="Registration Number" formControlName="medicalRegistrationNo" />
-          @if(employeeForm.get('medicalRegistrationNo')?.invalid && employeeForm.get('medicalRegistrationNo')?.touched){
+          @if(employeeForm.get('medicalRegistrationNo')?.invalid && (employeeForm.get('medicalRegistrationNo')?.dirty || employeeForm.get('medicalRegistrationNo')?.touched)){
 
           <span class="error-text">
             @if(employeeForm.get('medicalRegistrationNo')?.errors?.['required']){ Medical Registration Number is
@@ -299,7 +299,7 @@
 
             <option value="EMERGENCY_PHYSICIAN">Emergency Physician</option>
           </select>
-          @if(employeeForm.get('specialization')?.invalid && employeeForm.get('specialization')?.touched){
+          @if(employeeForm.get('specialization')?.invalid && (employeeForm.get('specialization')?.dirty || employeeForm.get('specialization')?.touched)){
           <span class="error-text">specialization is required</span>
           }
         </div>
@@ -310,7 +310,7 @@
           <label>Qualification</label>
 
           <input type="text" placeholder="Qualification" formControlName="qualification" />
-          @if(employeeForm.get('qualification')?.invalid && employeeForm.get('qualification')?.touched){
+          @if(employeeForm.get('qualification')?.invalid && (employeeForm.get('qualification')?.dirty || employeeForm.get('qualification')?.touched)){
 
           <span class="error-text">
             @if(employeeForm.get('qualification')?.errors?.['required']){ Qualification is required }
@@ -328,7 +328,7 @@
           <label>Consultation Fee</label>
 
           <input type="number" placeholder="Consultation Fee" formControlName="consultationFee" />
-          @if(employeeForm.get('consultationFee')?.invalid && employeeForm.get('consultationFee')?.touched){
+          @if(employeeForm.get('consultationFee')?.invalid && (employeeForm.get('consultationFee')?.dirty || employeeForm.get('consultationFee')?.touched)){
 
           <span class="error-text">
             @if(employeeForm.get('consultationFee')?.errors?.['required']){ Consultation fee is required } 
@@ -453,7 +453,7 @@
             <label>Start Time</label>
 
             <input type="time" formControlName="startTime" />
-            @if(employeeForm.get('startTime')?.invalid && employeeForm.get('startTime')?.touched){
+            @if(employeeForm.get('startTime')?.invalid && (employeeForm.get('startTime')?.dirty || employeeForm.get('startTime')?.touched)){
             <span class="error-text">startTime is required</span>
             }
           </div>
@@ -462,7 +462,7 @@
             <label>End Time</label>
 
             <input type="time" formControlName="endTime" />
-            @if(employeeForm.get('endTime')?.invalid && employeeForm.get('endTime')?.touched){
+            @if(employeeForm.get('endTime')?.invalid && (employeeForm.get('endTime')?.dirty || employeeForm.get('endTime')?.touched)){
             <span class="error-text">endTime is required</span>
             }
           </div>
@@ -479,7 +479,7 @@
 
               <option value="60">60 Minutes</option>
             </select>
-            @if(employeeForm.get('slotDuration')?.invalid && employeeForm.get('slotDuration')?.touched){
+            @if(employeeForm.get('slotDuration')?.invalid && (employeeForm.get('slotDuration')?.dirty || employeeForm.get('slotDuration')?.touched)){
             <span class="error-text">slotDuration is required</span>
             }
           </div>

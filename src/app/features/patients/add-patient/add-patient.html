@@ -42,7 +42,7 @@
         <!-- First Name -->
         <div class="form-field">
           <input type="text" placeholder="First Name" formControlName="firstName" />
-          @if(patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched){
+          @if(patientForm.get('firstName')?.invalid && (patientForm.get('firstName')?.dirty || patientForm.get('firstName')?.touched)){
           <span class="error-text">
             @if(patientForm.get('firstName')?.errors?.['required']){ First Name is required }
             @else if(patientForm.get('firstName')?.errors?.['minlength']){ First Name must be at least 2 characters }
@@ -55,7 +55,7 @@
         <!-- Last Name -->
         <div class="form-field">
           <input type="text" placeholder="Last Name" formControlName="lastName" />
-          @if(patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched){
+          @if(patientForm.get('lastName')?.invalid && (patientForm.get('lastName')?.dirty || patientForm.get('lastName')?.touched)){
           <span class="error-text">
             @if(patientForm.get('lastName')?.errors?.['required']){ Last Name is required }
             @else if(patientForm.get('lastName')?.errors?.['minlength']){ Last Name must be at least 2 characters }
@@ -69,7 +69,7 @@
         <div class="form-field">
           <label class="field-label">Date of Birth</label>
           <input type="date" formControlName="dateOfBirth" [max]="today" />
-          @if(patientForm.get('dateOfBirth')?.invalid && patientForm.get('dateOfBirth')?.touched){
+          @if(patientForm.get('dateOfBirth')?.invalid && (patientForm.get('dateOfBirth')?.dirty || patientForm.get('dateOfBirth')?.touched)){
           <span class="error-text">Date of Birth is required</span>
           @if (patientForm.get('dateOfBirth')?.errors?.['futureDate']) {
           <p class="error">Date of Birth cannot be in the future</p>
@@ -85,7 +85,7 @@
             <option value="FEMALE">Female</option>
             <option value="OTHER">Other</option>
           </select>
-          @if(patientForm.get('gender')?.invalid && patientForm.get('gender')?.touched){
+          @if(patientForm.get('gender')?.invalid && (patientForm.get('gender')?.dirty || patientForm.get('gender')?.touched)){
           <span class="error-text">Gender is required</span>
           }
         </div>
@@ -103,7 +103,7 @@
             <option value="O+">O+</option>
             <option value="O-">O-</option>
           </select>
-          @if(patientForm.get('bloodGroup')?.invalid && patientForm.get('bloodGroup')?.touched){
+          @if(patientForm.get('bloodGroup')?.invalid && (patientForm.get('bloodGroup')?.dirty || patientForm.get('bloodGroup')?.touched)){
           <span class="error-text">Blood Group is required</span>
           }
         </div>
@@ -116,7 +116,7 @@
             <option value="MARRIED">Married</option>
             <option value="DIVORCED">Divorced</option>
           </select>
-          @if(patientForm.get('maritalStatus')?.invalid && patientForm.get('maritalStatus')?.touched){
+          @if(patientForm.get('maritalStatus')?.invalid && (patientForm.get('maritalStatus')?.dirty || patientForm.get('maritalStatus')?.touched)){
           <span class="error-text">Marital Status is required</span>
           }
         </div>
@@ -143,7 +143,7 @@
             </select>
             <input type="text" placeholder="Phone" maxlength="10" formControlName="phone" />
           </div>
-          @if(patientForm.get('phone')?.invalid && patientForm.get('phone')?.touched){
+          @if(patientForm.get('phone')?.invalid && (patientForm.get('phone')?.dirty || patientForm.get('phone')?.touched)){
           <span class="error-text">
             @if(patientForm.get('phone')?.errors?.['required']){ Phone number is required } 
             @else if(patientForm.get('phone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
@@ -154,7 +154,7 @@
         <!-- Email -->
         <div class="form-field">
           <input type="email" placeholder="Email" formControlName="email" />
-          @if(patientForm.get('email')?.invalid && patientForm.get('email')?.touched){
+          @if(patientForm.get('email')?.invalid && (patientForm.get('email')?.dirty || patientForm.get('email')?.touched)){
           <span class="error-text">
             @if(patientForm.get('email')?.errors?.['required']){ Email is required } 
             @else if(patientForm.get('email')?.errors?.['email']){ Enter a valid email address }
@@ -165,7 +165,7 @@
         <!-- Address -->
         <div class="form-field">
           <input type="text" placeholder="Address" formControlName="address" />
-          @if(patientForm.get('address')?.invalid && patientForm.get('address')?.touched){
+          @if(patientForm.get('address')?.invalid && (patientForm.get('address')?.dirty || patientForm.get('address')?.touched)){
           <span class="error-text">
             @if(patientForm.get('address')?.errors?.['required']){ Address is required }
             @else if(patientForm.get('address')?.errors?.['minlength']){ Address must be at least 5 characters }
@@ -184,9 +184,9 @@
             <option [value]="state.id">{{ state.name }}</option>
             }
           </select>
-          @if(patientForm.get('state')?.invalid && patientForm.get('state')?.touched){
+          @if(patientForm.get('state')?.invalid && (patientForm.get('state')?.dirty || patientForm.get('state')?.touched)){
           <span class="error-text">State is required</span>
-          @if ( patientForm.get('state')?.touched && patientForm.get('state')?.invalid ) {
+          @if ( (patientForm.get('state')?.dirty || patientForm.get('state')?.touched) && patientForm.get('state')?.invalid ) {
 
           <div class="error-message">Select a valid state</div>
 
@@ -203,9 +203,9 @@
             <option [value]="district">{{ district }}</option>
             }
           </select>
-          @if(patientForm.get('city')?.invalid && patientForm.get('city')?.touched){
+          @if(patientForm.get('city')?.invalid && (patientForm.get('city')?.dirty || patientForm.get('city')?.touched)){
           <span class="error-text">City is required</span>
-          @if ( patientForm.get('city')?.touched && patientForm.get('city')?.invalid ) {
+          @if ( (patientForm.get('city')?.dirty || patientForm.get('city')?.touched) && patientForm.get('city')?.invalid ) {
 
           <div class="error-message">Select a valid city</div>
 
@@ -228,7 +228,7 @@
             <option [value]="taluk">{{ taluk }}</option>
             }
           </select>
-          @if(patientForm.get('taluk')?.invalid && patientForm.get('taluk')?.touched){
+          @if(patientForm.get('taluk')?.invalid && (patientForm.get('taluk')?.dirty || patientForm.get('taluk')?.touched)){
           <span class="error-text">Taluk is required</span>
           }
         </div>
@@ -249,7 +249,7 @@
             <option [value]="i">{{ area.name }}</option>
             }
           </select>
-          @if(patientForm.get('postOffice')?.invalid && patientForm.get('postOffice')?.touched){
+          @if(patientForm.get('postOffice')?.invalid && (patientForm.get('postOffice')?.dirty || patientForm.get('postOffice')?.touched)){
           <span class="error-text">Post Office / Area is required</span>
           }
         </div>
@@ -269,7 +269,7 @@
     "
           />
 
-          @if(patientForm.get('pincode')?.invalid && patientForm.get('pincode')?.touched){
+          @if(patientForm.get('pincode')?.invalid && (patientForm.get('pincode')?.dirty || patientForm.get('pincode')?.touched)){
 
           <span class="error-text">
             @if(patientForm.get('pincode')?.errors?.['required']){ Pincode is required } 
@@ -282,7 +282,7 @@
         <!-- Emergency Contact Name -->
         <div class="form-field">
           <input type="text" placeholder="Emergency Contact Name" formControlName="emergencyContactName" />
-          @if(patientForm.get('emergencyContactName')?.invalid && patientForm.get('emergencyContactName')?.touched){
+          @if(patientForm.get('emergencyContactName')?.invalid && (patientForm.get('emergencyContactName')?.dirty || patientForm.get('emergencyContactName')?.touched)){
           <span class="error-text">
             @if(patientForm.get('emergencyContactName')?.errors?.['required']){ Emergency Contact Name is required }
             @else if(patientForm.get('emergencyContactName')?.errors?.['minlength']){ Emergency Contact Name must be at least 2 characters }
@@ -300,12 +300,12 @@
             maxlength="10"
             formControlName="emergencyContactPhone"
           />
-          @if(patientForm.get('emergencyContactPhone')?.invalid && patientForm.get('emergencyContactPhone')?.touched){
+          @if(patientForm.get('emergencyContactPhone')?.invalid && (patientForm.get('emergencyContactPhone')?.dirty || patientForm.get('emergencyContactPhone')?.touched)){
           <span class="error-text">
             @if(patientForm.get('emergencyContactPhone')?.errors?.['required']){ Emergency Contact Phone is required }
             @else if(patientForm.get('emergencyContactPhone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
           </span>
-          @if ( patientForm.get('emergencyContactPhone')?.touched && patientForm.get('emergencyContactPhone')?.invalid )
+          @if ( (patientForm.get('emergencyContactPhone')?.dirty || patientForm.get('emergencyContactPhone')?.touched) && patientForm.get('emergencyContactPhone')?.invalid )
           {
 
           <div class="error-message">Emergency Contact Number must be 10 digits</div>
@@ -363,7 +363,7 @@
         <!-- Coverage Amount (optional) -->
         <div class="form-field">
           <input type="number" placeholder="Coverage Amount (optional)" formControlName="insuranceCoverageAmount" />
-          @if(patientForm.get('insuranceCoverageAmount')?.invalid && patientForm.get('insuranceCoverageAmount')?.touched){
+          @if(patientForm.get('insuranceCoverageAmount')?.invalid && (patientForm.get('insuranceCoverageAmount')?.dirty || patientForm.get('insuranceCoverageAmount')?.touched)){
           <span class="error-text">Coverage amount cannot be negative</span>
           }
         </div>
@@ -376,7 +376,7 @@
             <option value="IPD">IPD</option>
             <option value="EMERGENCY">Emergency</option>
           </select>
-          @if(patientForm.get('patientType')?.invalid && patientForm.get('patientType')?.touched){
+          @if(patientForm.get('patientType')?.invalid && (patientForm.get('patientType')?.dirty || patientForm.get('patientType')?.touched)){
           <span class="error-text">Patient Type is required</span>
           }
         </div>

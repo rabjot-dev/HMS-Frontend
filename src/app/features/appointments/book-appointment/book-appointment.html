@@ -52,7 +52,7 @@
             }
           </div>
 
-          @if(appointmentForm.get('patientId')?.invalid && appointmentForm.get('patientId')?.touched){
+          @if(appointmentForm.get('patientId')?.invalid && (appointmentForm.get('patientId')?.dirty || appointmentForm.get('patientId')?.touched)){
           <span class="error-text">Patient Id is required</span>
           }
         </div>
@@ -109,7 +109,7 @@
 
             <option value="ADMINISTRATION">Administration</option>
           </select>
-          @if(appointmentForm.get('department')?.invalid && appointmentForm.get('department')?.touched){
+          @if(appointmentForm.get('department')?.invalid && (appointmentForm.get('department')?.dirty || appointmentForm.get('department')?.touched)){
           <span class="error-text">Department is required</span>
           }
         </div>
@@ -169,7 +169,7 @@
             [min]="effectiveMinDate"
             (change)="fetchAvailableSlots()"
           />
-          @if(appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched){
+          @if(appointmentForm.get('appointmentDate')?.invalid && (appointmentForm.get('appointmentDate')?.dirty || appointmentForm.get('appointmentDate')?.touched)){
           <span class="error-text">Appointment Date is required</span>
           } @if(noSlotsError){
           <span class="error-text">{{ slotErrorMessage }}</span>
@@ -250,7 +250,7 @@
 
             <option value="ROUTINE_CHECKUP">Routine Checkup</option>
           </select>
-          @if(appointmentForm.get('appointmentType')?.invalid && appointmentForm.get('appointmentType')?.touched){
+          @if(appointmentForm.get('appointmentType')?.invalid && (appointmentForm.get('appointmentType')?.dirty || appointmentForm.get('appointmentType')?.touched)){
           <span class="error-text">Appointment type is required</span>
           }
         </div>
@@ -268,7 +268,7 @@
 
             <option value="CRITICAL">Critical</option>
           </select>
-          @if(appointmentForm.get('priority')?.invalid && appointmentForm.get('priority')?.touched){
+          @if(appointmentForm.get('priority')?.invalid && (appointmentForm.get('priority')?.dirty || appointmentForm.get('priority')?.touched)){
           <span class="error-text">Priority is required</span>
           }
         </div>
@@ -286,7 +286,7 @@
 
             <option value="INSURANCE">Insurance</option>
           </select>
-          @if(appointmentForm.get('paymentStatus')?.invalid && appointmentForm.get('paymentStatus')?.touched){
+          @if(appointmentForm.get('paymentStatus')?.invalid && (appointmentForm.get('paymentStatus')?.dirty || appointmentForm.get('paymentStatus')?.touched)){
           <span class="error-text">Payment Status is required</span>
           }
         </div>
@@ -304,7 +304,7 @@
 
             <option value="HOME_VISIT">Home Visit</option>
           </select>
-          @if(appointmentForm.get('visitMode')?.invalid && appointmentForm.get('visitMode')?.touched){
+          @if(appointmentForm.get('visitMode')?.invalid && (appointmentForm.get('visitMode')?.dirty || appointmentForm.get('visitMode')?.touched)){
           <span class="error-text">Visit Mode is required</span>
           }
         </div>
