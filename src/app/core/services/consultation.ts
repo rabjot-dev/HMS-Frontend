@@ -2,43 +2,66 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { API_BASE_URL } from '../constants/api.constants';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ConsultationService {
-  private readonly apiUrl = 'http://localhost:5000/api/consultations';
-
   constructor(private readonly http: HttpClient) {}
 
   // Create a new consultation
   createConsultation(data: any): Observable<any> {
-    return this.http.post(this.apiUrl, data);
+    return this.http.post(
+      `${API_BASE_URL}/consultations`,
+      data
+    );
   }
 
   // Get all consultations
   getConsultations(params?: any): Observable<any> {
-    return this.http.get(this.apiUrl, { params });
+    return this.http.get(
+      `${API_BASE_URL}/consultations`,
+      { params }
+    );
   }
 
   // Get consultation by appointment ID
-  getConsultationByAppointment(appointmentId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/appointment/${appointmentId}`);
+  getConsultationByAppointment(
+    appointmentId: string
+  ): Observable<any> {
+    return this.http.get(
+      `${API_BASE_URL}/consultations/appointment/${appointmentId}`
+    );
   }
 
   // Update consultation details
-  updateConsultation(id: string, data: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, data);
+  updateConsultation(
+    id: string,
+    data: any
+  ): Observable<any> {
+    return this.http.put(
+      `${API_BASE_URL}/consultations/${id}`,
+      data
+    );
   }
 
   // Download prescription PDF
-  downloadPrescriptionPdf(consultationId: string) {
-    return this.http.get(`${this.apiUrl}/prescription/${consultationId}`, {
-      responseType: 'blob'
-    });
+  downloadPrescriptionPdf(
+    consultationId: string
+  ): Observable<Blob> {
+    return this.http.get(
+      `${API_BASE_URL}/consultations/prescription/${consultationId}`,
+      {
+        responseType: 'blob'
+      }
+    );
   }
 
-  // Get consultation by ID
+  // Get consultation details by ID
   getConsultationById(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get(
+      `${API_BASE_URL}/consultations/${id}`
+    );
   }
 }
