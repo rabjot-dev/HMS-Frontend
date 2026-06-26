@@ -460,10 +460,24 @@
     <h2>{{ editingLabReportId ? 'Edit Lab Report' : 'Add Lab Report' }}</h2>
     <form [formGroup]="labReportForm">
       <input type="text" placeholder="Title" formControlName="title" />
+      @if(labReportForm.get('title')?.invalid && labReportForm.get('title')?.touched){
+      <span class="error-text">Title is required</span>
+      }
 
       <input type="text" placeholder="Report Type" formControlName="reportType" />
+      @if(labReportForm.get('reportType')?.invalid && labReportForm.get('reportType')?.touched){
+      <span class="error-text">Report type is required</span>
+      }
 
-      <input type="date" formControlName="reportDate" />
+      <input type="date" formControlName="reportDate" [max]="todayDate" />
+      @if(labReportForm.get('reportDate')?.invalid && labReportForm.get('reportDate')?.touched){
+        @if(labReportForm.get('reportDate')?.errors?.['required']){
+        <span class="error-text">Report date is required</span>
+        }
+        @if(labReportForm.get('reportDate')?.errors?.['futureDate']){
+        <span class="error-text">Report date cannot be in the future</span>
+        }
+      }
 
       <input type="text" placeholder="Lab Name" formControlName="labName" />
 
@@ -505,14 +519,28 @@
 
     <form [formGroup]="medicalDocumentForm">
       <input type="text" placeholder="Title" formControlName="title" />
+      @if(medicalDocumentForm.get('title')?.invalid && medicalDocumentForm.get('title')?.touched){
+      <span class="error-text">Title is required</span>
+      }
 
       <input type="text" placeholder="Document Type" formControlName="documentType" />
+      @if(medicalDocumentForm.get('documentType')?.invalid && medicalDocumentForm.get('documentType')?.touched){
+      <span class="error-text">Document type is required</span>
+      }
 
       <input type="text" placeholder="Hospital Name" formControlName="hospitalName" />
 
       <input type="text" placeholder="Doctor Name" formControlName="doctorName" />
 
-      <input type="date" formControlName="recordDate" />
+      <input type="date" formControlName="recordDate" [max]="todayDate" />
+      @if(medicalDocumentForm.get('recordDate')?.invalid && medicalDocumentForm.get('recordDate')?.touched){
+        @if(medicalDocumentForm.get('recordDate')?.errors?.['required']){
+        <span class="error-text">Record date is required</span>
+        }
+        @if(medicalDocumentForm.get('recordDate')?.errors?.['futureDate']){
+        <span class="error-text">Record date cannot be in the future</span>
+        }
+      }
       <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onMedicalFileChange($event)" />
       @if(editingMedicalDocumentId){
 
@@ -522,13 +550,7 @@
       <p class="file-name">{{ selectedMedicalFile.name }}</p>
       }
 
-      <textarea placeholder="Notes" formControlName="notes">
-</textarea
-        rows="4"
-        placeholder="Notes"
-        formControlName="notes"
-      >
-      </textarea>
+      <textarea rows="4" placeholder="Notes" formControlName="notes"></textarea>
 
       <div class="modal-actions">
         <button type="button" class="secondary-btn" (click)="closeDocumentModal()">Cancel</button>

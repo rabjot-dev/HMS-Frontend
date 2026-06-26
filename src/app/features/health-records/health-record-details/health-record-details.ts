@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { ActivatedRoute } from '@angular/router';
@@ -58,6 +58,7 @@ export class HealthRecordDetails implements OnInit {
   timelineMeta: any = {};
   labMeta: any = {};
   documentMeta: any = {};
+  readonly todayDate = this.formatDateInputValue(new Date());
   constructor(
     private readonly route: ActivatedRoute,
 
@@ -86,7 +87,7 @@ export class HealthRecordDetails implements OnInit {
 
       reportType: ['', Validators.required],
 
-      reportDate: ['', Validators.required],
+      reportDate: ['', [Validators.required, this.notFutureDateValidator]],
 
       labName: [''],
 
@@ -104,10 +105,32 @@ export class HealthRecordDetails implements OnInit {
 
       doctorName: [''],
 
-      recordDate: ['', Validators.required],
+      recordDate: ['', [Validators.required, this.notFutureDateValidator]],
 
       notes: ['']
     });
+  }
+
+  notFutureDateValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) {
+      return null;
+    }
+
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+
+    selectedDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    return selectedDate > today ? { futureDate: true } : null;
+  }
+
+  private formatDateInputValue(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
   loadHealthRecord(patientId: string): void {
     this.isLoading = true;
