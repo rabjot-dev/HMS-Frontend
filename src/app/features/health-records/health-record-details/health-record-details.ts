@@ -132,8 +132,10 @@ export class HealthRecordDetails implements OnInit {
 
     return `${year}-${month}-${day}`;
   }
-  loadHealthRecord(patientId: string): void {
-    this.isLoading = true;
+  loadHealthRecord(patientId: string, showPageLoader = true): void {
+    if (showPageLoader) {
+      this.isLoading = true;
+    }
 
     const params = {
       timelinePage: this.timelinePage,
@@ -201,7 +203,7 @@ export class HealthRecordDetails implements OnInit {
 
     this.timelinePage = page;
 
-    this.loadHealthRecord(this.patient._id);
+    this.loadHealthRecord(this.patient._id, false);
   }
 
   onLabPageChange(page: number): void {
@@ -211,7 +213,7 @@ export class HealthRecordDetails implements OnInit {
 
     this.labPage = page;
 
-    this.loadHealthRecord(this.patient._id);
+    this.loadHealthRecord(this.patient._id, false);
   }
 
   onDocumentPageChange(page: number): void {
@@ -221,7 +223,7 @@ export class HealthRecordDetails implements OnInit {
 
     this.documentPage = page;
 
-    this.loadHealthRecord(this.patient._id);
+    this.loadHealthRecord(this.patient._id, false);
   }
   editLabReport(report: any): void {
     this.editingLabReportId = report._id;
