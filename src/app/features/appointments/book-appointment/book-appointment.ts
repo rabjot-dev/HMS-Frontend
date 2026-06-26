@@ -52,7 +52,7 @@ export class BookAppointment implements OnInit {
 
       reason: [''],
       notes: [''],
-      symptoms: ['', Validators.required],
+      symptoms: [''],
 
       appointmentType: ['', Validators.required],
       priority: ['', Validators.required],
@@ -87,6 +87,7 @@ export class BookAppointment implements OnInit {
 
       error: (error) => {
         console.log(error);
+        this.cdr.detectChanges();
       }
     });
   }
@@ -100,10 +101,19 @@ export class BookAppointment implements OnInit {
         this.doctors = response.data;
 
         console.log('Doctors Array:', this.doctors);
+
+        if (this.appointmentForm.get('department')?.value) {
+          this.filterDoctors();
+        }
+
+        this.cdr.detectChanges();
       },
 
       error: (error) => {
         console.log(error);
+        this.doctors = [];
+        this.filteredDoctors = [];
+        this.cdr.detectChanges();
       }
     });
   }
@@ -147,6 +157,7 @@ export class BookAppointment implements OnInit {
       this.noSlotsError = true;
 
       this.toastService.show('Cannot select past dates', 'error');
+      this.cdr.detectChanges();
 
       return;
     }
