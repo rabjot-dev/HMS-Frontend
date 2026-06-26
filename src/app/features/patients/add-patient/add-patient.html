@@ -161,28 +161,84 @@
           }
         </div>
 
-        <!-- City -->
-        <div class="form-field">
-          <input type="text" placeholder="City" formControlName="city" />
-          @if(patientForm.get('city')?.invalid && patientForm.get('city')?.touched){
-          <span class="error-text">City is required</span>
-          @if ( patientForm.get('city')?.touched && patientForm.get('city')?.invalid ) {
-
-          <div class="error-message">City can contain only letters</div>
-
-          } }
-        </div>
-
         <!-- State -->
         <div class="form-field">
-          <input type="text" placeholder="State" formControlName="state" />
+          <select [value]="selectedStateId" (change)="onStateChange($event)" [disabled]="isLoadingStates">
+            <option value="">
+              @if(isLoadingStates){ Loading states... } @else { Select State }
+            </option>
+            @for (state of states; track state.id) {
+            <option [value]="state.id">{{ state.name }}</option>
+            }
+          </select>
           @if(patientForm.get('state')?.invalid && patientForm.get('state')?.touched){
           <span class="error-text">State is required</span>
           @if ( patientForm.get('state')?.touched && patientForm.get('state')?.invalid ) {
 
-          <div class="error-message">State can contain only letters</div>
+          <div class="error-message">Select a valid state</div>
 
           } }
+        </div>
+
+        <!-- City / District -->
+        <div class="form-field">
+          <select formControlName="city" [disabled]="!selectedStateId || isLoadingDistricts" (change)="onDistrictChange()">
+            <option value="">
+              @if(isLoadingDistricts){ Loading cities... } @else { Select City }
+            </option>
+            @for (district of districts; track district) {
+            <option [value]="district">{{ district }}</option>
+            }
+          </select>
+          @if(patientForm.get('city')?.invalid && patientForm.get('city')?.touched){
+          <span class="error-text">City is required</span>
+          @if ( patientForm.get('city')?.touched && patientForm.get('city')?.invalid ) {
+
+          <div class="error-message">Select a valid city</div>
+
+          } }
+        </div>
+
+        <!-- Taluk -->
+        <div class="form-field">
+          <select
+            class="location-select"
+            formControlName="taluk"
+            [title]="patientForm.get('taluk')?.value || 'Select Taluk'"
+            [disabled]="!patientForm.get('city')?.value || isLoadingTaluks"
+            (change)="onTalukChange()"
+          >
+            <option value="">
+              @if(isLoadingTaluks){ Loading taluks... } @else { Select Taluk }
+            </option>
+            @for (taluk of taluks; track taluk) {
+            <option [value]="taluk">{{ taluk }}</option>
+            }
+          </select>
+          @if(patientForm.get('taluk')?.invalid && patientForm.get('taluk')?.touched){
+          <span class="error-text">Taluk is required</span>
+          }
+        </div>
+
+        <!-- Post Office / Area -->
+        <div class="form-field">
+          <select
+            class="location-select"
+            [value]="selectedPostOfficeIndex"
+            [title]="patientForm.get('postOffice')?.value || 'Select Post Office / Area'"
+            [disabled]="!patientForm.get('taluk')?.value || isLoadingAreas"
+            (change)="onPostOfficeChange($event)"
+          >
+            <option value="">
+              @if(isLoadingAreas){ Loading areas... } @else { Select Post Office / Area }
+            </option>
+            @for (area of filteredPostOfficeAreas; track area.name + area.pincode; let i = $index) {
+            <option [value]="i">{{ area.name }}</option>
+            }
+          </select>
+          @if(patientForm.get('postOffice')?.invalid && patientForm.get('postOffice')?.touched){
+          <span class="error-text">Post Office / Area is required</span>
+          }
         </div>
 
         <!-- Pincode -->
@@ -191,7 +247,9 @@
             type="text"
             placeholder="Pincode"
             maxlength="6"
+            inputmode="numeric"
             formControlName="pincode"
+            readonly
             (input)="
       $any($event.target).value =
       $any($event.target).value.replace(/[^0-9]/g,'')
@@ -319,3 +377,4 @@
     </div>
   </form>
 </div>
+ 
