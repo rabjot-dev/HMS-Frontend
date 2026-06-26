@@ -11,6 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConsultationService } from '../../../core/services/consultation';
 import { AppointmentService } from '../../../core/services/appointment';
+import { ToastService } from '../../../core/services/toast';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,6 +35,7 @@ export class ConsultationForm implements OnInit {
     private readonly router: Router,
     private readonly consultationService: ConsultationService,
     private readonly appointmentService: AppointmentService,
+    private readonly toastService: ToastService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
@@ -180,6 +183,10 @@ export class ConsultationForm implements OnInit {
       error: (error) => {
 
         this.isSubmitting = false;
+        this.toastService.show(
+          getApiErrorMessage(error, 'Failed to complete consultation'),
+          'error'
+        );
       }
     });
   }

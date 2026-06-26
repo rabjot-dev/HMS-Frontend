@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppointmentService } from '../../../core/services/appointment';
 import { EmployeeService } from '../../../core/services/employee';
 import { ToastService } from '../../../core/services/toast';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -197,8 +198,7 @@ export class EditAppointment implements OnInit {
         this.noSlotsError = true;
 
         this.toastService.show(
-          error?.error?.message ||
-            'Doctor is not available on this date.',
+          getApiErrorMessage(error, 'Doctor is not available on this date.'),
           'error'
         );
       }
@@ -262,8 +262,7 @@ export class EditAppointment implements OnInit {
           this.isSubmitting = false;
 
           this.toastService.show(
-            error?.error?.message ||
-              'Failed to update appointment.',
+            getApiErrorMessage(error, 'Failed to update appointment.'),
             'error'
           );
         }

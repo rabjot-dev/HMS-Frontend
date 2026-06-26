@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth';
 import { ToastService } from '../../../core/services/toast';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -229,7 +230,7 @@ export class Register {
 
       error: (error) => {
         this.toastService.show(
-          error?.error?.message || 'Registration failed',
+          getApiErrorMessage(error, 'Registration failed'),
           'error'
         );
 

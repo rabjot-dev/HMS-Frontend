@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -100,7 +101,7 @@ export class ResetPassword implements OnInit {
 
         this.isSubmitting = false;
         this.errorMessage =
-          error?.error?.message || 'Failed to reset password';
+          getApiErrorMessage(error, 'Failed to reset password');
       }
     });
   }

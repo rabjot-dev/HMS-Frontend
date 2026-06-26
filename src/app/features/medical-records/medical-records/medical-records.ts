@@ -9,6 +9,7 @@ import { ApiPermissionService } from '../../../core/services/api-permission';
 import { MedicalRecordService } from '../../../core/services/medical-record';
 import { API_BASE_URL } from '../../../core/constants/api.constants';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
+import { getApiErrorMessage as getApiErrorMessageFromResponse } from '../../../core/utils/api-error';
 
 type MedicalRecordTab = 'prescriptions' | 'healthRecords' | 'labReports';
 
@@ -563,16 +564,7 @@ export class MedicalRecords implements OnInit {
   }
 
   private getApiErrorMessage(error: any, fallback: string): string {
-    const validationErrors = error?.error?.errors;
-
-    if (Array.isArray(validationErrors) && validationErrors.length > 0) {
-      return validationErrors
-        .map((item: any) => item?.msg)
-        .filter(Boolean)
-        .join(', ');
-    }
-
-    return error?.error?.message || fallback;
+    return getApiErrorMessageFromResponse(error, fallback);
   }
 
   private hasPermission(permissionKey: string): boolean {

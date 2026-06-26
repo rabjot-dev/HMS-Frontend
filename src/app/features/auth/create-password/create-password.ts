@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TokenService } from '../../../core/services/token';
 import { AuthService } from '../../../core/services/auth';
 import { MenuNodeService } from '../../../core/services/menu-node';
+import { ToastService } from '../../../core/services/toast';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +31,8 @@ export class CreatePassword {
     private readonly router: Router,
     private readonly tokenService: TokenService,
     private readonly authService: AuthService,
-    private readonly menuNodeService: MenuNodeService
+    private readonly menuNodeService: MenuNodeService,
+    private readonly toastService: ToastService
   ) {
     this.passwordForm = this.fb.group({
       temporaryPassword: ['', Validators.required],
@@ -80,6 +83,10 @@ export class CreatePassword {
       },
 
       error: (error) => {
+        this.toastService.show(
+          getApiErrorMessage(error, 'Failed to create password'),
+          'error'
+        );
       }
     });
   }

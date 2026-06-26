@@ -4,6 +4,7 @@ import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { EmployeeService } from '../../../core/services/employee';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -98,7 +99,7 @@ export class EditEmployee implements OnInit {
 
       error: (error) => {
         this.errorMessage =
-          error?.error?.message || 'Failed to load employee';
+          getApiErrorMessage(error, 'Failed to load employee');
       }
     });
   }
@@ -138,7 +139,7 @@ export class EditEmployee implements OnInit {
           this.isSubmitting = false;
 
           this.errorMessage =
-            error?.error?.message || 'Failed to update employee';
+            getApiErrorMessage(error, 'Failed to update employee');
         }
       });
   }

@@ -512,3 +512,114 @@ select:focus {
   font-size: var(--font-md);
 }
 
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    linear-gradient(135deg, rgba(29, 78, 216, 0.6), rgba(37, 99, 235, 0.42)),
+    radial-gradient(circle at 88% 8%, rgba(14, 165, 233, 0.26), transparent 32%),
+    url('https://images.unsplash.com/photo-1584982751601-97dcc096659c?q=80&w=1800&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  overflow: auto;
+}
+
+.register-left {
+  display: none;
+}
+
+.register-right {
+  width: 100%;
+  max-width: 760px;
+  padding: 0;
+}
+
+.glass-card {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.register-card {
+  width: 100%;
+  max-width: none;
+  padding: 30px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+  backdrop-filter: blur(18px);
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+
+.register-card h2 {
+  font-size: 30px;
+}
+
+.subtitle {
+  font-size: 17px;
+}
+
+.step p,
+.form-group label,
+.login-link,
+.error-text {
+  font-size: 13px;
+}
+
+.subtitle {
+  margin-bottom: 22px;
+}
+
+.step-indicator {
+  margin-bottom: 22px;
+}
+
+form,
+.step-section {
+  gap: 14px;
+}
+
+.form-group {
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 14px;
+}
+
+input,
+select {
+  padding: 11px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+.submit-btn,
+.back-btn {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #2563eb, #0f766e);
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.22);
+}
+
+.submit-btn:hover {
+  transform: none;
+  box-shadow: 0 18px 34px rgba(37, 99, 235, 0.28);
+}
+
+.step-circle {
+  background: rgba(255, 255, 255, 0.72);
+}
+

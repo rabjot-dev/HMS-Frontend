@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 
 import { ToastService } from '../../../core/services/toast';
 import { PatientService } from '../../../core/services/patient';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 type IndiaState = {
   id: string;
@@ -423,12 +424,10 @@ export class AddPatient implements OnInit {
       },
 
       error: (error) => {
-        const message =
-          error?.error?.message ||
-          error?.error?.errors?.[0]?.msg ||
-          'Failed to register patient';
-
-        this.toastService.show(message, 'error');
+        this.toastService.show(
+          getApiErrorMessage(error, 'Failed to register patient'),
+          'error'
+        );
 
         this.isSubmitting = false;
       }

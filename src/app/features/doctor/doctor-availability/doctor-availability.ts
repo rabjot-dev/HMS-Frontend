@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { EmployeeService } from '../../../core/services/employee';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -77,7 +78,7 @@ export class DoctorAvailability implements OnInit {
       },
 
       error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to load doctor availability';
+        this.errorMessage = getApiErrorMessage(error, 'Unable to load doctor availability');
         this.cdr.detectChanges();
       }
     });
@@ -140,7 +141,7 @@ export class DoctorAvailability implements OnInit {
 
         error: (error) => {
           this.isSubmitting = false;
-          this.errorMessage = error?.error?.message || 'Unable to update availability';
+          this.errorMessage = getApiErrorMessage(error, 'Unable to update availability');
 
           this.cdr.detectChanges();
         }

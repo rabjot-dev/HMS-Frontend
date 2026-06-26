@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 import { AuthService } from '../../../core/services/auth';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 type DesignationOption = {
   label: string;
@@ -287,7 +288,7 @@ export class AddEmployee implements OnInit, OnDestroy {
         this.isSubmitting = false;
 
         this.toastService.show(
-          error?.error?.message || 'Failed to create employee',
+          getApiErrorMessage(error, 'Failed to create employee'),
           'error'
         );
 

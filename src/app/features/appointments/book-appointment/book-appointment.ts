@@ -10,6 +10,7 @@ import {
 import { PatientService } from '../../../core/services/patient';
 import { EmployeeService } from '../../../core/services/employee';
 import { AppointmentService } from '../../../core/services/appointment';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -353,8 +354,7 @@ export class BookAppointment implements OnInit {
           this.availableSlots = [];
           this.noSlotsError = true;
           this.slotErrorMessage =
-            error?.error?.message ||
-            'No slots available for the selected date.';
+            getApiErrorMessage(error, 'No slots available for the selected date.');
 
           this.toastService.show(
             this.slotErrorMessage,
@@ -471,8 +471,7 @@ export class BookAppointment implements OnInit {
           this.isSubmitting = false;
 
           this.toastService.show(
-            error?.error?.message ||
-              'Failed to book appointment.',
+            getApiErrorMessage(error, 'Failed to book appointment.'),
             'error'
           );
         }

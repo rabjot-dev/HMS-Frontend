@@ -5,6 +5,7 @@ import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 import { FormsModule } from '@angular/forms';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -130,7 +131,10 @@ export class PendingEmployees implements OnInit, OnDestroy {
 
         error: (error) => {
 
-          this.toastService.show(error?.error?.message || 'Failed to approve employee', 'error');
+          this.toastService.show(
+            getApiErrorMessage(error, 'Failed to approve employee'),
+            'error'
+          );
         }
       });
   }

@@ -6,6 +6,7 @@ import { AuthService } from '../../../core/services/auth';
 import { MenuNodeService } from '../../../core/services/menu-node';
 import { TokenService } from '../../../core/services/token';
 import { ToastService } from '../../../core/services/toast';
+import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -81,7 +82,7 @@ this.tokenService.setRefreshToken(
       error: (error) => {
 
         this.toastService.show(
-          error?.error?.message || 'Login failed',
+          getApiErrorMessage(error, 'Login failed'),
           'error'
         );
 
