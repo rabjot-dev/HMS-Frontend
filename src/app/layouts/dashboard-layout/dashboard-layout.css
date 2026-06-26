@@ -2,6 +2,7 @@
   display: flex;
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fbff, #eef4ff);
+  width: 100%;
 }
 
 * {
@@ -105,7 +106,10 @@
 
 .main-content {
   flex: 1;
+  min-width: 0;
+  max-width: calc(100vw - 320px);
   padding: 30px;
+  overflow-x: auto;
 }
 
 .topbar {
@@ -241,11 +245,18 @@
 
 .page-content {
   min-height: calc(100vh - 140px);
+  min-width: 0;
+  width: 100%;
+  overflow-x: auto;
   position: relative;
   z-index: 1;
 }
 
 @media (max-width: 992px) {
+  .main-content {
+    max-width: 100vw;
+  }
+
   .top-user-info {
     display: none;
   }
