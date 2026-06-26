@@ -10,7 +10,7 @@ import { getApiErrorMessage } from '../../../core/utils/api-error';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-selector: 'app-login',
+  selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
@@ -53,18 +53,13 @@ export class Login {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (response: any) => {
+        const accessToken = response?.data?.accessToken;
 
-        const accessToken =response?.data?.accessToken;
+        const refreshToken = response?.data?.refreshToken;
 
-const refreshToken =response?.data?.refreshToken;
+        this.tokenService.setAccessToken(accessToken);
 
-       this.tokenService.setAccessToken(
-  accessToken
-);
-
-this.tokenService.setRefreshToken(
-  refreshToken
-);
+        this.tokenService.setRefreshToken(refreshToken);
         this.authService.currentUser.next(response.data.user);
 
         this.toastService.show('Login successful', 'success');
@@ -83,7 +78,6 @@ this.tokenService.setRefreshToken(
       },
 
       error: (error) => {
-
         this.errorMessage = getApiErrorMessage(error, 'Login failed');
 
         this.isSubmitting = false;
@@ -95,9 +89,7 @@ this.tokenService.setRefreshToken(
   private redirectUsingMenuNodes(): void {
     this.menuNodeService.loadMyMenu().subscribe({
       next: (response) => {
-        const dashboardPath = this.menuNodeService.getDefaultRedirectPath(
-          response.data || []
-        );
+        const dashboardPath = this.menuNodeService.getDefaultRedirectPath(response.data || []);
 
         this.isSubmitting = false;
         this.router.navigate([dashboardPath]);
