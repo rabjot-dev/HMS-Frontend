@@ -391,3 +391,131 @@ tbody td {
     font-size: 30px;
   }
 }
+
+/*
+|--------------------------------------------------------------------------
+| Compact HMS List Redesign
+|--------------------------------------------------------------------------
+*/
+.health-record-list-container {
+  width: 100%;
+  gap: 14px;
+}
+
+.top-section {
+  align-items: flex-end;
+  padding-bottom: 2px;
+}
+
+.section-label {
+  margin-bottom: 4px;
+  font-size: 11px;
+  letter-spacing: 0.6px;
+}
+
+.top-section h1 {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.section-subtitle {
+  font-size: 14px;
+}
+
+.record-count {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  backdrop-filter: none;
+}
+
+.filters-wrapper {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.filters-wrapper input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.search-btn {
+  min-height: 40px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #2563eb;
+}
+
+.search-btn:hover {
+  transform: none;
+  background: #1d4ed8;
+}
+
+.loading-card,
+.empty-state {
+  padding: 42px 24px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  backdrop-filter: none;
+}
+
+.empty-icon {
+  font-size: 42px;
+}
+
+.table-container {
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  backdrop-filter: none;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+thead {
+  background: #f8fafc;
+}
+
+thead th,
+tbody td {
+  padding: 12px 16px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #2563eb;
+}
+
+.uhid-badge,
+.visit-badge {
+  padding: 5px 9px;
+  border-radius: 8px;
+}
+
+.view-btn {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #2563eb;
+}
+
+.view-btn:hover {
+  transform: none;
+  box-shadow: none;
+  background: #1d4ed8;
+}
+
+@media (max-width: 700px) {
+  .filters-wrapper {
+    grid-template-columns: 1fr;
+  }
+}

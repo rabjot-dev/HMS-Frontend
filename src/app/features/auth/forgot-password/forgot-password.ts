@@ -1,18 +1,19 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './forgot-password.html',
   styleUrls: ['./forgot-password.css']
 })
 export class ForgotPassword {
   isSubmitting = false;
+  errorMessage = '';
   forgotForm: any;
 
   constructor(
@@ -34,21 +35,37 @@ export class ForgotPassword {
 
     this.isSubmitting = true;
 
-    this.authService.forgotPassword(this.forgotForm.value.email).subscribe({
+    const email = this.forgotForm.value.email.trim().toLowerCase();
+
+    this.authService.forgotPassword(email).subscribe({
       next: (response: any) => {
-        console.log(response);
+        const securityQuestion = response?.data?.securityQuestion;
+
+        if (!securityQuestion) {
+          this.errorMessage = 'Security question was not found for this account.';
+          this.isSubmitting = false;
+          return;
+        }
+
+        sessionStorage.setItem(
+          'passwordRecovery',
+          JSON.stringify({
+            email,
+            securityQuestion
+          })
+        );
 
         this.router.navigate(['/reset-password'], {
           state: {
-            email: this.forgotForm.value.email,
-            securityQuestion: response?.securityQuestion
+            email,
+            securityQuestion
           }
         });
 
         this.isSubmitting = false;
       },
       error: (error) => {
-        console.log(error);
+        this.errorMessage = error?.error?.message || 'Unable to find an account with this email.';
         this.isSubmitting = false;
       }
     });

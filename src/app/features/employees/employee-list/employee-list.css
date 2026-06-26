@@ -314,6 +314,158 @@ tbody td:last-child {
   color: #0f172a;
 }
 
+/*
+|--------------------------------------------------------------------------
+| Compact HMS Employee List Redesign
+|--------------------------------------------------------------------------
+*/
+.employees-page {
+  width: 100%;
+  gap: 14px;
+}
+
+p,
+span,
+a,
+li,
+td,
+label {
+  margin-left: 0;
+  font-size: 14px;
+}
+
+.employees-header {
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.page-label {
+  margin-bottom: 4px;
+  font-size: 11px;
+  letter-spacing: 0.6px;
+}
+
+.employees-header h1 {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.employee-count,
+.appointment-count {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #2563eb;
+  box-shadow: none;
+}
+
+.filters-wrapper,
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.search-box {
+  min-height: 40px;
+  border-radius: 10px;
+  padding: 0 12px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+
+.filters-row input,
+.filters-row select,
+.filters-wrapper select,
+.filters-wrapper input[type='date'] {
+  min-height: 40px;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.table-wrapper {
+  padding: 0;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+thead {
+  background: #f8fafc;
+}
+
+thead th {
+  padding: 12px 14px;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+}
+
+tbody tr {
+  background: #ffffff;
+}
+
+tbody tr:hover {
+  transform: none;
+  box-shadow: none;
+  background: #f8fafc;
+}
+
+tbody td {
+  padding: 12px 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
+tbody td:first-child,
+tbody td:last-child {
+  border-radius: 0;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #2563eb;
+  font-size: 16px;
+}
+
+.pagination,
+.pagination-wrapper {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.pagination-controls {
+  gap: 10px;
+}
+
+.pagination-controls button,
+.pagination-controls select {
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+@media (max-width: 992px) {
+  .filters-wrapper,
+  .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
 .employee-info span {
   color: #64748b;
 
@@ -536,4 +688,175 @@ tbody td:last-child {
   color: #fff;
 
   border-color: #dc3545;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Final Appointment-Style Alignment
+|--------------------------------------------------------------------------
+*/
+.employees-page {
+  gap: 14px;
+}
+
+.employees-header {
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.employees-header h1 {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.header-actions {
+  gap: 8px;
+}
+
+.add-btn,
+.pending-btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.add-btn {
+  background: #2563eb;
+}
+
+.pending-btn {
+  background: #d97706;
+}
+
+.add-btn:hover,
+.pending-btn:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.filters-wrapper,
+.filters-row {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) auto auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.search-box {
+  min-height: 40px;
+  border-radius: 10px;
+  padding: 0 12px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+
+.search-box input {
+  padding: 10px 0;
+}
+
+.filters-row input,
+.filters-row select,
+.filters-wrapper select,
+.filters-wrapper input[type='date'] {
+  min-height: 40px;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.table-wrapper {
+  padding: 0;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+thead {
+  background: #f8fafc;
+}
+
+thead th {
+  padding: 12px 14px;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+}
+
+tbody tr {
+  background: #ffffff;
+}
+
+tbody tr:hover {
+  transform: none;
+  box-shadow: none;
+  background: #f8fafc;
+}
+
+tbody td {
+  padding: 12px 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
+tbody td:first-child,
+tbody td:last-child {
+  border-radius: 0;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #2563eb;
+  font-size: 16px;
+}
+
+.designation-badge,
+.department-badge,
+.status-badge {
+  padding: 5px 9px;
+}
+
+.action-btn {
+  padding: 7px 10px;
+  border-radius: 8px;
+}
+
+.action-btn:hover,
+.action-btn.delete:hover {
+  transform: none;
+}
+
+.pagination,
+.pagination-wrapper {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+}
+
+.pagination-controls {
+  gap: 10px;
+}
+
+.pagination-controls button,
+.pagination-controls select {
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+@media (max-width: 992px) {
+  .filters-wrapper,
+  .filters-row {
+    grid-template-columns: 1fr;
+  }
 }

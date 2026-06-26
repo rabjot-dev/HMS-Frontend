@@ -14,11 +14,11 @@
 :root {
   /* Colors */
 
-  --primary: #3b82f6;
+  --primary: #2563eb;
 
-  --primary-dark: #2563eb;
+  --primary-dark: #1d4ed8;
 
-  --secondary: #8b5cf6;
+  --secondary: #0f766e;
 
   --success: #22c55e;
 
@@ -40,15 +40,15 @@
 
   --bg: #f4f7fb;
 
-  --card-bg: rgba(255, 255, 255, 0.65);
+  --card-bg: #ffffff;
 
   /* Effects */
 
-  --blur: blur(16px);
+  --blur: none;
 
-  --radius: 20px;
+  --radius: 12px;
 
-  --shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 10px 24px rgba(15, 23, 42, 0.05);
 
   --transition: all 0.3s ease;
 }
@@ -70,7 +70,7 @@ html,
 body {
   font-family: 'Inter', sans-serif;
 
-  background: linear-gradient(135deg, #f8fbff, #eef4ff);
+  background: var(--bg);
 
   color: var(--text);
 
@@ -108,7 +108,7 @@ body {
 |--------------------------------------------------------------------------
 */
 h1 {
-  font-size: 32px;
+  font-size: 28px;
 
   font-weight: 700;
 
@@ -156,19 +156,19 @@ button {
 
   cursor: pointer;
 
-  transition: var(--transition);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 
   font-family: inherit;
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  background: var(--primary);
 
   color: white;
 
-  padding: 14px 24px;
+  padding: 10px 16px;
 
-  border-radius: 14px;
+  border-radius: 10px;
 
   font-weight: 600;
 
@@ -178,9 +178,7 @@ button {
 }
 
 .primary-btn:hover {
-  transform: translateY(-2px);
-
-  box-shadow: 0 15px 35px rgba(59, 130, 246, 0.35);
+  background: var(--primary-dark);
 }
 
 /*
@@ -193,15 +191,15 @@ select,
 textarea {
   width: 100%;
 
-  padding: 14px 16px;
+  padding: 10px 12px;
 
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid #cbd5e1;
 
-  background: rgba(255, 255, 255, 0.65);
+  background: #ffffff;
 
   backdrop-filter: var(--blur);
 
-  border-radius: 14px;
+  border-radius: 10px;
 
   font-size: 14px;
 
@@ -238,11 +236,72 @@ textarea {
 
   backdrop-filter: var(--blur);
 
-  border: 1px solid var(--border);
+  border: 1px solid #e2e8f0;
 
   border-radius: var(--radius);
 
   box-shadow: var(--shadow);
+}
+
+/*
+|--------------------------------------------------------------------------
+| HMS Compact UI System
+|--------------------------------------------------------------------------
+*/
+.page-shell,
+.health-record-list-container,
+.consultation-list-container,
+.appointments-page,
+.patients-page,
+.employees-page {
+  width: 100%;
+  max-width: none;
+}
+
+.filter-toolbar,
+.filters-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.filter-toolbar input,
+.filter-toolbar select,
+.filters-wrapper input,
+.filters-wrapper select {
+  min-height: 40px;
+}
+
+.table-container,
+.table-wrapper {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+table {
+  font-size: 14px;
+}
+
+thead th,
+tbody td {
+  padding: 12px 16px;
+}
+
+@media (max-width: 768px) {
+  .filter-toolbar,
+  .filters-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 /*

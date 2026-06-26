@@ -63,12 +63,15 @@ export class AuthService {
   // Get security question for password recovery
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${API_BASE_URL}/auth/forgot-password`, {
-      email
+      email: email.trim().toLowerCase()
     });
   }
 
   // Reset password using security answer
   resetPassword(data: any): Observable<any> {
-    return this.http.post(`${API_BASE_URL}/auth/reset-password`, data);
+    return this.http.post(`${API_BASE_URL}/auth/reset-password`, {
+      ...data,
+      email: data.email?.trim().toLowerCase()
+    });
   }
 }
