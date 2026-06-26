@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -17,7 +17,8 @@ type PostOfficeArea = {
 };
 
 @Component({
-  selector: 'app-add-patient',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-add-patient',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './add-patient.html',
@@ -42,6 +43,7 @@ export class AddPatient implements OnInit {
   private readonly districtCache = new Map<string, string[]>();
   private readonly talukCache = new Map<string, string[]>();
   private readonly areaCache = new Map<string, PostOfficeArea[]>();
+  private readonly namePattern = /^[A-Za-z\s'-]+$/;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -50,8 +52,24 @@ export class AddPatient implements OnInit {
   ) {
     this.patientForm = this.fb.group({
       // Basic Information
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+          Validators.pattern(this.namePattern)
+        ]
+      ],
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+          Validators.pattern(this.namePattern)
+        ]
+      ],
       dateOfBirth: ['', [Validators.required, this.futureDateValidator]],
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
@@ -60,8 +78,8 @@ export class AddPatient implements OnInit {
       // Contact Information
       countryCode: ['+91', Validators.required],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      email: ['', Validators.required],
-      address: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(250)]],
       city: ['', Validators.required],
       state: ['', Validators.required],
       taluk: ['', Validators.required],
@@ -70,8 +88,16 @@ export class AddPatient implements OnInit {
       country: ['India'],
 
       // Emergency Contact
-      emergencyContactName: ['', Validators.required],
-      emergencyContactPhone: ['', Validators.required],
+      emergencyContactName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(100),
+          Validators.pattern(this.namePattern)
+        ]
+      ],
+      emergencyContactPhone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
 
       // Medical Information
       medicalHistory: [''],
@@ -85,7 +111,7 @@ export class AddPatient implements OnInit {
       insuranceProvider: [''],
       insurancePolicyNumber: [''],
       insuranceExpiryDate: [''],
-      insuranceCoverageAmount: [''],
+      insuranceCoverageAmount: ['', Validators.min(0)],
 
       // Hospital Information
       department: [''],
@@ -357,9 +383,6 @@ export class AddPatient implements OnInit {
 
   // Register patient
   onSubmit(): void {
-    console.log('Register Patient Clicked');
-    console.log(this.patientForm.value);
-
     this.patientForm.get('patientType')?.markAsTouched();
 
     if (this.patientForm.get('patientType')?.invalid) {
@@ -367,16 +390,6 @@ export class AddPatient implements OnInit {
     }
 
     if (this.patientForm.invalid) {
-      console.log('FORM INVALID');
-
-      Object.keys(this.patientForm.controls).forEach((key) => {
-        const control = this.patientForm.get(key);
-
-        if (control?.invalid) {
-          console.log(key, control.errors);
-        }
-      });
-
       this.patientForm.markAllAsTouched();
 
       return;
@@ -385,9 +398,7 @@ export class AddPatient implements OnInit {
     this.isSubmitting = true;
 
     this.patientService.createPatient(this.patientForm.value).subscribe({
-      next: (response) => {
-        console.log(response);
-
+      next: () => {
         this.toastService.show('Patient Registered Successfully', 'success');
 
         // Reset form
@@ -412,10 +423,12 @@ export class AddPatient implements OnInit {
       },
 
       error: (error) => {
-        console.log('FULL ERROR =>', error);
-        console.log('VALIDATION ERRORS =>', error?.error?.errors);
+        const message =
+          error?.error?.message ||
+          error?.error?.errors?.[0]?.msg ||
+          'Failed to register patient';
 
-        alert(JSON.stringify(error?.error?.errors, null, 2));
+        this.toastService.show(message, 'error');
 
         this.isSubmitting = false;
       }

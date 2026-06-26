@@ -53,6 +53,13 @@
   align-items: center;
 
   gap: 24px;
+
+  min-width: 0;
+}
+
+.profile-left > div:last-child {
+  min-width: 0;
+  text-align: left;
 }
 
 /*
@@ -101,9 +108,13 @@
 .profile-hero h1 {
   font-size: var(--font-hero);
 
-  margin-bottom: 14px;
+  line-height: 1.1;
+
+  margin: 0 0 14px;
 
   color: #0f172a;
+
+  overflow-wrap: anywhere;
 }
 
 /*
@@ -287,6 +298,8 @@
     flex-direction: column;
 
     align-items: flex-start;
+
+    width: 100%;
   }
 
   .profile-hero h1 {

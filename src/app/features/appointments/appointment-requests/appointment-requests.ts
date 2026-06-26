@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -6,7 +6,8 @@ import { AppointmentService } from '../../../core/services/appointment';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
-  selector: 'app-appointment-requests',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-appointment-requests',
   standalone: true,
   imports: [CommonModule, FormsModule, PaginationComponent],
   templateUrl: './appointment-requests.html',

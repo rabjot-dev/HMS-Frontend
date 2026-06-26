@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AsyncPipe, NgClass } from '@angular/common';
 
@@ -7,7 +7,8 @@ import { ToastService, ToastState } from './core/services/toast';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-root',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, AsyncPipe, NgClass],
   templateUrl: './app.html',

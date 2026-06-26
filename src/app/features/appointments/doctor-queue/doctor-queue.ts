@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -7,7 +7,8 @@ import { AppointmentService } from '../../../core/services/appointment';
 import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector: 'app-doctor-queue',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-doctor-queue',
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './doctor-queue.html',

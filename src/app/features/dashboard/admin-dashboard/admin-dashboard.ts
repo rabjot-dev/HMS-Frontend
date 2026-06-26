@@ -1,11 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 
 import { AuthService } from '../../../core/services/auth';
 import { DashboardService } from '../../../core/services/dashboard';
 
 @Component({
-  selector: 'app-admin-dashboard',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-admin-dashboard',
   standalone: true,
   imports: [AsyncPipe],
   templateUrl: './admin-dashboard.html',

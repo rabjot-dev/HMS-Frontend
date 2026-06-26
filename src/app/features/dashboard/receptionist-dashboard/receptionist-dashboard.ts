@@ -1,11 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 
 import { DashboardService } from '../../../core/services/dashboard';
 import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector: 'app-receptionist-dashboard',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-receptionist-dashboard',
   standalone: true,
   imports: [AsyncPipe],
   templateUrl: './receptionist-dashboard.html',

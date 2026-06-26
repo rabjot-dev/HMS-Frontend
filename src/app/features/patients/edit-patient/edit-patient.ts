@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,7 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../../core/services/patient';
 
 @Component({
-  selector: 'app-edit-patient',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-edit-patient',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './edit-patient.html',

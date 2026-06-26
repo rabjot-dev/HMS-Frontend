@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../core/services/toast';
 import {
@@ -12,7 +12,8 @@ import { EmployeeService } from '../../../core/services/employee';
 import { AppointmentService } from '../../../core/services/appointment';
 
 @Component({
-  selector: 'app-book-appointment',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-book-appointment',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './book-appointment.html',

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -8,7 +8,8 @@ import { PatientService } from '../../../core/services/patient';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
-  selector: 'app-patient-list',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-patient-list',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
   templateUrl: './patient-list.html',

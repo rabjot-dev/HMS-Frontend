@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -7,7 +7,8 @@ import { ConsultationService } from '../../../core/services/consultation';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
-  selector: 'app-consultation-list',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-consultation-list',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
   templateUrl: './consultation-list.html',

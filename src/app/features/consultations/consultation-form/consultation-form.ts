@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -13,7 +13,8 @@ import { ConsultationService } from '../../../core/services/consultation';
 import { AppointmentService } from '../../../core/services/appointment';
 
 @Component({
-  selector: 'app-consultation-form',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-consultation-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './consultation-form.html',
@@ -49,16 +50,16 @@ export class ConsultationForm implements OnInit {
   // Create consultation form
   initializeForm(): void {
     this.consultationForm = this.fb.group({
-      diagnosis: ['', Validators.required],
-      symptoms: [''],
-      doctorNotes: [''],
+      diagnosis: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(1000)]],
+      symptoms: ['', Validators.maxLength(1000)],
+      doctorNotes: ['', Validators.maxLength(2000)],
 
       vitals: this.fb.group({
-        bloodPressure: [''],
-        pulseRate: [''],
-        oxygenLevel: [''],
-        temperature: [''],
-        weight: ['']
+        bloodPressure: ['', Validators.pattern(/^\d{2,3}\/\d{2,3}$/)],
+        pulseRate: ['', [Validators.min(20), Validators.max(250)]],
+        oxygenLevel: ['', [Validators.min(0), Validators.max(100)]],
+        temperature: ['', [Validators.min(30), Validators.max(45)]],
+        weight: ['', [Validators.min(0.5), Validators.max(500)]]
       }),
 
       prescriptions: this.fb.array([
@@ -70,10 +71,10 @@ export class ConsultationForm implements OnInit {
   // Create prescription form group
   createPrescription(): FormGroup {
     return this.fb.group({
-      medicineName: ['', Validators.required],
-      dosage: ['', Validators.required],
-      frequency: ['', Validators.required],
-      duration: ['', Validators.required]
+      medicineName: ['', [Validators.required, Validators.maxLength(100)]],
+      dosage: ['', [Validators.required, Validators.maxLength(100)]],
+      frequency: ['', [Validators.required, Validators.maxLength(100)]],
+      duration: ['', [Validators.required, Validators.maxLength(100)]]
     });
   }
 
@@ -84,6 +85,16 @@ export class ConsultationForm implements OnInit {
 
   isFieldInvalid(fieldName: string): boolean {
     const field = this.consultationForm.get(fieldName);
+
+    return !!(
+      field &&
+      field.invalid &&
+      (field.touched || field.dirty)
+    );
+  }
+
+  isVitalFieldInvalid(fieldName: string): boolean {
+    const field = this.consultationForm.get(`vitals.${fieldName}`);
 
     return !!(
       field &&

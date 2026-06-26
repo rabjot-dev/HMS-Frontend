@@ -48,6 +48,13 @@
   align-items: center;
 
   gap: 22px;
+
+  min-width: 0;
+}
+
+.profile-left > div:last-child {
+  min-width: 0;
+  text-align: left;
 }
 
 .avatar {
@@ -91,7 +98,11 @@
 
   color: #0f172a;
 
-  margin-bottom: 8px;
+  line-height: 1.1;
+
+  margin: 0 0 8px;
+
+  overflow-wrap: anywhere;
 }
 
 .patient-subtitle {
@@ -252,6 +263,8 @@
     flex-direction: column;
 
     align-items: flex-start;
+
+    width: 100%;
   }
 
   .details-card {

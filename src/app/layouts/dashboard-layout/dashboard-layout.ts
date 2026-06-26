@@ -1,4 +1,4 @@
-import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
@@ -10,7 +10,8 @@ import { MenuNodeService } from '../../core/services/menu-node';
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 
 @Component({
-  selector: 'app-dashboard-layout',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-dashboard-layout',
   standalone: true,
   imports: [RouterOutlet, RouterLink, AsyncPipe, Sidebar],
   templateUrl: './dashboard-layout.html',

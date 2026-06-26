@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +7,8 @@ import { EmployeeService } from '../../../core/services/employee';
 import { ToastService } from '../../../core/services/toast';
 
 @Component({
-  selector: 'app-edit-appointment',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-edit-appointment',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './edit-appointment.html',

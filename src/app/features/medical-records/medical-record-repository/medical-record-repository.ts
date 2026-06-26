@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -7,7 +7,8 @@ import { MedicalRecordService } from '../../../core/services/medical-record';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
-  selector: 'app-medical-record-repository',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-medical-record-repository',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
   templateUrl: './medical-record-repository.html',

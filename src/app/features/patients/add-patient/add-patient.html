@@ -43,7 +43,12 @@
         <div class="form-field">
           <input type="text" placeholder="First Name" formControlName="firstName" />
           @if(patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched){
-          <span class="error-text">First Name is required</span>
+          <span class="error-text">
+            @if(patientForm.get('firstName')?.errors?.['required']){ First Name is required }
+            @else if(patientForm.get('firstName')?.errors?.['minlength']){ First Name must be at least 2 characters }
+            @else if(patientForm.get('firstName')?.errors?.['maxlength']){ First Name cannot exceed 50 characters }
+            @else if(patientForm.get('firstName')?.errors?.['pattern']){ First Name can contain only letters, spaces, apostrophes and hyphens }
+          </span>
           }
         </div>
 
@@ -51,7 +56,12 @@
         <div class="form-field">
           <input type="text" placeholder="Last Name" formControlName="lastName" />
           @if(patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched){
-          <span class="error-text">Last Name is required</span>
+          <span class="error-text">
+            @if(patientForm.get('lastName')?.errors?.['required']){ Last Name is required }
+            @else if(patientForm.get('lastName')?.errors?.['minlength']){ Last Name must be at least 2 characters }
+            @else if(patientForm.get('lastName')?.errors?.['maxlength']){ Last Name cannot exceed 50 characters }
+            @else if(patientForm.get('lastName')?.errors?.['pattern']){ Last Name can contain only letters, spaces, apostrophes and hyphens }
+          </span>
           }
         </div>
 
@@ -156,8 +166,11 @@
         <div class="form-field">
           <input type="text" placeholder="Address" formControlName="address" />
           @if(patientForm.get('address')?.invalid && patientForm.get('address')?.touched){
-          <span class="error-text">Address is required</span>
-
+          <span class="error-text">
+            @if(patientForm.get('address')?.errors?.['required']){ Address is required }
+            @else if(patientForm.get('address')?.errors?.['minlength']){ Address must be at least 5 characters }
+            @else if(patientForm.get('address')?.errors?.['maxlength']){ Address cannot exceed 250 characters }
+          </span>
           }
         </div>
 
@@ -270,7 +283,12 @@
         <div class="form-field">
           <input type="text" placeholder="Emergency Contact Name" formControlName="emergencyContactName" />
           @if(patientForm.get('emergencyContactName')?.invalid && patientForm.get('emergencyContactName')?.touched){
-          <span class="error-text">Emergency Contact Name is required</span>
+          <span class="error-text">
+            @if(patientForm.get('emergencyContactName')?.errors?.['required']){ Emergency Contact Name is required }
+            @else if(patientForm.get('emergencyContactName')?.errors?.['minlength']){ Emergency Contact Name must be at least 2 characters }
+            @else if(patientForm.get('emergencyContactName')?.errors?.['maxlength']){ Emergency Contact Name cannot exceed 100 characters }
+            @else if(patientForm.get('emergencyContactName')?.errors?.['pattern']){ Emergency Contact Name can contain only letters, spaces, apostrophes and hyphens }
+          </span>
           }
         </div>
 
@@ -345,6 +363,9 @@
         <!-- Coverage Amount (optional) -->
         <div class="form-field">
           <input type="number" placeholder="Coverage Amount (optional)" formControlName="insuranceCoverageAmount" />
+          @if(patientForm.get('insuranceCoverageAmount')?.invalid && patientForm.get('insuranceCoverageAmount')?.touched){
+          <span class="error-text">Coverage amount cannot be negative</span>
+          }
         </div>
 
         <!-- Patient Type (mandatory) -->

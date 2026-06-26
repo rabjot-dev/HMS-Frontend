@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ToastService } from '../../../core/services/toast';
@@ -7,7 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
-  selector: 'app-pending-employees',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-pending-employees',
   imports: [CommonModule, FormsModule, PaginationComponent],
   templateUrl: './pending-employees.html',
   styleUrl: './pending-employees.css'

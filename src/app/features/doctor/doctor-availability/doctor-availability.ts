@@ -1,11 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
-  selector: 'app-doctor-availability',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-doctor-availability',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './doctor-availability.html',

@@ -53,6 +53,13 @@
   align-items: center;
 
   gap: 24px;
+
+  min-width: 0;
+}
+
+.employee-profile > div:last-child {
+  min-width: 0;
+  text-align: left;
 }
 
 /*
@@ -108,7 +115,11 @@
 
   color: #0f172a;
 
-  margin-bottom: 14px;
+  line-height: 1.1;
+
+  margin: 0 0 14px;
+
+  overflow-wrap: anywhere;
 }
 
 /*
@@ -286,6 +297,8 @@
     flex-direction: column;
 
     align-items: flex-start;
+
+    width: 100%;
   }
 
   .employee-profile h1 {

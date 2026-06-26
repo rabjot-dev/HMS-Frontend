@@ -87,12 +87,10 @@
           <label>Full Name</label>
 
           <input type="text" formControlName="name" placeholder="Enter full name" />
-         @if(registerForm.get('medicalRegistrationNo')?.invalid &&
-registerForm.get('medicalRegistrationNo')?.touched){
-  <span class="error-text">
-    Medical Registration Number is required
-  </span>
-} @if(registerForm.get('name')?.errors?.['pattern']){
+
+          @if(registerForm.get('name')?.touched && registerForm.get('name')?.errors?.['required']){
+          <span class="error-text">Name is required</span>
+          } @if(registerForm.get('name')?.touched && registerForm.get('name')?.errors?.['pattern']){
           <span class="error-text">Name can contain only alphabets</span>
           }
         </div>
@@ -352,8 +350,9 @@ registerForm.get('medicalRegistrationNo')?.touched){
 
           <input type="text" formControlName="medicalRegistrationNo" placeholder="Enter registration number" />
 
-          @if(registerForm.get('name')?.invalid && registerForm.get('name')?.touched){
-          <span class="error-text">Name is required</span>
+          @if(registerForm.get('medicalRegistrationNo')?.invalid &&
+          registerForm.get('medicalRegistrationNo')?.touched){
+          <span class="error-text">Medical Registration Number is required</span>
           }
         </div>
         

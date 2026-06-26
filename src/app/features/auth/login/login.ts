@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -8,7 +8,8 @@ import { TokenService } from '../../../core/services/token';
 import { ToastService } from '../../../core/services/toast';
 
 @Component({
-  selector: 'app-login',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',

@@ -1,11 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 import { EmployeeService } from '../../../core/services/employee';
 
 @Component({
-  selector: 'app-employee-details',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-employee-details',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './employee-details.html',

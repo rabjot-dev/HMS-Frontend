@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../../core/services/auth';
 
 @Component({
-  selector: 'app-my-profile',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-my-profile',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './my-profile.html',

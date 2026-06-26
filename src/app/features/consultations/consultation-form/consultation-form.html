@@ -46,7 +46,7 @@
       <textarea formControlName="diagnosis" placeholder="Enter diagnosis"></textarea>
 
       @if(isFieldInvalid('diagnosis')) {
-      <small class="error-text">Diagnosis is required.</small>
+      <small class="error-text">Diagnosis must be between 2 and 1000 characters.</small>
       }
     </div>
 
@@ -56,6 +56,10 @@
       <label>Symptoms</label>
 
       <textarea formControlName="symptoms" placeholder="Fever, Cough, Headache"></textarea>
+
+      @if(isFieldInvalid('symptoms')) {
+      <small class="error-text">Symptoms cannot exceed 1000 characters.</small>
+      }
     </div>
 
     <!-- Doctor Notes -->
@@ -64,6 +68,10 @@
       <label>Doctor Notes</label>
 
       <textarea formControlName="doctorNotes" placeholder="Enter doctor notes"></textarea>
+
+      @if(isFieldInvalid('doctorNotes')) {
+      <small class="error-text">Doctor notes cannot exceed 2000 characters.</small>
+      }
     </div>
 
     <!-- Vitals -->
@@ -75,6 +83,10 @@
         <label>Blood Pressure</label>
 
         <input type="text" formControlName="bloodPressure" placeholder="120/80" />
+
+        @if(isVitalFieldInvalid('bloodPressure')) {
+        <small class="error-text">Use format like 120/80.</small>
+        }
       </div>
 
       <!-- Pulse Rate -->
@@ -83,6 +95,10 @@
         <label>Pulse Rate</label>
 
         <input type="number" formControlName="pulseRate" placeholder="72" />
+
+        @if(isVitalFieldInvalid('pulseRate')) {
+        <small class="error-text">Pulse rate must be between 20 and 250.</small>
+        }
       </div>
 
       <!-- Oxygen Level -->
@@ -91,6 +107,10 @@
         <label>Oxygen Level</label>
 
         <input type="number" formControlName="oxygenLevel" placeholder="98" />
+
+        @if(isVitalFieldInvalid('oxygenLevel')) {
+        <small class="error-text">Oxygen level must be between 0 and 100.</small>
+        }
       </div>
 
       <!-- Temperature -->
@@ -99,6 +119,10 @@
         <label>Temperature</label>
 
         <input type="number" formControlName="temperature" placeholder="Celsius" />
+
+        @if(isVitalFieldInvalid('temperature')) {
+        <small class="error-text">Temperature must be between 30 and 45 Celsius.</small>
+        }
       </div>
 
       <!-- Weight -->
@@ -107,6 +131,10 @@
         <label>Weight</label>
 
         <input type="number" formControlName="weight" placeholder="in kg" />
+
+        @if(isVitalFieldInvalid('weight')) {
+        <small class="error-text">Weight must be between 0.5 and 500 kg.</small>
+        }
       </div>
     </div>
 
@@ -133,7 +161,7 @@
             <input type="text" formControlName="medicineName" />
 
             @if(isPrescriptionFieldInvalid($index, 'medicineName')) {
-            <small class="error-text">Medicine name is required.</small>
+            <small class="error-text">Medicine name is required and cannot exceed 100 characters.</small>
             }
           </div>
 
@@ -145,7 +173,7 @@
             <input type="text" formControlName="dosage" />
 
             @if(isPrescriptionFieldInvalid($index, 'dosage')) {
-            <small class="error-text">Dosage is required.</small>
+            <small class="error-text">Dosage is required and cannot exceed 100 characters.</small>
             }
           </div>
 
@@ -157,7 +185,7 @@
             <input type="text" formControlName="frequency" />
 
             @if(isPrescriptionFieldInvalid($index, 'frequency')) {
-            <small class="error-text">Frequency is required.</small>
+            <small class="error-text">Frequency is required and cannot exceed 100 characters.</small>
             }
           </div>
 
@@ -169,7 +197,7 @@
             <input type="text" formControlName="duration" />
 
             @if(isPrescriptionFieldInvalid($index, 'duration')) {
-            <small class="error-text">Duration is required.</small>
+            <small class="error-text">Duration is required and cannot exceed 100 characters.</small>
             }
           </div>
 

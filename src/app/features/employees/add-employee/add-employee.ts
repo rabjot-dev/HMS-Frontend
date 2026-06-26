@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,8 @@ type DesignationOption = {
 };
 
 @Component({
-  selector: 'app-add-employee',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-add-employee',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './add-employee.html',

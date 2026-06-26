@@ -142,9 +142,10 @@
                 Edit
               </a>
 
-              <!-- Deactivate -->
+              <!-- Status Action -->
 
               <button
+                *ngIf="employee.status === 'ACTIVE'"
                 type="button"
                 (click)="
                               deactivateEmployee(
@@ -156,9 +157,8 @@
                 Deactivate
               </button>
 
-              <!-- Activate -->
-
               <button
+                *ngIf="employee.status === 'INACTIVE'"
                 type="button"
                 (click)="
                               activateEmployee(

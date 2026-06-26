@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -7,7 +7,8 @@ import { AuthService } from '../../../core/services/auth';
 import { MenuNode, MenuNodeService } from '../../../core/services/menu-node';
 
 @Component({
-  selector: 'app-sidebar',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-sidebar',
   standalone: true,
   imports: [AsyncPipe, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',

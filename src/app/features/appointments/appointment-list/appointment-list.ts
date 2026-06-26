@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -8,7 +8,8 @@ import { AppointmentService } from '../../../core/services/appointment';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
 @Component({
-  selector: 'app-appointment-list',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-appointment-list',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
   templateUrl: './appointment-list.html',

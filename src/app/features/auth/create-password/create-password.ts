@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -7,7 +7,8 @@ import { AuthService } from '../../../core/services/auth';
 import { MenuNodeService } from '../../../core/services/menu-node';
 
 @Component({
-  selector: 'app-create-password',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+selector: 'app-create-password',
   imports: [ReactiveFormsModule],
   templateUrl: './create-password.html',
   styleUrl: './create-password.css'
@@ -52,6 +53,7 @@ export class CreatePassword {
   // Create password on first login
   onSubmit(): void {
     if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
       return;
     }
 
