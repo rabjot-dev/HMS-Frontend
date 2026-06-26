@@ -127,7 +127,7 @@
 */
 
 .empty-state {
-  padding: 60px 30px;
+  padding: clamp(28px, 5vw, 48px) 24px;
 
   text-align: center;
 
@@ -161,7 +161,7 @@
 .employee-grid {
   display: grid;
 
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
 
   gap: 24px;
 }
@@ -319,19 +319,18 @@
 */
 
 .actions {
-  display: flex;
-
-  gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .actions button {
-  flex: 1;
-
   border: none;
 
-  padding: 14px;
+  min-height: 40px;
+  padding: 10px 14px;
 
-  border-radius: 16px;
+  border-radius: 12px;
 
   font-weight: 700;
 
@@ -398,7 +397,7 @@
   }
 
   .actions {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }
 

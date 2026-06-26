@@ -103,7 +103,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-md);
-  padding: 64px var(--space-2xl);
+  padding: clamp(28px, 5vw, 48px) var(--space-xl);
   text-align: center;
 }
 
@@ -275,7 +275,7 @@ tbody td:last-child {
 
 @media (max-width: 992px) {
   table {
-    min-width: 950px;
+    min-width: min(100%, 820px);
   }
 }
 

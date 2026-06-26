@@ -58,7 +58,7 @@
 
   justify-content: center;
 
-  padding: 60px;
+  padding: clamp(30px, 5vw, 52px);
 }
 
 .brand-content {
@@ -155,7 +155,7 @@
 .login-right {
   width: 40%;
 
-  min-width: 520px;
+  min-width: min(100%, 420px);
 
   max-width: 680px;
 
@@ -165,7 +165,7 @@
 
   justify-content: center;
 
-  padding: 50px;
+  padding: clamp(28px, 4vw, 42px);
 }
 
 /*
@@ -436,24 +436,24 @@
 }
 
 .login-header h2 {
-  font-size: 28px;
+  font-size: var(--font-3xl);
 }
 
 .login-header p,
 .input-group input,
 .login-btn {
-  font-size: 15px;
+  font-size: var(--font-sm);
 }
 
 .input-group label,
 .forgot-row a,
 .register-text {
-  font-size: 14px;
+  font-size: var(--font-xs);
 }
 
 .error-text,
 .error-box {
-  font-size: 13px;
+  font-size: var(--font-xs);
 }
 
 .input-group {

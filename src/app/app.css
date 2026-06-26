@@ -6,8 +6,9 @@
 
   transform: translateX(-50%);
 
-  min-width: 350px;
-  max-width: 550px;
+  width: min(550px, calc(100vw - 32px));
+  min-width: 0;
+  max-width: calc(100vw - 32px);
 
   display: flex;
   align-items: center;

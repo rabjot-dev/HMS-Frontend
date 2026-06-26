@@ -1,6 +1,6 @@
-projectKey=HMS-BACKEND_SPRINT-2
+projectKey=hms-frontend
 serverUrl=http://localhost:9000
 serverVersion=26.1.0.118079
-dashboardUrl=http://localhost:9000/dashboard?id=HMS-BACKEND_SPRINT-2
-ceTaskId=2d54ffc1-f50a-4164-b610-267990ba611b
-ceTaskUrl=http://localhost:9000/api/ce/task?id=2d54ffc1-f50a-4164-b610-267990ba611b
+dashboardUrl=http://localhost:9000/dashboard?id=hms-frontend
+ceTaskId=65faad1d-880b-4613-88b0-f6c44516b3b0
+ceTaskUrl=http://localhost:9000/api/ce/task?id=65faad1d-880b-4613-88b0-f6c44516b3b0

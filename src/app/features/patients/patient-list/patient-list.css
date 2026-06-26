@@ -279,7 +279,7 @@ tbody td:last-child {
   }
 
   table {
-    min-width: 1000px;
+    min-width: min(100%, 820px);
   }
 }
 
