@@ -540,3 +540,96 @@ tbody td:last-child {
     flex-wrap: wrap;
   }
 }
+
+/*
+|--------------------------------------------------------------------------
+| Final Filter And Column Alignment
+|--------------------------------------------------------------------------
+*/
+.filters-wrapper {
+  display: grid !important;
+  grid-template-columns: minmax(260px, 1.4fr) minmax(150px, 0.8fr) minmax(150px, 0.8fr) minmax(280px, 1fr) !important;
+  align-items: end !important;
+  gap: 10px !important;
+}
+
+.date-range {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  align-items: end !important;
+}
+
+.date-range div {
+  gap: 4px !important;
+}
+
+.table-wrapper table {
+  table-layout: fixed !important;
+}
+
+.table-wrapper th:nth-child(1),
+.table-wrapper td:nth-child(1) {
+  width: 13%;
+}
+
+.table-wrapper th:nth-child(2),
+.table-wrapper td:nth-child(2) {
+  width: 18%;
+}
+
+.table-wrapper th:nth-child(3),
+.table-wrapper td:nth-child(3) {
+  width: 14%;
+}
+
+.table-wrapper th:nth-child(4),
+.table-wrapper td:nth-child(4) {
+  width: 15%;
+}
+
+.table-wrapper th:nth-child(5),
+.table-wrapper td:nth-child(5),
+.table-wrapper th:nth-child(6),
+.table-wrapper td:nth-child(6),
+.table-wrapper th:nth-child(7),
+.table-wrapper td:nth-child(7) {
+  width: 10%;
+}
+
+.table-wrapper th:nth-child(8),
+.table-wrapper td:nth-child(8) {
+  width: 20%;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+  text-align: left !important;
+}
+
+.appointment-id h4,
+.patient-info h4,
+.date-info h4 {
+  margin: 0 0 3px !important;
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+}
+
+.appointment-id span,
+.patient-info span,
+.date-info span {
+  display: block !important;
+  margin: 0 !important;
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+}
+
+@media (max-width: 900px) {
+  .filters-wrapper {
+    grid-template-columns: 1fr !important;
+  }
+
+  .table-wrapper table {
+    min-width: 1120px;
+  }
+}

@@ -398,6 +398,7 @@ tbody td {
 ) {
   width: 100% !important;
   display: flex !important;
+  flex-direction: row !important;
   align-items: center !important;
   gap: 10px !important;
   padding: 10px !important;
