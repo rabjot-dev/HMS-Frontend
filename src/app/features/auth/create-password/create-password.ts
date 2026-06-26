@@ -17,6 +17,7 @@ selector: 'app-create-password',
 })
 export class CreatePassword {
   passwordForm: FormGroup;
+  temporaryPasswordServerError = '';
 
   securityQuestions = [
     'What is your favourite color?',
@@ -51,10 +52,16 @@ export class CreatePassword {
       securityQuestion: ['', Validators.required],
       securityAnswer: ['', Validators.required]
     });
+
+    this.passwordForm.get('temporaryPassword')?.valueChanges.subscribe(() => {
+      this.temporaryPasswordServerError = '';
+    });
   }
 
   // Create password on first login
   onSubmit(): void {
+    this.temporaryPasswordServerError = '';
+
     if (this.passwordForm.invalid) {
       this.passwordForm.markAllAsTouched();
       return;
@@ -83,10 +90,15 @@ export class CreatePassword {
       },
 
       error: (error) => {
-        this.toastService.show(
-          getApiErrorMessage(error, 'Failed to create password'),
-          'error'
-        );
+        const errorMessage = getApiErrorMessage(error, 'Failed to create password');
+
+        if (errorMessage.toLowerCase().includes('temporary password')) {
+          this.temporaryPasswordServerError = errorMessage;
+          this.passwordForm.get('temporaryPassword')?.markAsTouched();
+          return;
+        }
+
+        this.toastService.show(errorMessage, 'error');
       }
     });
   }
