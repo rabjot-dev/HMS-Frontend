@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
+import { NodeService } from '../../../core/services/node';
 
 @Component({
   selector: 'app-employee-list',
@@ -41,7 +42,8 @@ export class EmployeeList implements OnInit {
     private readonly employeeService: EmployeeService,
     private readonly cdr: ChangeDetectorRef,
     private readonly toastService: ToastService,
-    public readonly authService: AuthService
+    public readonly authService: AuthService,
+    public readonly nodeService: NodeService
   ) {}
 
   ngOnInit(): void {
@@ -173,4 +175,3 @@ export class EmployeeList implements OnInit {
   });
 }
 }
-

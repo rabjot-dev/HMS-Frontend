@@ -4,6 +4,7 @@ import { AsyncPipe } from '@angular/common';
 
 import { AuthService } from '../../../core/services/auth';
 import { DashboardService } from '../../../core/services/dashboard';
+import { NodeService } from '../../../core/services/node';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -19,6 +20,7 @@ export class AdminDashboard implements OnInit {
 
   constructor(
     public readonly authService: AuthService,
+    public readonly nodeService: NodeService,
     private readonly dashboardService: DashboardService,
     private readonly cdr: ChangeDetectorRef
   ) {}

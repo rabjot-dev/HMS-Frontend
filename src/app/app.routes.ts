@@ -154,12 +154,16 @@ export const routes: Routes = [
       // Internal pages
       {
         path: 'employees/:id',
-        component: EmployeeDetails
+        component: EmployeeDetails,
+        canActivate: [nodeGuard],
+        data: { nodePath: '/employees' }
       },
 
       {
         path: 'employees/edit/:id',
-        component: EditEmployee
+        component: EditEmployee,
+        canActivate: [nodeGuard],
+        data: { nodePath: '/employees' }
       },
 
       // =====================
@@ -181,12 +185,16 @@ export const routes: Routes = [
       // Internal pages
       {
         path: 'patients/:id',
-        component: PatientDetails
+        component: PatientDetails,
+        canActivate: [nodeGuard],
+        data: { nodePath: '/patients' }
       },
 
       {
         path: 'patients/edit/:id',
-        component: EditPatient
+        component: EditPatient,
+        canActivate: [nodeGuard],
+        data: { nodePath: '/patients' }
       },
 
       // =====================
@@ -217,7 +225,9 @@ export const routes: Routes = [
       // Internal pages
       {
         path: 'appointments/edit/:id',
-        component: EditAppointment
+        component: EditAppointment,
+        canActivate: [nodeGuard],
+        data: { nodePath: '/appointments' }
       },
 
       // =====================
@@ -249,7 +259,9 @@ export const routes: Routes = [
       // Internal pages
       {
         path: 'consultation/:appointmentId',
-        component: ConsultationForm
+        component: ConsultationForm,
+        canActivate: [nodeGuard],
+        data: { nodePath: '/doctor-queue' }
       },
 
       {
@@ -257,7 +269,9 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/health-records/health-record-details/health-record-details').then(
             (m) => m.HealthRecordDetails
-          )
+          ),
+        canActivate: [nodeGuard],
+        data: { nodePath: '/health-records' }
       },
 
       // =====================

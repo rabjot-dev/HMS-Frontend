@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
 
 import { PatientService } from '../../../core/services/patient';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
+import { NodeService } from '../../../core/services/node';
 
 @Component({
   selector: 'app-patient-list',
@@ -40,6 +41,7 @@ export class PatientList implements OnInit {
 
   constructor(
     private readonly patientService: PatientService,
+    public readonly nodeService: NodeService,
 
     private readonly cdr: ChangeDetectorRef
   ) {}

@@ -45,4 +45,36 @@ export class NodeService {
 
     localStorage.removeItem('nodes');
   }
+
+  canAccessPath(path: string): boolean {
+    return this.getFlatNodes().some((node) => node.path === path);
+  }
+
+  canUseApi(method: string, path: string): boolean {
+    const requestMethod = method.toUpperCase();
+    const userRoles = this.getUserRoles();
+
+    return this.getFlatNodes().some((node) =>
+      node.apiPermissions?.some((permission: any) => {
+        const permissionMethod = permission.method?.toUpperCase();
+        const methodMatches = permissionMethod === requestMethod || permissionMethod === 'ALL';
+        const pathMatches = permission.path === path;
+        const permissionRoles = permission.roles || [];
+        const roleMatches =
+          !permissionRoles.length || permissionRoles.some((role: string) => userRoles.includes(role));
+
+        return methodMatches && pathMatches && roleMatches;
+      })
+    );
+  }
+
+  private getFlatNodes(): any[] {
+    return this.nodes.value.flatMap((node) => [node, ...(node.children || [])]);
+  }
+
+  private getUserRoles(): string[] {
+    const role = localStorage.getItem('role');
+
+    return role ? [role] : [];
+  }
 }

@@ -242,7 +242,7 @@
             <div class="actions">
               <!-- Admin -->
 
-              @if( authService.hasRole( 'ADMIN' ) || authService.hasRole( 'RECEPTIONIST' ) ||authService.hasRole('SUPER_ADMIN')){
+              @if(nodeService.canUseApi('PUT', '/api/appointments/:id')){
 
               <button
                 class="action-btn edit"
@@ -253,6 +253,10 @@
               >
                 Edit
               </button>
+
+              }
+
+              @if(nodeService.canUseApi('DELETE', '/api/appointments/:id')){
 
               <button
                 class="action-btn delete"
@@ -269,7 +273,7 @@
 
               <!-- Doctor -->
 
-              @if( authService.hasRole( 'DOCTOR' ) ){
+              @if(nodeService.canAccessPath('/patients')){
 
               <button
                 class="action-btn view"

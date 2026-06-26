@@ -4,6 +4,7 @@ import { AsyncPipe } from '@angular/common';
 
 import { DashboardService } from '../../../core/services/dashboard';
 import { AuthService } from '../../../core/services/auth';
+import { NodeService } from '../../../core/services/node';
 
 @Component({
   selector: 'app-receptionist-dashboard',
@@ -19,6 +20,7 @@ export class ReceptionistDashboard implements OnInit {
 
   constructor(
     public readonly authService: AuthService,
+    public readonly nodeService: NodeService,
     private readonly dashboardService: DashboardService,
     private readonly cdr: ChangeDetectorRef
   ) {}

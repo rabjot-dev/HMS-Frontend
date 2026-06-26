@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
+import { NodeService } from '../../../core/services/node';
 
 @Component({
   selector: 'app-pending-employees',
@@ -17,6 +18,7 @@ export class PendingEmployees implements OnInit {
   constructor(
     private readonly employeeService: EmployeeService,
     private readonly toastService: ToastService,
+    public readonly nodeService: NodeService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 

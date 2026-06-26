@@ -3,6 +3,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AppointmentService } from '../../../core/services/appointment';
+import { NodeService } from '../../../core/services/node';
 
 @Component({
   selector: 'app-appointment-requests',
@@ -22,6 +23,7 @@ export class AppointmentRequestsComponent implements OnInit {
 
   constructor(
     private readonly appointmentService: AppointmentService,
+    public readonly nodeService: NodeService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 

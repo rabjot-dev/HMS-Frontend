@@ -123,11 +123,7 @@
 
     <!-- Edit -->
 
-    @if(
-      userRole === 'SUPER_ADMIN' ||
-      userRole === 'ADMIN' ||
-      userRole === 'RECEPTIONIST'
-    ){
+    @if(nodeService.canUseApi('PUT', '/api/patients/:id')){
 
       <a
         class="action-btn edit"
@@ -143,9 +139,7 @@
 
     <!-- Delete -->
 
-    @if(
-      userRole === 'SUPER_ADMIN' || userRole == 'ADMIN'
-    ){
+    @if(nodeService.canUseApi('DELETE', '/api/patients/:id')){
 
       <button
         class="action-btn delete"

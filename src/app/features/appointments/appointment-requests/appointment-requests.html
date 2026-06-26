@@ -80,6 +80,7 @@
       <!-- Actions -->
 
       <div class="actions">
+        @if(nodeService.canUseApi('PATCH', '/api/appointments/:id/approve')){
         <button
           class="approve-btn"
           (click)="
@@ -90,7 +91,9 @@
         >
           Approve
         </button>
+        }
 
+        @if(nodeService.canUseApi('PATCH', '/api/appointments/:id/reject')){
         <button
           class="reject-btn"
           (click)="
@@ -101,6 +104,7 @@
         >
           Reject
         </button>
+        }
       </div>
     </div>
 

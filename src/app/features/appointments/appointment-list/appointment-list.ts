@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { AppointmentService } from '../../../core/services/appointment';
 import { AuthService } from '../../../core/services/auth';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
+import { NodeService } from '../../../core/services/node';
 
 @Component({
   selector: 'app-appointment-list',
@@ -31,6 +32,7 @@ export class AppointmentList implements OnInit {
   constructor(
     private readonly appointmentService: AppointmentService,
     public readonly authService: AuthService,
+    public readonly nodeService: NodeService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
