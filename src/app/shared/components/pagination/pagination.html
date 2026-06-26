@@ -2,11 +2,11 @@
   <div class="total-records">Total: {{ totalRecords }}</div>
 
   <div class="pagination-controls">
-    <button (click)="previous.emit()" [disabled]="page === 1">Previous</button>
+    <button type="button" (click)="previous.emit()" [disabled]="page === 1">Previous</button>
 
     <span>Page {{ page }} of {{ totalPages }}</span>
 
-    <button (click)="next.emit()" [disabled]="page === totalPages">Next</button>
+    <button type="button" (click)="next.emit()" [disabled]="page === totalPages">Next</button>
 
     @if(showPageSize){
 

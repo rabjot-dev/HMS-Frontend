@@ -46,8 +46,10 @@ export class HealthRecordList implements OnInit {
     this.loadHealthRecords();
   }
 
-  loadHealthRecords(): void {
-    this.isLoading = true;
+  loadHealthRecords(showPageLoader = true): void {
+    if (showPageLoader) {
+      this.isLoading = true;
+    }
 
     this.healthRecordService
       .getHealthRecords({
@@ -79,14 +81,14 @@ export class HealthRecordList implements OnInit {
   onSearch(): void {
     this.page = 1;
 
-    this.loadHealthRecords();
+    this.loadHealthRecords(false);
   }
 
   nextPage(): void {
     if (this.meta?.hasNextPage) {
       this.page++;
 
-      this.loadHealthRecords();
+      this.loadHealthRecords(false);
     }
   }
 
@@ -94,7 +96,7 @@ export class HealthRecordList implements OnInit {
     if (this.page > 1) {
       this.page--;
 
-      this.loadHealthRecords();
+      this.loadHealthRecords(false);
     }
   }
 }

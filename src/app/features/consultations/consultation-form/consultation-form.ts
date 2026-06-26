@@ -52,11 +52,11 @@ export class ConsultationForm implements OnInit {
       doctorNotes: [''],
 
       vitals: this.fb.group({
-        bloodPressure: [''],
-        pulseRate: [''],
-        oxygenLevel: [''],
-        temperature: [''],
-        weight: ['']
+        bloodPressure: ['', Validators.pattern(/^\d{2,3}\/\d{2,3}$/)],
+        pulseRate: ['', [Validators.min(1), Validators.max(250)]],
+        oxygenLevel: ['', [Validators.min(0), Validators.max(100)]],
+        temperature: ['', [Validators.min(30), Validators.max(45)]],
+        weight: ['', [Validators.min(0), Validators.max(500)]]
       }),
 
       prescriptions: this.fb.array([this.createPrescription()])

@@ -51,8 +51,10 @@ export class EmployeeList implements OnInit {
     this.loadEmployees();
   }
 
-  loadEmployees(): void {
-    this.isLoading = true;
+  loadEmployees(showPageLoader = true): void {
+    if (showPageLoader) {
+      this.isLoading = true;
+    }
 
     const params: any = {
       page: this.page,
@@ -98,12 +100,12 @@ export class EmployeeList implements OnInit {
 
   onSearch(): void {
     this.page = 1;
-    this.loadEmployees();
+    this.loadEmployees(false);
   }
 
   onFilterChange(): void {
     this.page = 1;
-    this.loadEmployees();
+    this.loadEmployees(false);
   }
 
   previousPage(): void {
@@ -113,7 +115,7 @@ export class EmployeeList implements OnInit {
 
     this.page--;
 
-    this.loadEmployees();
+    this.loadEmployees(false);
   }
 
   nextPage(): void {
@@ -123,7 +125,7 @@ export class EmployeeList implements OnInit {
 
     this.page++;
 
-    this.loadEmployees();
+    this.loadEmployees(false);
   }
 
   resetFilters(): void {
@@ -134,7 +136,7 @@ export class EmployeeList implements OnInit {
 
     this.page = 1;
 
-    this.loadEmployees();
+    this.loadEmployees(false);
   }
 
   deactivateEmployee(id: string): void {

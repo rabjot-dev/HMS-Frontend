@@ -64,8 +64,10 @@ export class ConsultationList implements OnInit {
     });
   }
   // Fetch all consultations
-  loadConsultations(): void {
-    this.isLoading = true;
+  loadConsultations(showPageLoader = true): void {
+    if (showPageLoader) {
+      this.isLoading = true;
+    }
 
     const params: any = {
       page: this.page,
@@ -117,7 +119,7 @@ export class ConsultationList implements OnInit {
   onFilterChange(): void {
     this.page = 1;
 
-    this.loadConsultations();
+    this.loadConsultations(false);
   }
   previousPage(): void {
     if (this.page <= 1) {
@@ -126,7 +128,7 @@ export class ConsultationList implements OnInit {
 
     this.page--;
 
-    this.loadConsultations();
+    this.loadConsultations(false);
   }
 
   nextPage(): void {
@@ -136,7 +138,7 @@ export class ConsultationList implements OnInit {
 
     this.page++;
 
-    this.loadConsultations();
+    this.loadConsultations(false);
   }
   // Download prescription PDF
   downloadPdf(consultationId: string): void {
