@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -18,6 +18,7 @@ selector: 'app-create-password',
 export class CreatePassword {
   passwordForm: FormGroup;
   temporaryPasswordServerError = '';
+  errorMessage = '';
 
   securityQuestions = [
     'What is your favourite color?',
@@ -33,7 +34,8 @@ export class CreatePassword {
     private readonly tokenService: TokenService,
     private readonly authService: AuthService,
     private readonly menuNodeService: MenuNodeService,
-    private readonly toastService: ToastService
+    private readonly toastService: ToastService,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.passwordForm = this.fb.group({
       temporaryPassword: ['', Validators.required],
@@ -55,20 +57,25 @@ export class CreatePassword {
 
     this.passwordForm.get('temporaryPassword')?.valueChanges.subscribe(() => {
       this.temporaryPasswordServerError = '';
+      this.errorMessage = '';
+      this.cdr.markForCheck();
     });
   }
 
   // Create password on first login
   onSubmit(): void {
     this.temporaryPasswordServerError = '';
+    this.errorMessage = '';
 
     if (this.passwordForm.invalid) {
       this.passwordForm.markAllAsTouched();
+      this.cdr.markForCheck();
       return;
     }
 
     if (this.passwordForm.value.newPassword !== this.passwordForm.value.confirmPassword) {
-      alert('Passwords do not match');
+      this.errorMessage = 'Passwords do not match';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -95,10 +102,12 @@ export class CreatePassword {
         if (errorMessage.toLowerCase().includes('temporary password')) {
           this.temporaryPasswordServerError = errorMessage;
           this.passwordForm.get('temporaryPassword')?.markAsTouched();
+          this.cdr.markForCheck();
           return;
         }
 
-        this.toastService.show(errorMessage, 'error');
+        this.errorMessage = errorMessage;
+        this.cdr.markForCheck();
       }
     });
   }

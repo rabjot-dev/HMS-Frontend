@@ -47,10 +47,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       const isRefreshCall =
         req.url.includes('/auth/refresh-token');
 
+      const isCreatePasswordCall =
+        req.url.includes('/auth/create-password');
+
       if (
         error.status !== 401 ||
         !refreshToken ||
-        isRefreshCall
+        isRefreshCall ||
+        isCreatePasswordCall
       ) {
         return throwError(() => error);
       }

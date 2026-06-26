@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -26,7 +26,8 @@ export class ResetPassword implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.resetForm = this.fb.group({
       securityAnswer: ['', Validators.required],
@@ -64,6 +65,7 @@ export class ResetPassword implements OnInit {
 
     if (this.resetForm.invalid) {
       this.resetForm.markAllAsTouched();
+      this.cdr.markForCheck();
       return;
     }
 
@@ -75,7 +77,8 @@ export class ResetPassword implements OnInit {
     ) {
       this.isSubmitting = false;
 
-      alert('Passwords do not match');
+      this.errorMessage = 'Passwords do not match';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -94,6 +97,7 @@ export class ResetPassword implements OnInit {
         this.router.navigate(['/login']);
 
         this.isSubmitting = false;
+        this.cdr.markForCheck();
       },
 
       error: (error) => {
@@ -102,6 +106,7 @@ export class ResetPassword implements OnInit {
         this.isSubmitting = false;
         this.errorMessage =
           getApiErrorMessage(error, 'Failed to reset password');
+        this.cdr.markForCheck();
       }
     });
   }

@@ -39,10 +39,13 @@ export class Login {
 
   // Login user
   onSubmit(): void {
+    this.errorMessage = '';
+
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
 
-      this.toastService.show('Please enter valid credentials', 'error');
+      this.errorMessage = 'Please enter valid credentials';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -81,10 +84,7 @@ this.tokenService.setRefreshToken(
 
       error: (error) => {
 
-        this.toastService.show(
-          getApiErrorMessage(error, 'Login failed'),
-          'error'
-        );
+        this.errorMessage = getApiErrorMessage(error, 'Login failed');
 
         this.isSubmitting = false;
         this.cdr.detectChanges();

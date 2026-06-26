@@ -19,6 +19,7 @@ export class Register {
   registerForm: FormGroup;
 
   isSubmitting = false;
+  errorMessage = '';
   currentStep = 1;
 
   securityQuestions = [
@@ -167,6 +168,7 @@ export class Register {
 
   // Submit registration form
   onSubmit(): void {
+    this.errorMessage = '';
 
     Object.keys(this.registerForm.controls).forEach((key) => {
       const control = this.registerForm.get(key);
@@ -195,7 +197,8 @@ export class Register {
       this.registerForm.value.password !==
       this.registerForm.value.confirmPassword
     ) {
-      this.toastService.show('Passwords do not match', 'error');
+      this.errorMessage = 'Passwords do not match';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -229,10 +232,7 @@ export class Register {
       },
 
       error: (error) => {
-        this.toastService.show(
-          getApiErrorMessage(error, 'Registration failed'),
-          'error'
-        );
+        this.errorMessage = getApiErrorMessage(error, 'Registration failed');
 
         this.isSubmitting = false;
         this.cdr.detectChanges();
