@@ -41,11 +41,13 @@ export class HealthRecordDetails implements OnInit {
 
   showMedicalDocumentModal = false;
   selectedLabFile: File | null = null;
+  labFileError = false;
   toastMessage = '';
   toastType: 'success' | 'error' = 'success';
   showToast = false;
 
   selectedMedicalFile: File | null = null;
+  medicalFileError = false;
   isUploadingLabReport = false;
 
   isUploadingDocument = false;
@@ -193,6 +195,7 @@ export class HealthRecordDetails implements OnInit {
     this.labReportForm.reset();
 
     this.selectedLabFile = null;
+    this.labFileError = false;
 
     this.showLabReportModal = true;
   }
@@ -243,6 +246,7 @@ export class HealthRecordDetails implements OnInit {
     });
 
     this.selectedLabFile = null;
+    this.labFileError = false;
 
     this.showLabReportModal = true;
   }
@@ -272,10 +276,14 @@ export class HealthRecordDetails implements OnInit {
     this.labReportForm.reset();
 
     this.selectedLabFile = null;
+    this.labFileError = false;
   }
   saveLabReport(): void {
-    if (this.labReportForm.invalid) {
+    this.labFileError = !this.editingLabReportId && !this.selectedLabFile;
+
+    if (this.labReportForm.invalid || this.labFileError) {
       this.labReportForm.markAllAsTouched();
+      this.cdr.markForCheck();
       return;
     }
 
@@ -338,6 +346,7 @@ export class HealthRecordDetails implements OnInit {
     this.medicalDocumentForm.reset();
 
     this.selectedMedicalFile = null;
+    this.medicalFileError = false;
 
     this.showMedicalDocumentModal = true;
   }
@@ -359,6 +368,7 @@ export class HealthRecordDetails implements OnInit {
     });
 
     this.selectedMedicalFile = null;
+    this.medicalFileError = false;
 
     this.showMedicalDocumentModal = true;
   }
@@ -388,11 +398,15 @@ export class HealthRecordDetails implements OnInit {
     this.medicalDocumentForm.reset();
 
     this.selectedMedicalFile = null;
+    this.medicalFileError = false;
   }
   saveMedicalDocument(): void {
-    if (this.medicalDocumentForm.invalid) {
+    this.medicalFileError = !this.editingMedicalDocumentId && !this.selectedMedicalFile;
+
+    if (this.medicalDocumentForm.invalid || this.medicalFileError) {
       this.medicalDocumentForm.markAllAsTouched();
 
+      this.cdr.markForCheck();
       return;
     }
 
@@ -477,11 +491,13 @@ export class HealthRecordDetails implements OnInit {
     const input = event.target as HTMLInputElement;
 
     this.selectedLabFile = input.files?.[0] ?? null;
+    this.labFileError = !this.editingLabReportId && !this.selectedLabFile;
   }
   onMedicalFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     this.selectedMedicalFile = input.files?.[0] ?? null;
+    this.medicalFileError = !this.editingMedicalDocumentId && !this.selectedMedicalFile;
   }
   printPage(): void {
     globalThis.print();

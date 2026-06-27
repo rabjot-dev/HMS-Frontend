@@ -484,6 +484,9 @@
       <input type="text" placeholder="Doctor Name" formControlName="doctorName" />
 
       <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onLabFileChange($event)" />
+      @if(labFileError){
+      <span class="error-text">Report file is required</span>
+      }
       @if(editingLabReportId){
 
       <p class="file-name">Leave empty to keep the existing file.</p>
@@ -542,6 +545,9 @@
         }
       }
       <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onMedicalFileChange($event)" />
+      @if(medicalFileError){
+      <span class="error-text">Document file is required</span>
+      }
       @if(editingMedicalDocumentId){
 
       <p class="file-name">Leave empty to keep the existing file.</p>
