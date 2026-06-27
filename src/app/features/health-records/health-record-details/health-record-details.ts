@@ -41,13 +41,13 @@ export class HealthRecordDetails implements OnInit {
 
   showMedicalDocumentModal = false;
   selectedLabFile: File | null = null;
-  labFileError = false;
+  labFileError = '';
   toastMessage = '';
   toastType: 'success' | 'error' = 'success';
   showToast = false;
 
   selectedMedicalFile: File | null = null;
-  medicalFileError = false;
+  medicalFileError = '';
   isUploadingLabReport = false;
 
   isUploadingDocument = false;
@@ -56,11 +56,16 @@ export class HealthRecordDetails implements OnInit {
   documentPage = 1;
 
   readonly pageSize = 5;
+  readonly maxUploadSizeBytes = 5 * 1024 * 1024;
+  readonly maxUploadSizeLabel = '5 MB';
 
   timelineMeta: any = {};
   labMeta: any = {};
   documentMeta: any = {};
   readonly todayDate = this.formatDateInputValue(new Date());
+  readonly canDeleteHealthRecordDocuments = ['SUPER_ADMIN', 'ADMIN'].includes(
+    localStorage.getItem('role') || ''
+  );
   constructor(
     private readonly route: ActivatedRoute,
 
@@ -195,7 +200,7 @@ export class HealthRecordDetails implements OnInit {
     this.labReportForm.reset();
 
     this.selectedLabFile = null;
-    this.labFileError = false;
+    this.labFileError = '';
 
     this.showLabReportModal = true;
   }
@@ -246,7 +251,7 @@ export class HealthRecordDetails implements OnInit {
     });
 
     this.selectedLabFile = null;
-    this.labFileError = false;
+    this.labFileError = '';
 
     this.showLabReportModal = true;
   }
@@ -276,10 +281,14 @@ export class HealthRecordDetails implements OnInit {
     this.labReportForm.reset();
 
     this.selectedLabFile = null;
-    this.labFileError = false;
+    this.labFileError = '';
   }
   saveLabReport(): void {
-    this.labFileError = !this.editingLabReportId && !this.selectedLabFile;
+    this.labFileError = this.getFileValidationError(
+      this.selectedLabFile,
+      !this.editingLabReportId,
+      'Report file is required'
+    );
 
     if (this.labReportForm.invalid || this.labFileError) {
       this.labReportForm.markAllAsTouched();
@@ -330,7 +339,12 @@ export class HealthRecordDetails implements OnInit {
 
         this.cdr.markForCheck();
 
-        this.toast.error('Unable to add lab report');
+        this.toast.error(
+          this.getHttpErrorMessage(
+            error,
+            this.editingLabReportId ? 'Unable to update lab report' : 'Unable to add lab report'
+          )
+        );
       }
     });
   }
@@ -346,7 +360,7 @@ export class HealthRecordDetails implements OnInit {
     this.medicalDocumentForm.reset();
 
     this.selectedMedicalFile = null;
-    this.medicalFileError = false;
+    this.medicalFileError = '';
 
     this.showMedicalDocumentModal = true;
   }
@@ -368,7 +382,7 @@ export class HealthRecordDetails implements OnInit {
     });
 
     this.selectedMedicalFile = null;
-    this.medicalFileError = false;
+    this.medicalFileError = '';
 
     this.showMedicalDocumentModal = true;
   }
@@ -398,10 +412,14 @@ export class HealthRecordDetails implements OnInit {
     this.medicalDocumentForm.reset();
 
     this.selectedMedicalFile = null;
-    this.medicalFileError = false;
+    this.medicalFileError = '';
   }
   saveMedicalDocument(): void {
-    this.medicalFileError = !this.editingMedicalDocumentId && !this.selectedMedicalFile;
+    this.medicalFileError = this.getFileValidationError(
+      this.selectedMedicalFile,
+      !this.editingMedicalDocumentId,
+      'Document file is required'
+    );
 
     if (this.medicalDocumentForm.invalid || this.medicalFileError) {
       this.medicalDocumentForm.markAllAsTouched();
@@ -454,7 +472,12 @@ export class HealthRecordDetails implements OnInit {
       error: (error) => {
         console.error(error);
 
-        this.toast.error('Unable to add document');
+        this.toast.error(
+          this.getHttpErrorMessage(
+            error,
+            this.editingMedicalDocumentId ? 'Unable to update document' : 'Unable to add document'
+          )
+        );
 
         this.isUploadingDocument = false;
         this.cdr.markForCheck();
@@ -491,13 +514,47 @@ export class HealthRecordDetails implements OnInit {
     const input = event.target as HTMLInputElement;
 
     this.selectedLabFile = input.files?.[0] ?? null;
-    this.labFileError = !this.editingLabReportId && !this.selectedLabFile;
+    this.labFileError = this.getFileValidationError(
+      this.selectedLabFile,
+      !this.editingLabReportId,
+      'Report file is required'
+    );
+
+    if (this.labFileError && this.selectedLabFile) {
+      this.selectedLabFile = null;
+      input.value = '';
+    }
   }
   onMedicalFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     this.selectedMedicalFile = input.files?.[0] ?? null;
-    this.medicalFileError = !this.editingMedicalDocumentId && !this.selectedMedicalFile;
+    this.medicalFileError = this.getFileValidationError(
+      this.selectedMedicalFile,
+      !this.editingMedicalDocumentId,
+      'Document file is required'
+    );
+
+    if (this.medicalFileError && this.selectedMedicalFile) {
+      this.selectedMedicalFile = null;
+      input.value = '';
+    }
+  }
+
+  private getFileValidationError(file: File | null, isRequired: boolean, requiredMessage: string): string {
+    if (!file) {
+      return isRequired ? requiredMessage : '';
+    }
+
+    if (file.size > this.maxUploadSizeBytes) {
+      return `File size must not exceed ${this.maxUploadSizeLabel}`;
+    }
+
+    return '';
+  }
+
+  private getHttpErrorMessage(error: any, fallback: string): string {
+    return error?.error?.message || error?.message || fallback;
   }
   printPage(): void {
     globalThis.print();

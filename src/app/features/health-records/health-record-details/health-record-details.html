@@ -300,6 +300,7 @@
 
           }
           <button class="view-btn" (click)="editLabReport(report)">Edit</button>
+          @if(canDeleteHealthRecordDocuments){
           <button
             class="delete-btn"
             (click)="
@@ -310,6 +311,7 @@
           >
             Delete
           </button>
+          }
         </div>
       </div>
 
@@ -398,6 +400,7 @@
           }
           <button class="view-btn" (click)="editMedicalDocument(document)">Edit</button>
 
+          @if(canDeleteHealthRecordDocuments){
           <button
             class="delete-btn"
             (click)="
@@ -408,6 +411,7 @@
           >
             Delete
           </button>
+          }
         </div>
       </div>
 
@@ -485,7 +489,7 @@
 
       <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onLabFileChange($event)" />
       @if(labFileError){
-      <span class="error-text">Report file is required</span>
+      <span class="error-text">{{ labFileError }}</span>
       }
       @if(editingLabReportId){
 
@@ -546,7 +550,7 @@
       }
       <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onMedicalFileChange($event)" />
       @if(medicalFileError){
-      <span class="error-text">Document file is required</span>
+      <span class="error-text">{{ medicalFileError }}</span>
       }
       @if(editingMedicalDocumentId){
 
