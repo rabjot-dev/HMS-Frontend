@@ -1,4 +1,13 @@
 <nav class="nav-links" aria-label="Main navigation">
+  @if(nodeService.isSuperAdmin() && !nodeService.canAccessPath('/node-management')) {
+  <div class="nav-item">
+    <a routerLink="/node-management" routerLinkActive="active-link">
+      <span class="material-icons">account_tree</span>
+      Node Management
+    </a>
+  </div>
+  }
+
   @for ( node of nodeService.nodes | async; track node._id ) {
 
   <div class="nav-item">

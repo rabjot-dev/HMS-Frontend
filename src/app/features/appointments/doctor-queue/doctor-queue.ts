@@ -5,11 +5,13 @@ import { RouterLink } from '@angular/router';
 
 import { AppointmentService } from '../../../core/services/appointment';
 import { AuthService } from '../../../core/services/auth';
+import { ToastService } from '../../../core/services/toast';
+import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-doctor-queue',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SkeletonLoaderComponent],
   templateUrl: './doctor-queue.html',
   styleUrls: ['./doctor-queue.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -24,7 +26,8 @@ export class DoctorQueue implements OnInit {
   constructor(
     private readonly appointmentService: AppointmentService,
     public authService: AuthService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly toast: ToastService
   ) {}
 
   // Get logged-in doctor and load today's queue
@@ -73,13 +76,14 @@ export class DoctorQueue implements OnInit {
       next: (response) => {
         console.log(response);
 
-        alert('Consultation completed');
+        this.toast.success('Consultation completed');
 
         this.loadQueue();
       },
 
       error: (error) => {
         console.log(error);
+        this.toast.error('Unable to complete consultation');
       }
     });
   }
@@ -95,13 +99,14 @@ export class DoctorQueue implements OnInit {
       next: (response) => {
         console.log(response);
 
-        alert('Consultation started');
+        this.toast.success('Consultation started');
 
         this.loadQueue();
       },
 
       error: (error) => {
         console.log(error);
+        this.toast.error('Unable to start consultation');
       }
     });
   }

@@ -220,6 +220,88 @@ textarea:focus {
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
 }
 
+/*
+|--------------------------------------------------------------------------
+| Shared Admin Polish
+|--------------------------------------------------------------------------
+*/
+.glass-card,
+.table-wrapper,
+.table-container,
+.filters-wrapper,
+.section-card,
+.loading-card,
+.empty-state,
+.empty-card {
+  border-radius: 8px !important;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.top-section,
+.patients-header,
+.employees-header,
+.queue-header,
+.page-header {
+  border-radius: 8px !important;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.action-btn,
+.view-btn,
+.secondary-btn,
+.delete-btn,
+.submit-btn {
+  border-radius: 8px !important;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+thead th {
+  color: #334155;
+  background: #f8fafc;
+  font-weight: 800;
+}
+
+tbody tr {
+  transition: background 0.18s ease;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+.error-text {
+  display: block;
+  margin-top: 6px;
+  color: var(--danger);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+button:disabled,
+.primary-btn:disabled,
+.submit-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+@media (max-width: 720px) {
+  .top-section,
+  .patients-header,
+  .employees-header,
+  .queue-header,
+  .page-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
 textarea {
   resize: none;
 

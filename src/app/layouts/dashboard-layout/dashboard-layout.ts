@@ -61,9 +61,7 @@ export class DashboardLayout implements OnInit {
 
   // Logout user
   logout(): void {
-    const refreshToken = this.tokenService.getRefreshToken();
-
-    this.authService.logout(refreshToken!).subscribe();
+    this.authService.logout().subscribe();
 
     this.tokenService.removeTokens();
 

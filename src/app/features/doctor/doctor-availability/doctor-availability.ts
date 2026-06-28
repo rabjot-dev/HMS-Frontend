@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { EmployeeService } from '../../../core/services/employee';
+import { ToastService } from '../../../core/services/toast';
 
 @Component({
   selector: 'app-doctor-availability',
@@ -22,7 +23,8 @@ export class DoctorAvailability implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly employeeService: EmployeeService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly toast: ToastService
   ) {
     this.availabilityForm = this.fb.group({
       workingDays: [[]],
@@ -107,11 +109,12 @@ export class DoctorAvailability implements OnInit {
 
         this.cdr.detectChanges();
 
-        alert('Availability updated successfully');
+        this.toast.success('Availability updated successfully');
       },
 
       error: (error) => {
         console.log(error);
+        this.toast.error(error?.error?.message || 'Unable to update availability');
 
         this.isSubmitting = false;
 

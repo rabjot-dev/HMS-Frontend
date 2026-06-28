@@ -298,14 +298,18 @@
   </div>
   <app-pagination
     [page]="page"
-    [totalPages]="totalPages"
+    [totalPages]="page + (nextCursor ? 1 : 0)"
     [totalRecords]="totalRecords"
     [limit]="limit"
+    [cursorMode]="true"
+    [hasNextPage]="!!nextCursor"
     (previous)="previousPage()"
     (next)="nextPage()"
     (pageSizeChange)="
     limit = $event;
     page = 1;
+    cursorStack = [''];
+    nextCursor = '';
     loadAppointments()
   "
   ></app-pagination>

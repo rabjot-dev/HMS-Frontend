@@ -45,6 +45,7 @@ import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { MyProfile } from './features/profile/my-profile/my-profile';
 import { Home } from './features/floater/home/home';
 import { nodeGuard } from './core/guards/node.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   // Home Routes
@@ -113,19 +114,24 @@ export const routes: Routes = [
 
       {
         path: 'dashboard/admin',
-        component: AdminDashboard,
+        loadComponent: () =>
+          import('./features/dashboard/admin-dashboard/admin-dashboard').then((m) => m.AdminDashboard),
         canActivate: [nodeGuard]
       },
 
       {
         path: 'dashboard/doctor',
-        component: DoctorDashboard,
+        loadComponent: () =>
+          import('./features/dashboard/doctor-dashboard/doctor-dashboard').then((m) => m.DoctorDashboard),
         canActivate: [nodeGuard]
       },
 
       {
         path: 'dashboard/receptionist',
-        component: ReceptionistDashboard,
+        loadComponent: () =>
+          import('./features/dashboard/receptionist-dashboard/receptionist-dashboard').then(
+            (m) => m.ReceptionistDashboard
+          ),
         canActivate: [nodeGuard]
       },
 
@@ -135,33 +141,35 @@ export const routes: Routes = [
 
       {
         path: 'employees',
-        component: EmployeeList,
+        loadComponent: () => import('./features/employees/employee-list/employee-list').then((m) => m.EmployeeList),
         canActivate: [nodeGuard]
       },
 
       {
         path: 'employees/create',
-        component: AddEmployee,
+        loadComponent: () => import('./features/employees/add-employee/add-employee').then((m) => m.AddEmployee),
         canActivate: [nodeGuard]
       },
 
       {
         path: 'employees/pending',
-        component: PendingEmployees,
+        loadComponent: () =>
+          import('./features/employees/pending-employees/pending-employees').then((m) => m.PendingEmployees),
         canActivate: [nodeGuard]
       },
 
       // Internal pages
       {
         path: 'employees/:id',
-        component: EmployeeDetails,
+        loadComponent: () =>
+          import('./features/employees/employee-details/employee-details').then((m) => m.EmployeeDetails),
         canActivate: [nodeGuard],
         data: { nodePath: '/employees' }
       },
 
       {
         path: 'employees/edit/:id',
-        component: EditEmployee,
+        loadComponent: () => import('./features/employees/edit-employee/edit-employee').then((m) => m.EditEmployee),
         canActivate: [nodeGuard],
         data: { nodePath: '/employees' }
       },
@@ -172,27 +180,28 @@ export const routes: Routes = [
 
       {
         path: 'patients',
-        component: PatientList,
+        loadComponent: () => import('./features/patients/patient-list/patient-list').then((m) => m.PatientList),
         canActivate: [nodeGuard]
       },
 
       {
         path: 'patients/create',
-        component: AddPatient,
+        loadComponent: () => import('./features/patients/add-patient/add-patient').then((m) => m.AddPatient),
         canActivate: [nodeGuard]
       },
 
       // Internal pages
       {
         path: 'patients/:id',
-        component: PatientDetails,
+        loadComponent: () =>
+          import('./features/patients/patient-details/patient-details').then((m) => m.PatientDetails),
         canActivate: [nodeGuard],
         data: { nodePath: '/patients' }
       },
 
       {
         path: 'patients/edit/:id',
-        component: EditPatient,
+        loadComponent: () => import('./features/patients/edit-patient/edit-patient').then((m) => m.EditPatient),
         canActivate: [nodeGuard],
         data: { nodePath: '/patients' }
       },
@@ -203,13 +212,15 @@ export const routes: Routes = [
 
       {
         path: 'appointments',
-        component: AppointmentList,
+        loadComponent: () =>
+          import('./features/appointments/appointment-list/appointment-list').then((m) => m.AppointmentList),
         canActivate: [nodeGuard]
       },
 
       {
         path: 'appointments/book',
-        component: BookAppointment,
+        loadComponent: () =>
+          import('./features/appointments/book-appointment/book-appointment').then((m) => m.BookAppointment),
         canActivate: [nodeGuard]
       },
 
@@ -225,7 +236,8 @@ export const routes: Routes = [
       // Internal pages
       {
         path: 'appointments/edit/:id',
-        component: EditAppointment,
+        loadComponent: () =>
+          import('./features/appointments/edit-appointment/edit-appointment').then((m) => m.EditAppointment),
         canActivate: [nodeGuard],
         data: { nodePath: '/appointments' }
       },
@@ -236,14 +248,22 @@ export const routes: Routes = [
 
       {
         path: 'doctor-queue',
-        component: DoctorQueue,
+        loadComponent: () => import('./features/appointments/doctor-queue/doctor-queue').then((m) => m.DoctorQueue),
         canActivate: [nodeGuard]
       },
 
       {
         path: 'doctor-availability',
-        component: DoctorAvailability,
+        loadComponent: () =>
+          import('./features/doctor/doctor-availability/doctor-availability').then((m) => m.DoctorAvailability),
         canActivate: [nodeGuard]
+      },
+
+      {
+        path: 'node-management',
+        loadComponent: () =>
+          import('./features/node-management/node-management/node-management').then((m) => m.NodeManagement),
+        canActivate: [roleGuard(['SUPER_ADMIN'])]
       },
 
       // =====================
@@ -259,7 +279,8 @@ export const routes: Routes = [
       // Internal pages
       {
         path: 'consultation/:appointmentId',
-        component: ConsultationForm,
+        loadComponent: () =>
+          import('./features/consultations/consultation-form/consultation-form').then((m) => m.ConsultationForm),
         canActivate: [nodeGuard],
         data: { nodePath: '/doctor-queue' }
       },
@@ -280,7 +301,7 @@ export const routes: Routes = [
 
       {
         path: 'my-profile',
-        component: MyProfile,
+        loadComponent: () => import('./features/profile/my-profile/my-profile').then((m) => m.MyProfile),
         canActivate: [nodeGuard]
       }
     ]

@@ -25,6 +25,12 @@ export class PaginationComponent {
   @Input()
   showPageSize = true;
 
+  @Input()
+  cursorMode = false;
+
+  @Input()
+  hasNextPage = false;
+
   @Output()
   previous = new EventEmitter<void>();
 

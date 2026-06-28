@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PatientService } from '../../../core/services/patient';
+import { ToastService } from '../../../core/services/toast';
 
 @Component({
   selector: 'app-edit-patient',
@@ -25,7 +26,8 @@ export class EditPatient implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly patientService: PatientService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly toast: ToastService
   ) {
     this.patientForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -110,7 +112,7 @@ export class EditPatient implements OnInit {
       next: (response) => {
         console.log(response);
 
-        alert('Patient Updated Successfully');
+        this.toast.success('Patient updated successfully');
 
         this.isSubmitting = false;
         this.cdr.markForCheck();
@@ -121,6 +123,7 @@ export class EditPatient implements OnInit {
       error: (error) => {
         console.log(error);
 
+        this.toast.error(error?.error?.message || 'Unable to update patient');
         this.isSubmitting = false;
         this.cdr.markForCheck();
       }

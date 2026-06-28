@@ -12,7 +12,9 @@ export class AuthService {
   constructor(private readonly http: HttpClient) {}
 
   login(data: { loginId: string; password: string }): Observable<any> {
-    return this.http.post(`${API_BASE_URL}/auth/login`, data);
+    return this.http.post(`${API_BASE_URL}/auth/login`, data, {
+      withCredentials: true
+    });
   }
 
   getCurrentUser(): Observable<any> {
@@ -48,15 +50,15 @@ export class AuthService {
 
     return user.roles?.includes(role);
   }
-  refreshToken(refreshToken: string): Observable<any> {
-    return this.http.post(`${API_BASE_URL}/auth/refresh-token`, {
-      refreshToken
+  refreshToken(): Observable<any> {
+    return this.http.post(`${API_BASE_URL}/auth/refresh-token`, {}, {
+      withCredentials: true
     });
   }
 
-  logout(refreshToken: string): Observable<any> {
-    return this.http.post(`${API_BASE_URL}/auth/logout`, {
-      refreshToken
+  logout(): Observable<any> {
+    return this.http.post(`${API_BASE_URL}/auth/logout`, {}, {
+      withCredentials: true
     });
   }
 

@@ -60,13 +60,9 @@ export class Login {
         console.log('ACCESS TOKEN', response.data.accessToken);
         const accessToken = response.data.accessToken;
 
-        const refreshToken = response.data.refreshToken;
-
         const user = response.data.user;
 
         this.tokenService.setAccessToken(accessToken);
-
-        this.tokenService.setRefreshToken(refreshToken);
 
         this.authService.currentUser.next(user);
 

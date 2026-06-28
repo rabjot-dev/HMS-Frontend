@@ -7,13 +7,15 @@ import { ToastService } from '../../../core/services/toast';
 import { HealthRecordService } from '../../../core/services/health-record';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { ConsultationService } from '../../../core/services/consultation';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog';
+import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-health-record-details',
 
   standalone: true,
 
-  imports: [CommonModule, ReactiveFormsModule, PaginationComponent],
+  imports: [CommonModule, ReactiveFormsModule, PaginationComponent, SkeletonLoaderComponent],
 
   templateUrl: './health-record-details.html',
 
@@ -51,6 +53,7 @@ export class HealthRecordDetails implements OnInit {
   isUploadingLabReport = false;
 
   isUploadingDocument = false;
+  isDownloadingRecord = false;
   timelinePage = 1;
   labPage = 1;
   documentPage = 1;
@@ -76,7 +79,8 @@ export class HealthRecordDetails implements OnInit {
     private readonly consultationService: ConsultationService,
 
     private readonly cdr: ChangeDetectorRef,
-    private readonly toast: ToastService
+    private readonly toast: ToastService,
+    private readonly confirmDialog: ConfirmDialogService
   ) {}
 
   ngOnInit(): void {
@@ -158,17 +162,21 @@ export class HealthRecordDetails implements OnInit {
       next: (response) => {
         this.patient = response.data.patient;
 
-        this.consultations = response.data.consultations;
+        this.consultations = response.data.consultations ?? [];
 
-        this.patient.labReports = response.data.labReports;
+        this.patient.labReports = response.data.labReports ?? [];
 
-        this.patient.medicalDocuments = response.data.medicalDocuments;
+        this.patient.medicalDocuments = response.data.medicalDocuments ?? [];
 
         this.timelineMeta = response.data.meta.consultations;
 
         this.labMeta = response.data.meta.labReports;
 
         this.documentMeta = response.data.meta.medicalDocuments;
+
+        if (this.correctEmptyPagesAfterLoad()) {
+          return;
+        }
 
         this.isLoading = false;
 
@@ -255,8 +263,15 @@ export class HealthRecordDetails implements OnInit {
 
     this.showLabReportModal = true;
   }
-  deleteLabReport(reportId: string): void {
-    if (!confirm('Delete report?')) {
+  async deleteLabReport(reportId: string): Promise<void> {
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Delete lab report?',
+      message: 'This report will be removed from the patient record.',
+      confirmText: 'Delete',
+      tone: 'danger'
+    });
+
+    if (!confirmed) {
       return;
     }
 
@@ -264,7 +279,9 @@ export class HealthRecordDetails implements OnInit {
       next: () => {
         this.toast.success('Lab report deleted successfully');
 
-        this.loadHealthRecord(this.patient._id);
+        this.labPage = this.getPageAfterDelete(this.labMeta);
+
+        this.loadHealthRecord(this.patient._id, false);
       },
 
       error: (error) => {
@@ -386,8 +403,15 @@ export class HealthRecordDetails implements OnInit {
 
     this.showMedicalDocumentModal = true;
   }
-  deleteMedicalDocument(documentId: string): void {
-    if (!confirm('Delete document?')) {
+  async deleteMedicalDocument(documentId: string): Promise<void> {
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Delete medical document?',
+      message: 'This document will be removed from the patient record.',
+      confirmText: 'Delete',
+      tone: 'danger'
+    });
+
+    if (!confirmed) {
       return;
     }
 
@@ -395,7 +419,9 @@ export class HealthRecordDetails implements OnInit {
       next: () => {
         this.toast.success('Medical document deleted successfully');
 
-        this.loadHealthRecord(this.patient._id);
+        this.documentPage = this.getPageAfterDelete(this.documentMeta);
+
+        this.loadHealthRecord(this.patient._id, false);
       },
 
       error: (error) => {
@@ -510,6 +536,47 @@ export class HealthRecordDetails implements OnInit {
       }
     });
   }
+
+  downloadCompleteRecord(): void {
+    if (!this.patient?._id || this.isDownloadingRecord) {
+      return;
+    }
+
+    this.isDownloadingRecord = true;
+
+    this.healthRecordService
+      .getHealthRecordDetails(this.patient._id, {
+        timelinePage: 1,
+        labPage: 1,
+        documentPage: 1,
+        limit: 10000
+      })
+      .subscribe({
+        next: (response) => {
+          const record = response.data;
+          const blob = new Blob([JSON.stringify(record, null, 2)], {
+            type: 'application/json'
+          });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+
+          link.href = url;
+          link.download = `${record.patient?.patientId || 'patient'}-health-record.json`;
+          link.click();
+          URL.revokeObjectURL(url);
+
+          this.toast.success('Complete health record downloaded');
+          this.isDownloadingRecord = false;
+          this.cdr.markForCheck();
+        },
+        error: (error) => {
+          console.error(error);
+          this.toast.error('Unable to download complete health record');
+          this.isDownloadingRecord = false;
+          this.cdr.markForCheck();
+        }
+      });
+  }
   onLabFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
 
@@ -555,6 +622,35 @@ export class HealthRecordDetails implements OnInit {
 
   private getHttpErrorMessage(error: any, fallback: string): string {
     return error?.error?.message || error?.message || fallback;
+  }
+
+  private getPageAfterDelete(meta: any): number {
+    const totalAfterDelete = Math.max((meta?.totalRecords || 0) - 1, 0);
+    const nextTotalPages = Math.max(Math.ceil(totalAfterDelete / this.pageSize), 1);
+
+    return Math.min(meta?.page || 1, nextTotalPages);
+  }
+
+  private correctEmptyPagesAfterLoad(): boolean {
+    if (this.timelinePage > 1 && !this.consultations.length) {
+      this.timelinePage = Math.max((this.timelineMeta?.totalPages || 1), 1);
+      this.loadHealthRecord(this.patient._id, false);
+      return true;
+    }
+
+    if (this.labPage > 1 && !this.patient.labReports?.length) {
+      this.labPage = Math.max((this.labMeta?.totalPages || 1), 1);
+      this.loadHealthRecord(this.patient._id, false);
+      return true;
+    }
+
+    if (this.documentPage > 1 && !this.patient.medicalDocuments?.length) {
+      this.documentPage = Math.max((this.documentMeta?.totalPages || 1), 1);
+      this.loadHealthRecord(this.patient._id, false);
+      return true;
+    }
+
+    return false;
   }
   printPage(): void {
     globalThis.print();

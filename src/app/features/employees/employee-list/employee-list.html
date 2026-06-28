@@ -68,6 +68,20 @@
     </div>
   </div>
 
+  @if(isLoading){
+
+  <app-skeleton-loader [rows]="5"></app-skeleton-loader>
+
+  } @else if(employees.length === 0) {
+
+  <app-empty-state
+    icon="groups"
+    title="No Employees Found"
+    message="Try changing filters or add a new employee."
+  ></app-empty-state>
+
+  } @else {
+
   <!-- Table -->
 
   <div class="table-wrapper glass-card">
@@ -223,9 +237,11 @@
   </div>
   <app-pagination
     [page]="page"
-    [totalPages]="totalPages"
+    [totalPages]="page + (nextCursor ? 1 : 0)"
     [totalRecords]="total"
     [limit]="limit"
+    [cursorMode]="true"
+    [hasNextPage]="!!nextCursor"
     (previous)="previousPage()"
     (next)="nextPage()"
     (pageSizeChange)="
@@ -234,4 +250,5 @@
     loadEmployees(false)
   "
   ></app-pagination>
+  }
 </div>

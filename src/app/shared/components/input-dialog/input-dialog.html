@@ -1,0 +1,28 @@
+@if(dialog$ | async; as dialog) {
+<div class="input-backdrop" (click)="cancel()">
+  <section class="input-card" (click)="$event.stopPropagation()">
+    <div>
+      <h2>{{ dialog.title }}</h2>
+      @if(dialog.message) {
+      <p>{{ dialog.message }}</p>
+      }
+    </div>
+
+    <label>
+      <span>{{ dialog.inputLabel }}</span>
+      <input
+        [(ngModel)]="value"
+        [type]="dialog.inputType"
+        [min]="dialog.min"
+        autofocus
+        (keyup.enter)="submit()"
+      />
+    </label>
+
+    <div class="input-actions">
+      <button type="button" class="cancel-btn" (click)="cancel()">{{ dialog.cancelText }}</button>
+      <button type="button" class="submit-btn" (click)="submit()">{{ dialog.confirmText }}</button>
+    </div>
+  </section>
+</div>
+}

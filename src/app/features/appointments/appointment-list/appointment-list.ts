@@ -7,6 +7,8 @@ import { AppointmentService } from '../../../core/services/appointment';
 import { AuthService } from '../../../core/services/auth';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { NodeService } from '../../../core/services/node';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog';
+import { ToastService } from '../../../core/services/toast';
 
 @Component({
   selector: 'app-appointment-list',
@@ -26,6 +28,8 @@ export class AppointmentList implements OnInit {
   endDate = '';
   page = 1;
   limit = 10;
+  cursorStack: string[] = [''];
+  nextCursor = '';
 
   totalRecords = 0;
   totalPages = 0;
@@ -34,7 +38,9 @@ export class AppointmentList implements OnInit {
     private readonly appointmentService: AppointmentService,
     public readonly authService: AuthService,
     public readonly nodeService: NodeService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly confirmDialog: ConfirmDialogService,
+    private readonly toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -44,7 +50,9 @@ export class AppointmentList implements OnInit {
   loadAppointments(): void {
     const params: any = {
       page: this.page,
-      limit: this.limit
+      limit: this.limit,
+      pagination: 'cursor',
+      cursor: this.cursorStack[this.page - 1] || ''
     };
 
     if (this.search.trim()) {
@@ -74,6 +82,13 @@ export class AppointmentList implements OnInit {
         this.totalRecords = response.meta?.total || 0;
 
         this.totalPages = response.meta?.totalPages || 0;
+        this.nextCursor = response.meta?.nextCursor || '';
+
+        if (this.page > 1 && this.appointments.length === 0) {
+          this.page = Math.max(this.totalPages || 1, 1);
+          this.loadAppointments();
+          return;
+        }
 
         this.cdr.detectChanges();
       },
@@ -85,6 +100,8 @@ export class AppointmentList implements OnInit {
   }
   onFilterChange(): void {
     this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
 
     this.loadAppointments();
   }
@@ -98,7 +115,8 @@ export class AppointmentList implements OnInit {
   }
 
   nextPage(): void {
-    if (this.page < this.totalPages) {
+    if (this.nextCursor) {
+      this.cursorStack[this.page] = this.nextCursor;
       this.page++;
 
       this.loadAppointments();
@@ -111,20 +129,28 @@ export class AppointmentList implements OnInit {
     this.limit = Number(select.value);
 
     this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
 
     this.loadAppointments();
   }
 
-  deleteAppointment(id: string): void {
-    const confirmDelete = confirm('Delete this appointment?');
+  async deleteAppointment(id: string): Promise<void> {
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Delete appointment?',
+      message: 'This appointment will be removed from the schedule.',
+      confirmText: 'Delete',
+      tone: 'danger'
+    });
 
-    if (!confirmDelete) {
+    if (!confirmed) {
       return;
     }
 
     this.appointmentService.deleteAppointment(id).subscribe({
       next: () => {
-        alert('Appointment deleted successfully');
+        this.page = this.getPageAfterDelete();
+        this.toast.success('Appointment deleted successfully');
 
         this.loadAppointments();
       },
@@ -133,5 +159,12 @@ export class AppointmentList implements OnInit {
         console.log(error);
       }
     });
+  }
+
+  private getPageAfterDelete(): number {
+    const totalAfterDelete = Math.max(this.totalRecords - 1, 0);
+    const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
+
+    return Math.min(this.page, totalPagesAfterDelete);
   }
 }

@@ -9,13 +9,14 @@ import { RouterLink } from '@angular/router';
 import { HealthRecordService } from '../../../core/services/health-record';
 
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
+import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-health-record-list',
 
   standalone: true,
 
-  imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
+  imports: [CommonModule, FormsModule, RouterLink, PaginationComponent, SkeletonLoaderComponent],
 
   templateUrl: './health-record-list.html',
 
@@ -33,6 +34,8 @@ export class HealthRecordList implements OnInit {
   page = 1;
 
   limit = 10;
+  cursorStack: string[] = [''];
+  nextCursor = '';
 
   meta: any = {};
 
@@ -55,6 +58,8 @@ export class HealthRecordList implements OnInit {
       .getHealthRecords({
         page: this.page,
         limit: this.limit,
+        pagination: 'cursor',
+        cursor: this.cursorStack[this.page - 1] || '',
         search: this.search
       })
       .subscribe({
@@ -62,6 +67,13 @@ export class HealthRecordList implements OnInit {
           this.healthRecords = response.data;
 
           this.meta = response.meta;
+          this.nextCursor = response.meta?.nextCursor || '';
+
+          if (this.page > 1 && this.healthRecords.length === 0) {
+            this.page = Math.max(this.meta?.totalPages || 1, 1);
+            this.loadHealthRecords(false);
+            return;
+          }
 
           this.isLoading = false;
 
@@ -80,12 +92,15 @@ export class HealthRecordList implements OnInit {
 
   onSearch(): void {
     this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
 
     this.loadHealthRecords(false);
   }
 
   nextPage(): void {
-    if (this.meta?.hasNextPage) {
+    if (this.meta?.hasNextPage && this.nextCursor) {
+      this.cursorStack[this.page] = this.nextCursor;
       this.page++;
 
       this.loadHealthRecords(false);
@@ -95,8 +110,17 @@ export class HealthRecordList implements OnInit {
   previousPage(): void {
     if (this.page > 1) {
       this.page--;
+      this.nextCursor = '';
 
       this.loadHealthRecords(false);
     }
+  }
+
+  onPageSizeChange(nextLimit: number): void {
+    this.limit = nextLimit;
+    this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
+    this.loadHealthRecords(false);
   }
 }

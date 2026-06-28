@@ -18,10 +18,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const accessToken = tokenService.getAccessToken();
 
-  let authReq = req;
+  let authReq = req.clone({
+    withCredentials: true
+  });
 
   if (accessToken) {
-    authReq = req.clone({
+    authReq = authReq.clone({
       setHeaders: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -30,21 +32,20 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      const refreshToken = tokenService.getRefreshToken();
-
       const isRefreshCall = req.url.includes('/auth/refresh-token');
 
-      if (error.status !== 401 || !refreshToken || isRefreshCall) {
+      if (error.status !== 401 || isRefreshCall) {
         return throwError(() => error);
       }
 
-      return authService.refreshToken(refreshToken).pipe(
+      return authService.refreshToken().pipe(
         switchMap((response: any) => {
           const newAccessToken = response.data.accessToken;
 
           tokenService.setAccessToken(newAccessToken);
 
           const retryRequest = req.clone({
+            withCredentials: true,
             setHeaders: {
               Authorization: `Bearer ${newAccessToken}`
             }

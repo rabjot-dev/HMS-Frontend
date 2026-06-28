@@ -23,11 +23,7 @@
 
   @if(isLoading){
 
-  <div class="loading-card glass-card">
-    <div class="loader"></div>
-
-    <p>Loading Queue...</p>
-  </div>
+  <app-skeleton-loader [rows]="4"></app-skeleton-loader>
 
   } @else {
 

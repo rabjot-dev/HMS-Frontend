@@ -1,7 +1,7 @@
 <div class="health-record-details-page">
   @if (isLoading) {
 
-  <div class="loading-card">Loading Health Record...</div>
+  <app-skeleton-loader [rows]="5"></app-skeleton-loader>
 
   } @else {
 
@@ -19,6 +19,15 @@
 
       <div class="avatar">{{ patient?.firstName?.charAt(0) }}</div>
     </div>
+
+    <button
+      type="button"
+      class="secondary-btn"
+      (click)="downloadCompleteRecord()"
+      [disabled]="isDownloadingRecord"
+    >
+      {{ isDownloadingRecord ? 'Downloading...' : 'Download Complete Record' }}
+    </button>
 
     <div class="patient-grid">
       <div class="info-item">
@@ -504,6 +513,7 @@
         <button type="button" class="secondary-btn" (click)="closeLabModal()">Cancel</button>
 
         <button
+          type="button"
           class="primary-btn"
           (click)="saveLabReport()"
           [disabled]="
@@ -566,6 +576,7 @@
         <button type="button" class="secondary-btn" (click)="closeDocumentModal()">Cancel</button>
 
         <button
+          type="button"
           class="primary-btn"
           (click)="
     saveMedicalDocument()

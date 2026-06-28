@@ -20,8 +20,28 @@ export class NodeService {
     }
   }
 
-  getNodes() {
-    return this.http.get<any>(`${API_BASE_URL}/nodes`);
+  getNodes(params?: any) {
+    return this.http.get<any>(`${API_BASE_URL}/nodes`, {
+      params
+    });
+  }
+
+  getManagementNodes() {
+    return this.getNodes({
+      management: true
+    });
+  }
+
+  createNode(data: any) {
+    return this.http.post<any>(`${API_BASE_URL}/nodes`, data);
+  }
+
+  updateNode(id: string, data: any) {
+    return this.http.put<any>(`${API_BASE_URL}/nodes/${id}`, data);
+  }
+
+  deleteNode(id: string) {
+    return this.http.delete<any>(`${API_BASE_URL}/nodes/${id}`);
   }
 
   loadNodes(): void {
@@ -66,6 +86,10 @@ export class NodeService {
         return methodMatches && pathMatches && roleMatches;
       })
     );
+  }
+
+  isSuperAdmin(): boolean {
+    return this.getUserRoles().includes('SUPER_ADMIN');
   }
 
   private getFlatNodes(): any[] {

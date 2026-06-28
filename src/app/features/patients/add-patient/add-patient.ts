@@ -430,7 +430,11 @@ export class AddPatient implements OnInit {
         console.log('FULL ERROR =>', error);
         console.log('VALIDATION ERRORS =>', error?.error?.errors);
 
-        alert(JSON.stringify(error?.error?.errors, null, 2));
+        const validationMessage = Array.isArray(error?.error?.errors)
+          ? error.error.errors.map((item: any) => item.msg || item.message).filter(Boolean).join(', ')
+          : error?.error?.message;
+
+        this.toastService.error(validationMessage || 'Unable to register patient');
 
         this.isSubmitting = false;
         this.cdr.markForCheck();

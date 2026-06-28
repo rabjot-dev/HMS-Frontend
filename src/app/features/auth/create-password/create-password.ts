@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { TokenService } from '../../../core/services/token';
 import { AuthService } from '../../../core/services/auth';
+import { ToastService } from '../../../core/services/toast';
 
 @Component({
   selector: 'app-create-password',
@@ -14,6 +15,7 @@ import { AuthService } from '../../../core/services/auth';
 })
 export class CreatePassword {
   passwordForm: FormGroup;
+  isSubmitting = false;
 
   securityQuestions = [
     'What is your favourite color?',
@@ -28,7 +30,8 @@ export class CreatePassword {
     private readonly router: Router,
     private readonly tokenService: TokenService,
     private readonly authService: AuthService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly toast: ToastService
   ) {
     this.passwordForm = this.fb.group({
       temporaryPassword: ['', Validators.required],
@@ -52,13 +55,21 @@ export class CreatePassword {
   // Create password on first login
   onSubmit(): void {
     if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
       return;
     }
 
     if (this.passwordForm.value.newPassword !== this.passwordForm.value.confirmPassword) {
-      alert('Passwords do not match');
+      this.toast.error('Passwords do not match');
       return;
     }
+
+    if (this.isSubmitting) {
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.cdr.markForCheck();
 
     const payload = {
       loginId: localStorage.getItem('loginId'),
@@ -73,13 +84,18 @@ export class CreatePassword {
       next: (response) => {
         console.log(response);
 
+        this.toast.success('Password created successfully');
         this.tokenService.removeTokens();
         this.router.navigate(['/login']);
+        this.isSubmitting = false;
+        this.cdr.markForCheck();
       },
 
       error: (error) => {
         console.log(error);
         console.log(error.error.errors);
+        this.toast.error(error?.error?.message || 'Unable to create password');
+        this.isSubmitting = false;
         this.cdr.markForCheck();
       }
     });

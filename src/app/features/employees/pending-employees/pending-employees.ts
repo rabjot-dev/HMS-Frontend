@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 import { NodeService } from '../../../core/services/node';
+import { InputDialogService } from '../../../core/services/input-dialog';
 
 @Component({
   selector: 'app-pending-employees',
@@ -20,7 +21,8 @@ export class PendingEmployees implements OnInit {
     private readonly employeeService: EmployeeService,
     private readonly toastService: ToastService,
     public readonly nodeService: NodeService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly inputDialog: InputDialogService
   ) {}
 
   // Load pending employees on page load
@@ -46,14 +48,21 @@ export class PendingEmployees implements OnInit {
   }
 
   // Approve employee
-  approveEmployee(employee: any): void {
+  async approveEmployee(employee: any): Promise<void> {
     let consultationFee = null;
 
     if (employee.designation === 'DOCTOR') {
-      const fee = prompt(`Enter consultation fee for Dr. ${employee.name}`);
+      const fee = await this.inputDialog.ask({
+        title: 'Consultation fee',
+        message: `Enter consultation fee for Dr. ${employee.name}`,
+        inputLabel: 'Fee',
+        inputType: 'number',
+        min: 0,
+        confirmText: 'Approve'
+      });
 
       if (fee === null || fee.trim() === '' || Number(fee) < 0) {
-        alert('Valid consultation fee is required');
+        this.toastService.error('Valid consultation fee is required');
         return;
       }
 

@@ -9,13 +9,17 @@ import { RouterLink } from '@angular/router';
 import { PatientService } from '../../../core/services/patient';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { NodeService } from '../../../core/services/node';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog';
+import { ToastService } from '../../../core/services/toast';
+import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state';
 
 @Component({
   selector: 'app-patient-list',
 
   standalone: true,
 
-  imports: [CommonModule, FormsModule, RouterLink, PaginationComponent],
+  imports: [CommonModule, FormsModule, RouterLink, PaginationComponent, SkeletonLoaderComponent, EmptyStateComponent],
 
   templateUrl: './patient-list.html',
 
@@ -36,15 +40,20 @@ export class PatientList implements OnInit {
 
   page = 1;
   limit = 10;
+  cursorStack: string[] = [''];
+  nextCursor = '';
 
   totalRecords = 0;
   totalPages = 0;
+  isLoading = false;
 
   constructor(
     private readonly patientService: PatientService,
     public readonly nodeService: NodeService,
 
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly confirmDialog: ConfirmDialogService,
+    private readonly toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -54,9 +63,13 @@ export class PatientList implements OnInit {
   }
 
   loadPatients(): void {
+    this.isLoading = true;
+
     const params: any = {
       page: this.page,
-      limit: this.limit
+      limit: this.limit,
+      pagination: 'cursor',
+      cursor: this.cursorStack[this.page - 1] || ''
     };
 
     if (this.search.trim()) {
@@ -88,18 +101,33 @@ export class PatientList implements OnInit {
         this.totalRecords = response.meta?.total || 0;
 
         this.totalPages = response.meta?.totalPages || 0;
+        this.nextCursor = response.meta?.nextCursor || '';
+
+        if (this.page > 1 && this.patients.length === 0) {
+          this.page = Math.max(this.totalPages || 1, 1);
+          this.loadPatients();
+          return;
+        }
+
+        this.isLoading = false;
 
         this.cdr.detectChanges();
       },
 
       error: (error) => {
         console.log(error);
+
+        this.isLoading = false;
+
+        this.cdr.detectChanges();
       }
     });
   }
 
   onFilterChange(): void {
     this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
 
     this.loadPatients();
   }
@@ -113,7 +141,8 @@ export class PatientList implements OnInit {
   }
 
   nextPage(): void {
-    if (this.page < this.totalPages) {
+    if (this.nextCursor) {
+      this.cursorStack[this.page] = this.nextCursor;
       this.page++;
 
       this.loadPatients();
@@ -126,15 +155,20 @@ export class PatientList implements OnInit {
     this.limit = Number(select.value);
 
     this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
 
     this.loadPatients();
   }
-  deletePatient(id: string): void {
-  if (
-    !confirm(
-      'Delete this patient?'
-    )
-  ) {
+  async deletePatient(id: string): Promise<void> {
+  const confirmed = await this.confirmDialog.confirm({
+    title: 'Delete patient?',
+    message: 'This patient will be removed from active records.',
+    confirmText: 'Delete',
+    tone: 'danger'
+  });
+
+  if (!confirmed) {
     return;
   }
 
@@ -142,6 +176,8 @@ export class PatientList implements OnInit {
     .deletePatient(id)
     .subscribe({
       next: () => {
+        this.page = this.getPageAfterDelete();
+        this.toast.success('Patient deleted successfully');
         this.loadPatients();
       },
 
@@ -149,5 +185,12 @@ export class PatientList implements OnInit {
         console.log(error);
       }
     });
+}
+
+private getPageAfterDelete(): number {
+  const totalAfterDelete = Math.max(this.totalRecords - 1, 0);
+  const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
+
+  return Math.min(this.page, totalPagesAfterDelete);
 }
 }
