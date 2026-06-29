@@ -554,18 +554,9 @@ export class HealthRecordDetails implements OnInit {
       .subscribe({
         next: (response) => {
           const record = response.data;
-          const blob = new Blob([JSON.stringify(record, null, 2)], {
-            type: 'application/json'
-          });
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
+          this.printCompleteHealthRecord(record);
 
-          link.href = url;
-          link.download = `${record.patient?.patientId || 'patient'}-health-record.json`;
-          link.click();
-          URL.revokeObjectURL(url);
-
-          this.toast.success('Complete health record downloaded');
+          this.toast.success('Complete health record opened for PDF printing');
           this.isDownloadingRecord = false;
           this.cdr.markForCheck();
         },
@@ -576,6 +567,220 @@ export class HealthRecordDetails implements OnInit {
           this.cdr.markForCheck();
         }
       });
+  }
+
+  private printCompleteHealthRecord(record: any): void {
+    const printWindow = window.open('', '_blank', 'width=1100,height=800');
+
+    if (!printWindow) {
+      this.toast.error('Please allow popups to print the health record');
+      return;
+    }
+
+    printWindow.document.open();
+    printWindow.document.write(this.buildCompleteHealthRecordHtml(record));
+    printWindow.document.close();
+
+    printWindow.onload = () => {
+      printWindow.focus();
+      printWindow.print();
+    };
+  }
+
+  private buildCompleteHealthRecordHtml(record: any): string {
+    const patient = record.patient || {};
+    const fullName = `${patient.firstName || ''} ${patient.lastName || ''}`.trim() || 'Patient';
+    const consultations = record.consultations || [];
+    const labReports = record.labReports || [];
+    const medicalDocuments = record.medicalDocuments || [];
+
+    return `
+      <!doctype html>
+      <html>
+        <head>
+          <title>${this.escapeHtml(patient.patientId || 'patient')}-health-record</title>
+          <style>
+            * { box-sizing: border-box; }
+            body { margin: 0; padding: 28px; font-family: Arial, sans-serif; color: #0f172a; background: #ffffff; }
+            h1, h2, h3, p { margin-top: 0; }
+            h1 { font-size: 28px; margin-bottom: 6px; }
+            h2 { font-size: 20px; margin: 26px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #e2e8f0; }
+            h3 { font-size: 16px; margin-bottom: 8px; }
+            .muted { color: #64748b; }
+            .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+            .box, .card { border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-top: 10px; break-inside: avoid; }
+            .label { display: block; color: #64748b; font-size: 12px; margin-bottom: 3px; }
+            .value { font-weight: 700; }
+            table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+            th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; vertical-align: top; font-size: 12px; }
+            th { background: #f8fafc; }
+            ul { margin: 6px 0 0; padding-left: 18px; }
+            a { color: #2563eb; word-break: break-all; }
+            .file-preview { max-width: 100%; max-height: 420px; margin-top: 10px; border: 1px solid #e2e8f0; border-radius: 6px; }
+            .print-note { margin-top: 12px; padding: 10px; border-radius: 8px; background: #eff6ff; color: #1e40af; font-size: 12px; }
+            @media print {
+              body { padding: 18mm; }
+              .card, .box { break-inside: avoid; }
+              a { color: #0f172a; text-decoration: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <h1>${this.escapeHtml(fullName)}</h1>
+          <p class="muted">Complete Health Record • Generated ${this.formatDisplayDate(new Date().toISOString())}</p>
+
+          <section class="grid">
+            ${this.infoBox('Patient ID', patient.patientId)}
+            ${this.infoBox('Gender', patient.gender)}
+            ${this.infoBox('Blood Group', patient.bloodGroup)}
+            ${this.infoBox('Phone', patient.phone)}
+            ${this.infoBox('Date of Birth', this.formatDisplayDate(patient.dateOfBirth))}
+            ${this.infoBox('Allergies', patient.allergies)}
+          </section>
+
+          <section>
+            <h2>Consultations & Prescriptions (${consultations.length})</h2>
+            ${
+              consultations
+                .map((consultation: any) => this.renderConsultationForPrint(consultation))
+                .join('') || '<p class="muted">No consultations available.</p>'
+            }
+          </section>
+
+          <section>
+            <h2>Lab Reports (${labReports.length})</h2>
+            ${
+              labReports
+                .map((report: any) => this.renderUploadedRecordForPrint(report, 'reportDate', 'reportType'))
+                .join('') || '<p class="muted">No lab reports uploaded.</p>'
+            }
+          </section>
+
+          <section>
+            <h2>Medical Documents (${medicalDocuments.length})</h2>
+            ${
+              medicalDocuments
+                .map((document: any) => this.renderUploadedRecordForPrint(document, 'recordDate', 'documentType'))
+                .join('') || '<p class="muted">No medical documents uploaded.</p>'
+            }
+          </section>
+
+          <p class="print-note">
+            Uploaded image files are printed inline when supported. PDF and other uploaded files are included as printable links.
+          </p>
+        </body>
+      </html>
+    `;
+  }
+
+  private renderConsultationForPrint(consultation: any): string {
+    const prescriptions = consultation.prescriptions || [];
+
+    return `
+      <div class="card">
+        <h3>${this.formatDisplayDate(consultation.createdAt)} • ${this.escapeHtml(consultation.doctorEmployeeId?.name || 'Doctor')}</h3>
+        <p><strong>Diagnosis:</strong> ${this.escapeHtml(consultation.diagnosis)}</p>
+        <p><strong>Symptoms:</strong> ${this.escapeHtml((consultation.symptoms || []).join(', '))}</p>
+        <p><strong>Doctor Notes:</strong> ${this.escapeHtml(consultation.doctorNotes)}</p>
+        ${
+          prescriptions.length
+            ? `
+              <table>
+                <thead>
+                  <tr>
+                    <th>Medicine</th>
+                    <th>Dosage</th>
+                    <th>Frequency</th>
+                    <th>Duration</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${prescriptions
+                    .map(
+                      (item: any) => `
+                        <tr>
+                          <td>${this.escapeHtml(item.medicineName)}</td>
+                          <td>${this.escapeHtml(item.dosage)}</td>
+                          <td>${this.escapeHtml(item.frequency)}</td>
+                          <td>${this.escapeHtml(item.duration)}</td>
+                        </tr>
+                      `
+                    )
+                    .join('')}
+                </tbody>
+              </table>
+            `
+            : '<p class="muted">No prescriptions recorded for this consultation.</p>'
+        }
+      </div>
+    `;
+  }
+
+  private renderUploadedRecordForPrint(item: any, dateField: string, typeField: string): string {
+    const fileUrl = this.getAbsoluteFileUrl(item.documentUrl);
+
+    return `
+      <div class="card">
+        <h3>${this.escapeHtml(item.title)}</h3>
+        <p><strong>Type:</strong> ${this.escapeHtml(item[typeField])}</p>
+        <p><strong>Date:</strong> ${this.formatDisplayDate(item[dateField])}</p>
+        <p><strong>Doctor:</strong> ${this.escapeHtml(item.doctorName)}</p>
+        <p><strong>Hospital/Lab:</strong> ${this.escapeHtml(item.hospitalName || item.labName)}</p>
+        <p><strong>Notes:</strong> ${this.escapeHtml(item.notes)}</p>
+        ${
+          fileUrl
+            ? `
+              <p><strong>Uploaded File:</strong> <a href="${fileUrl}" target="_blank">${fileUrl}</a></p>
+              ${this.isPrintableImage(fileUrl) ? `<img class="file-preview" src="${fileUrl}" alt="${this.escapeHtml(item.title)}" />` : ''}
+            `
+            : '<p class="muted">No uploaded file attached.</p>'
+        }
+      </div>
+    `;
+  }
+
+  private infoBox(label: string, value: any): string {
+    return `
+      <div class="box">
+        <span class="label">${this.escapeHtml(label)}</span>
+        <span class="value">${this.escapeHtml(value)}</span>
+      </div>
+    `;
+  }
+
+  private getAbsoluteFileUrl(path?: string): string {
+    if (!path) {
+      return '';
+    }
+
+    if (path.startsWith('http')) {
+      return path;
+    }
+
+    return `http://localhost:5000/${path.replace(/^\/+/, '')}`;
+  }
+
+  private isPrintableImage(url: string): boolean {
+    return /\.(png|jpe?g|gif|webp)$/i.test(url.split('?')[0]);
+  }
+
+  private formatDisplayDate(value?: string): string {
+    if (!value) {
+      return 'N/A';
+    }
+
+    const date = new Date(value);
+
+    return Number.isNaN(date.getTime()) ? 'N/A' : date.toLocaleDateString();
+  }
+
+  private escapeHtml(value: any): string {
+    return String(value ?? 'N/A')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
   onLabFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;

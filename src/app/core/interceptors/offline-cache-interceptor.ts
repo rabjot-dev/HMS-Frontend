@@ -30,11 +30,11 @@ export const offlineCacheInterceptor: HttpInterceptorFn = (req, next) => {
       if (cached) {
         const parsed = JSON.parse(cached);
 
-        toast.show('Offline mode: showing cached data', 'success');
+        toast.show('Offline mode', 'error');
 
         return of(
           new HttpResponse({
-            status: 200,
+            status: 500,
             body: parsed.body,
             url: req.urlWithParams
           })
@@ -85,11 +85,11 @@ export const offlineCacheInterceptor: HttpInterceptorFn = (req, next) => {
           const isFresh = Date.now() - parsed.createdAt <= CACHE_TTL_MS;
 
           if (isFresh || error.status === 0) {
-            toast.show('Network issue: showing cached data', 'success');
+            toast.show('Network issue', 'error');
 
             return of(
               new HttpResponse({
-                status: 200,
+                status: 500,
                 body: parsed.body,
                 url: req.urlWithParams
               })
