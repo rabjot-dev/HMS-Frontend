@@ -56,8 +56,8 @@ export class EmployeeService {
   }
 
   // Reject employee registration
-  rejectEmployee(employeeId: string): Observable<any> {
-    return this.http.patch(`${API_BASE_URL}/employees/${employeeId}/reject-employee`, {});
+  rejectEmployee(employeeId: string, data: any = {}): Observable<any> {
+    return this.http.patch(`${API_BASE_URL}/employees/${employeeId}/reject-employee`, data);
   }
 
   // Get all available doctors

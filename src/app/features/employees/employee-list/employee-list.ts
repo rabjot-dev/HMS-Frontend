@@ -89,9 +89,10 @@ export class EmployeeList implements OnInit {
       next: (response) => {
         this.employees = response.data;
 
-        this.total = response.meta.total;
+        this.total = response.meta?.totalRecords ?? response.meta?.total ?? 0;
 
-        this.totalPages = response.meta.totalPages;
+        this.totalPages =
+          response.meta?.totalPages || Math.max(Math.ceil(this.total / this.limit), 1);
         this.nextCursor = response.meta?.nextCursor || '';
 
         if (this.page > 1 && this.employees.length === 0) {

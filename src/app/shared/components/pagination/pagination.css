@@ -5,15 +5,13 @@
 
   border-radius: 12px;
 
-  display: flex;
+  display: grid;
 
-  justify-content: space-between;
+  grid-template-columns: minmax(120px, 1fr) auto minmax(120px, 1fr);
 
   align-items: center;
 
   gap: 12px;
-
-  flex-wrap: wrap;
 
   background: #ffffff;
 
@@ -30,6 +28,8 @@
   font-weight: 700;
 
   color: #475569;
+
+  justify-self: start;
 }
 
 .pagination-controls {
@@ -40,6 +40,10 @@
   gap: 10px;
 
   flex-wrap: wrap;
+
+  justify-content: center;
+
+  justify-self: center;
 }
 
 .pagination-controls span {
@@ -78,7 +82,25 @@
   cursor: not-allowed;
 }
 
-.pagination-controls select {
+.page-size {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  justify-self: end;
+}
+
+.page-size span {
+  font-size: 13px;
+
+  font-weight: 700;
+
+  color: #64748b;
+}
+
+.page-size select {
   padding: 8px 10px;
 
   border-radius: 8px;
@@ -94,9 +116,14 @@
 
 @media (max-width: 768px) {
   .pagination-card {
-    flex-direction: column;
+    grid-template-columns: 1fr;
 
-    align-items: stretch;
+    justify-items: center;
+  }
+
+  .total-records,
+  .page-size {
+    justify-self: center;
   }
 
   .pagination-controls {

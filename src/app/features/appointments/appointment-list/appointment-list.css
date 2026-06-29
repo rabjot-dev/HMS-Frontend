@@ -320,6 +320,11 @@ tbody td:last-child {
   color: #dc2626;
 }
 
+.status-badge.rejected {
+  background: rgba(100, 116, 139, 0.14);
+  color: #475569;
+}
+
 .status-badge.consultation {
   background: rgba(139, 92, 246, 0.14);
   color: #7c3aed;

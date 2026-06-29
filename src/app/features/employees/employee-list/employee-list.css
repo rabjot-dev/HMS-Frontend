@@ -529,6 +529,11 @@ tbody td:last-child {
   color: #dc2626;
 }
 
+.status-badge.rejected {
+  background: rgba(100, 116, 139, 0.14);
+  color: #475569;
+}
+
 .status-badge.pending {
   background: rgba(245, 158, 11, 0.15);
 

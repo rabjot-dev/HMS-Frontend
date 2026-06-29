@@ -96,8 +96,22 @@ export class PendingEmployees implements OnInit {
   }
 
   // Reject employee
-  rejectEmployee(employeeId: string): void {
-    this.employeeService.rejectEmployee(employeeId).subscribe({
+  async rejectEmployee(employee: any): Promise<void> {
+    const rejectionReason = await this.inputDialog.ask({
+      title: 'Reject employee?',
+      message: `Add a reason for rejecting ${employee.name}.`,
+      inputLabel: 'Reason',
+      inputType: 'text',
+      confirmText: 'Reject'
+    });
+
+    if (rejectionReason === null) {
+      return;
+    }
+
+    this.employeeService.rejectEmployee(employee._id, {
+      rejectionReason: rejectionReason.trim() || null
+    }).subscribe({
       next: (response: any) => {
         console.log(response);
 

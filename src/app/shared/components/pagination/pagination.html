@@ -1,6 +1,6 @@
 <div class="pagination-card">
   <div class="total-records">
-    @if(cursorMode){ Cursor pagination } @else { Total: {{ totalRecords }} }
+    Total: {{ totalRecords }}
   </div>
 
   <div class="pagination-controls">
@@ -18,8 +18,11 @@
       Next
     </button>
 
-    @if(showPageSize){
+  </div>
 
+  @if(showPageSize){
+  <div class="page-size">
+    <span>Rows</span>
     <select [value]="limit" (change)="changePageSize($event)">
       <option value="10">10</option>
 
@@ -27,7 +30,6 @@
 
       <option value="50">50</option>
     </select>
-
-    }
   </div>
+  }
 </div>

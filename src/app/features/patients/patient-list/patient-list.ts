@@ -98,9 +98,10 @@ export class PatientList implements OnInit {
 
         this.patients = response.data;
 
-        this.totalRecords = response.meta?.total || 0;
+        this.totalRecords = response.meta?.totalRecords ?? response.meta?.total ?? 0;
 
-        this.totalPages = response.meta?.totalPages || 0;
+        this.totalPages =
+          response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
         this.nextCursor = response.meta?.nextCursor || '';
 
         if (this.page > 1 && this.patients.length === 0) {
