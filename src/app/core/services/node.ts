@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
-
 import { BehaviorSubject } from 'rxjs';
-
 import { API_BASE_URL } from '../constants/api.constants';
 
 @Injectable({
@@ -51,7 +48,6 @@ export class NodeService {
 
         localStorage.setItem('nodes', JSON.stringify(response.data));
       },
-
       error: () => {
         this.nodes.next([]);
 
@@ -80,8 +76,7 @@ export class NodeService {
         const methodMatches = permissionMethod === requestMethod || permissionMethod === 'ALL';
         const pathMatches = permission.path === path;
         const permissionRoles = permission.roles || [];
-        const roleMatches =
-          !permissionRoles.length || permissionRoles.some((role: string) => userRoles.includes(role));
+        const roleMatches = !permissionRoles.length || permissionRoles.some((role: string) => userRoles.includes(role));
 
         return methodMatches && pathMatches && roleMatches;
       })

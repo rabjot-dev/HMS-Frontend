@@ -1,7 +1,6 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
 import { TokenService } from '../../../core/services/token';
 import { AuthService } from '../../../core/services/auth';
 import { ToastService } from '../../../core/services/toast';
@@ -35,7 +34,6 @@ export class CreatePassword {
   ) {
     this.passwordForm = this.fb.group({
       temporaryPassword: ['', Validators.required],
-
       newPassword: [
         '',
         [
@@ -45,7 +43,6 @@ export class CreatePassword {
           Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/)
         ]
       ],
-
       confirmPassword: ['', Validators.required],
       securityQuestion: ['', Validators.required],
       securityAnswer: ['', Validators.required]
@@ -90,7 +87,6 @@ export class CreatePassword {
         this.isSubmitting = false;
         this.cdr.markForCheck();
       },
-
       error: (error) => {
         console.log(error);
         console.log(error.error.errors);

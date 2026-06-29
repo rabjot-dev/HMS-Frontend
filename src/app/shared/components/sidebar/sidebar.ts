@@ -1,9 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-
 import { AsyncPipe } from '@angular/common';
-
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-
 import { NodeService } from '../../../core/services/node';
 
 @Component({

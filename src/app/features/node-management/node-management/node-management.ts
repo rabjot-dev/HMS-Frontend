@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { NodeService } from '../../../core/services/node';
 import { ToastService } from '../../../core/services/toast';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog';

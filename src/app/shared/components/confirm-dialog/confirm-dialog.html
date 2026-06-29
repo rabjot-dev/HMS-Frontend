@@ -1,9 +1,7 @@
 @if(dialog$ | async; as dialog) {
 <div class="confirm-backdrop" (click)="cancel()">
   <section class="confirm-card" (click)="$event.stopPropagation()">
-    <div class="confirm-icon" [ngClass]="dialog.tone">
-      {{ dialog.tone === 'danger' ? '!' : '?' }}
-    </div>
+    <div class="confirm-icon" [ngClass]="dialog.tone">{{ dialog.tone === 'danger' ? '!' : '?' }}</div>
 
     <div>
       <h2>{{ dialog.title }}</h2>

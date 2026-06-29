@@ -69,11 +69,9 @@
   </div>
 
   @if(isLoading){
-
   <app-skeleton-loader [rows]="5"></app-skeleton-loader>
 
   } @else if(employees.length === 0) {
-
   <app-empty-state
     icon="groups"
     title="No Employees Found"
@@ -81,7 +79,6 @@
   ></app-empty-state>
 
   } @else {
-
   <!-- Table -->
 
   <div class="table-wrapper glass-card">
@@ -166,71 +163,37 @@
           <!-- Actions -->
 
           <td>
-  <div class="actions">
+            <div class="actions">
+              <!-- View -->
+              <a [routerLink]="['/employees', employee._id]" class="action-btn view">View</a>
 
-    <!-- View -->
-    <a
-      [routerLink]="['/employees', employee._id]"
-      class="action-btn view"
-    >
-      View
-    </a>
+              <!-- Edit -->
+              @if(nodeService.canUseApi('PUT', '/api/employees/:id')){
+              <a [routerLink]="['/employees/edit', employee._id]" class="action-btn edit">Edit</a>
+              }
 
-    <!-- Edit -->
-    @if(nodeService.canUseApi('PUT', '/api/employees/:id')){
-      <a
-        [routerLink]="['/employees/edit', employee._id]"
-        class="action-btn edit"
-      >
-        Edit
-      </a>
-    }
+              <!-- Activate -->
+              @if( employee.status === 'INACTIVE' && ( nodeService.canUseApi('PATCH', '/api/employees/:id/activate') )
+              ){
+              <button type="button" class="action-btn activate" (click)="activateEmployee(employee._id)">
+                Activate
+              </button>
+              }
 
-    <!-- Activate -->
-    @if(
-      employee.status === 'INACTIVE' &&
-      (
-        nodeService.canUseApi('PATCH', '/api/employees/:id/activate')
-      )
-    ){
-      <button
-        type="button"
-        class="action-btn activate"
-        (click)="activateEmployee(employee._id)"
-      >
-        Activate
-      </button>
-    }
+              <!-- Deactivate -->
+              @if( employee.status === 'ACTIVE' && ( nodeService.canUseApi('PATCH', '/api/employees/:id/deactivate') )
+              ){
+              <button type="button" class="action-btn deactivate" (click)="deactivateEmployee(employee._id)">
+                Deactivate
+              </button>
+              }
 
-    <!-- Deactivate -->
-    @if(
-      employee.status === 'ACTIVE' &&
-      (
-        nodeService.canUseApi('PATCH', '/api/employees/:id/deactivate')
-      )
-    ){
-      <button
-        type="button"
-        class="action-btn deactivate"
-        (click)="deactivateEmployee(employee._id)"
-      >
-        Deactivate
-      </button>
-    }
-
-    <!-- Delete -->
-    @if(nodeService.canUseApi('DELETE', '/api/employees/:id')){
-      <button
-        type="button"
-        class="action-btn delete"
-        (click)="deleteEmployee(employee._id)"
-      >
-        Delete
-      </button>
-    }
-
-  </div>
-</td>
+              <!-- Delete -->
+              @if(nodeService.canUseApi('DELETE', '/api/employees/:id')){
+              <button type="button" class="action-btn delete" (click)="deleteEmployee(employee._id)">Delete</button>
+              }
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>

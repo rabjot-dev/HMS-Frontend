@@ -91,9 +91,7 @@
             <option value="">Select Doctor</option>
 
             @for ( doctor of doctors; track doctor._id ) {
-
             <option [value]="doctor._id">{{ doctor.name }} - {{ doctor.department }}</option>
-
             }
           </select>
         </div>

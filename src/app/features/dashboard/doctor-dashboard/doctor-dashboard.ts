@@ -1,7 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
-
 import { AuthService } from '../../../core/services/auth';
 import { DashboardService } from '../../../core/services/dashboard';
 import { NodeService } from '../../../core/services/node';
@@ -42,7 +41,6 @@ export class DoctorDashboard implements OnInit {
 
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log(error);
       }
@@ -57,7 +55,6 @@ export class DoctorDashboard implements OnInit {
 
         this.todayAppointments = response.data;
       },
-
       error: (error) => {
         console.log(error);
       }

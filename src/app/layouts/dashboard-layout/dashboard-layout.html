@@ -16,7 +16,6 @@
     </div>
 
     @if( authService.currentUser | async; as user ){
-
     <!-- Profile -->
 
     <div class="profile-card">
@@ -30,7 +29,6 @@
     </div>
 
     <app-sidebar />
-
     }
   </aside>
 
@@ -47,7 +45,6 @@
       </div>
 
       @if( authService.currentUser | async; as user ){
-
       <div class="topbar-right">
         <!-- System Status -->
 
@@ -81,17 +78,14 @@
           <!-- Dropdown -->
 
           @if(isProfileOpen){
-
           <div class="profile-dropdown">
             <a routerLink="/my-profile">My Profile</a>
 
             <button (click)="logout()">Logout</button>
           </div>
-
           }
         </div>
       </div>
-
       }
     </header>
 

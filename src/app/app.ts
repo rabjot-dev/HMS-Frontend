@@ -1,13 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
-
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
 import { AsyncPipe, NgClass } from '@angular/common';
-
 import { Observable } from 'rxjs';
-
 import { ToastService, ToastState } from './core/services/toast';
-
 import { AuthService } from './core/services/auth';
 import { NodeService } from './core/services/node';
 import { TokenService } from './core/services/token';

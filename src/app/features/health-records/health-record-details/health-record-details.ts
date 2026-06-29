@@ -1,7 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
 import { ActivatedRoute } from '@angular/router';
 import { ToastService } from '../../../core/services/toast';
 import { HealthRecordService } from '../../../core/services/health-record';
@@ -12,15 +18,10 @@ import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loa
 
 @Component({
   selector: 'app-health-record-details',
-
   standalone: true,
-
   imports: [CommonModule, ReactiveFormsModule, PaginationComponent, SkeletonLoaderComponent],
-
   templateUrl: './health-record-details.html',
-
   styleUrls: ['./health-record-details.css'],
-
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HealthRecordDetails implements OnInit {
@@ -66,18 +67,12 @@ export class HealthRecordDetails implements OnInit {
   labMeta: any = {};
   documentMeta: any = {};
   readonly todayDate = this.formatDateInputValue(new Date());
-  readonly canDeleteHealthRecordDocuments = ['SUPER_ADMIN', 'ADMIN'].includes(
-    localStorage.getItem('role') || ''
-  );
+  readonly canDeleteHealthRecordDocuments = ['SUPER_ADMIN', 'ADMIN'].includes(localStorage.getItem('role') || '');
   constructor(
     private readonly route: ActivatedRoute,
-
     private readonly fb: FormBuilder,
-
     private readonly healthRecordService: HealthRecordService,
-
     private readonly consultationService: ConsultationService,
-
     private readonly cdr: ChangeDetectorRef,
     private readonly toast: ToastService,
     private readonly confirmDialog: ConfirmDialogService
@@ -95,29 +90,19 @@ export class HealthRecordDetails implements OnInit {
   initializeForms(): void {
     this.labReportForm = this.fb.group({
       title: ['', Validators.required],
-
       reportType: ['', Validators.required],
-
       reportDate: ['', [Validators.required, this.notFutureDateValidator]],
-
       labName: [''],
-
       doctorName: [''],
-
       notes: ['']
     });
 
     this.medicalDocumentForm = this.fb.group({
       title: ['', Validators.required],
-
       documentType: ['', Validators.required],
-
       hospitalName: [''],
-
       doctorName: [''],
-
       recordDate: ['', [Validators.required, this.notFutureDateValidator]],
-
       notes: ['']
     });
   }
@@ -150,11 +135,8 @@ export class HealthRecordDetails implements OnInit {
 
     const params = {
       timelinePage: this.timelinePage,
-
       labPage: this.labPage,
-
       documentPage: this.documentPage,
-
       limit: this.pageSize
     };
 
@@ -182,7 +164,6 @@ export class HealthRecordDetails implements OnInit {
 
         this.cdr.markForCheck();
       },
-
       error: (error) => {
         console.error(error);
 
@@ -197,11 +178,7 @@ export class HealthRecordDetails implements OnInit {
     this.expandedTimeline[consultationId] = !this.expandedTimeline[consultationId];
   }
 
-  /*
-  |----------------------------------------------------------
-  | Lab Report Modal
-  |----------------------------------------------------------
-  */
+  /* Lab Report Modal */
   openLabModal(): void {
     this.editingLabReportId = null;
 
@@ -246,15 +223,10 @@ export class HealthRecordDetails implements OnInit {
 
     this.labReportForm.patchValue({
       title: report.title,
-
       reportType: report.reportType,
-
       reportDate: report.reportDate?.split('T')[0],
-
       labName: report.labName,
-
       doctorName: report.doctorName,
-
       notes: report.notes
     });
 
@@ -283,7 +255,6 @@ export class HealthRecordDetails implements OnInit {
 
         this.loadHealthRecord(this.patient._id, false);
       },
-
       error: (error) => {
         console.error(error);
 
@@ -365,12 +336,7 @@ export class HealthRecordDetails implements OnInit {
       }
     });
   }
-  /*
-  |----------------------------------------------------------
-  | Medical Document Modal
-  |----------------------------------------------------------
-  */
-
+  /* Medical Document Modal */
   openDocumentModal(): void {
     this.editingMedicalDocumentId = null;
 
@@ -386,15 +352,10 @@ export class HealthRecordDetails implements OnInit {
 
     this.medicalDocumentForm.patchValue({
       title: document.title,
-
       documentType: document.documentType,
-
       hospitalName: document.hospitalName,
-
       doctorName: document.doctorName,
-
       recordDate: document.recordDate?.split('T')[0],
-
       notes: document.notes
     });
 
@@ -423,7 +384,6 @@ export class HealthRecordDetails implements OnInit {
 
         this.loadHealthRecord(this.patient._id, false);
       },
-
       error: (error) => {
         console.error(error);
 
@@ -494,7 +454,6 @@ export class HealthRecordDetails implements OnInit {
 
         this.loadHealthRecord(this.patient._id);
       },
-
       error: (error) => {
         console.error(error);
 
@@ -530,7 +489,6 @@ export class HealthRecordDetails implements OnInit {
 
         window.open(fileUrl);
       },
-
       error: (error) => {
         console.log(error);
       }
@@ -641,9 +599,8 @@ export class HealthRecordDetails implements OnInit {
           <section>
             <h2>Consultations & Prescriptions (${consultations.length})</h2>
             ${
-              consultations
-                .map((consultation: any) => this.renderConsultationForPrint(consultation))
-                .join('') || '<p class="muted">No consultations available.</p>'
+              consultations.map((consultation: any) => this.renderConsultationForPrint(consultation)).join('') ||
+              '<p class="muted">No consultations available.</p>'
             }
           </section>
 
@@ -838,19 +795,19 @@ export class HealthRecordDetails implements OnInit {
 
   private correctEmptyPagesAfterLoad(): boolean {
     if (this.timelinePage > 1 && !this.consultations.length) {
-      this.timelinePage = Math.max((this.timelineMeta?.totalPages || 1), 1);
+      this.timelinePage = Math.max(this.timelineMeta?.totalPages || 1, 1);
       this.loadHealthRecord(this.patient._id, false);
       return true;
     }
 
     if (this.labPage > 1 && !this.patient.labReports?.length) {
-      this.labPage = Math.max((this.labMeta?.totalPages || 1), 1);
+      this.labPage = Math.max(this.labMeta?.totalPages || 1, 1);
       this.loadHealthRecord(this.patient._id, false);
       return true;
     }
 
     if (this.documentPage > 1 && !this.patient.medicalDocuments?.length) {
-      this.documentPage = Math.max((this.documentMeta?.totalPages || 1), 1);
+      this.documentPage = Math.max(this.documentMeta?.totalPages || 1, 1);
       this.loadHealthRecord(this.patient._id, false);
       return true;
     }

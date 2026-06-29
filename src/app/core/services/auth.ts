@@ -51,15 +51,23 @@ export class AuthService {
     return user.roles?.includes(role);
   }
   refreshToken(): Observable<any> {
-    return this.http.post(`${API_BASE_URL}/auth/refresh-token`, {}, {
-      withCredentials: true
-    });
+    return this.http.post(
+      `${API_BASE_URL}/auth/refresh-token`,
+      {},
+      {
+        withCredentials: true
+      }
+    );
   }
 
   logout(): Observable<any> {
-    return this.http.post(`${API_BASE_URL}/auth/logout`, {}, {
-      withCredentials: true
-    });
+    return this.http.post(
+      `${API_BASE_URL}/auth/logout`,
+      {},
+      {
+        withCredentials: true
+      }
+    );
   }
 
   // Get security question for password recovery

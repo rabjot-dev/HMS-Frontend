@@ -4,11 +4,8 @@
   <span class="toast-message">{{ toast.message }}</span>
   <button class="toast-close" (click)="dismissToast()">x</button>
 </div>
-}
-@if((online$ | async) === false) {
-<div class="offline-banner">
-  You are offline. Saved pages remain visible, but new changes need a connection.
-</div>
+} @if((online$ | async) === false) {
+<div class="offline-banner">You are offline. Saved pages remain visible, but new changes need a connection.</div>
 }
 <app-confirm-dialog></app-confirm-dialog>
 <app-input-dialog></app-input-dialog>

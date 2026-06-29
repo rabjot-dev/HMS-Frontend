@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
-
 import { ToastService } from './toast';
 
 export interface QueuedRequest {

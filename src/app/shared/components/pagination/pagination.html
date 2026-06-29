@@ -1,23 +1,14 @@
 <div class="pagination-card">
-  <div class="total-records">
-    Total: {{ totalRecords }}
-  </div>
+  <div class="total-records">Total: {{ totalRecords }}</div>
 
   <div class="pagination-controls">
     <button type="button" (click)="previous.emit()" [disabled]="page === 1">Previous</button>
 
-    <span>
-      @if(cursorMode){ Page {{ page }} } @else { Page {{ page }} of {{ totalPages }} }
-    </span>
+    <span>@if(cursorMode){ Page {{ page }} } @else { Page {{ page }} of {{ totalPages }} }</span>
 
-    <button
-      type="button"
-      (click)="next.emit()"
-      [disabled]="cursorMode ? !hasNextPage : page === totalPages"
-    >
+    <button type="button" (click)="next.emit()" [disabled]="cursorMode ? !hasNextPage : page === totalPages">
       Next
     </button>
-
   </div>
 
   @if(showPageSize){

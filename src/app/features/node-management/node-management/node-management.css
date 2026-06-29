@@ -221,7 +221,6 @@ button {
   .form-grid {
     grid-template-columns: 1fr;
   }
-
   .permission-row {
     grid-template-columns: 1fr;
   }

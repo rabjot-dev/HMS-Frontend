@@ -1,11 +1,7 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-
 import { inject } from '@angular/core';
-
 import { catchError, finalize, Observable, shareReplay, switchMap, tap, throwError } from 'rxjs';
-
 import { Router } from '@angular/router';
-
 import { TokenService } from '../services/token';
 import { AuthService } from '../services/auth';
 
@@ -74,7 +70,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
           return next(retryRequest);
         }),
-
         catchError((refreshError) => {
           tokenService.removeTokens();
 

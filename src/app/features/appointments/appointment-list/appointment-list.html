@@ -133,7 +133,6 @@
 
       <tbody>
         @for ( appointment of appointments; track appointment._id ) {
-
         <tr>
           <!-- Appointment -->
 
@@ -248,7 +247,6 @@
               <!-- Admin -->
 
               @if(nodeService.canUseApi('PUT', '/api/appointments/:id')){
-
               <button
                 class="action-btn edit"
                 [routerLink]="[
@@ -259,10 +257,7 @@
                 Edit
               </button>
 
-              }
-
-              @if(nodeService.canUseApi('DELETE', '/api/appointments/:id')){
-
+              } @if(nodeService.canUseApi('DELETE', '/api/appointments/:id')){
               <button
                 class="action-btn delete"
                 (click)="
@@ -273,13 +268,11 @@
               >
                 Delete
               </button>
-
               }
 
               <!-- Doctor -->
 
               @if(nodeService.canAccessPath('/patients')){
-
               <button
                 class="action-btn view"
                 [routerLink]="[
@@ -291,12 +284,10 @@
               >
                 View Patient
               </button>
-
               }
             </div>
           </td>
         </tr>
-
         }
       </tbody>
     </table>

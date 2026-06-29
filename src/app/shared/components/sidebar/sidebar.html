@@ -6,14 +6,10 @@
       Node Management
     </a>
   </div>
-  }
-
-  @for ( node of nodeService.nodes | async; track node._id ) {
-
+  } @for ( node of nodeService.nodes | async; track node._id ) {
   <div class="nav-item">
     <!-- Parent Menu -->
     @if ( node.children?.length ) {
-
     <div class="parent-menu">
       <!-- Text + Icon -->
       <button
@@ -53,7 +49,6 @@
     @if ( expandedMenus[ node._id ] ) {
     <div class="submenu">
       @for ( child of node.children; track child._id ) {
-
       <a
         [routerLink]="
           child.path
@@ -66,14 +61,12 @@
         <span class="material-icons">{{ child.icon }}</span>
         } {{ child.name }}
       </a>
-
       }
     </div>
     } }
 
     <!-- Simple Menu -->
     @else {
-
     <a
       [routerLink]="
         node.path
@@ -86,9 +79,7 @@
       <span class="material-icons">{{ node.icon }}</span>
       } {{ node.name }}
     </a>
-
     }
   </div>
-
   }
 </nav>

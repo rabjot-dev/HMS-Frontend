@@ -1,9 +1,6 @@
-import { Component, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
-
+import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
 import { AuthService } from '../../../core/services/auth';
 import { TokenService } from '../../../core/services/token';
 import { ToastService } from '../../../core/services/toast';
@@ -113,7 +110,6 @@ export class Login {
                 this.router.navigate(['/login']);
             }
           },
-
           error: () => {
             this.isSubmitting = false;
 
@@ -121,7 +117,6 @@ export class Login {
           }
         });
       },
-
       error: (error) => {
         this.toastService.show(error?.error?.message || 'Login failed', 'error');
 

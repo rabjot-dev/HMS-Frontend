@@ -1,7 +1,5 @@
 import { inject } from '@angular/core';
-
 import { CanActivateFn, Router } from '@angular/router';
-
 import { NodeService } from '../services/node';
 export const nodeGuard: CanActivateFn = (route) => {
   const router = inject(Router);

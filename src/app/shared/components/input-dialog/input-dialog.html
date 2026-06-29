@@ -10,13 +10,7 @@
 
     <label>
       <span>{{ dialog.inputLabel }}</span>
-      <input
-        [(ngModel)]="value"
-        [type]="dialog.inputType"
-        [min]="dialog.min"
-        autofocus
-        (keyup.enter)="submit()"
-      />
+      <input [(ngModel)]="value" [type]="dialog.inputType" [min]="dialog.min" autofocus (keyup.enter)="submit()" />
     </label>
 
     <div class="input-actions">

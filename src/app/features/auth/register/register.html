@@ -62,7 +62,6 @@
           </div>
         </div>
         @if(currentStep === 1){
-
         <div class="step-section">
           <!-- Name -->
 
@@ -131,9 +130,7 @@
             </div>
 
             @if( registerForm .get('phone') ?.touched && registerForm .get('phone') ?.invalid ){
-
             <p class="error-text">Enter valid 10 digit phone number</p>
-
             }
           </div>
           <!-- Designation -->
@@ -239,10 +236,8 @@
         <button type="button" class="submit-btn" (click)="nextStep()">Next</button>
 
         } @if(currentStep === 2){
-
         <div class="step-section">
           @if(isDoctor()){
-
           <!-- Specialization -->
 
           <div class="input-group">
@@ -331,9 +326,7 @@
           </div>
 
           } @if(!isDoctor()){
-
           <div class="feature-card">No additional information required for this designation.</div>
-
           }
         </div>
 
@@ -344,7 +337,6 @@
         </div>
 
         } @if(currentStep === 3){
-
         <div class="step-section">
           <!-- Password -->
 
@@ -382,9 +374,7 @@
               <option value="">Select Question</option>
 
               @for( question of securityQuestions; track question ){
-
               <option [value]="question">{{ question }}</option>
-
               }
             </select>
 
@@ -413,7 +403,6 @@
             @if(isSubmitting){ Registering... } @else { Register }
           </button>
         </div>
-
         }
       </form>
 

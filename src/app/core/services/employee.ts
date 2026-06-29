@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 import { API_BASE_URL } from '../constants/api.constants';
 
 @Injectable({
@@ -41,9 +40,7 @@ export class EmployeeService {
   }
   // Delete employee
   deleteEmployee(id: string): Observable<any> {
-    return this.http.delete(
-      `${API_BASE_URL}/employees/${id}`
-    );
+    return this.http.delete(`${API_BASE_URL}/employees/${id}`);
   }
   // Get employees waiting for approval
   getPendingEmployees(): Observable<any> {
@@ -74,5 +71,4 @@ export class EmployeeService {
   updateDoctorAvailability(data: any): Observable<any> {
     return this.http.patch(`${API_BASE_URL}/employees/doctor/availability`, data);
   }
-
 }

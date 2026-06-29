@@ -53,11 +53,7 @@ button {
   gap: 32px;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Glass Card
-|--------------------------------------------------------------------------
-*/
+/* Glass Card */
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(18px);
@@ -65,11 +61,7 @@ button {
   box-shadow: 0 15px 35px rgba(15, 23, 42, 0.06);
 }
 
-/*
-|--------------------------------------------------------------------------
-| Hero
-|--------------------------------------------------------------------------
-*/
+/* Hero */
 .hero-section {
   display: flex;
   justify-content: space-between;
@@ -114,11 +106,7 @@ button {
   font-size: 18px;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Status Badge
-|--------------------------------------------------------------------------
-*/
+/* Status Badge */
 .hero-badge {
   display: flex;
   align-items: center;
@@ -156,11 +144,7 @@ button {
   }
 }
 
-/*
-|--------------------------------------------------------------------------
-| Stats
-|--------------------------------------------------------------------------
-*/
+/* Stats */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -218,22 +202,14 @@ button {
   font-size: 16px;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Bottom Grid
-|--------------------------------------------------------------------------
-*/
+/* Bottom Grid */
 .bottom-grid {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
   gap: 28px;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Sections
-|--------------------------------------------------------------------------
-*/
+/* Sections */
 .recent-section,
 .quick-section {
   padding: 36px;
@@ -257,11 +233,7 @@ button {
   font-size: 15px;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Employee Cards
-|--------------------------------------------------------------------------
-*/
+/* Employee Cards */
 .employee-list {
   display: flex;
   flex-direction: column;
@@ -308,11 +280,7 @@ button {
   font-size: 15px;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Quick Actions
-|--------------------------------------------------------------------------
-*/
+/* Quick Actions */
 .quick-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -344,16 +312,11 @@ button {
   box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
 }
 
-/*
-|--------------------------------------------------------------------------
-| Responsive
-|--------------------------------------------------------------------------
-*/
+/* Responsive */
 @media (max-width: 1100px) {
   .bottom-grid {
     grid-template-columns: 1fr;
   }
-
   .hero-section {
     flex-direction: column;
     align-items: flex-start;
@@ -365,11 +328,9 @@ button {
   .quick-grid {
     grid-template-columns: 1fr;
   }
-
   .hero-section h1 {
     font-size: 36px;
   }
-
   .stat-card h2 {
     font-size: 32px;
   }

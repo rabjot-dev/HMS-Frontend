@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AsyncPipe, NgClass } from '@angular/common';
-
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog';
 
 @Component({

@@ -1,8 +1,6 @@
-import { Component, ChangeDetectionStrategy} from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-
 import { AuthService } from '../../../core/services/auth';
-
 import { AdminDashboard } from '../admin-dashboard/admin-dashboard';
 import { DoctorDashboard } from '../doctor-dashboard/doctor-dashboard';
 import { ReceptionistDashboard } from '../receptionist-dashboard/receptionist-dashboard';

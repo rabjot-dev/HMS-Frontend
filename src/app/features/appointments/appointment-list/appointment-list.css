@@ -370,17 +370,12 @@ tbody td:last-child {
     align-items: flex-start;
     gap: 20px;
   }
-
   table {
     min-width: 1100px;
   }
 }
 
-/*
-|--------------------------------------------------------------------------
-| Compact HMS Appointment List Redesign
-|--------------------------------------------------------------------------
-*/
+/* Compact HMS Appointment List Redesign */
 .appointments-page {
   width: 100%;
   gap: 14px;
@@ -540,17 +535,12 @@ tbody td:last-child {
   .filters-wrapper {
     grid-template-columns: 1fr;
   }
-
   .date-range {
     flex-wrap: wrap;
   }
 }
 
-/*
-|--------------------------------------------------------------------------
-| Final Filter And Column Alignment
-|--------------------------------------------------------------------------
-*/
+/* Final Filter And Column Alignment */
 .filters-wrapper {
   display: grid !important;
   grid-template-columns: minmax(260px, 1.4fr) minmax(150px, 0.8fr) minmax(150px, 0.8fr) minmax(280px, 1fr) !important;
@@ -633,7 +623,6 @@ tbody td:last-child {
   .filters-wrapper {
     grid-template-columns: 1fr !important;
   }
-
   .table-wrapper table {
     min-width: 1120px;
   }

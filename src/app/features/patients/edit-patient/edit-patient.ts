@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { PatientService } from '../../../core/services/patient';
 import { ToastService } from '../../../core/services/toast';
 
@@ -59,7 +58,6 @@ export class EditPatient implements OnInit {
         this.doctors = response.data;
         this.cdr.markForCheck();
       },
-
       error: (error) => {
         console.log(error);
         this.cdr.markForCheck();
@@ -91,7 +89,6 @@ export class EditPatient implements OnInit {
 
         this.cdr.markForCheck();
       },
-
       error: (error) => {
         console.log(error);
         this.cdr.markForCheck();
@@ -119,7 +116,6 @@ export class EditPatient implements OnInit {
 
         this.router.navigate(['/patients']);
       },
-
       error: (error) => {
         console.log(error);
 

@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { ToastService } from '../../../core/services/toast';
 import { PatientService } from '../../../core/services/patient';
 
@@ -58,7 +57,6 @@ export class AddPatient implements OnInit {
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
       maritalStatus: ['', Validators.required],
-
       // Contact Information
       countryCode: ['+91', Validators.required],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
@@ -70,11 +68,9 @@ export class AddPatient implements OnInit {
       postOffice: ['', Validators.required],
       pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
       country: ['India'],
-
       // Emergency Contact
       emergencyContactName: ['', Validators.required],
       emergencyContactPhone: ['', Validators.required],
-
       // Medical Information
       medicalHistory: [''],
       allergies: [''],
@@ -82,13 +78,11 @@ export class AddPatient implements OnInit {
       currentMedications: [''],
       pastSurgeries: [''],
       familyMedicalHistory: [''],
-
       // Insurance Information
       insuranceProvider: [''],
       insurancePolicyNumber: [''],
       insuranceExpiryDate: [''],
       insuranceCoverageAmount: [''],
-
       // Hospital Information
       department: [''],
       patientType: ['', Validators.required]
@@ -425,13 +419,15 @@ export class AddPatient implements OnInit {
         this.isSubmitting = false;
         this.cdr.markForCheck();
       },
-
       error: (error) => {
         console.log('FULL ERROR =>', error);
         console.log('VALIDATION ERRORS =>', error?.error?.errors);
 
         const validationMessage = Array.isArray(error?.error?.errors)
-          ? error.error.errors.map((item: any) => item.msg || item.message).filter(Boolean).join(', ')
+          ? error.error.errors
+              .map((item: any) => item.msg || item.message)
+              .filter(Boolean)
+              .join(', ')
           : error?.error?.message;
 
         this.toastService.error(validationMessage || 'Unable to register patient');
@@ -442,4 +438,3 @@ export class AddPatient implements OnInit {
     });
   }
 }
- 

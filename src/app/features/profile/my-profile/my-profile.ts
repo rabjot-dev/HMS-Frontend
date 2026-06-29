@@ -1,6 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { AuthService } from '../../../core/services/auth';
 
 @Component({
@@ -41,7 +40,6 @@ export class MyProfile implements OnInit {
 
         this.cdr.markForCheck();
       },
-
       error: (error) => {
         console.log(error);
         this.cdr.markForCheck();

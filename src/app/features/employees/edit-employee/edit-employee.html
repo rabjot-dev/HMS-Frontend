@@ -19,11 +19,8 @@
         <input type="text" formControlName="name" placeholder="Enter full name" />
 
         @if(employeeForm.get('name')?.touched && employeeForm.get('name')?.invalid){
-
         <span class="error-text">
-          @if(employeeForm.get('name')?.errors?.['required']){ Name is required } 
-          @else if(employeeForm.get('name')?.errors?.['minlength']){ Name must be at least 2 characters } 
-          @else if(employeeForm.get('name')?.errors?.['pattern']){ Only alphabets are allowed }
+          @if(employeeForm.get('name')?.errors?.['required']){ Name is required } @else if(employeeForm.get('name')?.errors?.['minlength']){ Name must be at least 2 characters } @else if(employeeForm.get('name')?.errors?.['pattern']){ Only alphabets are allowed }
         </span>
         }
       </div>
@@ -44,10 +41,8 @@
         <input type="text" maxlength="10" formControlName="phone" placeholder="9876543210" />
 
         @if(employeeForm.get('phone')?.touched && employeeForm.get('phone')?.invalid){
-
         <span class="error-text">
-          @if(employeeForm.get('phone')?.errors?.['required']){ Phone number is required } 
-          @else if(employeeForm.get('phone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
+          @if(employeeForm.get('phone')?.errors?.['required']){ Phone number is required } @else if(employeeForm.get('phone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
         </span>
         }
       </div>
@@ -68,9 +63,7 @@
         </select>
 
         @if(employeeForm.get('gender')?.touched && employeeForm.get('gender')?.invalid){
-
         <span class="error-text">Gender is required</span>
-
         }
       </div>
 
@@ -82,9 +75,7 @@
         <input type="text" formControlName="department" placeholder="Department" />
 
         @if(employeeForm.get('department')?.touched && employeeForm.get('department')?.invalid){
-
         <span class="error-text">Department is required</span>
-
         }
       </div>
 
@@ -106,9 +97,7 @@
         </select>
 
         @if(employeeForm.get('designation')?.touched && employeeForm.get('designation')?.invalid){
-
         <span class="error-text">Designation is required</span>
-
         }
       </div>
 
@@ -120,21 +109,16 @@
         <input type="date" formControlName="joiningDate" />
 
         @if(employeeForm.get('joiningDate')?.touched && employeeForm.get('joiningDate')?.invalid){
-
         <span class="error-text">Joining date is required</span>
-
         }
       </div>
     </div>
 
     @if(errorMessage){
-
     <div class="error-text">{{ errorMessage }}</div>
 
     } @if(successMessage){
-
     <div class="success-box">{{ successMessage }}</div>
-
     }
 
     <div class="button-group">

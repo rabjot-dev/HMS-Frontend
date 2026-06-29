@@ -5,7 +5,6 @@
       <h1>Node Management</h1>
       <p class="page-subtitle">Control navigation nodes and API permission mappings.</p>
     </div>
-
   </div>
 
   <div class="node-layout">
@@ -27,12 +26,7 @@
       <div class="tree">
         @for(node of nodes; track node._id) {
         <div class="node-group">
-          <button
-            type="button"
-            class="node-row"
-            [class.active]="selectedNodeId === node._id"
-            (click)="editNode(node)"
-          >
+          <button type="button" class="node-row" [class.active]="selectedNodeId === node._id" (click)="editNode(node)">
             <span class="material-icons">{{ node.icon || 'radio_button_unchecked' }}</span>
             <span>
               <strong>{{ node.name }}</strong>

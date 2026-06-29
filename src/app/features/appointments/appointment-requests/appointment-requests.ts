@@ -1,19 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
-
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { AppointmentService } from '../../../core/services/appointment';
 import { NodeService } from '../../../core/services/node';
 
 @Component({
   selector: 'app-appointment-requests',
-
   standalone: true,
-
   imports: [CommonModule],
-
   templateUrl: './appointment-requests.html',
-
   styleUrls: ['./appointment-requests.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -42,7 +36,6 @@ export class AppointmentRequestsComponent implements OnInit {
         this.loading = false;
         this.cdr.detectChanges();
       },
-
       error: () => {
         this.loading = false;
       }

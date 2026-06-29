@@ -1,8 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-
 import { AppointmentService } from '../../../core/services/appointment';
 import { AuthService } from '../../../core/services/auth';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
@@ -81,8 +80,7 @@ export class AppointmentList implements OnInit {
 
         this.totalRecords = response.meta?.totalRecords ?? response.meta?.total ?? 0;
 
-        this.totalPages =
-          response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
+        this.totalPages = response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
         this.nextCursor = response.meta?.nextCursor || '';
 
         if (this.page > 1 && this.appointments.length === 0) {
@@ -93,7 +91,6 @@ export class AppointmentList implements OnInit {
 
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log(error);
       }
@@ -155,7 +152,6 @@ export class AppointmentList implements OnInit {
 
         this.loadAppointments();
       },
-
       error: (error) => {
         console.log(error);
       }

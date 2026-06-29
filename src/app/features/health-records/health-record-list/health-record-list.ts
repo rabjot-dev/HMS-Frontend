@@ -1,27 +1,17 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-
 import { FormsModule } from '@angular/forms';
-
 import { RouterLink } from '@angular/router';
-
 import { HealthRecordService } from '../../../core/services/health-record';
-
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-health-record-list',
-
   standalone: true,
-
   imports: [CommonModule, FormsModule, RouterLink, PaginationComponent, SkeletonLoaderComponent],
-
   templateUrl: './health-record-list.html',
-
   styleUrls: ['./health-record-list.css'],
-
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HealthRecordList implements OnInit {
@@ -41,7 +31,6 @@ export class HealthRecordList implements OnInit {
 
   constructor(
     private readonly healthRecordService: HealthRecordService,
-
     private readonly cdr: ChangeDetectorRef
   ) {}
 
@@ -79,7 +68,6 @@ export class HealthRecordList implements OnInit {
 
           this.cdr.detectChanges();
         },
-
         error: (error) => {
           console.log(error);
 

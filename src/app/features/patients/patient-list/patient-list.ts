@@ -1,11 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
-
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { FormsModule } from '@angular/forms';
-
 import { RouterLink } from '@angular/router';
-
 import { PatientService } from '../../../core/services/patient';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { NodeService } from '../../../core/services/node';
@@ -16,13 +12,9 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
 
 @Component({
   selector: 'app-patient-list',
-
   standalone: true,
-
   imports: [CommonModule, FormsModule, RouterLink, PaginationComponent, SkeletonLoaderComponent, EmptyStateComponent],
-
   templateUrl: './patient-list.html',
-
   styleUrls: ['./patient-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -50,7 +42,6 @@ export class PatientList implements OnInit {
   constructor(
     private readonly patientService: PatientService,
     public readonly nodeService: NodeService,
-
     private readonly cdr: ChangeDetectorRef,
     private readonly confirmDialog: ConfirmDialogService,
     private readonly toast: ToastService
@@ -100,8 +91,7 @@ export class PatientList implements OnInit {
 
         this.totalRecords = response.meta?.totalRecords ?? response.meta?.total ?? 0;
 
-        this.totalPages =
-          response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
+        this.totalPages = response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
         this.nextCursor = response.meta?.nextCursor || '';
 
         if (this.page > 1 && this.patients.length === 0) {
@@ -114,7 +104,6 @@ export class PatientList implements OnInit {
 
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log(error);
 
@@ -162,36 +151,33 @@ export class PatientList implements OnInit {
     this.loadPatients();
   }
   async deletePatient(id: string): Promise<void> {
-  const confirmed = await this.confirmDialog.confirm({
-    title: 'Delete patient?',
-    message: 'This patient will be removed from active records.',
-    confirmText: 'Delete',
-    tone: 'danger'
-  });
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Delete patient?',
+      message: 'This patient will be removed from active records.',
+      confirmText: 'Delete',
+      tone: 'danger'
+    });
 
-  if (!confirmed) {
-    return;
-  }
+    if (!confirmed) {
+      return;
+    }
 
-  this.patientService
-    .deletePatient(id)
-    .subscribe({
+    this.patientService.deletePatient(id).subscribe({
       next: () => {
         this.page = this.getPageAfterDelete();
         this.toast.success('Patient deleted successfully');
         this.loadPatients();
       },
-
       error: (error) => {
         console.log(error);
       }
     });
-}
+  }
 
-private getPageAfterDelete(): number {
-  const totalAfterDelete = Math.max(this.totalRecords - 1, 0);
-  const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
+  private getPageAfterDelete(): number {
+    const totalAfterDelete = Math.max(this.totalRecords - 1, 0);
+    const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
 
-  return Math.min(this.page, totalPagesAfterDelete);
-}
+    return Math.min(this.page, totalPagesAfterDelete);
+  }
 }

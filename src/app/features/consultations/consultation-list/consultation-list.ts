@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -120,7 +120,6 @@ export class ConsultationList implements OnInit {
 
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log(error);
 
@@ -163,7 +162,6 @@ export class ConsultationList implements OnInit {
 
         globalThis.open(fileURL);
       },
-
       error: (error) => {
         console.log(error);
       }

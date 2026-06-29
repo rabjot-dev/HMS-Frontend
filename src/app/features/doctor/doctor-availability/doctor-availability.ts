@@ -1,7 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-
 import { EmployeeService } from '../../../core/services/employee';
 import { ToastService } from '../../../core/services/toast';
 
@@ -28,17 +27,12 @@ export class DoctorAvailability implements OnInit {
   ) {
     this.availabilityForm = this.fb.group({
       workingDays: [[]],
-
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
-
       slotDuration: [15, Validators.required],
-
       breakStartTime: [''],
       breakEndTime: [''],
-
       maxPatientsPerDay: [40, Validators.required],
-
       isAvailable: [true]
     });
   }
@@ -67,7 +61,6 @@ export class DoctorAvailability implements OnInit {
 
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log(error);
       }
@@ -111,7 +104,6 @@ export class DoctorAvailability implements OnInit {
 
         this.toast.success('Availability updated successfully');
       },
-
       error: (error) => {
         console.log(error);
         this.toast.error(error?.error?.message || 'Unable to update availability');

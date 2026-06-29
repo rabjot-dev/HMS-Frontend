@@ -50,7 +50,6 @@
   .skeleton-row {
     grid-template-columns: 42px 1fr;
   }
-
   .line.short {
     display: none;
   }

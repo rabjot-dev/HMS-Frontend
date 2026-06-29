@@ -1,8 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-
 import { AuthService } from '../../../core/services/auth';
 import { ToastService } from '../../../core/services/toast';
 
@@ -31,7 +30,6 @@ export class ResetPassword implements OnInit {
   ) {
     this.resetForm = this.fb.group({
       securityAnswer: ['', Validators.required],
-
       newPassword: [
         '',
         [
@@ -41,7 +39,6 @@ export class ResetPassword implements OnInit {
           Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/)
         ]
       ],
-
       confirmPassword: ['', Validators.required]
     });
   }
@@ -107,7 +104,6 @@ export class ResetPassword implements OnInit {
         this.isSubmitting = false;
         this.cdr.markForCheck();
       },
-
       error: (error) => {
         console.log('FULL ERROR');
         console.log(error);

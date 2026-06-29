@@ -1,6 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 import { NodeService } from '../../../core/services/node';
@@ -40,7 +39,6 @@ export class PendingEmployees implements OnInit {
 
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log(error);
       }
@@ -86,7 +84,6 @@ export class PendingEmployees implements OnInit {
 
           this.loadPendingEmployees();
         },
-
         error: (error) => {
           console.log(error);
 
@@ -109,22 +106,23 @@ export class PendingEmployees implements OnInit {
       return;
     }
 
-    this.employeeService.rejectEmployee(employee._id, {
-      rejectionReason: rejectionReason.trim() || null
-    }).subscribe({
-      next: (response: any) => {
-        console.log(response);
+    this.employeeService
+      .rejectEmployee(employee._id, {
+        rejectionReason: rejectionReason.trim() || null
+      })
+      .subscribe({
+        next: (response: any) => {
+          console.log(response);
 
-        this.toastService.show('Employee Rejected', 'success');
+          this.toastService.show('Employee Rejected', 'success');
 
-        this.loadPendingEmployees();
-      },
+          this.loadPendingEmployees();
+        },
+        error: (error) => {
+          console.log(error);
 
-      error: (error) => {
-        console.log(error);
-
-        this.toastService.show('Failed to reject employee', 'error');
-      }
-    });
+          this.toastService.show('Failed to reject employee', 'error');
+        }
+      });
   }
 }

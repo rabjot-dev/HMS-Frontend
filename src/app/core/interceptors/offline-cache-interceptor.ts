@@ -1,7 +1,6 @@
 import { HttpErrorResponse, HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, of, tap, throwError } from 'rxjs';
-
 import { OfflineQueueService } from '../services/offline-queue';
 import { ToastService } from '../services/toast';
 

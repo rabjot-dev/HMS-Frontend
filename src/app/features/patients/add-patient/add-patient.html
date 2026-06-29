@@ -135,8 +135,7 @@
           </div>
           @if(patientForm.get('phone')?.invalid && patientForm.get('phone')?.touched){
           <span class="error-text">
-            @if(patientForm.get('phone')?.errors?.['required']){ Phone number is required } 
-            @else if(patientForm.get('phone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
+            @if(patientForm.get('phone')?.errors?.['required']){ Phone number is required } @else if(patientForm.get('phone')?.errors?.['pattern']){ Enter valid 10-digit phone number }
           </span>
           }
         </div>
@@ -146,8 +145,7 @@
           <input type="email" placeholder="Email" formControlName="email" />
           @if(patientForm.get('email')?.invalid && patientForm.get('email')?.touched){
           <span class="error-text">
-            @if(patientForm.get('email')?.errors?.['required']){ Email is required } 
-            @else if(patientForm.get('email')?.errors?.['email']){ Enter a valid email address }
+            @if(patientForm.get('email')?.errors?.['required']){ Email is required } @else if(patientForm.get('email')?.errors?.['email']){ Enter a valid email address }
           </span>
           }
         </div>
@@ -157,16 +155,13 @@
           <input type="text" placeholder="Address" formControlName="address" />
           @if(patientForm.get('address')?.invalid && patientForm.get('address')?.touched){
           <span class="error-text">Address is required</span>
-
           }
         </div>
 
         <!-- State -->
         <div class="form-field">
           <select [value]="selectedStateId" (change)="onStateChange($event)" [disabled]="isLoadingStates">
-            <option value="">
-              @if(isLoadingStates){ Loading states... } @else { Select State }
-            </option>
+            <option value="">@if(isLoadingStates){ Loading states... } @else { Select State }</option>
             @for (state of states; track state.id) {
             <option [value]="state.id">{{ state.name }}</option>
             }
@@ -174,7 +169,6 @@
           @if(patientForm.get('state')?.invalid && patientForm.get('state')?.touched){
           <span class="error-text">State is required</span>
           @if ( patientForm.get('state')?.touched && patientForm.get('state')?.invalid ) {
-
           <div class="error-message">Select a valid state</div>
 
           } }
@@ -182,10 +176,12 @@
 
         <!-- City / District -->
         <div class="form-field">
-          <select formControlName="city" [disabled]="!selectedStateId || isLoadingDistricts" (change)="onDistrictChange()">
-            <option value="">
-              @if(isLoadingDistricts){ Loading cities... } @else { Select City }
-            </option>
+          <select
+            formControlName="city"
+            [disabled]="!selectedStateId || isLoadingDistricts"
+            (change)="onDistrictChange()"
+          >
+            <option value="">@if(isLoadingDistricts){ Loading cities... } @else { Select City }</option>
             @for (district of districts; track district) {
             <option [value]="district">{{ district }}</option>
             }
@@ -193,7 +189,6 @@
           @if(patientForm.get('city')?.invalid && patientForm.get('city')?.touched){
           <span class="error-text">City is required</span>
           @if ( patientForm.get('city')?.touched && patientForm.get('city')?.invalid ) {
-
           <div class="error-message">Select a valid city</div>
 
           } }
@@ -208,9 +203,7 @@
             [disabled]="!patientForm.get('city')?.value || isLoadingTaluks"
             (change)="onTalukChange()"
           >
-            <option value="">
-              @if(isLoadingTaluks){ Loading taluks... } @else { Select Taluk }
-            </option>
+            <option value="">@if(isLoadingTaluks){ Loading taluks... } @else { Select Taluk }</option>
             @for (taluk of taluks; track taluk) {
             <option [value]="taluk">{{ taluk }}</option>
             }
@@ -229,9 +222,7 @@
             [disabled]="!patientForm.get('taluk')?.value || isLoadingAreas"
             (change)="onPostOfficeChange($event)"
           >
-            <option value="">
-              @if(isLoadingAreas){ Loading areas... } @else { Select Post Office / Area }
-            </option>
+            <option value="">@if(isLoadingAreas){ Loading areas... } @else { Select Post Office / Area }</option>
             @for (area of filteredPostOfficeAreas; track area.name + area.pincode; let i = $index) {
             <option [value]="i">{{ area.name }}</option>
             }
@@ -257,12 +248,9 @@
           />
 
           @if(patientForm.get('pincode')?.invalid && patientForm.get('pincode')?.touched){
-
           <span class="error-text">
-            @if(patientForm.get('pincode')?.errors?.['required']){ Pincode is required } 
-            @else if(patientForm.get('pincode')?.errors?.['pattern']){ Enter valid 6-digit pincode }
+            @if(patientForm.get('pincode')?.errors?.['required']){ Pincode is required } @else if(patientForm.get('pincode')?.errors?.['pattern']){ Enter valid 6-digit pincode }
           </span>
-
           }
         </div>
 
@@ -289,7 +277,6 @@
           </span>
           @if ( patientForm.get('emergencyContactPhone')?.touched && patientForm.get('emergencyContactPhone')?.invalid )
           {
-
           <div class="error-message">Emergency Contact Number must be 10 digits</div>
 
           } }
@@ -377,4 +364,3 @@
     </div>
   </form>
 </div>
- 

@@ -1,8 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
-
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
 import { AppointmentService } from '../../../core/services/appointment';
 import { AuthService } from '../../../core/services/auth';
 import { ToastService } from '../../../core/services/toast';
@@ -56,7 +54,6 @@ export class DoctorQueue implements OnInit {
         this.isLoading = false;
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log(error);
 
@@ -80,7 +77,6 @@ export class DoctorQueue implements OnInit {
 
         this.loadQueue();
       },
-
       error: (error) => {
         console.log(error);
         this.toast.error('Unable to complete consultation');
@@ -103,7 +99,6 @@ export class DoctorQueue implements OnInit {
 
         this.loadQueue();
       },
-
       error: (error) => {
         console.log(error);
         this.toast.error('Unable to start consultation');

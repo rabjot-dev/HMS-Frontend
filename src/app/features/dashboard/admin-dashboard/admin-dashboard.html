@@ -5,9 +5,7 @@
     <div>
       <p class="hero-label">Smart Healthcare Workspace</p>
       @if( authService.currentUser | async; as user ){
-
       <h1>Welcome, {{ user?.employeeId?.name || 'Administrator' }} 👋</h1>
-
       }
 
       <p class="hero-subtitle">Here’s what’s happening in your hospital today.</p>
@@ -86,7 +84,6 @@
 
       <div class="employee-list">
         @for( employee of recentEmployees || []; track employee._id ){
-
         <div class="employee-card">
           <div class="employee-avatar">{{ employee.name ?.charAt(0) }}</div>
 
@@ -96,7 +93,6 @@
             <p>{{ employee.designation }}</p>
           </div>
         </div>
-
         }
       </div>
     </div>
@@ -117,25 +113,19 @@
 
           Book Appointment
         </a>
-        }
-
-        @if(nodeService.canAccessPath('/patients/create')){
+        } @if(nodeService.canAccessPath('/patients/create')){
         <a routerLink="/patients/create" class="quick-card">
           <span>🧑</span>
 
           Add Patient
         </a>
-        }
-
-        @if(nodeService.canAccessPath('/employees/create')){
+        } @if(nodeService.canAccessPath('/employees/create')){
         <a routerLink="/employees/create" class="quick-card">
           <span>👨‍⚕️</span>
 
           Add Employee
         </a>
-        }
-
-        @if(nodeService.canAccessPath('/appointments')){
+        } @if(nodeService.canAccessPath('/appointments')){
         <a routerLink="/appointments" class="quick-card">
           <span>📋</span>
 

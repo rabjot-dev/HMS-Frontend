@@ -1,8 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../core/services/toast';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-
 import { PatientService } from '../../../core/services/patient';
 import { EmployeeService } from '../../../core/services/employee';
 import { AppointmentService } from '../../../core/services/appointment';
@@ -49,11 +48,9 @@ export class BookAppointment implements OnInit {
       doctorId: ['', Validators.required],
       appointmentDate: ['', Validators.required],
       appointmentTime: ['', Validators.required],
-
       reason: [''],
       notes: [''],
       symptoms: [''],
-
       appointmentType: ['', Validators.required],
       priority: ['', Validators.required],
       paymentStatus: ['', Validators.required],
@@ -84,7 +81,6 @@ export class BookAppointment implements OnInit {
         this.patients = response.data;
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log(error);
         this.cdr.detectChanges();
@@ -108,7 +104,6 @@ export class BookAppointment implements OnInit {
 
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log(error);
         this.doctors = [];
@@ -210,7 +205,6 @@ export class BookAppointment implements OnInit {
 
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log('Slots error:', error);
 
@@ -270,7 +264,6 @@ export class BookAppointment implements OnInit {
     // Convert symptoms text into array
     const formData = {
       ...this.appointmentForm.value,
-
       symptoms: this.appointmentForm.value.symptoms?.split(',').map((symptom: string) => symptom.trim())
     };
 
@@ -295,7 +288,6 @@ export class BookAppointment implements OnInit {
         this.filteredDoctors = [];
         this.isSubmitting = false;
       },
-
       error: (error) => {
         console.log(error);
 

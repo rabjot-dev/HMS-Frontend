@@ -1,7 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
-
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth';
 import { RouterLink } from '@angular/router';
@@ -91,8 +89,7 @@ export class EmployeeList implements OnInit {
 
         this.total = response.meta?.totalRecords ?? response.meta?.total ?? 0;
 
-        this.totalPages =
-          response.meta?.totalPages || Math.max(Math.ceil(this.total / this.limit), 1);
+        this.totalPages = response.meta?.totalPages || Math.max(Math.ceil(this.total / this.limit), 1);
         this.nextCursor = response.meta?.nextCursor || '';
 
         if (this.page > 1 && this.employees.length === 0) {
@@ -105,7 +102,6 @@ export class EmployeeList implements OnInit {
 
         this.cdr.detectChanges();
       },
-
       error: (error) => {
         console.log(error);
 
@@ -178,42 +174,35 @@ export class EmployeeList implements OnInit {
     });
   }
   async deleteEmployee(id: string): Promise<void> {
-  const confirmed = await this.confirmDialog.confirm({
-    title: 'Delete employee?',
-    message: 'This employee will be removed from active records.',
-    confirmText: 'Delete',
-    tone: 'danger'
-  });
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Delete employee?',
+      message: 'This employee will be removed from active records.',
+      confirmText: 'Delete',
+      tone: 'danger'
+    });
 
-  if (!confirmed) {
-    return;
+    if (!confirmed) {
+      return;
+    }
+
+    this.employeeService.deleteEmployee(id).subscribe({
+      next: () => {
+        this.page = this.getPageAfterDelete();
+
+        this.toastService.show('Employee deleted successfully', 'success');
+
+        this.loadEmployees();
+      },
+      error: (error) => {
+        this.toastService.show(error?.error?.message || 'Failed to delete employee', 'error');
+      }
+    });
   }
 
-  this.employeeService.deleteEmployee(id).subscribe({
-    next: () => {
-      this.page = this.getPageAfterDelete();
+  private getPageAfterDelete(): number {
+    const totalAfterDelete = Math.max(this.total - 1, 0);
+    const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
 
-      this.toastService.show(
-        'Employee deleted successfully',
-        'success'
-      );
-
-      this.loadEmployees();
-    },
-
-    error: (error) => {
-      this.toastService.show(
-        error?.error?.message || 'Failed to delete employee',
-        'error'
-      );
-    }
-  });
-}
-
-private getPageAfterDelete(): number {
-  const totalAfterDelete = Math.max(this.total - 1, 0);
-  const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
-
-  return Math.min(this.page, totalPagesAfterDelete);
-}
+    return Math.min(this.page, totalPagesAfterDelete);
+  }
 }

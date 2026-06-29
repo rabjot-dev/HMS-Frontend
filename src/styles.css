@@ -1,89 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
-/*
-|--------------------------------------------------------------------------
-| Google Font
-|--------------------------------------------------------------------------
-*/
+/* Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import 'ngx-toastr/toastr';
-/*
-|--------------------------------------------------------------------------
-| Root Variables
-|--------------------------------------------------------------------------
-*/
+/* Root Variables */
 :root {
   /* Colors */
-
   --primary: #2563eb;
-
   --primary-dark: #1d4ed8;
-
   --secondary: #0f766e;
-
   --success: #22c55e;
-
   --danger: #ef4444;
-
   --warning: #f59e0b;
-
   --dark: #0f172a;
-
   --dark-light: #1e293b;
-
   --text: #0f172a;
-
   --text-light: #64748b;
-
   --border: rgba(255, 255, 255, 0.2);
-
   /* Backgrounds */
-
   --bg: #f4f7fb;
-
   --card-bg: #ffffff;
-
   /* Effects */
-
   --blur: none;
-
   --radius: 12px;
-
   --shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 10px 24px rgba(15, 23, 42, 0.05);
-
   --transition: all 0.3s ease;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Global Reset
-|--------------------------------------------------------------------------
-*/
+/* Global Reset */
 * {
   margin: 0;
-
   padding: 0;
-
   box-sizing: border-box;
 }
 
 html,
 body {
   font-family: 'Inter', sans-serif;
-
   background: var(--bg);
-
   color: var(--text);
-
   min-height: 100vh;
-
   scroll-behavior: smooth;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Scrollbar
-|--------------------------------------------------------------------------
-*/
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -94,7 +53,6 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: rgba(59, 130, 246, 0.25);
-
   border-radius: 20px;
 }
 
@@ -102,78 +60,54 @@ body {
   background: rgba(59, 130, 246, 0.45);
 }
 
-/*
-|--------------------------------------------------------------------------
-| Typography
-|--------------------------------------------------------------------------
-*/
+/* Typography */
 h1 {
   font-size: 28px;
-
   font-weight: 700;
-
   letter-spacing: -1px;
 }
 
 h2 {
   font-size: 24px;
-
   font-weight: 600;
 }
 
 h3 {
   font-size: 18px;
-
   font-weight: 600;
 }
 
 p {
   color: var(--text-light);
-
   line-height: 1.6;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Links
-|--------------------------------------------------------------------------
-*/
+/* Links */
 a {
   text-decoration: none;
-
   color: inherit;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Buttons
-|--------------------------------------------------------------------------
-*/
+/* Buttons */
 button {
   border: none;
-
   outline: none;
-
   cursor: pointer;
-
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
   font-family: inherit;
 }
 
 .primary-btn {
   background: var(--primary);
-
   color: white;
-
   padding: 10px 16px;
-
   border-radius: 10px;
-
   font-weight: 600;
-
   box-shadow: 0 10px 25px rgba(59, 130, 246, 0.25);
-
   transition: var(--transition);
 }
 
@@ -181,32 +115,19 @@ button {
   background: var(--primary-dark);
 }
 
-/*
-|--------------------------------------------------------------------------
-| Inputs
-|--------------------------------------------------------------------------
-*/
+/* Inputs */
 input,
 select,
 textarea {
   width: 100%;
-
   padding: 10px 12px;
-
   border: 1px solid #cbd5e1;
-
   background: #ffffff;
-
   backdrop-filter: var(--blur);
-
   border-radius: 10px;
-
   font-size: 14px;
-
   transition: var(--transition);
-
   font-family: inherit;
-
   color: var(--text);
 }
 
@@ -214,17 +135,11 @@ input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-
   border-color: rgba(59, 130, 246, 0.4);
-
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
 }
 
-/*
-|--------------------------------------------------------------------------
-| Shared Admin Polish
-|--------------------------------------------------------------------------
-*/
+/* Shared Admin Polish */
 .glass-card,
 .table-wrapper,
 .table-container,
@@ -304,32 +219,19 @@ button:disabled,
 
 textarea {
   resize: none;
-
   min-height: 120px;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Glass Card
-|--------------------------------------------------------------------------
-*/
+/* Glass Card */
 .glass-card {
   background: var(--card-bg);
-
   backdrop-filter: var(--blur);
-
   border: 1px solid #e2e8f0;
-
   border-radius: var(--radius);
-
   box-shadow: var(--shadow);
 }
 
-/*
-|--------------------------------------------------------------------------
-| HMS Compact UI System
-|--------------------------------------------------------------------------
-*/
+/* HMS Compact UI System */
 .page-shell,
 .health-record-list-container,
 .consultation-list-container,
@@ -386,14 +288,11 @@ tbody td {
   }
 }
 
-/*
-|--------------------------------------------------------------------------
-| Cross-App HMS Normalization Layer
-|--------------------------------------------------------------------------
-| Many feature components have their own CSS. These rules intentionally use
-| common HMS class names with !important so list, card, form, and action
-| surfaces stay visually consistent across Angular templates.
-*/
+/* Cross-App HMS Normalization Layer
+ * Many feature components have their own CSS. These rules intentionally use
+ * common HMS class names with !important so list, card, form, and action
+ * surfaces stay visually consistent across Angular templates.
+ */
 :where(
   .appointments-page,
   .patients-page,
@@ -434,23 +333,25 @@ tbody td {
 }
 
 :where(
-  .appointments-header,
-  .patients-header,
-  .employees-header,
-  .pending-header,
-  .availability-header,
-  .top-section,
-  .section-header
-) h1,
+    .appointments-header,
+    .patients-header,
+    .employees-header,
+    .pending-header,
+    .availability-header,
+    .top-section,
+    .section-header
+  )
+  h1,
 :where(
-  .appointments-header,
-  .patients-header,
-  .employees-header,
-  .pending-header,
-  .availability-header,
-  .top-section,
-  .section-header
-) h2 {
+    .appointments-header,
+    .patients-header,
+    .employees-header,
+    .pending-header,
+    .availability-header,
+    .top-section,
+    .section-header
+  )
+  h2 {
   margin: 0 0 4px !important;
   color: #0f172a !important;
   font-size: 26px !important;
@@ -473,11 +374,7 @@ tbody td {
   line-height: 1.5 !important;
 }
 
-:where(
-  .filters-wrapper,
-  .filters-row,
-  .filter-toolbar
-) {
+:where(.filters-wrapper, .filters-row, .filter-toolbar) {
   width: 100% !important;
   display: flex !important;
   flex-direction: row !important;
@@ -515,10 +412,7 @@ tbody td {
   border-radius: 10px !important;
 }
 
-:where(
-  .table-wrapper,
-  .table-container
-) {
+:where(.table-wrapper, .table-container) {
   width: 100% !important;
   overflow-x: auto !important;
   padding: 0 !important;
@@ -609,13 +503,7 @@ tbody td {
   font-size: 16px !important;
 }
 
-:where(
-  .patient-count,
-  .employee-count,
-  .appointment-count,
-  .consultation-count,
-  .record-count
-) {
+:where(.patient-count, .employee-count, .appointment-count, .consultation-count, .record-count) {
   padding: 8px 12px !important;
   border-radius: 10px !important;
   background: #eff6ff !important;
@@ -679,30 +567,12 @@ tbody td {
   transform: none !important;
 }
 
-:where(
-  .book-btn,
-  .request-btn,
-  .add-btn,
-  .submit-btn,
-  .primary-btn,
-  .search-btn,
-  .view-btn,
-  .download-btn
-) {
+:where(.book-btn, .request-btn, .add-btn, .submit-btn, .primary-btn, .search-btn, .view-btn, .download-btn) {
   background: #2563eb !important;
   color: #ffffff !important;
 }
 
-:where(
-  .book-btn,
-  .request-btn,
-  .add-btn,
-  .submit-btn,
-  .primary-btn,
-  .search-btn,
-  .view-btn,
-  .download-btn
-):hover {
+:where(.book-btn, .request-btn, .add-btn, .submit-btn, .primary-btn, .search-btn, .view-btn, .download-btn):hover {
   background: #1d4ed8 !important;
 }
 
@@ -713,12 +583,7 @@ tbody td {
   flex-wrap: wrap !important;
 }
 
-:where(
-  .pagination-card,
-  .pagination-footer,
-  .pagination,
-  .pagination-wrapper
-) {
+:where(.pagination-card, .pagination-footer, .pagination, .pagination-wrapper) {
   margin-top: 12px !important;
   padding: 10px 14px !important;
   border-radius: 12px !important;
@@ -753,18 +618,13 @@ tbody td {
     align-items: flex-start !important;
     flex-direction: column !important;
   }
-
   :where(.filters-wrapper, .filters-row, .filter-toolbar) {
     align-items: stretch !important;
     flex-direction: column !important;
   }
 }
 
-/*
-|--------------------------------------------------------------------------
-| Sidebar Exceptions
-|--------------------------------------------------------------------------
-*/
+/* Sidebar Exceptions */
 .sidebar .profile-card {
   background: rgba(255, 255, 255, 0.08) !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -779,12 +639,9 @@ tbody td {
   color: rgba(255, 255, 255, 0.68) !important;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Auth Theme Exceptions
-|--------------------------------------------------------------------------
-*/
-:where(.login-page, .register-page, .forgot-page, .reset-page, .create-password-page) :where(.submit-btn, button[type='submit']) {
+/* Auth Theme Exceptions */
+:where(.login-page, .register-page, .forgot-page, .reset-page, .create-password-page)
+  :where(.submit-btn, button[type='submit']) {
   background: linear-gradient(135deg, #2563eb, #0f766e) !important;
   color: #ffffff !important;
   box-shadow: 0 14px 30px rgba(37, 99, 235, 0.22) !important;
@@ -819,11 +676,7 @@ tbody td {
   -webkit-backdrop-filter: blur(12px) !important;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Utility Classes
-|--------------------------------------------------------------------------
-*/
+/* Utility Classes */
 .flex {
   display: flex;
 }
@@ -840,11 +693,7 @@ tbody td {
   gap: 20px;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Fade Animation
-|--------------------------------------------------------------------------
-*/
+/* Fade Animation */
 .fade-in {
   animation: fadeIn 0.5s ease;
 }
@@ -852,13 +701,10 @@ tbody td {
 @keyframes fadeIn {
   from {
     opacity: 0;
-
     transform: translateY(10px);
   }
-
   to {
     opacity: 1;
-
     transform: translateY(0);
   }
 }

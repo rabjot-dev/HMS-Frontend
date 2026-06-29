@@ -12,13 +12,10 @@
 
     <div class="availability-status">
       @if( availabilityForm .value .isAvailable ){
-
       <span class="status active">Available</span>
 
       } @else {
-
       <span class="status inactive">Unavailable</span>
-
       }
     </div>
   </div>
@@ -49,7 +46,6 @@
 
       <div class="days-container">
         @for( day of workingDays; track day ){
-
         <button
           type="button"
           class="day-btn"
@@ -65,7 +61,6 @@
         >
           {{ day }}
         </button>
-
         }
       </div>
     </div>
