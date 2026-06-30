@@ -43,8 +43,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => error);
       }
 
-      if (!refreshRequest$) {
-        refreshRequest$ = authService.refreshToken().pipe(
+      refreshRequest$ ??= authService.refreshToken().pipe(
           tap((response: any) => {
             const newAccessToken = response.data.accessToken;
 
@@ -55,7 +54,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           }),
           shareReplay(1)
         );
-      }
 
       return refreshRequest$.pipe(
         switchMap((response: any) => {

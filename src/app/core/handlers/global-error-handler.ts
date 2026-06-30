@@ -3,7 +3,7 @@ import { LoggerService } from '../services/logger';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  constructor(private logger: LoggerService) {}
+  constructor(private readonly logger: LoggerService) {}
 
   handleError(error: unknown): void {
     this.logger.error('Unhandled application error', error);
