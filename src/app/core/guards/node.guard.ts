@@ -1,6 +1,11 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { catchError, map, of } from 'rxjs';
 import { NodeService } from '../services/node';
+
+const hasAllowedNode = (nodes: any[], url: string): boolean =>
+  nodes.some((node) => node.path === url || node.children?.some((child: { path: string }) => child.path === url));
+
 export const nodeGuard: CanActivateFn = (route) => {
   const router = inject(Router);
 
@@ -10,15 +15,12 @@ export const nodeGuard: CanActivateFn = (route) => {
 
   const nodes = nodeService.nodes();
 
-  const allowed = nodes.some(
-    (node) => node.path === url || node.children?.some((child: { path: string }) => child.path === url)
-  );
-
-  if (allowed) {
+  if (hasAllowedNode(nodes, url)) {
     return true;
   }
 
-  router.navigate(['/login']);
-
-  return false;
+  return nodeService.ensureNodesLoaded().pipe(
+    map((loadedNodes) => (hasAllowedNode(loadedNodes, url) ? true : router.createUrlTree(['/login']))),
+    catchError(() => of(router.createUrlTree(['/login'])))
+  );
 };

@@ -71,7 +71,7 @@ export class NodeManagement implements OnInit {
   }
 
   get parentOptions(): any[] {
-    return this.flatNodes.filter((node) => node._id !== this.form._id);
+    return this.nodes.filter((node) => node._id !== this.form._id);
   }
 
   loadNodes(): void {
@@ -182,7 +182,7 @@ export class NodeManagement implements OnInit {
   async deleteNode(node: any): Promise<void> {
     const confirmed = await this.confirmDialog.confirm({
       title: 'Delete node?',
-      message: `${node.name} will be removed from navigation and permissions.`,
+      message: `${node.name} will be removed from navigation and permissions. Child nodes under it will also be removed.`,
       confirmText: 'Delete',
       tone: 'danger'
     });

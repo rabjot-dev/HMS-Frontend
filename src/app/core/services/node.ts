@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { API_BASE_URL } from '../constants/api.constants';
 
 @Injectable({
@@ -41,14 +42,30 @@ export class NodeService {
   }
 
   loadNodes(): void {
-    this.getNodes().subscribe({
-      next: (response) => {
-        this.setNodes(response.data || []);
-      },
-      error: () => {
-        this.clearNodes();
-      }
+    this.fetchAndStoreNodes().subscribe({
+      error: () => this.clearNodes()
     });
+  }
+
+  ensureNodesLoaded(): Observable<any[]> {
+    const currentNodes = this.nodes();
+
+    if (currentNodes.length) {
+      return of(currentNodes);
+    }
+
+    return this.fetchAndStoreNodes();
+  }
+
+  private fetchAndStoreNodes(): Observable<any[]> {
+    return this.getNodes().pipe(
+      map((response) => response.data || []),
+      tap((nodes) => this.setNodes(nodes)),
+      catchError((error) => {
+        this.clearNodes();
+        return throwError(() => error);
+      })
+    );
   }
 
   setNodes(nodes: any[]): void {
