@@ -1,4 +1,4 @@
-@if( authService.currentUser | async; as user ){
+@if( authService.currentUser(); as user ){
 <!-- ADMIN -->
 
 @if( user?.roles?.includes( 'ADMIN' ) ){

@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { API_BASE_URL } from '../constants/api.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  currentUser = new BehaviorSubject<any>(null);
-  currentUser$ = this.currentUser.asObservable();
+  readonly currentUser = signal<any | null>(null);
+
   constructor(private readonly http: HttpClient) {}
 
   login(data: { loginId: string; password: string }): Observable<any> {
@@ -24,12 +24,20 @@ export class AuthService {
   loadCurrentUser(): void {
     this.getCurrentUser().subscribe({
       next: (response) => {
-        this.currentUser.next(response.data);
+        this.setCurrentUser(response.data);
       },
       error: () => {
-        this.currentUser.next(null);
+        this.clearCurrentUser();
       }
     });
+  }
+
+  setCurrentUser(user: any | null): void {
+    this.currentUser.set(user);
+  }
+
+  clearCurrentUser(): void {
+    this.currentUser.set(null);
   }
 
   createPassword(data: any): Observable<any> {
@@ -42,7 +50,7 @@ export class AuthService {
 
   // Check if current user has a specific role
   hasRole(role: string): boolean {
-    const user = this.currentUser.value;
+    const user = this.currentUser();
 
     if (!user) {
       return false;

@@ -1,6 +1,5 @@
 import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
 import { NodeService } from '../../core/services/node';
 import { AuthService } from '../../core/services/auth';
 import { TokenService } from '../../core/services/token';
@@ -9,7 +8,7 @@ import { Sidebar } from '../../shared/components/sidebar/sidebar';
 
 @Component({
   selector: 'app-dashboard-layout',
-  imports: [RouterOutlet, RouterLink, AsyncPipe, Sidebar],
+  imports: [RouterOutlet, RouterLink, Sidebar],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -40,7 +39,7 @@ export class DashboardLayout implements OnInit {
 
   // Close active toast
   dismissToast(): void {
-    this.toastService.toast$.next(null);
+    this.toastService.dismiss();
   }
 
   // Toggle profile dropdown
@@ -64,7 +63,7 @@ export class DashboardLayout implements OnInit {
 
     this.tokenService.removeTokens();
 
-    this.authService.currentUser.next(null);
+    this.authService.clearCurrentUser();
 
     this.nodeService.clearNodes();
 

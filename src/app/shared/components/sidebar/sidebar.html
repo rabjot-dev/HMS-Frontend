@@ -6,7 +6,7 @@
       Node Management
     </a>
   </div>
-  } @for ( node of nodeService.nodes | async; track node._id ) {
+  } @for ( node of nodeService.nodes(); track node._id ) {
   <div class="nav-item">
     <!-- Parent Menu -->
     @if ( node.children?.length ) {

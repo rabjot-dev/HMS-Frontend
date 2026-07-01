@@ -61,7 +61,7 @@ export class Login {
 
         this.tokenService.setAccessToken(accessToken);
 
-        this.authService.currentUser.next(user);
+        this.authService.setCurrentUser(user);
 
         localStorage.setItem('role', user.roles?.[0]);
 
@@ -80,9 +80,7 @@ export class Login {
         // Load nodes before navigation
         this.nodeService.getNodes().subscribe({
           next: (nodeResponse: any) => {
-            this.nodeService.nodes.next(nodeResponse.data);
-
-            localStorage.setItem('nodes', JSON.stringify(nodeResponse.data));
+            this.nodeService.setNodes(nodeResponse.data || []);
 
             this.toastService.show('Login successful', 'success');
 

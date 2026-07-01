@@ -1,28 +1,24 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputDialogService } from '../../../core/services/input-dialog';
 
 @Component({
   selector: 'app-input-dialog',
   standalone: true,
-  imports: [AsyncPipe, FormsModule],
+  imports: [FormsModule],
   templateUrl: './input-dialog.html',
   styleUrls: ['./input-dialog.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InputDialogComponent {
-  readonly dialog$;
-  value = '';
+  private readonly inputDialog = inject(InputDialogService);
+  readonly dialog = this.inputDialog.dialog;
+  readonly value = signal('');
 
-  constructor(
-    private readonly inputDialog: InputDialogService,
-    private readonly cdr: ChangeDetectorRef
-  ) {
-    this.dialog$ = this.inputDialog.dialog$;
-    this.dialog$.subscribe(() => {
-      this.value = '';
-      this.cdr.markForCheck();
+  constructor() {
+    effect(() => {
+      this.dialog();
+      this.value.set('');
     });
   }
 
@@ -31,6 +27,6 @@ export class InputDialogComponent {
   }
 
   submit(): void {
-    this.inputDialog.close(this.value.trim());
+    this.inputDialog.close(this.value().trim());
   }
 }

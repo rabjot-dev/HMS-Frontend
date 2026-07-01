@@ -1,11 +1,10 @@
-import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, NgZone, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NetworkStatusService {
-  readonly online$ = new BehaviorSubject<boolean>(navigator.onLine);
+  readonly online = signal<boolean>(navigator.onLine);
 
   constructor(private readonly zone: NgZone) {
     window.addEventListener('online', () => this.update(true));
@@ -13,6 +12,6 @@ export class NetworkStatusService {
   }
 
   private update(online: boolean): void {
-    this.zone.run(() => this.online$.next(online));
+    this.zone.run(() => this.online.set(online));
   }
 }

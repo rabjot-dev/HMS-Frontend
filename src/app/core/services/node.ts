@@ -1,19 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
 import { API_BASE_URL } from '../constants/api.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NodeService {
-  nodes = new BehaviorSubject<any[]>([]);
+  readonly nodes = signal<any[]>([]);
 
   constructor(private readonly http: HttpClient) {
     const storedNodes = localStorage.getItem('nodes');
 
     if (storedNodes) {
-      this.nodes.next(JSON.parse(storedNodes));
+      this.nodes.set(JSON.parse(storedNodes));
     }
   }
 
@@ -44,21 +43,21 @@ export class NodeService {
   loadNodes(): void {
     this.getNodes().subscribe({
       next: (response) => {
-        this.nodes.next(response.data);
-
-        localStorage.setItem('nodes', JSON.stringify(response.data));
+        this.setNodes(response.data || []);
       },
       error: () => {
-        this.nodes.next([]);
-
-        localStorage.removeItem('nodes');
+        this.clearNodes();
       }
     });
   }
 
-  clearNodes(): void {
-    this.nodes.next([]);
+  setNodes(nodes: any[]): void {
+    this.nodes.set(nodes);
+    localStorage.setItem('nodes', JSON.stringify(nodes));
+  }
 
+  clearNodes(): void {
+    this.nodes.set([]);
     localStorage.removeItem('nodes');
   }
 
@@ -88,7 +87,7 @@ export class NodeService {
   }
 
   private getFlatNodes(): any[] {
-    return this.nodes.value.flatMap((node) => [node, ...(node.children || [])]);
+    return this.nodes().flatMap((node) => [node, ...(node.children || [])]);
   }
 
   private getUserRoles(): string[] {

@@ -8,7 +8,7 @@ export const nodeGuard: CanActivateFn = (route) => {
 
   const url = route.data?.['nodePath'] || '/' + route.url.map((segment) => segment.path).join('/');
 
-  const nodes = nodeService.nodes.value;
+  const nodes = nodeService.nodes();
 
   const allowed = nodes.some(
     (node) => node.path === url || node.children?.some((child: { path: string }) => child.path === url)

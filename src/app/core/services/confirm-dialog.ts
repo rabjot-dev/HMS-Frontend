@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 
 export interface ConfirmDialogState {
   title: string;
@@ -14,11 +13,11 @@ export interface ConfirmDialogState {
   providedIn: 'root'
 })
 export class ConfirmDialogService {
-  readonly dialog$ = new BehaviorSubject<ConfirmDialogState | null>(null);
+  readonly dialog = signal<ConfirmDialogState | null>(null);
 
   confirm(options: Partial<Omit<ConfirmDialogState, 'resolve'>>): Promise<boolean> {
     return new Promise((resolve) => {
-      this.dialog$.next({
+      this.dialog.set({
         title: options.title || 'Confirm action',
         message: options.message || 'Are you sure you want to continue?',
         confirmText: options.confirmText || 'Confirm',
@@ -30,13 +29,13 @@ export class ConfirmDialogService {
   }
 
   close(confirmed: boolean): void {
-    const current = this.dialog$.value;
+    const current = this.dialog();
 
     if (!current) {
       return;
     }
 
     current.resolve(confirmed);
-    this.dialog$.next(null);
+    this.dialog.set(null);
   }
 }

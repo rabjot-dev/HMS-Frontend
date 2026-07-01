@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
 import { DashboardService } from '../../../core/services/dashboard';
 import { AuthService } from '../../../core/services/auth';
 import { NodeService } from '../../../core/services/node';
@@ -8,7 +7,7 @@ import { NodeService } from '../../../core/services/node';
 @Component({
   selector: 'app-receptionist-dashboard',
   standalone: true,
-  imports: [RouterLink, AsyncPipe],
+  imports: [RouterLink],
   templateUrl: './receptionist-dashboard.html',
   styleUrl: './receptionist-dashboard.css',
   changeDetection: ChangeDetectionStrategy.OnPush

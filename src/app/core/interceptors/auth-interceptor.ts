@@ -73,7 +73,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
           localStorage.removeItem('role');
 
-          authService.currentUser.next(null);
+          authService.clearCurrentUser();
 
           router.navigate(['/login']);
 

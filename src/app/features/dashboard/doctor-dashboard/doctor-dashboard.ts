@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
 import { AuthService } from '../../../core/services/auth';
 import { DashboardService } from '../../../core/services/dashboard';
 import { NodeService } from '../../../core/services/node';
@@ -8,7 +7,7 @@ import { NodeService } from '../../../core/services/node';
 @Component({
   selector: 'app-doctor-dashboard',
   standalone: true,
-  imports: [RouterLink, AsyncPipe],
+  imports: [RouterLink],
   templateUrl: './doctor-dashboard.html',
   styleUrl: './doctor-dashboard.css',
   changeDetection: ChangeDetectionStrategy.OnPush

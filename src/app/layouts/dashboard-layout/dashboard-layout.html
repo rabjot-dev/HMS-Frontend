@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    @if( authService.currentUser | async; as user ){
+    @if( authService.currentUser(); as user ){
     <!-- Profile -->
 
     <div class="profile-card">
@@ -44,7 +44,7 @@
         <p>Modern Hospital Workspace</p>
       </div>
 
-      @if( authService.currentUser | async; as user ){
+      @if( authService.currentUser(); as user ){
       <div class="topbar-right">
         <!-- System Status -->
 

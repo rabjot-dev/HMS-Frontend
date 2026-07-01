@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 
 export interface InputDialogState {
   title: string;
@@ -16,11 +15,11 @@ export interface InputDialogState {
   providedIn: 'root'
 })
 export class InputDialogService {
-  readonly dialog$ = new BehaviorSubject<InputDialogState | null>(null);
+  readonly dialog = signal<InputDialogState | null>(null);
 
   ask(options: Partial<Omit<InputDialogState, 'resolve'>>): Promise<string | null> {
     return new Promise((resolve) => {
-      this.dialog$.next({
+      this.dialog.set({
         title: options.title || 'Enter value',
         message: options.message || '',
         inputLabel: options.inputLabel || 'Value',
@@ -34,13 +33,13 @@ export class InputDialogService {
   }
 
   close(value: string | null): void {
-    const current = this.dialog$.value;
+    const current = this.dialog();
 
     if (!current) {
       return;
     }
 
     current.resolve(value);
-    this.dialog$.next(null);
+    this.dialog.set(null);
   }
 }

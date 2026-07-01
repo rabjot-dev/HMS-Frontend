@@ -5,7 +5,7 @@
     <div>
       <p class="hero-label">Doctor Workspace</p>
 
-      @if( authService.currentUser | async; as user ){
+      @if( authService.currentUser(); as user ){
       <h1>Welcome Dr. {{ user?.employeeId?.name || 'Doctor' }} 👋</h1>
       }
 

@@ -1,4 +1,4 @@
-@if(dialog$ | async; as dialog) {
+@if(dialog(); as dialog) {
 <div class="confirm-backdrop" (click)="cancel()">
   <section class="confirm-card" (click)="$event.stopPropagation()">
     <div class="confirm-icon" [ngClass]="dialog.tone">{{ dialog.tone === 'danger' ? '!' : '?' }}</div>
