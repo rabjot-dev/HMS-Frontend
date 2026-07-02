@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { NodeService } from '../../../core/services/node';
 import { ToastService } from '../../../core/services/toast';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog';
@@ -57,13 +58,14 @@ export class NodeManagement implements OnInit {
 
   constructor(
     private readonly nodeService: NodeService,
+    private readonly route: ActivatedRoute,
     private readonly toast: ToastService,
     private readonly confirmDialog: ConfirmDialogService,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadNodes();
+    this.nodes = this.route.snapshot.data['nodes']?.data || [];
   }
 
   get flatNodes(): any[] {

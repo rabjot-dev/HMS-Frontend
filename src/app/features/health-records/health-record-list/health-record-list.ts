@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HealthRecordService } from '../../../core/services/health-record';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader';
@@ -31,11 +31,12 @@ export class HealthRecordList implements OnInit {
 
   constructor(
     private readonly healthRecordService: HealthRecordService,
+    private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadHealthRecords();
+    this.applyHealthRecordsResponse(this.route.snapshot.data['healthRecords']);
   }
 
   loadHealthRecords(showPageLoader = true): void {
@@ -53,10 +54,7 @@ export class HealthRecordList implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          this.healthRecords = response.data;
-
-          this.meta = response.meta;
-          this.nextCursor = response.meta?.nextCursor || '';
+          this.applyHealthRecordsResponse(response);
 
           if (this.page > 1 && this.healthRecords.length === 0) {
             this.page = Math.max(this.meta?.totalPages || 1, 1);
@@ -110,5 +108,12 @@ export class HealthRecordList implements OnInit {
     this.cursorStack = [''];
     this.nextCursor = '';
     this.loadHealthRecords(false);
+  }
+
+  private applyHealthRecordsResponse(response: any): void {
+    this.healthRecords = response?.data || [];
+    this.meta = response?.meta || {};
+    this.nextCursor = response?.meta?.nextCursor || '';
+    this.isLoading = false;
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { AppointmentService } from '../../../core/services/appointment';
 import { NodeService } from '../../../core/services/node';
 
@@ -19,11 +20,12 @@ export class AppointmentRequestsComponent implements OnInit {
   constructor(
     private readonly appointmentService: AppointmentService,
     public readonly nodeService: NodeService,
+    private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadPendingAppointments();
+    this.appointments = this.route.snapshot.data['pendingAppointments']?.data || [];
   }
 
   loadPendingAppointments(): void {

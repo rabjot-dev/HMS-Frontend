@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
@@ -44,6 +44,7 @@ export class EmployeeList implements OnInit {
 
   constructor(
     private readonly employeeService: EmployeeService,
+    private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef,
     private readonly toastService: ToastService,
     public readonly authService: AuthService,
@@ -52,7 +53,7 @@ export class EmployeeList implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadEmployees();
+    this.applyEmployeesResponse(this.route.snapshot.data['employees']);
   }
 
   loadEmployees(showPageLoader = true): void {
@@ -85,12 +86,7 @@ export class EmployeeList implements OnInit {
 
     this.employeeService.getEmployees(params).subscribe({
       next: (response) => {
-        this.employees = response.data;
-
-        this.total = response.meta?.totalRecords ?? response.meta?.total ?? 0;
-
-        this.totalPages = response.meta?.totalPages || Math.max(Math.ceil(this.total / this.limit), 1);
-        this.nextCursor = response.meta?.nextCursor || '';
+        this.applyEmployeesResponse(response);
 
         if (this.page > 1 && this.employees.length === 0) {
           this.page = Math.max(this.totalPages || 1, 1);
@@ -204,5 +200,13 @@ export class EmployeeList implements OnInit {
     const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
 
     return Math.min(this.page, totalPagesAfterDelete);
+  }
+
+  private applyEmployeesResponse(response: any): void {
+    this.employees = response?.data || [];
+    this.total = response?.meta?.totalRecords ?? response?.meta?.total ?? 0;
+    this.totalPages = response?.meta?.totalPages || Math.max(Math.ceil(this.total / this.limit), 1);
+    this.nextCursor = response?.meta?.nextCursor || '';
+    this.isLoading = false;
   }
 }

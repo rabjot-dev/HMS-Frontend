@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PatientService } from '../../../core/services/patient';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { NodeService } from '../../../core/services/node';
@@ -42,6 +42,7 @@ export class PatientList implements OnInit {
   constructor(
     private readonly patientService: PatientService,
     public readonly nodeService: NodeService,
+    private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef,
     private readonly confirmDialog: ConfirmDialogService,
     private readonly toast: ToastService
@@ -50,7 +51,7 @@ export class PatientList implements OnInit {
   ngOnInit(): void {
     this.userRole = localStorage.getItem('role') || '';
 
-    this.loadPatients();
+    this.applyPatientsResponse(this.route.snapshot.data['patients']);
   }
 
   loadPatients(): void {
@@ -87,12 +88,7 @@ export class PatientList implements OnInit {
       next: (response) => {
         console.log(response);
 
-        this.patients = response.data;
-
-        this.totalRecords = response.meta?.totalRecords ?? response.meta?.total ?? 0;
-
-        this.totalPages = response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
-        this.nextCursor = response.meta?.nextCursor || '';
+        this.applyPatientsResponse(response);
 
         if (this.page > 1 && this.patients.length === 0) {
           this.page = Math.max(this.totalPages || 1, 1);
@@ -179,5 +175,13 @@ export class PatientList implements OnInit {
     const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
 
     return Math.min(this.page, totalPagesAfterDelete);
+  }
+
+  private applyPatientsResponse(response: any): void {
+    this.patients = response?.data || [];
+    this.totalRecords = response?.meta?.totalRecords ?? response?.meta?.total ?? 0;
+    this.totalPages = response?.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
+    this.nextCursor = response?.meta?.nextCursor || '';
+    this.isLoading = false;
   }
 }

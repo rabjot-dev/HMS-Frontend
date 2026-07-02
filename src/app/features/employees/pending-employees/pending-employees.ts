@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 import { NodeService } from '../../../core/services/node';
@@ -18,6 +19,7 @@ export class PendingEmployees implements OnInit {
 
   constructor(
     private readonly employeeService: EmployeeService,
+    private readonly route: ActivatedRoute,
     private readonly toastService: ToastService,
     public readonly nodeService: NodeService,
     private readonly cdr: ChangeDetectorRef,
@@ -26,7 +28,7 @@ export class PendingEmployees implements OnInit {
 
   // Load pending employees on page load
   ngOnInit(): void {
-    this.loadPendingEmployees();
+    this.pendingEmployees = this.route.snapshot.data['pendingEmployees']?.data || [];
   }
 
   // Get all pending employees

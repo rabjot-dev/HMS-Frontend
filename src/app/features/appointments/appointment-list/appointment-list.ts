@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AppointmentService } from '../../../core/services/appointment';
 import { AuthService } from '../../../core/services/auth';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
@@ -37,13 +37,14 @@ export class AppointmentList implements OnInit {
     private readonly appointmentService: AppointmentService,
     public readonly authService: AuthService,
     public readonly nodeService: NodeService,
+    private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef,
     private readonly confirmDialog: ConfirmDialogService,
     private readonly toast: ToastService
   ) {}
 
   ngOnInit(): void {
-    this.loadAppointments();
+    this.applyAppointmentsResponse(this.route.snapshot.data['appointments']);
   }
 
   loadAppointments(): void {
@@ -76,12 +77,7 @@ export class AppointmentList implements OnInit {
 
     this.appointmentService.getAppointments(params).subscribe({
       next: (response) => {
-        this.appointments = response.data;
-
-        this.totalRecords = response.meta?.totalRecords ?? response.meta?.total ?? 0;
-
-        this.totalPages = response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
-        this.nextCursor = response.meta?.nextCursor || '';
+        this.applyAppointmentsResponse(response);
 
         if (this.page > 1 && this.appointments.length === 0) {
           this.page = Math.max(this.totalPages || 1, 1);
@@ -163,5 +159,12 @@ export class AppointmentList implements OnInit {
     const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
 
     return Math.min(this.page, totalPagesAfterDelete);
+  }
+
+  private applyAppointmentsResponse(response: any): void {
+    this.appointments = response?.data || [];
+    this.totalRecords = response?.meta?.totalRecords ?? response?.meta?.total ?? 0;
+    this.totalPages = response?.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
+    this.nextCursor = response?.meta?.nextCursor || '';
   }
 }

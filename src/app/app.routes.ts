@@ -10,6 +10,22 @@ import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { Home } from './features/floater/home/home';
 import { nodeGuard } from './core/guards/node.guard';
 import { roleGuard } from './core/guards/role.guard';
+import {
+  adminDashboardResolver,
+  doctorDashboardResolver,
+  receptionistDashboardResolver
+} from './features/dashboard/dashboard.resolvers';
+import {
+  appointmentsResolver,
+  consultationFiltersResolver,
+  consultationsResolver,
+  employeesResolver,
+  healthRecordsResolver,
+  managementNodesResolver,
+  pendingAppointmentsResolver,
+  pendingEmployeesResolver,
+  patientsResolver
+} from './features/route-data.resolvers';
 
 export const routes: Routes = [
   // Home Routes
@@ -60,13 +76,19 @@ export const routes: Routes = [
         path: 'dashboard/admin',
         loadComponent: () =>
           import('./features/dashboard/admin-dashboard/admin-dashboard').then((m) => m.AdminDashboard),
-        canActivate: [nodeGuard]
+        canActivate: [nodeGuard],
+        resolve: {
+          dashboard: adminDashboardResolver
+        }
       },
       {
         path: 'dashboard/doctor',
         loadComponent: () =>
           import('./features/dashboard/doctor-dashboard/doctor-dashboard').then((m) => m.DoctorDashboard),
-        canActivate: [nodeGuard]
+        canActivate: [nodeGuard],
+        resolve: {
+          dashboard: doctorDashboardResolver
+        }
       },
       {
         path: 'dashboard/receptionist',
@@ -74,13 +96,19 @@ export const routes: Routes = [
           import('./features/dashboard/receptionist-dashboard/receptionist-dashboard').then(
             (m) => m.ReceptionistDashboard
           ),
-        canActivate: [nodeGuard]
+        canActivate: [nodeGuard],
+        resolve: {
+          dashboard: receptionistDashboardResolver
+        }
       },
       // Employees
       {
         path: 'employees',
         loadComponent: () => import('./features/employees/employee-list/employee-list').then((m) => m.EmployeeList),
-        canActivate: [nodeGuard]
+        canActivate: [nodeGuard],
+        resolve: {
+          employees: employeesResolver
+        }
       },
       {
         path: 'employees/create',
@@ -91,7 +119,10 @@ export const routes: Routes = [
         path: 'employees/pending',
         loadComponent: () =>
           import('./features/employees/pending-employees/pending-employees').then((m) => m.PendingEmployees),
-        canActivate: [nodeGuard]
+        canActivate: [nodeGuard],
+        resolve: {
+          pendingEmployees: pendingEmployeesResolver
+        }
       },
       // Internal pages
       {
@@ -111,7 +142,10 @@ export const routes: Routes = [
       {
         path: 'patients',
         loadComponent: () => import('./features/patients/patient-list/patient-list').then((m) => m.PatientList),
-        canActivate: [nodeGuard]
+        canActivate: [nodeGuard],
+        resolve: {
+          patients: patientsResolver
+        }
       },
       {
         path: 'patients/create',
@@ -137,7 +171,10 @@ export const routes: Routes = [
         path: 'appointments',
         loadComponent: () =>
           import('./features/appointments/appointment-list/appointment-list').then((m) => m.AppointmentList),
-        canActivate: [nodeGuard]
+        canActivate: [nodeGuard],
+        resolve: {
+          appointments: appointmentsResolver
+        }
       },
       {
         path: 'appointments/book',
@@ -151,7 +188,10 @@ export const routes: Routes = [
           import('./features/appointments/appointment-requests/appointment-requests').then(
             (m) => m.AppointmentRequestsComponent
           ),
-        canActivate: [nodeGuard]
+        canActivate: [nodeGuard],
+        resolve: {
+          pendingAppointments: pendingAppointmentsResolver
+        }
       },
       // Internal pages
       {
@@ -177,14 +217,20 @@ export const routes: Routes = [
         path: 'node-management',
         loadComponent: () =>
           import('./features/node-management/node-management/node-management').then((m) => m.NodeManagement),
-        canActivate: [roleGuard(['SUPER_ADMIN'])]
+        canActivate: [roleGuard(['SUPER_ADMIN'])],
+        resolve: {
+          nodes: managementNodesResolver
+        }
       },
       // Consultations
       {
         path: 'health-records',
         loadComponent: () =>
           import('./features/health-records/health-record-list/health-record-list').then((m) => m.HealthRecordList),
-        canActivate: [nodeGuard]
+        canActivate: [nodeGuard],
+        resolve: {
+          healthRecords: healthRecordsResolver
+        }
       },
       // Internal pages
       {
