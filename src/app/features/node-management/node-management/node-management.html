@@ -3,7 +3,7 @@
     <div>
       <p class="page-label">Super Admin</p>
       <h1>Node Management</h1>
-      <p class="page-subtitle">Control navigation nodes and API permission mappings.</p>
+      <p class="page-subtitle">Control which screens appear and what each role is allowed to do inside them.</p>
     </div>
   </div>
 
@@ -69,22 +69,22 @@
         </label>
 
         <label>
-          <span>Route Path</span>
+          <span>Screen URL</span>
           <input type="text" [(ngModel)]="form.path" placeholder="/employees" />
         </label>
 
         <label>
-          <span>Material Icon</span>
+          <span>Menu Icon Name</span>
           <input type="text" [(ngModel)]="form.icon" placeholder="groups" />
         </label>
 
         <label>
-          <span>Order</span>
+          <span>Menu Position</span>
           <input type="number" [(ngModel)]="form.order" />
         </label>
 
         <label>
-          <span>Parent</span>
+          <span>Place Under</span>
           <select [(ngModel)]="form.parent">
             <option value="">Root node</option>
             @for(parent of parentOptions; track parent._id) {
@@ -94,47 +94,72 @@
         </label>
 
         <label>
-          <span>Active</span>
+          <span>Visibility</span>
           <select [(ngModel)]="form.isActive">
-            <option [ngValue]="true">Active</option>
-            <option [ngValue]="false">Inactive</option>
+            <option [ngValue]="true">Shown</option>
+            <option [ngValue]="false">Hidden</option>
           </select>
         </label>
       </div>
 
       <label class="full-field">
-        <span>Allowed Roles</span>
+        <span>Who can see this screen</span>
         <input type="text" [(ngModel)]="form.rolesText" placeholder="SUPER_ADMIN, ADMIN" />
         <small>Available: {{ roles.join(', ') }}</small>
       </label>
 
       <div class="permission-header">
         <div>
-          <h3>API Permissions</h3>
-          <p>Match backend route patterns such as /api/patients/:id.</p>
+          <h3>Access Rules</h3>
+          <p>Choose what this screen allows each role to do.</p>
         </div>
         <button type="button" class="secondary-btn" (click)="addPermission()">
           <span class="material-icons">add</span>
-          Add API
+          Add Rule
         </button>
       </div>
 
       <div class="permissions">
         @for(permission of form.apiPermissions; track $index) {
-        <div class="permission-row">
-          <select [(ngModel)]="permission.method">
-            @for(method of methods; track method) {
-            <option [value]="method">{{ method }}</option>
-            }
-          </select>
+        <div class="permission-card">
+          <div class="permission-row">
+            <label>
+              <span>Allowed action</span>
+              <select [(ngModel)]="permission.method">
+                @for(action of permissionActions; track action.value) {
+                <option [value]="action.value">{{ action.label }}</option>
+                }
+              </select>
+              <small>{{ getActionDescription(permission.method) }}</small>
+            </label>
 
-          <input type="text" [(ngModel)]="permission.path" placeholder="/api/resource/:id" />
+            <label>
+              <span>System area</span>
+              <select [(ngModel)]="permission.path">
+                <option value="">Select area</option>
+                @for(area of systemAreaOptions; track area.path) {
+                <option [value]="area.path">{{ area.label }}</option>
+                }
+              </select>
+              <small>Pick the area this action belongs to.</small>
+            </label>
 
-          <input type="text" [(ngModel)]="permission.rolesText" placeholder="Optional role override" />
+            <label>
+              <span>Role override</span>
+              <input type="text" [(ngModel)]="permission.rolesText" placeholder="Optional: ADMIN, DOCTOR" />
+              <small>Leave empty to use the node's allowed roles.</small>
+            </label>
 
-          <button type="button" class="icon-btn danger" (click)="removePermission($index)">
-            <span class="material-icons">delete</span>
-          </button>
+            <button
+              type="button"
+              class="icon-btn danger"
+              [attr.aria-label]="'Remove ' + getActionLabel(permission.method) + ' rule'"
+              (click)="removePermission($index)"
+            >
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+
         </div>
         }
       </div>

@@ -26,6 +26,17 @@ type NodeDraft = {
   apiPermissions: PermissionDraft[];
 };
 
+type PermissionAction = {
+  value: string;
+  label: string;
+  description: string;
+};
+
+type SystemAreaOption = {
+  path: string;
+  label: string;
+};
+
 @Component({
   selector: 'app-node-management',
   standalone: true,
@@ -52,7 +63,38 @@ export class NodeManagement implements OnInit {
     'PATIENT'
   ];
 
-  readonly methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'ALL'];
+  readonly permissionActions: PermissionAction[] = [
+    {
+      value: 'GET',
+      label: 'View information',
+      description: 'Allows users to open screens, lists, profiles, reports, or other read-only information.'
+    },
+    {
+      value: 'POST',
+      label: 'Create new record',
+      description: 'Allows users to add a new patient, appointment, employee, report, or similar record.'
+    },
+    {
+      value: 'PUT',
+      label: 'Update full record',
+      description: 'Allows users to save major edits to an existing record.'
+    },
+    {
+      value: 'PATCH',
+      label: 'Approve, cancel, or status change',
+      description: 'Allows users to perform a focused action such as approve, reject, activate, deactivate, or cancel.'
+    },
+    {
+      value: 'DELETE',
+      label: 'Remove record',
+      description: 'Allows users to delete or remove an existing record.'
+    },
+    {
+      value: 'ALL',
+      label: 'Allow every action',
+      description: 'Gives this node every action for the selected system endpoint. Use only for trusted admin areas.'
+    }
+  ];
 
   form: NodeDraft = this.getBlankForm();
 
@@ -74,6 +116,30 @@ export class NodeManagement implements OnInit {
 
   get parentOptions(): any[] {
     return this.nodes.filter((node) => node._id !== this.form._id);
+  }
+
+  get systemAreaOptions(): SystemAreaOption[] {
+    const options = new Map<string, string>();
+
+    this.form.apiPermissions.forEach((permission) => {
+      if (!permission.path || options.has(permission.path)) {
+        return;
+      }
+
+      options.set(permission.path, this.humanizeSystemArea(permission.path));
+    });
+
+    if (this.form.path) {
+      const screenApiPath = this.normalizeApiPath(this.form.path);
+
+      if (!options.has(screenApiPath)) {
+        options.set(screenApiPath, `${this.form.name || 'Current screen'} area`);
+      }
+    }
+
+    return Array.from(options.entries())
+      .map(([path, label]) => ({ path, label }))
+      .sort((first, second) => first.label.localeCompare(second.label));
   }
 
   loadNodes(): void {
@@ -130,6 +196,17 @@ export class NodeManagement implements OnInit {
 
   removePermission(index: number): void {
     this.form.apiPermissions = this.form.apiPermissions.filter((_, itemIndex) => itemIndex !== index);
+  }
+
+  getActionLabel(method: string): string {
+    return this.permissionActions.find((action) => action.value === method)?.label || 'Select action';
+  }
+
+  getActionDescription(method: string): string {
+    return (
+      this.permissionActions.find((action) => action.value === method)?.description ||
+      'Choose what users are allowed to do in this area.'
+    );
   }
 
   saveNode(): void {
@@ -242,5 +319,19 @@ export class NodeManagement implements OnInit {
     const cleanPath = this.normalizeRoutePath(path);
 
     return cleanPath.startsWith('/api') ? cleanPath : `/api${cleanPath}`;
+  }
+
+  private humanizeSystemArea(path: string): string {
+    const cleanPath = path
+      .replace(/^\/api\/?/, '')
+      .replace(/:\w+/g, 'selected record')
+      .replace(/[-/]+/g, ' ')
+      .trim();
+
+    if (!cleanPath) {
+      return 'General system area';
+    }
+
+    return cleanPath.charAt(0).toUpperCase() + cleanPath.slice(1);
   }
 }
