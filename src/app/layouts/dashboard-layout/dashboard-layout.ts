@@ -1,5 +1,7 @@
-import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { NodeService } from '../../core/services/node';
 import { AuthService } from '../../core/services/auth';
 import { TokenService } from '../../core/services/token';
@@ -15,6 +17,7 @@ import { Sidebar } from '../../shared/components/sidebar/sidebar';
 })
 export class DashboardLayout implements OnInit {
   isProfileOpen = false;
+  isSidebarOpen = false;
 
   constructor(
     public readonly nodeService: NodeService,
@@ -23,7 +26,8 @@ export class DashboardLayout implements OnInit {
     private readonly router: Router,
     private readonly toastService: ToastService,
     private readonly cdr: ChangeDetectorRef,
-    private readonly elementRef: ElementRef
+    private readonly elementRef: ElementRef,
+    private readonly destroyRef: DestroyRef
   ) {}
 
   // Load current user details
@@ -35,6 +39,15 @@ export class DashboardLayout implements OnInit {
 
       this.nodeService.loadNodes();
     }
+
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.closeSidebar();
+      });
   }
 
   // Close active toast
@@ -45,6 +58,20 @@ export class DashboardLayout implements OnInit {
   // Toggle profile dropdown
   toggleProfile(): void {
     this.isProfileOpen = !this.isProfileOpen;
+  }
+
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    this.cdr.markForCheck();
+  }
+
+  closeSidebar(): void {
+    if (!this.isSidebarOpen) {
+      return;
+    }
+
+    this.isSidebarOpen = false;
+    this.cdr.markForCheck();
   }
 
   // Close dropdown when clicked outside

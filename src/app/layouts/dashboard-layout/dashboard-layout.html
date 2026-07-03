@@ -1,8 +1,16 @@
 <div class="global-toast-wrapper"></div>
-<div class="dashboard-shell">
+<div class="dashboard-shell" [class.sidebar-open]="isSidebarOpen">
   <!-- Sidebar -->
 
-  <aside class="sidebar glass">
+  <button
+    type="button"
+    class="sidebar-backdrop"
+    aria-label="Close navigation"
+    [class.visible]="isSidebarOpen"
+    (click)="closeSidebar()"
+  ></button>
+
+  <aside class="sidebar glass" [class.open]="isSidebarOpen">
     <!-- Logo -->
 
     <div class="logo-section">
@@ -38,10 +46,22 @@
     <!-- Topbar -->
 
     <header class="topbar glass">
-      <div>
-        <h1>BootStrap HMS</h1>
+      <div class="topbar-title">
+        <button
+          type="button"
+          class="mobile-menu-btn"
+          aria-label="Open navigation"
+          [attr.aria-expanded]="isSidebarOpen"
+          (click)="toggleSidebar(); $event.stopPropagation()"
+        >
+          <span class="material-icons">menu</span>
+        </button>
 
-        <p>Hospital Workspace</p>
+        <div>
+          <h1>BootStrap HMS</h1>
+
+          <p>Hospital Workspace</p>
+        </div>
       </div>
 
       @if( authService.currentUser(); as user ){

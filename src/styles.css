@@ -676,6 +676,247 @@ tbody td {
   -webkit-backdrop-filter: blur(12px) !important;
 }
 
+/* Mobile Responsiveness Layer */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+:where(.page-content, router-outlet + *, app-root, app-dashboard-layout) {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  :where(
+    .dashboard-wrapper,
+    .dashboard-content,
+    .stats-grid,
+    .quick-grid,
+    .content-grid,
+    .overview-grid,
+    .details-grid,
+    .info-grid,
+    .form-grid,
+    .form-row,
+    .node-layout,
+    .cards-grid,
+    .appointments-grid,
+    .requests-grid,
+    .records-grid,
+    .profile-grid,
+    .availability-grid
+  ) {
+    grid-template-columns: 1fr !important;
+  }
+
+  :where(.page-header, .top-section, .patients-header, .employees-header, .appointments-header, .pending-header) {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  :where(.header-actions, .actions, .action-buttons, .form-actions, .btn-row) {
+    justify-content: flex-start !important;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 24px;
+    letter-spacing: 0;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 17px;
+  }
+
+  :where(
+    .appointments-page,
+    .patients-page,
+    .employees-page,
+    .pending-page,
+    .availability-page,
+    .consultation-list-container,
+    .health-record-list-container,
+    .profile-page,
+    .node-page,
+    .page-shell,
+    .dashboard-wrapper
+  ) {
+    gap: 12px !important;
+  }
+
+  :where(
+    .appointments-header,
+    .patients-header,
+    .employees-header,
+    .pending-header,
+    .availability-header,
+    .top-section,
+    .section-header,
+    .page-header
+  ) {
+    padding: 14px !important;
+    border-radius: 12px !important;
+  }
+
+  :where(
+      .appointments-header,
+      .patients-header,
+      .employees-header,
+      .pending-header,
+      .availability-header,
+      .top-section,
+      .section-header,
+      .page-header
+    )
+    h1,
+  :where(
+      .appointments-header,
+      .patients-header,
+      .employees-header,
+      .pending-header,
+      .availability-header,
+      .top-section,
+      .section-header,
+      .page-header
+    )
+    h2 {
+    font-size: 22px !important;
+    letter-spacing: 0 !important;
+  }
+
+  :where(.page-subtitle, .section-subtitle) {
+    font-size: 13px !important;
+  }
+
+  :where(.filters-wrapper, .filters-row, .filter-toolbar, .search-filter-row) {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    padding: 10px !important;
+  }
+
+  :where(.filters-wrapper > *, .filters-row > *, .filter-toolbar > *, .search-filter-row > *) {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  :where(input, select, textarea) {
+    min-width: 0 !important;
+    font-size: 16px !important;
+  }
+
+  :where(.table-wrapper, .table-container) {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  :where(.table-wrapper table, .table-container table) {
+    min-width: 760px;
+  }
+
+  :where(thead th, tbody td) {
+    padding: 10px 12px !important;
+  }
+
+  :where(.card, .glass-card, .section-card, .employee-card, .profile-card, .stat-card, .quick-card) {
+    border-radius: 10px !important;
+  }
+
+  :where(.form-actions, .header-actions, .actions, .action-buttons, .btn-row) {
+    width: 100% !important;
+    align-items: stretch !important;
+  }
+
+  :where(.form-actions > button, .form-actions > a, .header-actions > button, .header-actions > a) {
+    width: 100% !important;
+  }
+
+  :where(.pagination-card, .pagination-footer, .pagination, .pagination-wrapper, app-pagination) {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 520px) {
+  :where(
+    .appointments-header,
+    .patients-header,
+    .employees-header,
+    .pending-header,
+    .availability-header,
+    .top-section,
+    .section-header,
+    .page-header
+  ) {
+    padding: 12px !important;
+  }
+
+  :where(
+      .appointments-header,
+      .patients-header,
+      .employees-header,
+      .pending-header,
+      .availability-header,
+      .top-section,
+      .section-header,
+      .page-header
+    )
+    h1,
+  :where(
+      .appointments-header,
+      .patients-header,
+      .employees-header,
+      .pending-header,
+      .availability-header,
+      .top-section,
+      .section-header,
+      .page-header
+    )
+    h2 {
+    font-size: 20px !important;
+  }
+
+  :where(.book-btn, .request-btn, .add-btn, .submit-btn, .primary-btn, .search-btn, .view-btn, .download-btn) {
+    width: 100% !important;
+  }
+
+  :where(.table-wrapper table, .table-container table) {
+    min-width: 680px;
+  }
+
+  :where(.global-toast-wrapper) {
+    left: 12px;
+    right: 12px;
+    transform: none;
+  }
+
+  :where(.global-toast) {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+    padding: 14px 16px;
+    white-space: normal;
+  }
+
+  :where(.toast-message) {
+    font-size: 14px;
+    text-align: left;
+  }
+}
+
 /* Utility Classes */
 .flex {
   display: flex;

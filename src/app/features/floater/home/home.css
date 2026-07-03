@@ -276,3 +276,70 @@ kbd {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 520px) {
+  .home-page {
+    min-height: 100dvh;
+    padding: 0 16px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .navbar {
+    height: 72px;
+  }
+
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 20px;
+  }
+
+  .logo-section h2 {
+    font-size: 18px;
+  }
+
+  .hero-section {
+    min-height: auto;
+    gap: 28px;
+    padding: 28px 0 48px;
+  }
+
+  .hero-label {
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    font-size: 11px;
+    letter-spacing: 0.4px;
+  }
+
+  .hero-content h1 {
+    font-size: 34px;
+    line-height: 1.12;
+    margin-bottom: 16px;
+  }
+
+  .hero-description {
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .hero-actions {
+    margin-bottom: 24px;
+  }
+
+  .spacebar-box {
+    display: none;
+  }
+
+  .glass-panel {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .mini-card {
+    height: 96px;
+    border-radius: 16px;
+  }
+}
