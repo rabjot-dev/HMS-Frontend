@@ -541,7 +541,10 @@ export class HealthRecordDetails implements OnInit {
 
     printWindow.onload = () => {
       printWindow.focus();
-      printWindow.print();
+
+      window.setTimeout(() => {
+        printWindow.print();
+      }, 1200);
     };
   }
 
@@ -574,11 +577,17 @@ export class HealthRecordDetails implements OnInit {
             th { background: #f8fafc; }
             ul { margin: 6px 0 0; padding-left: 18px; }
             a { color: #2563eb; word-break: break-all; }
-            .file-preview { max-width: 100%; max-height: 420px; margin-top: 10px; border: 1px solid #e2e8f0; border-radius: 6px; }
+            .file-preview { max-width: 100%; max-height: 680px; margin-top: 10px; border: 1px solid #e2e8f0; border-radius: 6px; object-fit: contain; }
+            .file-frame { width: 100%; height: 980px; margin-top: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; }
+            .file-page { break-before: page; margin-top: 18px; }
             .print-note { margin-top: 12px; padding: 10px; border-radius: 8px; background: #eff6ff; color: #1e40af; font-size: 12px; }
             @media print {
               body { padding: 18mm; }
               .card, .box { break-inside: avoid; }
+              .file-card { break-inside: auto; }
+              .file-page { break-before: page; }
+              .file-frame { height: 245mm; border: none; border-radius: 0; }
+              .file-preview { max-height: 245mm; border: none; }
               a { color: #0f172a; text-decoration: none; }
             }
           </style>
@@ -623,7 +632,7 @@ export class HealthRecordDetails implements OnInit {
           </section>
 
           <p class="print-note">
-            Uploaded image files are printed inline when supported. PDF and other uploaded files are included as printable links.
+            Uploaded images and PDFs are embedded in this print view. Other file types are included as download links.
           </p>
         </body>
       </html>
@@ -677,7 +686,7 @@ export class HealthRecordDetails implements OnInit {
     const fileUrl = this.getAbsoluteFileUrl(item.documentUrl);
 
     return `
-      <div class="card">
+      <div class="card file-card">
         <h3>${this.escapeHtml(item.title)}</h3>
         <p><strong>Type:</strong> ${this.escapeHtml(item[typeField])}</p>
         <p><strong>Date:</strong> ${this.formatDisplayDate(item[dateField])}</p>
@@ -688,7 +697,7 @@ export class HealthRecordDetails implements OnInit {
           fileUrl
             ? `
               <p><strong>Uploaded File:</strong> <a href="${fileUrl}" target="_blank">${fileUrl}</a></p>
-              ${this.isPrintableImage(fileUrl) ? `<img class="file-preview" src="${fileUrl}" alt="${this.escapeHtml(item.title)}" />` : ''}
+              ${this.renderPrintableUploadedFile(fileUrl, item.title)}
             `
             : '<p class="muted">No uploaded file attached.</p>'
         }
@@ -719,6 +728,36 @@ export class HealthRecordDetails implements OnInit {
 
   private isPrintableImage(url: string): boolean {
     return /\.(png|jpe?g|gif|webp)$/i.test(url.split('?')[0]);
+  }
+
+  private isPrintablePdf(url: string): boolean {
+    return /\.pdf$/i.test(url.split('?')[0]);
+  }
+
+  private renderPrintableUploadedFile(url: string, title: string): string {
+    const safeUrl = this.escapeHtml(url);
+    const safeTitle = this.escapeHtml(title);
+
+    if (this.isPrintableImage(url)) {
+      return `
+        <div class="file-page">
+          <img class="file-preview" src="${safeUrl}" alt="${safeTitle}" />
+        </div>
+      `;
+    }
+
+    if (this.isPrintablePdf(url)) {
+      return `
+        <div class="file-page">
+          <iframe class="file-frame" src="${safeUrl}#toolbar=0&navpanes=0" title="${safeTitle}"></iframe>
+          <object class="file-frame" data="${safeUrl}" type="application/pdf">
+            <p class="muted">PDF preview could not be embedded. Open file: <a href="${safeUrl}" target="_blank">${safeUrl}</a></p>
+          </object>
+        </div>
+      `;
+    }
+
+    return '<p class="muted">This uploaded file type cannot be embedded in the print view. Use the file link above.</p>';
   }
 
   private formatDisplayDate(value?: string): string {

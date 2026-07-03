@@ -17,8 +17,6 @@ import {
 } from './features/dashboard/dashboard.resolvers';
 import {
   appointmentsResolver,
-  consultationFiltersResolver,
-  consultationsResolver,
   employeesResolver,
   healthRecordsResolver,
   managementNodesResolver,
