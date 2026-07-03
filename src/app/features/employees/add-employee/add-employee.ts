@@ -19,7 +19,7 @@ export class AddEmployee implements OnInit {
   errorMessage = '';
 
   isSubmitting = false;
-  designations = ['ADMIN', 'DOCTOR', 'RECEPTIONIST', 'LAB_TECHNICIAN', 'PHARMACIST'];
+  designations = ['ADMIN', 'DOCTOR', 'RECEPTIONIST', 'NURSE', 'LAB_TECH', 'PHARMACIST', 'CASHIER'];
 
   ngOnInit(): void {
     const role = localStorage.getItem('role');
