@@ -18,6 +18,7 @@ import { Sidebar } from '../../shared/components/sidebar/sidebar';
 export class DashboardLayout implements OnInit {
   isProfileOpen = false;
   isSidebarOpen = false;
+  isSidebarCollapsed = false;
 
   constructor(
     public readonly nodeService: NodeService,
@@ -60,7 +61,17 @@ export class DashboardLayout implements OnInit {
     this.isProfileOpen = !this.isProfileOpen;
   }
 
-  toggleSidebar(): void {
+  toggleNavigation(): void {
+    if (this.isMobileViewport()) {
+      this.toggleSidebar();
+      return;
+    }
+
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    this.cdr.markForCheck();
+  }
+
+  private toggleSidebar(): void {
     this.isSidebarOpen = !this.isSidebarOpen;
     this.cdr.markForCheck();
   }
@@ -72,6 +83,10 @@ export class DashboardLayout implements OnInit {
 
     this.isSidebarOpen = false;
     this.cdr.markForCheck();
+  }
+
+  private isMobileViewport(): boolean {
+    return window.innerWidth <= 768;
   }
 
   // Close dropdown when clicked outside

@@ -1,5 +1,9 @@
 <div class="global-toast-wrapper"></div>
-<div class="dashboard-shell" [class.sidebar-open]="isSidebarOpen">
+<div
+  class="dashboard-shell"
+  [class.sidebar-open]="isSidebarOpen"
+  [class.sidebar-collapsed]="isSidebarCollapsed"
+>
   <!-- Sidebar -->
 
   <button
@@ -50,9 +54,9 @@
         <button
           type="button"
           class="mobile-menu-btn"
-          aria-label="Open navigation"
-          [attr.aria-expanded]="isSidebarOpen"
-          (click)="toggleSidebar(); $event.stopPropagation()"
+          [attr.aria-label]="isSidebarOpen || !isSidebarCollapsed ? 'Close navigation' : 'Open navigation'"
+          [attr.aria-expanded]="isSidebarOpen || !isSidebarCollapsed"
+          (click)="toggleNavigation(); $event.stopPropagation()"
         >
           <span class="material-icons">menu</span>
         </button>
