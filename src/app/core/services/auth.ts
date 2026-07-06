@@ -3,11 +3,36 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '../constants/api.constants';
 
+export type EmployeeProfile = {
+  _id?: string;
+  name?: string;
+  employeeCode?: string;
+  email?: string;
+  countryCode?: string;
+  phone?: string;
+  gender?: string;
+  designation?: string;
+  department?: string;
+  joiningDate?: string;
+  status?: string;
+  specialization?: string;
+  qualification?: string[];
+  consultationFee?: number;
+};
+
+export type CurrentUser = {
+  roles?: string[];
+  employeeId?: EmployeeProfile | null;
+  email?: string;
+  status?: string;
+  createdAt?: string;
+};
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  readonly currentUser = signal<any | null>(null);
+  readonly currentUser = signal<CurrentUser | null>(null);
 
   constructor(private readonly http: HttpClient) {}
 
@@ -32,7 +57,7 @@ export class AuthService {
     });
   }
 
-  setCurrentUser(user: any | null): void {
+  setCurrentUser(user: CurrentUser | null): void {
     this.currentUser.set(user);
   }
 
@@ -56,7 +81,7 @@ export class AuthService {
       return false;
     }
 
-    return user.roles?.includes(role);
+    return user.roles?.includes(role) ?? false;
   }
   refreshToken(): Observable<any> {
     return this.http.post(

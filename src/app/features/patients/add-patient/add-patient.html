@@ -57,8 +57,8 @@
 
         <!-- Date of Birth -->
         <div class="form-field">
-          <label class="field-label">Date of Birth</label>
-          <input type="date" formControlName="dateOfBirth" [max]="today" />
+          <label class="field-label" for="add-patient-date-of-birth">Date of Birth</label>
+          <input id="add-patient-date-of-birth" type="date" formControlName="dateOfBirth" [max]="today" />
           @if(patientForm.get('dateOfBirth')?.invalid && patientForm.get('dateOfBirth')?.touched){
           <span class="error-text">Date of Birth is required</span>
           @if (patientForm.get('dateOfBirth')?.errors?.['futureDate']) {
@@ -243,7 +243,7 @@
             readonly
             (input)="
       $any($event.target).value =
-      $any($event.target).value.replace(/[^0-9]/g,'')
+      $any($event.target).value.replaceAll(/[^0-9]/g,'')
     "
           />
 
@@ -325,8 +325,8 @@
 
         <!-- Insurance Expiry Date (optional) -->
         <div class="form-field">
-          <label class="field-label">Insurance Expiry Date (optional)</label>
-          <input type="date" formControlName="insuranceExpiryDate" />
+          <label class="field-label" for="add-patient-insurance-expiry-date">Insurance Expiry Date (optional)</label>
+          <input id="add-patient-insurance-expiry-date" type="date" formControlName="insuranceExpiryDate" />
         </div>
 
         <!-- Coverage Amount (optional) -->

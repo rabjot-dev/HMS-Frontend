@@ -1,16 +1,17 @@
 @if(dialog(); as dialog) {
-<div class="input-backdrop" (click)="cancel()">
-  <section class="input-card" (click)="$event.stopPropagation()">
+<button type="button" class="input-backdrop" aria-label="Cancel input dialog" (click)="cancel()"></button>
+  <dialog open class="input-card" aria-modal="true" aria-labelledby="input-dialog-title">
     <div>
-      <h2>{{ dialog.title }}</h2>
+      <h2 id="input-dialog-title">{{ dialog.title }}</h2>
       @if(dialog.message) {
       <p>{{ dialog.message }}</p>
       }
     </div>
 
-    <label>
+    <label for="input-dialog-value">
       <span>{{ dialog.inputLabel }}</span>
       <input
+        id="input-dialog-value"
         [ngModel]="value()"
         (ngModelChange)="value.set($event)"
         [type]="dialog.inputType"
@@ -24,6 +25,5 @@
       <button type="button" class="cancel-btn" (click)="cancel()">{{ dialog.cancelText }}</button>
       <button type="button" class="submit-btn" (click)="submit()">{{ dialog.confirmText }}</button>
     </div>
-  </section>
-</div>
+  </dialog>
 }

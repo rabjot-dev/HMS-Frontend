@@ -426,17 +426,17 @@ tbody td:last-child {
 
 .status-badge.inactive {
   background: rgba(239, 68, 68, 0.12);
-  color: #dc2626;
+  color: #991b1b;
 }
 
 .status-badge.rejected {
-  background: rgba(100, 116, 139, 0.14);
-  color: #475569;
+  background: #e2e8f0;
+  color: #0f172a;
 }
 
 .status-badge.pending {
-  background: rgba(245, 158, 11, 0.15);
-  color: #b45309;
+  background: #fef3c7;
+  color: #78350f;
 }
 .header-actions {
   display: flex;

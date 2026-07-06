@@ -23,7 +23,7 @@ export class OfflineQueueService {
     private readonly toast: ToastService,
     private readonly zone: NgZone
   ) {
-    window.addEventListener('online', () => {
+    globalThis.addEventListener('online', () => {
       this.zone.run(() => this.flushQueue());
     });
   }
@@ -33,7 +33,7 @@ export class OfflineQueueService {
 
     queue.push({
       ...request,
-      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      id: `${Date.now()}-${crypto.randomUUID()}`,
       createdAt: new Date().toISOString()
     });
 

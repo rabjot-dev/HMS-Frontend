@@ -322,10 +322,17 @@ export class NodeManagement implements OnInit {
   }
 
   private humanizeSystemArea(path: string): string {
-    const cleanPath = path
-      .replace(/^\/api\/?/, '')
-      .replace(/:\w+/g, 'selected record')
-      .replace(/[-/]+/g, ' ')
+    let routePath = path;
+
+    if (path.startsWith('/api/')) {
+      routePath = path.slice(5);
+    } else if (path.startsWith('/api')) {
+      routePath = path.slice(4);
+    }
+
+    const cleanPath = routePath
+      .replaceAll(/:\w+/g, 'selected record')
+      .replaceAll(/[-/]+/g, ' ')
       .trim();
 
     if (!cleanPath) {

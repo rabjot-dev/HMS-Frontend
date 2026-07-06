@@ -126,6 +126,7 @@ small {
   gap: 14px;
 }
 
+.field-control,
 label,
 .full-field {
   display: grid;
@@ -220,7 +221,7 @@ button {
 }
 
 .icon-btn.danger {
-  color: #dc2626;
+  color: #991b1b;
   background: #fee2e2;
 }
 

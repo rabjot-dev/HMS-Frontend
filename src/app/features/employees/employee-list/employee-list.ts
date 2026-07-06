@@ -107,16 +107,12 @@ export class EmployeeList implements OnInit {
   }
 
   onSearch(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
+    this.resetPagination();
     this.loadEmployees(false);
   }
 
   onFilterChange(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
+    this.resetPagination();
     this.loadEmployees(false);
   }
 
@@ -147,9 +143,7 @@ export class EmployeeList implements OnInit {
     this.department = '';
     this.designation = '';
 
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
+    this.resetPagination();
 
     this.loadEmployees(false);
   }
@@ -200,6 +194,12 @@ export class EmployeeList implements OnInit {
     const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
 
     return Math.min(this.page, totalPagesAfterDelete);
+  }
+
+  private resetPagination(): void {
+    this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
   }
 
   private applyEmployeesResponse(response: any): void {

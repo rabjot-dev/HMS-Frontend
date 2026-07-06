@@ -535,14 +535,17 @@ export class HealthRecordDetails implements OnInit {
       return;
     }
 
-    printWindow.document.open();
-    printWindow.document.write(this.buildCompleteHealthRecordHtml(record));
-    printWindow.document.close();
+    const html = this.buildCompleteHealthRecordHtml(record);
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+
+    printWindow.location.href = url;
 
     printWindow.onload = () => {
+      URL.revokeObjectURL(url);
       printWindow.focus();
 
-      window.setTimeout(() => {
+      globalThis.setTimeout(() => {
         printWindow.print();
       }, 1200);
     };
@@ -723,7 +726,7 @@ export class HealthRecordDetails implements OnInit {
       return path;
     }
 
-    return `http://localhost:5000/${path.replace(/^\/+/, '')}`;
+    return `http://localhost:5000/${path.replaceAll(/^\/+/g, '')}`;
   }
 
   private isPrintableImage(url: string): boolean {
@@ -772,11 +775,11 @@ export class HealthRecordDetails implements OnInit {
 
   private escapeHtml(value: any): string {
     return String(value ?? 'N/A')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
   }
   onLabFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;

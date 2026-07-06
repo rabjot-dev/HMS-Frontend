@@ -80,7 +80,9 @@
 
         <!-- Profile -->
 
-        <div
+        <div class="top-profile-menu">
+        <button
+          type="button"
           class="top-profile"
           (click)=" toggleProfile();
 
@@ -89,15 +91,16 @@
         >
           <!-- Avatar -->
 
-          <div class="top-avatar">{{ user?.email ?.charAt(0) ?.toUpperCase() }}</div>
+          <span class="top-avatar">{{ user?.email ?.charAt(0) ?.toUpperCase() }}</span>
 
           <!-- Info -->
 
-          <div class="top-user-info">
-            <h4>{{ user?.employeeId?.name || 'User' }}</h4>
+          <span class="top-user-info">
+            <span class="top-user-name">{{ user?.employeeId?.name || 'User' }}</span>
 
-            <p>{{ user?.roles?.[0] }}</p>
-          </div>
+            <span class="top-user-role">{{ user?.roles?.[0] }}</span>
+          </span>
+        </button>
 
           <!-- Dropdown -->
 

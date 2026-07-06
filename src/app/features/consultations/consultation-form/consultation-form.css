@@ -58,7 +58,8 @@ form {
   gap: 10px;
 }
 
-.form-group label {
+.form-group label,
+.form-group .field-label {
   font-weight: 600;
   color: #0f172a;
 }

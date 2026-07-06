@@ -90,10 +90,20 @@
   height: 34px;
 }
 
-.switch input {
+.switch-input {
+  position: absolute;
   opacity: 0;
   width: 0;
   height: 0;
+}
+
+.switch-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
 .slider {
@@ -117,11 +127,11 @@
   transition: 0.3s;
 }
 
-.switch input:checked + .slider {
+.switch-input:checked + .switch .slider {
   background: #2563eb;
 }
 
-.switch input:checked + .slider::before {
+.switch-input:checked + .switch .slider::before {
   transform: translateX(26px);
 }
 

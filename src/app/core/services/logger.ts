@@ -23,9 +23,6 @@ export class LoggerService {
   }
 
   error(message: string, error?: unknown, context?: LogContext): void {
-    console.error(message, {
-      ...(context ?? {}),
-      error
-    });
+    console.error(message, context ? { ...context, error } : { error });
   }
 }

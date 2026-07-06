@@ -317,17 +317,17 @@ tbody td:last-child {
 
 .status-badge.cancelled {
   background: rgba(239, 68, 68, 0.12);
-  color: #dc2626;
+  color: #991b1b;
 }
 
 .status-badge.rejected {
-  background: rgba(100, 116, 139, 0.14);
-  color: #475569;
+  background: #e2e8f0;
+  color: #0f172a;
 }
 
 .status-badge.consultation {
-  background: rgba(139, 92, 246, 0.14);
-  color: #7c3aed;
+  background: #ede9fe;
+  color: #4c1d95;
 }
 
 .actions {

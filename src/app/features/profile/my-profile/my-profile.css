@@ -192,7 +192,7 @@ button {
   padding-bottom: 0;
 }
 
-.info-item label {
+.info-item .info-label {
   display: block;
   margin-bottom: 8px;
   color: #64748b;
