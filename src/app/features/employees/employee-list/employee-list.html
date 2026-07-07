@@ -20,7 +20,7 @@
   <div class="filters-wrapper glass-card">
     <div class="filters-row">
       <div class="search-box">
-        <span>🔍</span>
+        <span class="hms-icon hms-icon-search" aria-hidden="true"></span>
 
         <input type="text" placeholder="Search employee..." [(ngModel)]="search" (input)="onSearch()" />
       </div>
@@ -42,7 +42,7 @@
         department
       "
         (input)="
-        onFilterChange()
+        onTextFilterChange()
       "
       />
 
@@ -53,7 +53,7 @@
         designation
       "
         (input)="
-        onFilterChange()
+        onTextFilterChange()
       "
       />
 
@@ -207,11 +207,10 @@
     [hasNextPage]="!!nextCursor"
     (previous)="previousPage()"
     (next)="nextPage()"
-    (pageSizeChange)="
-    limit = $event;
-    page = 1;
-    loadEmployees(false)
-  "
+    (pageSizeChange)="onPageSizeChange($event)"
   ></app-pagination>
   }
 </div>
+
+
+

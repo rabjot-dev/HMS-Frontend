@@ -20,6 +20,7 @@
       type="text"
       placeholder="Search by patient name or UHID..."
       [(ngModel)]="search"
+      (input)="onSearchInput()"
       (keyup.enter)="onSearch()"
     />
 
@@ -40,7 +41,7 @@
 
   @if (healthRecords.length === 0) {
   <div class="empty-state">
-    <div class="empty-icon">🩺</div>
+    <div class="empty-icon"><span class="hms-icon hms-icon-stethoscope" aria-hidden="true"></span></div>
 
     <h2>No Health Records Found</h2>
 
@@ -145,3 +146,5 @@
 
   } }
 </div>
+
+

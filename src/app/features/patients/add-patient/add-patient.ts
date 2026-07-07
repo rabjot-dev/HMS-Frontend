@@ -51,8 +51,8 @@ export class AddPatient implements OnInit {
   ) {
     this.patientForm = this.fb.group({
       // Basic Information
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
+      lastName: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
       dateOfBirth: ['', [Validators.required, this.futureDateValidator]],
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
@@ -60,7 +60,7 @@ export class AddPatient implements OnInit {
       // Contact Information
       countryCode: ['+91', Validators.required],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       address: ['', Validators.required],
       city: ['', Validators.required],
       state: ['', Validators.required],
@@ -69,8 +69,8 @@ export class AddPatient implements OnInit {
       pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
       country: ['India'],
       // Emergency Contact
-      emergencyContactName: ['', Validators.required],
-      emergencyContactPhone: ['', Validators.required],
+      emergencyContactName: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
+      emergencyContactPhone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       // Medical Information
       medicalHistory: [''],
       allergies: [''],
@@ -420,11 +420,9 @@ export class AddPatient implements OnInit {
         this.cdr.markForCheck();
       },
       error: (error) => {
-        console.log('FULL ERROR =>', error);
-        console.log('VALIDATION ERRORS =>', error?.error?.errors);
-
-        const validationMessage = Array.isArray(error?.error?.errors)
-          ? error.error.errors
+        const validationErrors = error?.error?.details || error?.error?.errors;
+        const validationMessage = Array.isArray(validationErrors)
+          ? validationErrors
               .map((item: any) => item.msg || item.message)
               .filter(Boolean)
               .join(', ')
@@ -438,3 +436,8 @@ export class AddPatient implements OnInit {
     });
   }
 }
+
+
+
+
+

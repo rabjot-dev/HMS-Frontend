@@ -6,7 +6,7 @@
       <p class="hero-label">Doctor Workspace</p>
 
       @if( authService.currentUser(); as user ){
-      <h1>Welcome Dr. {{ user?.employeeId?.name || 'Doctor' }} 👋</h1>
+      <h1>Welcome Dr. {{ user?.employeeId?.name || 'Doctor' }} </h1>
       }
 
       <p class="hero-subtitle">Manage appointments, patient queue and availability.</p>
@@ -25,7 +25,7 @@
     <!-- Today's Patients -->
 
     <div class="stat-card glass-card">
-      <div class="stat-icon blue">🧑‍🤝‍🧑</div>
+      <div class="stat-icon blue"><span class="hms-icon hms-icon-users" aria-hidden="true"></span></div>
 
       <div>
         <h2>{{ stats?.todayPatients || 0 }}</h2>
@@ -37,7 +37,7 @@
     <!-- Total Appointments -->
 
     <div class="stat-card glass-card">
-      <div class="stat-icon purple">📅</div>
+      <div class="stat-icon purple"><span class="hms-icon hms-icon-calendar" aria-hidden="true"></span></div>
 
       <div>
         <h2>{{ stats?.totalAppointments || 0 }}</h2>
@@ -49,7 +49,7 @@
     <!-- Completed -->
 
     <div class="stat-card glass-card">
-      <div class="stat-icon green">✅</div>
+      <div class="stat-icon green"><span class="hms-icon hms-icon-check" aria-hidden="true"></span></div>
 
       <div>
         <h2>{{ stats?.completedConsultations || 0 }}</h2>
@@ -110,19 +110,19 @@
       <div class="quick-grid">
         @if(nodeService.canAccessPath('/doctor-queue')){
         <a routerLink="/doctor-queue" class="quick-card">
-          <span>🩺</span>
+          <span class="hms-icon hms-icon-stethoscope" aria-hidden="true"></span>
 
           Queue
         </a>
         } @if(nodeService.canAccessPath('/appointments')){
         <a routerLink="/appointments" class="quick-card">
-          <span>📅</span>
+          <span class="hms-icon hms-icon-calendar" aria-hidden="true"></span>
 
           Appointments
         </a>
         } @if(nodeService.canAccessPath('/patients')){
         <a routerLink="/patients" class="quick-card">
-          <span>🧑</span>
+          <span class="hms-icon hms-icon-user" aria-hidden="true"></span>
 
           Patients
         </a>

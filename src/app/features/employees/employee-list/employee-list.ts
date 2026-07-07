@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth';
@@ -19,7 +21,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
   styleUrl: './employee-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EmployeeList implements OnInit {
+export class EmployeeList implements OnInit, OnDestroy {
   employees: any[] = [];
 
   search = '';
@@ -42,6 +44,10 @@ export class EmployeeList implements OnInit {
 
   isLoading = false;
 
+  private readonly searchInput$ = new Subject<string>();
+  private readonly textFilterInput$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
+
   constructor(
     private readonly employeeService: EmployeeService,
     private readonly route: ActivatedRoute,
@@ -53,7 +59,20 @@ export class EmployeeList implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.searchInput$
+      .pipe(debounceTime(350), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(() => this.reloadFromFirstPage());
+
+    this.textFilterInput$
+      .pipe(debounceTime(350), takeUntil(this.destroy$))
+      .subscribe(() => this.reloadFromFirstPage());
+
     this.applyEmployeesResponse(this.route.snapshot.data['employees']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadEmployees(showPageLoader = true): void {
@@ -68,20 +87,20 @@ export class EmployeeList implements OnInit {
       cursor: this.cursorStack[this.page - 1] || ''
     };
 
-    if (this.search) {
-      params.search = this.search;
+    if (this.search.trim()) {
+      params.search = this.search.trim();
     }
 
-    if (this.status) {
-      params.status = this.status;
+    if (this.status.trim()) {
+      params.status = this.status.trim();
     }
 
-    if (this.department) {
-      params.department = this.department;
+    if (this.department.trim()) {
+      params.department = this.department.trim();
     }
 
-    if (this.designation) {
-      params.designation = this.designation;
+    if (this.designation.trim()) {
+      params.designation = this.designation.trim();
     }
 
     this.employeeService.getEmployees(params).subscribe({
@@ -99,16 +118,19 @@ export class EmployeeList implements OnInit {
         this.cdr.detectChanges();
       },
       error: (error) => {
-        console.log(error);
-
+        this.toastService.show(error?.error?.message || 'Failed to load employees', 'error');
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
 
   onSearch(): void {
-    this.resetPagination();
-    this.loadEmployees(false);
+    this.searchInput$.next(this.search.trim());
+  }
+
+  onTextFilterChange(): void {
+    this.textFilterInput$.next();
   }
 
   onFilterChange(): void {
@@ -134,6 +156,12 @@ export class EmployeeList implements OnInit {
     this.cursorStack[this.page] = this.nextCursor;
     this.page++;
 
+    this.loadEmployees(false);
+  }
+
+  onPageSizeChange(limit: number): void {
+    this.limit = limit;
+    this.resetPagination();
     this.loadEmployees(false);
   }
 
@@ -196,6 +224,11 @@ export class EmployeeList implements OnInit {
     return Math.min(this.page, totalPagesAfterDelete);
   }
 
+  private reloadFromFirstPage(): void {
+    this.resetPagination();
+    this.loadEmployees(false);
+  }
+
   private resetPagination(): void {
     this.page = 1;
     this.cursorStack = [''];
@@ -210,3 +243,7 @@ export class EmployeeList implements OnInit {
     this.isLoading = false;
   }
 }
+
+
+
+

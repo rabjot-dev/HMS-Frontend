@@ -5,7 +5,7 @@
     <div>
       <p class="hero-label">Smart Healthcare Workspace</p>
       @if( authService.currentUser(); as user ){
-      <h1>Welcome, {{ user?.employeeId?.name || 'Administrator' }} 👋</h1>
+      <h1>Welcome, {{ user?.employeeId?.name || 'Administrator' }} </h1>
       }
 
       <p class="hero-subtitle">Here’s what’s happening in your hospital today.</p>
@@ -24,7 +24,7 @@
     <!-- Employees -->
 
     <div class="stat-card glass-card">
-      <div class="stat-icon blue">👨‍⚕️</div>
+      <div class="stat-icon blue"><span class="hms-icon hms-icon-users" aria-hidden="true"></span></div>
 
       <div>
         <h2>{{ stats?.totalEmployees || 0 }}</h2>
@@ -36,7 +36,7 @@
     <!-- Doctors -->
 
     <div class="stat-card glass-card">
-      <div class="stat-icon purple">🩺</div>
+      <div class="stat-icon purple"><span class="hms-icon hms-icon-stethoscope" aria-hidden="true"></span></div>
 
       <div>
         <h2>{{ stats?.totalDoctors || 0 }}</h2>
@@ -48,7 +48,7 @@
     <!-- Nurses -->
 
     <div class="stat-card glass-card">
-      <div class="stat-icon green">💉</div>
+      <div class="stat-icon green"><span class="hms-icon hms-icon-user" aria-hidden="true"></span></div>
 
       <div>
         <h2>{{ stats?.totalNurses || 0 }}</h2>
@@ -109,25 +109,25 @@
       <div class="quick-grid">
         @if(nodeService.canAccessPath('/appointments/book')){
         <a routerLink="/appointments/book" class="quick-card">
-          <span>📅</span>
+          <span class="hms-icon hms-icon-calendar" aria-hidden="true"></span>
 
           Book Appointment
         </a>
         } @if(nodeService.canAccessPath('/patients/create')){
         <a routerLink="/patients/create" class="quick-card">
-          <span>🧑</span>
+          <span class="hms-icon hms-icon-user" aria-hidden="true"></span>
 
           Add Patient
         </a>
         } @if(nodeService.canAccessPath('/employees/create')){
         <a routerLink="/employees/create" class="quick-card">
-          <span>👨‍⚕️</span>
+          <span class="hms-icon hms-icon-users" aria-hidden="true"></span>
 
           Add Employee
         </a>
         } @if(nodeService.canAccessPath('/appointments')){
         <a routerLink="/appointments" class="quick-card">
-          <span>📋</span>
+          <span class="hms-icon hms-icon-clipboard" aria-hidden="true"></span>
 
           View Appointments
         </a>

@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +18,7 @@ import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loa
   styleUrls: ['./consultation-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConsultationList implements OnInit {
+export class ConsultationList implements OnInit, OnDestroy {
   consultations: any[] = [];
 
   meta: any = {};
@@ -39,6 +41,9 @@ export class ConsultationList implements OnInit {
 
   isLoading = false;
 
+  private readonly searchInput$ = new Subject<string>();
+  private readonly destroy$ = new Subject<void>();
+
   constructor(
     private readonly consultationService: ConsultationService,
     private readonly employeeService: EmployeeService,
@@ -48,9 +53,18 @@ export class ConsultationList implements OnInit {
 
   // Load consultations on page load
   ngOnInit(): void {
+    this.searchInput$
+      .pipe(debounceTime(350), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(() => this.reloadFromFirstPage());
+
     this.loadDoctors();
     this.loadPatients();
     this.loadConsultations();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   loadDoctors(): void {
     this.employeeService.getDoctors().subscribe({
@@ -79,8 +93,8 @@ export class ConsultationList implements OnInit {
       cursor: this.cursorStack[this.page - 1] || ''
     };
 
-    if (this.search) {
-      params.search = this.search;
+    if (this.search.trim()) {
+      params.search = this.search.trim();
     }
 
     if (this.doctor) {
@@ -127,6 +141,10 @@ export class ConsultationList implements OnInit {
       }
     });
   }
+  onSearchInput(): void {
+    this.searchInput$.next(this.search.trim());
+  }
+
   onFilterChange(): void {
     this.page = 1;
     this.cursorStack = [''];
@@ -134,6 +152,13 @@ export class ConsultationList implements OnInit {
 
     this.loadConsultations(false);
   }
+  private reloadFromFirstPage(): void {
+    this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
+    this.loadConsultations(false);
+  }
+
   previousPage(): void {
     if (this.page <= 1) {
       return;
@@ -168,3 +193,5 @@ export class ConsultationList implements OnInit {
     });
   }
 }
+
+

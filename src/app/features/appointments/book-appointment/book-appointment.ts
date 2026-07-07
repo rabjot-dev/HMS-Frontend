@@ -23,10 +23,9 @@ export class BookAppointment implements OnInit {
 
   // UI state flags
   isSubmitting = false;
-  toastMessage = '';
-  toastType: 'success' | 'error' = 'success';
-  showToast = false;
   noSlotsError = false;
+  slotErrorMessage = '';
+  doctorFilterMessage = '';
 
   // Form related variables
   appointmentForm: any;
@@ -72,17 +71,46 @@ export class BookAppointment implements OnInit {
     });
   }
 
+  private getDateOnly(value: string | Date): Date {
+    if (typeof value === 'string') {
+      const datePart = value.includes('T') ? value.split('T')[0] : value;
+      const [year, month, day] = datePart.split('-').map(Number);
+
+      if (year && month && day) {
+        const date = new Date(year, month - 1, day);
+        date.setHours(0, 0, 0, 0);
+
+        return date;
+      }
+    }
+
+    const date = new Date(value);
+    date.setHours(0, 0, 0, 0);
+
+    return date;
+  }
+
+  private normalizeValue(value: any): string {
+    return String(value ?? '').trim().toUpperCase();
+  }
+
+  private hasDoctorJoinedByDate(doctor: any, appointmentDate: string): boolean {
+    if (!doctor?.joiningDate || !appointmentDate) {
+      return false;
+    }
+
+    return this.getDateOnly(appointmentDate) >= this.getDateOnly(doctor.joiningDate);
+  }
+
   // Fetch all patients
   loadPatients(): void {
     this.patientService.getPatients().subscribe({
       next: (response) => {
-        console.log(response);
 
         this.patients = response.data;
         this.cdr.detectChanges();
       },
       error: (error) => {
-        console.log(error);
         this.cdr.detectChanges();
       }
     });
@@ -92,11 +120,8 @@ export class BookAppointment implements OnInit {
   loadDoctors(): void {
     this.employeeService.getDoctors().subscribe({
       next: (response) => {
-        console.log(response);
 
-        this.doctors = response.data;
-
-        console.log('Doctors Array:', this.doctors);
+        this.doctors = Array.isArray(response?.data) ? response.data : [];
 
         if (this.appointmentForm.get('department')?.value) {
           this.filterDoctors();
@@ -105,7 +130,6 @@ export class BookAppointment implements OnInit {
         this.cdr.detectChanges();
       },
       error: (error) => {
-        console.log(error);
         this.doctors = [];
         this.filteredDoctors = [];
         this.cdr.detectChanges();
@@ -113,19 +137,31 @@ export class BookAppointment implements OnInit {
     });
   }
 
-  // Show doctors belonging to selected department
+  // Show doctors belonging to selected department and joined by selected date
   filterDoctors(): void {
     const department = this.appointmentForm.get('department')?.value;
+    const appointmentDate = this.appointmentForm.get('appointmentDate')?.value;
 
-    console.log('Selected Department:', department);
-    console.log('All Doctors:', this.doctors);
-
-    this.filteredDoctors = this.doctors.filter((doctor) => doctor.department === department);
+    if (!department || !appointmentDate) {
+      this.filteredDoctors = [];
+      this.doctorFilterMessage = department ? 'Select appointment date to view available doctors.' : '';
+    } else {
+      this.filteredDoctors = this.doctors.filter(
+        (doctor) =>
+          this.normalizeValue(doctor.department) === this.normalizeValue(department) &&
+          this.hasDoctorJoinedByDate(doctor, appointmentDate)
+      );
+      this.doctorFilterMessage =
+        this.filteredDoctors.length === 0 ? 'No doctors available for selected date.' : '';
+    }
 
     // Reset doctor and slot selection
     this.appointmentForm.get('doctorId')?.setValue('');
+    this.selectedDoctor = null;
+    this.appointmentForm.get('appointmentTime')?.setValue('');
     this.availableSlots = [];
     this.noSlotsError = false;
+    this.slotErrorMessage = '';
 
     this.cdr.detectChanges();
   }
@@ -150,8 +186,9 @@ export class BookAppointment implements OnInit {
     if (selectedDate < today) {
       this.availableSlots = [];
       this.noSlotsError = true;
+      this.slotErrorMessage = 'Cannot select past dates';
 
-      this.toastService.show('Cannot select past dates', 'error');
+      this.toastService.show(this.slotErrorMessage, 'error');
       this.cdr.detectChanges();
 
       return;
@@ -165,7 +202,6 @@ export class BookAppointment implements OnInit {
 
     this.appointmentService.getAvailableSlots(doctorId, appointmentDate).subscribe({
       next: (response) => {
-        console.log(response);
 
         let slots = response.data || [];
 
@@ -197,32 +233,36 @@ export class BookAppointment implements OnInit {
 
         if (this.availableSlots.length === 0) {
           this.noSlotsError = true;
+          this.slotErrorMessage = 'No slots available for the selected date.';
 
-          this.toastService.show('No slots available for the selected date.', 'error');
+          this.toastService.show(this.slotErrorMessage, 'error');
         } else {
           this.noSlotsError = false;
+          this.slotErrorMessage = '';
         }
 
         this.cdr.detectChanges();
       },
       error: (error) => {
-        console.log('Slots error:', error);
 
         this.availableSlots = [];
         this.noSlotsError = true;
+        this.slotErrorMessage = error?.error?.message || 'No slots available for the selected date.';
 
-        this.toastService.show(error?.error?.message || 'No slots available for the selected date.', 'error');
+        this.toastService.show(this.slotErrorMessage, 'error');
 
         this.cdr.detectChanges();
       }
     });
   }
 
+  onAppointmentDateChange(): void {
+    this.filterDoctors();
+  }
+
   // Update selected doctor and refresh slots
   onDoctorChange(): void {
     const doctorId = this.appointmentForm.get('doctorId')?.value;
-
-    console.log(this.selectedDoctor);
 
     this.selectedDoctor = this.filteredDoctors.find((doctor: any) => doctor._id === doctorId);
 
@@ -231,12 +271,12 @@ export class BookAppointment implements OnInit {
 
     this.availableSlots = [];
     this.noSlotsError = false;
+    this.slotErrorMessage = '';
 
     this.cdr.detectChanges();
 
     this.fetchAvailableSlots();
 
-    console.log(this.selectedDoctor);
   }
 
   // Submit appointment booking request
@@ -253,6 +293,7 @@ export class BookAppointment implements OnInit {
 
     if (this.availableSlots.length === 0) {
       this.noSlotsError = true;
+      this.slotErrorMessage = this.slotErrorMessage || 'No slots available for the selected date.';
 
       this.cdr.detectChanges();
 
@@ -267,11 +308,8 @@ export class BookAppointment implements OnInit {
       symptoms: this.appointmentForm.value.symptoms?.split(',').map((symptom: string) => symptom.trim())
     };
 
-    console.log(formData);
-
     this.appointmentService.bookAppointment(formData).subscribe({
       next: (response) => {
-        console.log(response);
 
         this.toastService.show('Appointment booked successfully', 'success');
 
@@ -286,15 +324,27 @@ export class BookAppointment implements OnInit {
 
         this.availableSlots = [];
         this.filteredDoctors = [];
+        this.noSlotsError = false;
+        this.slotErrorMessage = '';
         this.isSubmitting = false;
       },
       error: (error) => {
-        console.log(error);
 
         this.isSubmitting = false;
 
-        this.toastService.show(error?.error?.message || 'Failed to book appointment.', 'error');
+        const message = error?.error?.message || 'Failed to book appointment.';
+
+        if (error?.error?.errorCode === 'DOCTOR_JOINING_DATE_NOT_REACHED') {
+          this.noSlotsError = true;
+          this.slotErrorMessage = message;
+        }
+
+        this.toastService.show(message, 'error');
+        this.cdr.detectChanges();
       }
     });
   }
 }
+
+
+

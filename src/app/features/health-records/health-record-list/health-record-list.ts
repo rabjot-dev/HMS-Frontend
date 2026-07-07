@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -14,7 +16,7 @@ import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loa
   styleUrls: ['./health-record-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HealthRecordList implements OnInit {
+export class HealthRecordList implements OnInit, OnDestroy {
   healthRecords: any[] = [];
 
   isLoading = false;
@@ -29,6 +31,9 @@ export class HealthRecordList implements OnInit {
 
   meta: any = {};
 
+  private readonly searchInput$ = new Subject<string>();
+  private readonly destroy$ = new Subject<void>();
+
   constructor(
     private readonly healthRecordService: HealthRecordService,
     private readonly route: ActivatedRoute,
@@ -36,7 +41,16 @@ export class HealthRecordList implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.searchInput$
+      .pipe(debounceTime(350), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(() => this.reloadFromFirstPage());
+
     this.applyHealthRecordsResponse(this.route.snapshot.data['healthRecords']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadHealthRecords(showPageLoader = true): void {
@@ -50,7 +64,7 @@ export class HealthRecordList implements OnInit {
         limit: this.limit,
         pagination: 'cursor',
         cursor: this.cursorStack[this.page - 1] || '',
-        search: this.search
+        search: this.search.trim()
       })
       .subscribe({
         next: (response) => {
@@ -74,6 +88,10 @@ export class HealthRecordList implements OnInit {
           this.cdr.detectChanges();
         }
       });
+  }
+
+  onSearchInput(): void {
+    this.searchInput$.next(this.search.trim());
   }
 
   onSearch(): void {
@@ -110,6 +128,13 @@ export class HealthRecordList implements OnInit {
     this.loadHealthRecords(false);
   }
 
+  private reloadFromFirstPage(): void {
+    this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
+    this.loadHealthRecords(false);
+  }
+
   private applyHealthRecordsResponse(response: any): void {
     this.healthRecords = response?.data || [];
     this.meta = response?.meta || {};
@@ -117,3 +142,5 @@ export class HealthRecordList implements OnInit {
     this.isLoading = false;
   }
 }
+
+

@@ -100,24 +100,6 @@
           }
         </div>
 
-        <!-- Doctor -->
-
-        <div class="form-group">
-          <label for="book-appointment-doctor">Doctor</label>
-
-          <select id="book-appointment-doctor" formControlName="doctorId" (change)="onDoctorChange()">
-            <option value="">Select Doctor</option>
-
-            <option *ngFor="let doctor of filteredDoctors" [value]="doctor._id">{{ doctor.name }}</option>
-          </select>
-
-          <!-- Consultation Fee -->
-
-          @if(selectedDoctor){
-          <p class="consultation-fee">Consultation Fee: ₹{{ selectedDoctor ?.consultationFee || 0 }}</p>
-          }
-        </div>
-
         <!-- Appointment Date -->
 
         <div class="form-group">
@@ -128,12 +110,39 @@
             type="date"
             formControlName="appointmentDate"
             [min]="minDate"
-            (change)="fetchAvailableSlots()"
+            (change)="onAppointmentDateChange()"
           />
           @if(appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched){
           <span class="error-text">Appointment Date is required</span>
           } @if(noSlotsError){
-          <span class="error-text">Doctor is not available on this day</span>
+          <span class="error-text">{{ slotErrorMessage || 'Doctor is not available on this day' }}</span>
+          }
+        </div>
+
+        <!-- Doctor -->
+
+        <div class="form-group">
+          <label for="book-appointment-doctor">Doctor</label>
+
+          <select
+            id="book-appointment-doctor"
+            formControlName="doctorId"
+            (change)="onDoctorChange()"
+            [disabled]="!appointmentForm.get('department')?.value || !appointmentForm.get('appointmentDate')?.value"
+          >
+            <option value="">Select Doctor</option>
+
+            <option *ngFor="let doctor of filteredDoctors" [value]="doctor._id">{{ doctor.name }}</option>
+          </select>
+
+          @if(doctorFilterMessage){
+          <span class="error-text">{{ doctorFilterMessage }}</span>
+          }
+
+          <!-- Consultation Fee -->
+
+          @if(selectedDoctor){
+          <p class="consultation-fee">Consultation Fee: Rs. {{ selectedDoctor ?.consultationFee || 0 }}</p>
           }
         </div>
       </div>

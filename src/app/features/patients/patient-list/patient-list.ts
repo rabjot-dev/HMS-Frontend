@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -18,7 +20,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
   styleUrls: ['./patient-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PatientList implements OnInit {
+export class PatientList implements OnInit, OnDestroy {
   patients: any[] = [];
 
   userRole = '';
@@ -39,6 +41,9 @@ export class PatientList implements OnInit {
   totalPages = 0;
   isLoading = false;
 
+  private readonly searchInput$ = new Subject<string>();
+  private readonly destroy$ = new Subject<void>();
+
   constructor(
     private readonly patientService: PatientService,
     public readonly nodeService: NodeService,
@@ -49,9 +54,18 @@ export class PatientList implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.searchInput$
+      .pipe(debounceTime(350), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(() => this.reloadFromFirstPage());
+
     this.userRole = localStorage.getItem('role') || '';
 
     this.applyPatientsResponse(this.route.snapshot.data['patients']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadPatients(): void {
@@ -65,7 +79,7 @@ export class PatientList implements OnInit {
     };
 
     if (this.search.trim()) {
-      params.search = this.search;
+      params.search = this.search.trim();
     }
 
     if (this.gender) {
@@ -108,6 +122,10 @@ export class PatientList implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  onSearchInput(): void {
+    this.searchInput$.next(this.search.trim());
   }
 
   onFilterChange(): void {
@@ -170,6 +188,13 @@ export class PatientList implements OnInit {
     });
   }
 
+  private reloadFromFirstPage(): void {
+    this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
+    this.loadPatients();
+  }
+
   private getPageAfterDelete(): number {
     const totalAfterDelete = Math.max(this.totalRecords - 1, 0);
     const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
@@ -185,3 +210,5 @@ export class PatientList implements OnInit {
     this.isLoading = false;
   }
 }
+
+

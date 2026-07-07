@@ -11,7 +11,7 @@
     <div class="consultation-count">Total: {{ consultations.length }}</div>
   </div>
   <div class="filters-wrapper">
-    <input type="text" placeholder="Search consultation" [(ngModel)]="search" (input)="onFilterChange()" />
+    <input type="text" placeholder="Search consultation" [(ngModel)]="search" (input)="onSearchInput()" />
 
     <select [(ngModel)]="doctor" (change)="onFilterChange()">
       <option value="">All Doctors</option>
@@ -62,7 +62,7 @@
 
   @if( consultations.length === 0 ){
   <div class="empty-state">
-    <div class="empty-icon">📄</div>
+    <div class="empty-icon"><span class="hms-icon hms-icon-file" aria-hidden="true"></span></div>
 
     <h2>No Consultations Found</h2>
 
@@ -108,7 +108,7 @@
           <!-- Doctor -->
 
           <td>
-            <div class="doctor-badge">🩺 {{ consultation ?.doctorEmployeeId ?.name }}</div>
+            <div class="doctor-badge"><span class="hms-icon hms-icon-stethoscope" aria-hidden="true"></span>{{ consultation ?.doctorEmployeeId ?.name }}</div>
           </td>
 
           <!-- Diagnosis -->
@@ -178,3 +178,4 @@
 
   } }
 </div>
+

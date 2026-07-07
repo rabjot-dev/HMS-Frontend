@@ -18,7 +18,7 @@
     <!-- Search -->
 
     <div class="search-box">
-      <span>🔍</span>
+      <span class="hms-icon hms-icon-search" aria-hidden="true"></span>
 
       <input
         type="text"
@@ -27,7 +27,7 @@
         search
       "
         (input)="
-        onFilterChange()
+        onSearchInput()
       "
       />
     </div>
@@ -38,9 +38,7 @@
       [(ngModel)]="
       status
     "
-      (change)="
-      onFilterChange()
-    "
+      (change)="onFilterChange()"
     >
       <option value="">All Status</option>
 
@@ -59,9 +57,7 @@
       [(ngModel)]="
       priority
     "
-      (change)="
-      onFilterChange()
-    "
+      (change)="onFilterChange()"
     >
       <option value="">All Priorities</option>
 
@@ -84,9 +80,7 @@
           [(ngModel)]="
         startDate
       "
-          (change)="
-        onFilterChange()
-      "
+          (change)="onFilterChange()"
         />
       </div>
 
@@ -99,9 +93,7 @@
           [(ngModel)]="
         endDate
       "
-          (change)="
-        onFilterChange()
-      "
+          (change)="onFilterChange()"
         />
       </div>
     </div>
@@ -161,7 +153,7 @@
           <!-- Doctor -->
 
           <td>
-            <div class="doctor-name">🩺 {{ appointment ?.doctorEmployeeId ?.name }}</div>
+            <div class="doctor-name"><span class="hms-icon hms-icon-stethoscope" aria-hidden="true"></span>{{ appointment ?.doctorEmployeeId ?.name }}</div>
           </td>
 
           <!-- Date -->
@@ -310,3 +302,5 @@
   "
   ></app-pagination>
 </div>
+
+

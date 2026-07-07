@@ -19,9 +19,9 @@
 
   <div class="filters-wrapper glass-card">
     <div class="search-box">
-      <span>🔍</span>
+      <span class="hms-icon hms-icon-search" aria-hidden="true"></span>
 
-      <input type="text" placeholder="Search patient..." [(ngModel)]="search" (input)="onFilterChange()" />
+      <input type="text" placeholder="Search patient..." [(ngModel)]="search" (input)="onSearchInput()" />
     </div>
 
     <select [(ngModel)]="gender" (change)="onFilterChange()">
@@ -104,7 +104,7 @@
             <!-- Blood Group -->
 
             <td>
-              <span class="blood-badge">🩸 {{ patient ?.bloodGroup || 'N/A' }}</span>
+              <span class="blood-badge"><span class="hms-icon hms-icon-droplet" aria-hidden="true"></span>{{ patient ?.bloodGroup || 'N/A' }}</span>
             </td>
 
             <!-- Status -->
@@ -175,3 +175,4 @@
     }
   </div>
 </div>
+

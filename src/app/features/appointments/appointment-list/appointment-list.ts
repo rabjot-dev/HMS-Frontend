@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -17,7 +19,7 @@ import { ToastService } from '../../../core/services/toast';
   styleUrls: ['./appointment-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppointmentList implements OnInit {
+export class AppointmentList implements OnInit, OnDestroy {
   appointments: any[] = [];
 
   search = '';
@@ -33,6 +35,9 @@ export class AppointmentList implements OnInit {
   totalRecords = 0;
   totalPages = 0;
 
+  private readonly searchInput$ = new Subject<string>();
+  private readonly destroy$ = new Subject<void>();
+
   constructor(
     private readonly appointmentService: AppointmentService,
     public readonly authService: AuthService,
@@ -44,7 +49,16 @@ export class AppointmentList implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.searchInput$
+      .pipe(debounceTime(350), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe(() => this.reloadFromFirstPage());
+
     this.applyAppointmentsResponse(this.route.snapshot.data['appointments']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadAppointments(): void {
@@ -56,7 +70,7 @@ export class AppointmentList implements OnInit {
     };
 
     if (this.search.trim()) {
-      params.search = this.search;
+      params.search = this.search.trim();
     }
 
     if (this.status) {
@@ -92,6 +106,10 @@ export class AppointmentList implements OnInit {
       }
     });
   }
+  onSearchInput(): void {
+    this.searchInput$.next(this.search.trim());
+  }
+
   onFilterChange(): void {
     this.page = 1;
     this.cursorStack = [''];
@@ -154,6 +172,13 @@ export class AppointmentList implements OnInit {
     });
   }
 
+  private reloadFromFirstPage(): void {
+    this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
+    this.loadAppointments();
+  }
+
   private getPageAfterDelete(): number {
     const totalAfterDelete = Math.max(this.totalRecords - 1, 0);
     const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
@@ -168,3 +193,5 @@ export class AppointmentList implements OnInit {
     this.nextCursor = response?.meta?.nextCursor || '';
   }
 }
+
+

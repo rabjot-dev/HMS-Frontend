@@ -19,7 +19,7 @@ export class AddEmployee implements OnInit {
   errorMessage = '';
 
   isSubmitting = false;
-  designations = ['ADMIN', 'DOCTOR', 'RECEPTIONIST', 'LAB_TECHNICIAN', 'PHARMACIST'];
+  designations = ['ADMIN', 'DOCTOR', 'RECEPTIONIST', 'LAB_TECH', 'PHARMACIST'];
 
   ngOnInit(): void {
     const role = localStorage.getItem('role');
@@ -173,6 +173,7 @@ export class AddEmployee implements OnInit {
     // Prepare API payload
     const payload: any = {
       ...this.employeeForm.value,
+      role: this.employeeForm.value.designation,
       qualification: this.employeeForm.value.qualification ? [this.employeeForm.value.qualification] : []
     };
 
@@ -245,3 +246,4 @@ export class AddEmployee implements OnInit {
     this.employeeForm.get('workingDays')?.setValue(workingDays);
   }
 }
+
