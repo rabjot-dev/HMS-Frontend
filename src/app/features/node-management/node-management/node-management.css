@@ -1,6 +1,7 @@
 .node-page {
   display: grid;
-  gap: 20px;
+  gap: 16px;
+  min-width: 0;
 }
 
 .page-header,
@@ -17,7 +18,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 24px;
+  padding: 18px 20px;
 }
 
 .page-label {
@@ -37,7 +38,8 @@ p {
 
 h1 {
   color: #0f172a;
-  font-size: 32px;
+  font-size: 28px;
+  line-height: 1.15;
 }
 
 .page-subtitle,
@@ -48,14 +50,16 @@ small {
 
 .node-layout {
   display: grid;
-  grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.4fr);
-  gap: 20px;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.35fr);
+  gap: 16px;
   align-items: start;
+  min-width: 0;
 }
 
 .node-list,
 .node-form {
-  padding: 20px;
+  min-width: 0;
+  padding: 16px;
 }
 
 .section-title,
@@ -91,7 +95,8 @@ small {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px;
+  min-width: 0;
+  padding: 10px 12px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #ffffff;
@@ -114,30 +119,36 @@ small {
 .node-row span:last-child {
   display: grid;
   gap: 2px;
+  min-width: 0;
 }
 
 .node-row small {
   font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: 12px;
 }
 
 .field-control,
 label,
 .full-field {
   display: grid;
-  gap: 7px;
+  min-width: 0;
+  gap: 6px;
   color: #334155;
   font-weight: 700;
 }
 
 input,
 select {
-  min-height: 42px;
+  min-width: 0;
+  min-height: 40px;
   width: 100%;
   padding: 0 12px;
   border: 1px solid #cbd5e1;
@@ -147,12 +158,12 @@ select {
 }
 
 .full-field {
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 .permission-header {
-  margin-top: 22px;
-  margin-bottom: 12px;
+  margin-top: 18px;
+  margin-bottom: 10px;
 }
 
 .permissions {
@@ -161,7 +172,8 @@ select {
 }
 
 .permission-card {
-  padding: 14px;
+  min-width: 0;
+  padding: 12px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #f8fafc;
@@ -169,17 +181,18 @@ select {
 
 .permission-row {
   display: grid;
-  grid-template-columns: minmax(180px, 0.9fr) minmax(220px, 1.1fr) minmax(180px, 0.9fr) 42px;
-  gap: 12px;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr) minmax(0, 0.95fr) 40px;
+  gap: 10px;
   align-items: start;
+  min-width: 0;
 }
 
 .permission-row .icon-btn {
-  margin-top: 25px;
+  margin-top: 24px;
 }
 
 button {
-  min-height: 40px;
+  min-height: 38px;
   border: 0;
   border-radius: 8px;
   font-weight: 800;
@@ -192,7 +205,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 0 16px;
+  padding: 0 14px;
 }
 
 .primary-btn {
@@ -226,7 +239,17 @@ button {
 }
 
 .form-actions {
-  margin-top: 20px;
+  margin-top: 18px;
+}
+
+@media (max-width: 1180px) {
+  .permission-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) 40px;
+  }
+
+  .permission-row .field-control:last-of-type {
+    grid-column: 1 / 3;
+  }
 }
 
 @media (max-width: 980px) {
@@ -234,7 +257,17 @@ button {
   .form-grid {
     grid-template-columns: 1fr;
   }
+
   .permission-row {
     grid-template-columns: 1fr;
+  }
+
+  .permission-row .field-control:last-of-type {
+    grid-column: auto;
+  }
+
+  .permission-row .icon-btn {
+    width: 40px;
+    margin-top: 0;
   }
 }
