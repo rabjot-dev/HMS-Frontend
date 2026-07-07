@@ -70,6 +70,38 @@
     </div>
   </div>
 
+  <div class="audit-section glass-card">
+    <div class="section-header">
+      <h2>Audit Logs</h2>
+
+      <span>Live Activity</span>
+    </div>
+
+    <div class="audit-list">
+      @for( log of auditLogs || []; track log._id ){
+      <div class="audit-card">
+        <div class="audit-marker" [class.failed]="log.status === 'FAILED'"></div>
+
+        <div class="audit-content">
+          <div class="audit-topline">
+            <h4>{{ getAuditSummary(log) }}</h4>
+
+            <time>{{ log.timestamp | date: 'short' }}</time>
+          </div>
+
+          <p>
+            {{ getActorName(log) }} · {{ log.module || 'System' }} · {{ log.status || 'SUCCESS' }}
+          </p>
+        </div>
+      </div>
+      } @empty {
+      <div class="audit-empty">
+        No audit activity yet.
+      </div>
+      }
+    </div>
+  </div>
+
   <!-- Bottom Grid -->
 
   <div class="bottom-grid">

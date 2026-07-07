@@ -100,24 +100,6 @@
           }
         </div>
 
-        <!-- Doctor -->
-
-        <div class="form-group">
-          <label for="book-appointment-doctor">Doctor</label>
-
-          <select id="book-appointment-doctor" formControlName="doctorId" (change)="onDoctorChange()">
-            <option value="">Select Doctor</option>
-
-            <option *ngFor="let doctor of filteredDoctors" [value]="doctor._id">{{ doctor.name }}</option>
-          </select>
-
-          <!-- Consultation Fee -->
-
-          @if(selectedDoctor){
-          <p class="consultation-fee">Consultation Fee: ₹{{ selectedDoctor ?.consultationFee || 0 }}</p>
-          }
-        </div>
-
         <!-- Appointment Date -->
 
         <div class="form-group">
@@ -128,12 +110,46 @@
             type="date"
             formControlName="appointmentDate"
             [min]="minDate"
-            (change)="fetchAvailableSlots()"
+            (change)="onAppointmentDateChange()"
           />
           @if(appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched){
           <span class="error-text">Appointment Date is required</span>
           } @if(noSlotsError){
           <span class="error-text">Doctor is not available on this day</span>
+          }
+
+          <!-- Consultation Fee -->
+
+          @if(false){
+          <p class="consultation-fee">Consultation Fee: ₹{{ selectedDoctor ?.consultationFee || 0 }}</p>
+          }
+        </div>
+
+        <!-- Doctor -->
+
+        <div class="form-group">
+          <label for="book-appointment-doctor">Doctor</label>
+
+          <select
+            id="book-appointment-doctor"
+            formControlName="doctorId"
+            [disabled]="!appointmentForm.get('appointmentDate')?.value"
+            (change)="onDoctorChange()"
+          >
+            <option value="">Select Doctor</option>
+
+            <option *ngFor="let doctor of filteredDoctors" [value]="doctor._id">{{ doctor.name }}</option>
+          </select>
+
+          @if(!appointmentForm.get('appointmentDate')?.value){}
+           @else if(appointmentForm.get('department')?.value && filteredDoctors.length === 0){
+          <span class="helper-text">No joined doctors available for this date and department.</span>
+          }
+
+          <!-- Consultation Fee -->
+
+          @if(selectedDoctor){
+          <p class="consultation-fee">Consultation Fee: ₹{{ selectedDoctor ?.consultationFee || 0 }}</p>
           }
         </div>
       </div>
