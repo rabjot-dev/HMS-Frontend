@@ -70,6 +70,10 @@ export class BookAppointment implements OnInit {
     this.appointmentForm.get('department')?.valueChanges.subscribe(() => {
       this.filterDoctors();
     });
+
+    this.appointmentForm.get('appointmentDate')?.valueChanges.subscribe(() => {
+      this.filterDoctors();
+    });
   }
 
   // Fetch all patients
@@ -113,21 +117,31 @@ export class BookAppointment implements OnInit {
     });
   }
 
-  // Show doctors belonging to selected department
+  // Show doctors belonging to selected department who have joined by selected date
   filterDoctors(): void {
     const department = this.appointmentForm.get('department')?.value;
+    const appointmentDate = this.appointmentForm.get('appointmentDate')?.value;
 
     console.log('Selected Department:', department);
     console.log('All Doctors:', this.doctors);
 
-    this.filteredDoctors = this.doctors.filter((doctor) => doctor.department === department);
+    this.filteredDoctors = this.doctors.filter(
+      (doctor) => doctor.department === department && this.hasDoctorJoinedByDate(doctor, appointmentDate)
+    );
 
     // Reset doctor and slot selection
     this.appointmentForm.get('doctorId')?.setValue('');
+    this.appointmentForm.get('appointmentTime')?.setValue('');
+    this.selectedDoctor = null;
     this.availableSlots = [];
     this.noSlotsError = false;
 
     this.cdr.detectChanges();
+  }
+
+  onAppointmentDateChange(): void {
+    this.filterDoctors();
+    this.fetchAvailableSlots();
   }
 
   // Load available slots for selected doctor and date
@@ -237,6 +251,21 @@ export class BookAppointment implements OnInit {
     this.fetchAvailableSlots();
 
     console.log(this.selectedDoctor);
+  }
+
+  private hasDoctorJoinedByDate(doctor: any, appointmentDate: string): boolean {
+    if (!appointmentDate || !doctor?.joiningDate) {
+      return Boolean(appointmentDate);
+    }
+
+    return this.getDateOnly(appointmentDate) >= this.getDateOnly(doctor.joiningDate);
+  }
+
+  private getDateOnly(date: string): number {
+    const dateOnly = new Date(date);
+    dateOnly.setHours(0, 0, 0, 0);
+
+    return dateOnly.getTime();
   }
 
   // Submit appointment booking request

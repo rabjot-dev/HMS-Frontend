@@ -19,6 +19,14 @@ export class DashboardService {
     return this.http.get(`${API_BASE_URL}/dashboard/recent-employees`);
   }
 
+  getAuditLogs(limit = 20): Observable<any> {
+    return this.http.get(`${API_BASE_URL}/dashboard/audit-logs`, {
+      params: {
+        limit
+      }
+    });
+  }
+
   // Get doctor dashboard statistics
   getDoctorStats(): Observable<any> {
     return this.http.get(`${API_BASE_URL}/dashboard/doctor-stats`);

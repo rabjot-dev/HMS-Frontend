@@ -8,7 +8,8 @@ export const adminDashboardResolver: ResolveFn<any> = () => {
 
   return forkJoin({
     stats: dashboardService.getAdminStats().pipe(catchError(() => of({ data: {} }))),
-    recentEmployees: dashboardService.getRecentEmployees().pipe(catchError(() => of({ data: [] })))
+    recentEmployees: dashboardService.getRecentEmployees().pipe(catchError(() => of({ data: [] }))),
+    auditLogs: dashboardService.getAuditLogs().pipe(catchError(() => of({ data: [] })))
   });
 };
 
