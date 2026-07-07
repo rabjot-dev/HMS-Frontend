@@ -15,7 +15,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import { ConsultationService } from '../../../core/services/consultation';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog';
 import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader';
-
+import { FILE_BASE_URL } from '../../../core/constants/api.constants';
 @Component({
   selector: 'app-health-record-details',
   standalone: true,
@@ -470,13 +470,13 @@ export class HealthRecordDetails implements OnInit {
     });
   }
   viewFile(url: string): void {
-    window.open(`http://localhost:5000${url}`, '_blank');
+    window.open(`${FILE_BASE_URL}${url}`, '_blank');
   }
 
   downloadFile(url: string): void {
     const link = document.createElement('a');
 
-    link.href = `http://localhost:5000${url}`;
+    link.href = `${FILE_BASE_URL}${url}`;
 
     link.download = '';
 
@@ -726,7 +726,7 @@ export class HealthRecordDetails implements OnInit {
       return path;
     }
 
-    return `http://localhost:5000/${path.replaceAll(/^\/+/g, '')}`;
+    return `${FILE_BASE_URL}/${path.replaceAll(/^\/+/g, '')}`;
   }
 
   private isPrintableImage(url: string): boolean {
