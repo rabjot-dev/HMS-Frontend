@@ -131,8 +131,8 @@
 
     <!-- Submit -->
 
-    <button type="submit" class="submit-btn" [disabled]="isSubmitting">
-      {{ isSubmitting ? 'Saving...' : 'Save Availability' }}
+    <button type="submit" class="submit-btn" [disabled]="isSubmitting()">
+      {{ isSubmitting() ? 'Saving...' : 'Save Availability' }}
     </button>
   </form>
 </div>

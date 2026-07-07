@@ -32,7 +32,7 @@
           <select formControlName="patientId">
             <option value="">Select Patient</option>
 
-            @for( patient of patients; track patient._id ){
+            @for( patient of patients(); track patient._id ){
             <option [value]="patient._id">
               {{ patient.patientId }} - {{ patient.firstName }} {{ patient.lastName }}
             </option>
@@ -100,24 +100,6 @@
           }
         </div>
 
-        <!-- Doctor -->
-
-        <div class="form-group">
-          <label>Doctor</label>
-
-          <select formControlName="doctorId" (change)="onDoctorChange()">
-            <option value="">Select Doctor</option>
-
-            <option *ngFor="let doctor of filteredDoctors" [value]="doctor._id">{{ doctor.name }}</option>
-          </select>
-
-          <!-- Consultation Fee -->
-
-          @if(selectedDoctor){
-          <p class="consultation-fee">Consultation Fee: ₹{{ selectedDoctor ?.consultationFee || 0 }}</p>
-          }
-        </div>
-
         <!-- Appointment Date -->
 
         <div class="form-group">
@@ -128,11 +110,32 @@
             type="date"
             formControlName="appointmentDate"
             [min]="minDate"
-            (change)="fetchAvailableSlots()"
+            (change)="filterDoctors()"
           />
           @if(appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched){
           <span class="error-text">Appointment Date is required</span>
-          } @if(noSlotsError){
+          }
+        </div>
+
+        <!-- Doctor -->
+
+        <div class="form-group">
+          <label for="doctorId">Doctor</label>
+
+          <select id="doctorId" formControlName="doctorId" (change)="onDoctorChange()">
+            <option value="">Select Doctor</option>
+
+            @for( doctor of filteredDoctors(); track doctor._id ){
+            <option [value]="doctor._id">{{ doctor.name }}</option>
+            }
+          </select>
+
+          <!-- Consultation Fee -->
+
+          @if(selectedDoctor()){
+          <p class="consultation-fee">Consultation Fee: ₹{{ selectedDoctor()?.consultationFee || 0 }}</p>
+          }
+          @if(noSlotsError()){
           <span class="error-text">Doctor is not available on this day</span>
           }
         </div>
@@ -151,7 +154,7 @@
       </div>
 
       <div class="slots-container">
-        @for( slot of availableSlots; track slot ){
+        @for( slot of availableSlots(); track slot ){
         <button
           type="button"
           class="slot-btn"
@@ -292,8 +295,8 @@
 
     <!-- Submit -->
 
-    <button type="submit" class="submit-btn" [disabled]="isSubmitting">
-      @if(isSubmitting){ Booking Appointment... } @else { Confirm Appointment }
+    <button type="submit" class="submit-btn" [disabled]="isSubmitting()">
+      @if(isSubmitting()){ Booking Appointment... } @else { Confirm Appointment }
     </button>
   </form>
 </div>

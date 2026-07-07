@@ -7,27 +7,27 @@
 
   <!-- Patient Card -->
 
-  @if(appointment){
+  @if(appointment()){
   <div class="patient-card">
-    <h2>{{ appointment?.patientId?.firstName }} {{ appointment?.patientId?.lastName }}</h2>
+    <h2>{{ appointment()?.patientId?.firstName }} {{ appointment()?.patientId?.lastName }}</h2>
 
     <div class="patient-info">
       <p>
         <strong>Patient ID:</strong>
 
-        {{ appointment?.patientId?.patientId }}
+        {{ appointment()?.patientId?.patientId }}
       </p>
 
       <p>
         <strong>Appointment:</strong>
 
-        {{ appointment?.appointmentType }}
+        {{ appointment()?.appointmentType }}
       </p>
 
       <p>
         <strong>Time:</strong>
 
-        {{ appointment?.timeSlot }}
+        {{ appointment()?.timeSlot }}
       </p>
     </div>
   </div>
@@ -193,8 +193,8 @@
 
     <!-- Submit -->
 
-    <button type="submit" class="submit-btn" [disabled]="isSubmitting">
-      @if(isSubmitting){ Saving... } @else { Complete Consultation }
+    <button type="submit" class="submit-btn" [disabled]="isSubmitting()">
+      @if(isSubmitting()){ Saving... } @else { Complete Consultation }
     </button>
   </form>
 </div>

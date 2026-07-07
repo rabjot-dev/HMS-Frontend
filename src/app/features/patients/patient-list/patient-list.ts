@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -18,138 +19,135 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
   styleUrls: ['./patient-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PatientList implements OnInit {
-  patients: any[] = [];
+export class PatientList implements OnInit, OnDestroy {
+  readonly patients = signal<any[]>([]);
+  readonly userRole = signal('');
+  readonly search = signal('');
+  readonly gender = signal('');
+  readonly bloodGroup = signal('');
+  readonly startDate = signal('');
+  readonly endDate = signal('');
+  readonly page = signal(1);
+  readonly limit = signal(10);
+  readonly cursorStack = signal<string[]>(['']);
+  readonly nextCursor = signal('');
+  readonly totalRecords = signal(0);
+  readonly totalPages = signal(0);
+  readonly isLoading = signal(false);
 
-  userRole = '';
-
-  search = '';
-  gender = '';
-  bloodGroup = '';
-
-  startDate = '';
-  endDate = '';
-
-  page = 1;
-  limit = 10;
-  cursorStack: string[] = [''];
-  nextCursor = '';
-
-  totalRecords = 0;
-  totalPages = 0;
-  isLoading = false;
+  private readonly destroy$ = new Subject<void>();
+  protected readonly searchDebounce$ = new Subject<void>();
 
   constructor(
     private readonly patientService: PatientService,
     public readonly nodeService: NodeService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly confirmDialog: ConfirmDialogService,
     private readonly toast: ToastService
   ) {}
 
   ngOnInit(): void {
-    this.userRole = localStorage.getItem('role') || '';
-
+    this.userRole.set(localStorage.getItem('role') || '');
     this.loadPatients();
+    this.searchDebounce$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.onFilterChange());
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadPatients(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     const params: any = {
-      page: this.page,
-      limit: this.limit,
+      page: this.page(),
+      limit: this.limit(),
       pagination: 'cursor',
-      cursor: this.cursorStack[this.page - 1] || ''
+      cursor: this.cursorStack()[this.page() - 1] || ''
     };
 
-    if (this.search.trim()) {
-      params.search = this.search;
+    if (this.search().trim()) {
+      params.search = this.search();
     }
 
-    if (this.gender) {
-      params.gender = this.gender;
+    if (this.gender()) {
+      params.gender = this.gender();
     }
 
-    if (this.bloodGroup) {
-      params.bloodGroup = this.bloodGroup;
+    if (this.bloodGroup()) {
+      params.bloodGroup = this.bloodGroup();
     }
 
-    if (this.startDate) {
-      params.startDate = this.startDate;
+    if (this.startDate()) {
+      params.startDate = this.startDate();
     }
 
-    if (this.endDate) {
-      params.endDate = this.endDate;
+    if (this.endDate()) {
+      params.endDate = this.endDate();
     }
 
     this.patientService.getPatients(params).subscribe({
       next: (response) => {
         console.log(response);
 
-        this.patients = response.data;
+        this.patients.set(response.data);
 
-        this.totalRecords = response.meta?.totalRecords ?? response.meta?.total ?? 0;
+        this.totalRecords.set(response.meta?.totalRecords ?? response.meta?.total ?? 0);
+        this.totalPages.set(response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords() / this.limit()), 1));
+        this.nextCursor.set(response.meta?.nextCursor || '');
 
-        this.totalPages = response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
-        this.nextCursor = response.meta?.nextCursor || '';
-
-        if (this.page > 1 && this.patients.length === 0) {
-          this.page = Math.max(this.totalPages || 1, 1);
+        if (this.page() > 1 && this.patients().length === 0) {
+          this.page.set(Math.max(this.totalPages() || 1, 1));
           this.loadPatients();
           return;
         }
 
-        this.isLoading = false;
-
-        this.cdr.detectChanges();
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.log(error);
 
-        this.isLoading = false;
-
-        this.cdr.detectChanges();
+        this.isLoading.set(false);
       }
     });
   }
 
   onFilterChange(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
 
     this.loadPatients();
   }
 
   previousPage(): void {
-    if (this.page > 1) {
-      this.page--;
+    if (this.page() > 1) {
+      this.page.update(p => p - 1);
 
       this.loadPatients();
     }
   }
 
   nextPage(): void {
-    if (this.nextCursor) {
-      this.cursorStack[this.page] = this.nextCursor;
-      this.page++;
+    if (this.nextCursor()) {
+      const stack = [...this.cursorStack()];
+      stack[this.page()] = this.nextCursor();
+      this.cursorStack.set(stack);
+      this.page.update(p => p + 1);
 
       this.loadPatients();
     }
   }
 
-  changePageSize(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-
-    this.limit = Number(select.value);
-
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
+  onPageSizeChange(nextLimit: number): void {
+    this.limit.set(nextLimit);
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
 
     this.loadPatients();
   }
+
   async deletePatient(id: string): Promise<void> {
     const confirmed = await this.confirmDialog.confirm({
       title: 'Delete patient?',
@@ -164,7 +162,7 @@ export class PatientList implements OnInit {
 
     this.patientService.deletePatient(id).subscribe({
       next: () => {
-        this.page = this.getPageAfterDelete();
+        this.page.set(this.getPageAfterDelete());
         this.toast.success('Patient deleted successfully');
         this.loadPatients();
       },
@@ -175,9 +173,9 @@ export class PatientList implements OnInit {
   }
 
   private getPageAfterDelete(): number {
-    const totalAfterDelete = Math.max(this.totalRecords - 1, 0);
-    const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
+    const totalAfterDelete = Math.max(this.totalRecords() - 1, 0);
+    const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit()), 1);
 
-    return Math.min(this.page, totalPagesAfterDelete);
+    return Math.min(this.page(), totalPagesAfterDelete);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../../../core/services/employee';
@@ -12,12 +12,11 @@ import { EmployeeService } from '../../../core/services/employee';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmployeeDetails implements OnInit {
-  employee: any = null;
+  readonly employee = signal<any>(null);
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly employeeService: EmployeeService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly employeeService: EmployeeService
   ) {}
 
   // Load employee details
@@ -32,9 +31,7 @@ export class EmployeeDetails implements OnInit {
       next: (response: any) => {
         console.log(response);
 
-        this.employee = response.data;
-
-        this.cdr.markForCheck();
+        this.employee.set(response.data);
       },
       error: (error) => {
         console.log(error);

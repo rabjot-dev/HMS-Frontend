@@ -1,4 +1,5 @@
-<div class="employee-page" *ngIf="employee as emp">
+@if(employee(); as emp){
+<div class="employee-page">
   <!-- Hero -->
 
   <div class="employee-hero glass-card">
@@ -94,13 +95,8 @@
 
     <!-- Doctor -->
 
-    <div
-      *ngIf="
-          emp.designation
-          === 'DOCTOR'
-          "
-      class="info-card glass-card doctor-card"
-    >
+    @if( emp.designation === 'DOCTOR' ){
+    <div class="info-card glass-card doctor-card">
       <h2>Doctor Information</h2>
 
       <div class="info-list">
@@ -129,5 +125,7 @@
         </div>
       </div>
     </div>
+    }
   </div>
 </div>
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -15,23 +15,17 @@ import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loa
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HealthRecordList implements OnInit {
-  healthRecords: any[] = [];
-
-  isLoading = false;
-
-  search = '';
-
-  page = 1;
-
-  limit = 10;
-  cursorStack: string[] = [''];
-  nextCursor = '';
-
-  meta: any = {};
+  readonly healthRecords = signal<any[]>([]);
+  readonly isLoading = signal(false);
+  readonly search = signal('');
+  readonly page = signal(1);
+  readonly limit = signal(10);
+  readonly cursorStack = signal<string[]>(['']);
+  readonly nextCursor = signal('');
+  readonly meta = signal<any>({});
 
   constructor(
-    private readonly healthRecordService: HealthRecordService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly healthRecordService: HealthRecordService
   ) {}
 
   ngOnInit(): void {
@@ -40,75 +34,73 @@ export class HealthRecordList implements OnInit {
 
   loadHealthRecords(showPageLoader = true): void {
     if (showPageLoader) {
-      this.isLoading = true;
+      this.isLoading.set(true);
     }
 
     this.healthRecordService
       .getHealthRecords({
-        page: this.page,
-        limit: this.limit,
+        page: this.page(),
+        limit: this.limit(),
         pagination: 'cursor',
-        cursor: this.cursorStack[this.page - 1] || '',
-        search: this.search
+        cursor: this.cursorStack()[this.page() - 1] || '',
+        search: this.search()
       })
       .subscribe({
         next: (response) => {
-          this.healthRecords = response.data;
+          this.healthRecords.set(response.data);
 
-          this.meta = response.meta;
-          this.nextCursor = response.meta?.nextCursor || '';
+          this.meta.set(response.meta);
+          this.nextCursor.set(response.meta?.nextCursor || '');
 
-          if (this.page > 1 && this.healthRecords.length === 0) {
-            this.page = Math.max(this.meta?.totalPages || 1, 1);
+          if (this.page() > 1 && this.healthRecords().length === 0) {
+            this.page.set(Math.max(this.meta()?.totalPages || 1, 1));
             this.loadHealthRecords(false);
             return;
           }
 
-          this.isLoading = false;
-
-          this.cdr.detectChanges();
+          this.isLoading.set(false);
         },
         error: (error) => {
           console.log(error);
 
-          this.isLoading = false;
-
-          this.cdr.detectChanges();
+          this.isLoading.set(false);
         }
       });
   }
 
   onSearch(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
 
     this.loadHealthRecords(false);
   }
 
   nextPage(): void {
-    if (this.meta?.hasNextPage && this.nextCursor) {
-      this.cursorStack[this.page] = this.nextCursor;
-      this.page++;
+    if (this.meta()?.hasNextPage && this.nextCursor()) {
+      const stack = [...this.cursorStack()];
+      stack[this.page()] = this.nextCursor();
+      this.cursorStack.set(stack);
+      this.page.update(p => p + 1);
 
       this.loadHealthRecords(false);
     }
   }
 
   previousPage(): void {
-    if (this.page > 1) {
-      this.page--;
-      this.nextCursor = '';
+    if (this.page() > 1) {
+      this.page.update(p => p - 1);
+      this.nextCursor.set('');
 
       this.loadHealthRecords(false);
     }
   }
 
   onPageSizeChange(nextLimit: number): void {
-    this.limit = nextLimit;
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
+    this.limit.set(nextLimit);
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
     this.loadHealthRecords(false);
   }
 }

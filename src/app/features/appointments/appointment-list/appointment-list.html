@@ -9,7 +9,7 @@
 
       <p class="page-subtitle">Manage and monitor patient appointments.</p>
     </div>
-    <div class="appointment-count">{{ totalRecords }} Appointments</div>
+    <div class="appointment-count">{{ totalRecords() }} Appointments</div>
   </div>
 
   <!-- Filters -->
@@ -23,24 +23,16 @@
       <input
         type="text"
         placeholder="Search patient or doctor"
-        [(ngModel)]="
-        search
-      "
-        (input)="
-        onFilterChange()
-      "
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event); searchDebounce$.next()"
       />
     </div>
 
     <!-- Status -->
 
     <select
-      [(ngModel)]="
-      status
-    "
-      (change)="
-      onFilterChange()
-    "
+      [ngModel]="status()"
+      (ngModelChange)="status.set($event); onFilterChange()"
     >
       <option value="">All Status</option>
 
@@ -56,12 +48,8 @@
     <!-- Priority -->
 
     <select
-      [(ngModel)]="
-      priority
-    "
-      (change)="
-      onFilterChange()
-    "
+      [ngModel]="priority()"
+      (ngModelChange)="priority.set($event); onFilterChange()"
     >
       <option value="">All Priorities</option>
 
@@ -81,12 +69,8 @@
         <input
           id="filter-start-date"
           type="date"
-          [(ngModel)]="
-        startDate
-      "
-          (change)="
-        onFilterChange()
-      "
+          [ngModel]="startDate()"
+          (ngModelChange)="startDate.set($event); onFilterChange()"
         />
       </div>
 
@@ -96,12 +80,8 @@
         <input
           id="filter-end-date"
           type="date"
-          [(ngModel)]="
-        endDate
-      "
-          (change)="
-        onFilterChange()
-      "
+          [ngModel]="endDate()"
+          (ngModelChange)="endDate.set($event); onFilterChange()"
         />
       </div>
     </div>
@@ -132,7 +112,7 @@
       </thead>
 
       <tbody>
-        @for ( appointment of appointments; track appointment._id ) {
+        @for ( appointment of appointments(); track appointment._id ) {
         <tr>
           <!-- Appointment -->
 
@@ -185,21 +165,9 @@
           <td>
             <span
               class="priority-badge"
-              [class.normal]="
-                          appointment
-                          ?.priority
-                          === 'NORMAL'
-                          "
-              [class.urgent]="
-                          appointment
-                          ?.priority
-                          === 'URGENT'
-                          "
-              [class.critical]="
-                          appointment
-                          ?.priority
-                          === 'CRITICAL'
-                          "
+              [class.normal]="appointment?.priority === 'NORMAL'"
+              [class.urgent]="appointment?.priority === 'URGENT'"
+              [class.critical]="appointment?.priority === 'CRITICAL'"
             >
               {{ appointment ?.priority }}
             </span>
@@ -210,31 +178,11 @@
           <td>
             <span
               class="status-badge"
-              [class.booked]="
-                          appointment
-                          ?.status
-                          === 'BOOKED'
-                          "
-              [class.completed]="
-                          appointment
-                          ?.status
-                          === 'COMPLETED'
-                          "
-              [class.cancelled]="
-                          appointment
-                          ?.status
-                          === 'CANCELLED'
-                          "
-              [class.rejected]="
-                          appointment
-                          ?.status
-                          === 'REJECTED'
-                          "
-              [class.consultation]="
-                          appointment
-                          ?.status
-                          === 'IN_CONSULTATION'
-                          "
+              [class.booked]="appointment?.status === 'BOOKED'"
+              [class.completed]="appointment?.status === 'COMPLETED'"
+              [class.cancelled]="appointment?.status === 'CANCELLED'"
+              [class.rejected]="appointment?.status === 'REJECTED'"
+              [class.consultation]="appointment?.status === 'IN_CONSULTATION'"
             >
               {{ appointment ?.status }}
             </span>
@@ -249,10 +197,7 @@
               @if(nodeService.canUseApi('PUT', '/api/appointments/:id')){
               <button
                 class="action-btn edit"
-                [routerLink]="[
-                                '/appointments/edit',
-                                appointment._id
-                              ]"
+                [routerLink]="['/appointments/edit', appointment._id]"
               >
                 Edit
               </button>
@@ -260,11 +205,7 @@
               } @if(nodeService.canUseApi('DELETE', '/api/appointments/:id')){
               <button
                 class="action-btn delete"
-                (click)="
-                              deleteAppointment(
-                                appointment._id
-                              )
-                              "
+                (click)="deleteAppointment(appointment._id)"
               >
                 Delete
               </button>
@@ -275,12 +216,7 @@
               @if(nodeService.canAccessPath('/patients')){
               <button
                 class="action-btn view"
-                [routerLink]="[
-                                '/patients',
-                                appointment
-                                ?.patientId
-                                ?._id
-                              ]"
+                [routerLink]="['/patients', appointment?.patientId?._id]"
               >
                 View Patient
               </button>
@@ -293,20 +229,14 @@
     </table>
   </div>
   <app-pagination
-    [page]="page"
-    [totalPages]="page + (nextCursor ? 1 : 0)"
-    [totalRecords]="totalRecords"
-    [limit]="limit"
+    [page]="page()"
+    [totalPages]="page() + (nextCursor() ? 1 : 0)"
+    [totalRecords]="totalRecords()"
+    [limit]="limit()"
     [cursorMode]="true"
-    [hasNextPage]="!!nextCursor"
+    [hasNextPage]="!!nextCursor()"
     (previous)="previousPage()"
     (next)="nextPage()"
-    (pageSizeChange)="
-    limit = $event;
-    page = 1;
-    cursorStack = [''];
-    nextCursor = '';
-    loadAppointments()
-  "
+    (pageSizeChange)="onPageSizeChange($event)"
   ></app-pagination>
 </div>

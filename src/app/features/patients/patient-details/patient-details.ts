@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PatientService } from '../../../core/services/patient';
@@ -12,12 +12,11 @@ import { PatientService } from '../../../core/services/patient';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PatientDetails implements OnInit {
-  patient: any = {};
+  readonly patient = signal<any>(null);
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly patientService: PatientService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly patientService: PatientService
   ) {}
 
   // Load patient details on page load
@@ -37,9 +36,7 @@ export class PatientDetails implements OnInit {
       next: (response) => {
         console.log(response);
 
-        this.patient = response.data;
-
-        this.cdr.detectChanges();
+        this.patient.set(response.data);
       },
       error: (error) => {
         console.log(error);

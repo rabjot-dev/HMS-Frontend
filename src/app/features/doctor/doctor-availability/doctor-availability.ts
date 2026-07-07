@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from '../../../core/services/employee';
@@ -13,16 +13,15 @@ import { ToastService } from '../../../core/services/toast';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DoctorAvailability implements OnInit {
-  isSubmitting = false;
+  readonly isSubmitting = signal(false);
 
   availabilityForm: any;
 
-  workingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+  readonly workingDays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly employeeService: EmployeeService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toast: ToastService
   ) {
     this.availabilityForm = this.fb.group({
@@ -58,8 +57,6 @@ export class DoctorAvailability implements OnInit {
           maxPatientsPerDay: response?.data?.maxPatientsPerDay,
           isAvailable: response?.data?.isAvailable
         });
-
-        this.cdr.detectChanges();
       },
       error: (error) => {
         console.log(error);
@@ -94,13 +91,11 @@ export class DoctorAvailability implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
 
     this.employeeService.updateDoctorAvailability(this.availabilityForm.value).subscribe({
       next: () => {
-        this.isSubmitting = false;
-
-        this.cdr.detectChanges();
+        this.isSubmitting.set(false);
 
         this.toast.success('Availability updated successfully');
       },
@@ -108,9 +103,7 @@ export class DoctorAvailability implements OnInit {
         console.log(error);
         this.toast.error(error?.error?.message || 'Unable to update availability');
 
-        this.isSubmitting = false;
-
-        this.cdr.detectChanges();
+        this.isSubmitting.set(false);
       }
     });
   }

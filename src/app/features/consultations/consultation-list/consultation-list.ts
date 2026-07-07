@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -16,34 +17,30 @@ import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loa
   styleUrls: ['./consultation-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConsultationList implements OnInit {
-  consultations: any[] = [];
+export class ConsultationList implements OnInit, OnDestroy {
+  readonly consultations = signal<any[]>([]);
+  readonly meta = signal<any>({});
+  readonly search = signal('');
+  readonly doctor = signal('');
+  readonly patient = signal('');
+  readonly status = signal('');
+  readonly startDate = signal('');
+  readonly endDate = signal('');
+  readonly page = signal(1);
+  readonly limit = signal(10);
+  readonly cursorStack = signal<string[]>(['']);
+  readonly nextCursor = signal('');
+  readonly doctors = signal<any[]>([]);
+  readonly patients = signal<any[]>([]);
+  readonly isLoading = signal(false);
 
-  meta: any = {};
-
-  search = '';
-  doctor = '';
-  patient = '';
-  status = '';
-
-  startDate = '';
-  endDate = '';
-
-  page = 1;
-  limit = 10;
-  cursorStack: string[] = [''];
-  nextCursor = '';
-
-  doctors: any[] = [];
-  patients: any[] = [];
-
-  isLoading = false;
+  private readonly destroy$ = new Subject<void>();
+  protected readonly searchDebounce$ = new Subject<void>();
 
   constructor(
     private readonly consultationService: ConsultationService,
     private readonly employeeService: EmployeeService,
-    private readonly patientService: PatientService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly patientService: PatientService
   ) {}
 
   // Load consultations on page load
@@ -51,109 +48,129 @@ export class ConsultationList implements OnInit {
     this.loadDoctors();
     this.loadPatients();
     this.loadConsultations();
+    this.searchDebounce$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.onFilterChange());
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   loadDoctors(): void {
     this.employeeService.getDoctors().subscribe({
       next: (response) => {
-        this.doctors = response.data;
+        this.doctors.set(response.data);
       }
     });
   }
+
   loadPatients(): void {
     this.patientService.getPatients().subscribe({
       next: (response) => {
-        this.patients = response.data;
+        this.patients.set(response.data);
       }
     });
   }
+
   // Fetch all consultations
   loadConsultations(showPageLoader = true): void {
     if (showPageLoader) {
-      this.isLoading = true;
+      this.isLoading.set(true);
     }
 
     const params: any = {
-      page: this.page,
-      limit: this.limit,
+      page: this.page(),
+      limit: this.limit(),
       pagination: 'cursor',
-      cursor: this.cursorStack[this.page - 1] || ''
+      cursor: this.cursorStack()[this.page() - 1] || ''
     };
 
-    if (this.search) {
-      params.search = this.search;
+    if (this.search()) {
+      params.search = this.search();
     }
 
-    if (this.doctor) {
-      params.doctor = this.doctor;
+    if (this.doctor()) {
+      params.doctor = this.doctor();
     }
 
-    if (this.patient) {
-      params.patient = this.patient;
+    if (this.patient()) {
+      params.patient = this.patient();
     }
 
-    if (this.status) {
-      params.status = this.status;
+    if (this.status()) {
+      params.status = this.status();
     }
 
-    if (this.startDate) {
-      params.startDate = this.startDate;
+    if (this.startDate()) {
+      params.startDate = this.startDate();
     }
 
-    if (this.endDate) {
-      params.endDate = this.endDate;
+    if (this.endDate()) {
+      params.endDate = this.endDate();
     }
 
     this.consultationService.getConsultations(params).subscribe({
       next: (response) => {
-        this.consultations = response.data;
+        this.consultations.set(response.data);
 
-        this.meta = response.meta;
-        this.nextCursor = response.meta?.nextCursor || '';
+        this.meta.set(response.meta);
+        this.nextCursor.set(response.meta?.nextCursor || '');
 
-        if (this.page > 1 && this.consultations.length === 0) {
-          this.page = Math.max(this.meta?.totalPages || 1, 1);
+        if (this.page() > 1 && this.consultations().length === 0) {
+          this.page.set(Math.max(this.meta()?.totalPages || 1, 1));
           this.loadConsultations(false);
           return;
         }
 
-        this.isLoading = false;
-
-        this.cdr.detectChanges();
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.log(error);
 
-        this.isLoading = false;
+        this.isLoading.set(false);
       }
     });
   }
+
   onFilterChange(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
 
     this.loadConsultations(false);
   }
+
   previousPage(): void {
-    if (this.page <= 1) {
+    if (this.page() <= 1) {
       return;
     }
 
-    this.page--;
+    this.page.update(p => p - 1);
 
     this.loadConsultations(false);
   }
 
   nextPage(): void {
-    if (!this.nextCursor) {
+    if (!this.nextCursor()) {
       return;
     }
 
-    this.cursorStack[this.page] = this.nextCursor;
-    this.page++;
+    const stack = [...this.cursorStack()];
+    stack[this.page()] = this.nextCursor();
+    this.cursorStack.set(stack);
+    this.page.update(p => p + 1);
 
     this.loadConsultations(false);
   }
+
+  onPageSizeChange(newLimit: number): void {
+    this.limit.set(newLimit);
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
+    this.loadConsultations(false);
+  }
+
   // Download prescription PDF
   downloadPdf(consultationId: string): void {
     this.consultationService.downloadPrescriptionPdf(consultationId).subscribe({

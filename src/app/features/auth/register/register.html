@@ -42,26 +42,26 @@
 
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="step-indicator">
-          <div class="step" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
+          <div class="step" [class.active]="currentStep() === 1" [class.completed]="currentStep() > 1">
             <div class="step-circle">1</div>
             <p>Basic</p>
           </div>
 
-          <div class="step-line" [class.completed]="currentStep > 1"></div>
+          <div class="step-line" [class.completed]="currentStep() > 1"></div>
 
-          <div class="step" [class.active]="currentStep === 2" [class.completed]="currentStep > 2">
+          <div class="step" [class.active]="currentStep() === 2" [class.completed]="currentStep() > 2">
             <div class="step-circle">2</div>
             <p>Professional</p>
           </div>
 
-          <div class="step-line" [class.completed]="currentStep > 2"></div>
+          <div class="step-line" [class.completed]="currentStep() > 2"></div>
 
-          <div class="step" [class.active]="currentStep === 3">
+          <div class="step" [class.active]="currentStep() === 3">
             <div class="step-circle">3</div>
             <p>Security</p>
           </div>
         </div>
-        @if(currentStep === 1){
+        @if(currentStep() === 1){
         <div class="step-section">
           <!-- Name -->
 
@@ -235,7 +235,7 @@
 
         <button type="button" class="submit-btn" (click)="nextStep()">Next</button>
 
-        } @if(currentStep === 2){
+        } @if(currentStep() === 2){
         <div class="step-section">
           @if(isDoctor()){
           <!-- Specialization -->
@@ -336,7 +336,7 @@
           <button type="button" class="submit-btn" (click)="nextStep()">Next</button>
         </div>
 
-        } @if(currentStep === 3){
+        } @if(currentStep() === 3){
         <div class="step-section">
           <!-- Password -->
 
@@ -399,8 +399,8 @@
         <div class="btn-row">
           <button type="button" class="back-btn" (click)="prevStep()">Back</button>
 
-          <button type="submit" class="submit-btn" [disabled]="isSubmitting">
-            @if(isSubmitting){ Registering... } @else { Register }
+          <button type="submit" class="submit-btn" [disabled]="isSubmitting()">
+            @if(isSubmitting()){ Registering... } @else { Register }
           </button>
         </div>
         }

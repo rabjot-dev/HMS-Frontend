@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppointmentService } from '../../../core/services/appointment';
 import { NodeService } from '../../../core/services/node';
@@ -12,14 +12,12 @@ import { NodeService } from '../../../core/services/node';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppointmentRequestsComponent implements OnInit {
-  appointments: any[] = [];
-
-  loading = false;
+  readonly appointments = signal<any[]>([]);
+  readonly loading = signal(false);
 
   constructor(
     private readonly appointmentService: AppointmentService,
-    public readonly nodeService: NodeService,
-    private readonly cdr: ChangeDetectorRef
+    public readonly nodeService: NodeService
   ) {}
 
   ngOnInit(): void {
@@ -27,17 +25,15 @@ export class AppointmentRequestsComponent implements OnInit {
   }
 
   loadPendingAppointments(): void {
-    this.loading = true;
+    this.loading.set(true);
 
     this.appointmentService.getPendingAppointments().subscribe({
       next: (response) => {
-        this.appointments = response.data;
-
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.appointments.set(response.data);
+        this.loading.set(false);
       },
       error: () => {
-        this.loading = false;
+        this.loading.set(false);
       }
     });
   }

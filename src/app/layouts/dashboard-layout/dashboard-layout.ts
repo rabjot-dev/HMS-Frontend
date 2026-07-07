@@ -1,4 +1,4 @@
-import { Component, HostListener, ElementRef, ChangeDetectorRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, HostListener, ElementRef, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { NodeService } from '../../core/services/node';
 import { AuthService } from '../../core/services/auth';
@@ -14,7 +14,7 @@ import { Sidebar } from '../../shared/components/sidebar/sidebar';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardLayout implements OnInit {
-  isProfileOpen = false;
+  readonly isProfileOpen = signal(false);
 
   constructor(
     public readonly nodeService: NodeService,
@@ -22,7 +22,6 @@ export class DashboardLayout implements OnInit {
     private readonly tokenService: TokenService,
     private readonly router: Router,
     private readonly toastService: ToastService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly elementRef: ElementRef
   ) {}
 
@@ -44,7 +43,7 @@ export class DashboardLayout implements OnInit {
 
   // Toggle profile dropdown
   toggleProfile(): void {
-    this.isProfileOpen = !this.isProfileOpen;
+    this.isProfileOpen.update(v => !v);
   }
 
   // Close dropdown when clicked outside
@@ -53,7 +52,7 @@ export class DashboardLayout implements OnInit {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
 
     if (!clickedInside) {
-      this.isProfileOpen = false;
+      this.isProfileOpen.set(false);
     }
   }
 
@@ -71,7 +70,5 @@ export class DashboardLayout implements OnInit {
     localStorage.removeItem('loginId');
 
     this.router.navigate(['/login']);
-
-    this.cdr.detectChanges();
   }
 }

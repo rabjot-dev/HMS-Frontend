@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ChangeDetectionStrategy, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AppointmentService } from '../../../core/services/appointment';
@@ -15,16 +15,14 @@ import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loa
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DoctorQueue {
-  appointments: any[] = [];
+  readonly appointments = signal<any[]>([]);
+  readonly isLoading = signal(false);
 
-  isLoading = false;
-
-  doctorEmployeeId = '';
+  private doctorEmployeeId = '';
 
   constructor(
     private readonly appointmentService: AppointmentService,
     public authService: AuthService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toast: ToastService
   ) {
     effect(() => {
@@ -40,21 +38,20 @@ export class DoctorQueue {
 
   // Fetch doctor's appointment queue
   loadQueue(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     this.appointmentService.getDoctorQueue(this.doctorEmployeeId).subscribe({
       next: (response) => {
         console.log(response);
 
-        this.appointments = response.data;
+        this.appointments.set(response.data);
 
-        this.isLoading = false;
-        this.cdr.detectChanges();
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.log(error);
 
-        this.isLoading = false;
+        this.isLoading.set(false);
       }
     });
   }

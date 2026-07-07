@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -26,54 +26,49 @@ import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loa
 })
 export class HealthRecordDetails implements OnInit {
   labReportForm!: FormGroup;
-
   medicalDocumentForm!: FormGroup;
 
-  editingLabReportId: string | null = null;
+  readonly editingLabReportId = signal<string | null>(null);
+  readonly editingMedicalDocumentId = signal<string | null>(null);
+  readonly patient = signal<any>(null);
+  readonly consultations = signal<any[]>([]);
 
-  editingMedicalDocumentId: string | null = null;
-  patient: any;
-
-  consultations: any[] = [];
-
+  // expandedTimeline is a cache/map — left as plain property
   expandedTimeline: Record<string, boolean> = {};
 
-  isLoading = true;
+  readonly isLoading = signal(true);
+  readonly showLabReportModal = signal(false);
+  readonly showMedicalDocumentModal = signal(false);
 
-  showLabReportModal = false;
-
-  showMedicalDocumentModal = false;
   selectedLabFile: File | null = null;
   labFileError = '';
-  toastMessage = '';
-  toastType: 'success' | 'error' = 'success';
-  showToast = false;
-
   selectedMedicalFile: File | null = null;
   medicalFileError = '';
-  isUploadingLabReport = false;
 
-  isUploadingDocument = false;
-  isDownloadingRecord = false;
-  timelinePage = 1;
-  labPage = 1;
-  documentPage = 1;
+  readonly isUploadingLabReport = signal(false);
+  readonly isUploadingDocument = signal(false);
+  readonly isDownloadingRecord = signal(false);
+
+  readonly timelinePage = signal(1);
+  readonly labPage = signal(1);
+  readonly documentPage = signal(1);
 
   readonly pageSize = 5;
   readonly maxUploadSizeBytes = 5 * 1024 * 1024;
   readonly maxUploadSizeLabel = '5 MB';
 
-  timelineMeta: any = {};
-  labMeta: any = {};
-  documentMeta: any = {};
+  readonly timelineMeta = signal<any>({});
+  readonly labMeta = signal<any>({});
+  readonly documentMeta = signal<any>({});
+
   readonly todayDate = this.formatDateInputValue(new Date());
   readonly canDeleteHealthRecordDocuments = ['SUPER_ADMIN', 'ADMIN'].includes(localStorage.getItem('role') || '');
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder,
     private readonly healthRecordService: HealthRecordService,
     private readonly consultationService: ConsultationService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toast: ToastService,
     private readonly confirmDialog: ConfirmDialogService
   ) {}
@@ -128,48 +123,42 @@ export class HealthRecordDetails implements OnInit {
 
     return `${year}-${month}-${day}`;
   }
+
   loadHealthRecord(patientId: string, showPageLoader = true): void {
     if (showPageLoader) {
-      this.isLoading = true;
+      this.isLoading.set(true);
     }
 
     const params = {
-      timelinePage: this.timelinePage,
-      labPage: this.labPage,
-      documentPage: this.documentPage,
+      timelinePage: this.timelinePage(),
+      labPage: this.labPage(),
+      documentPage: this.documentPage(),
       limit: this.pageSize
     };
 
     this.healthRecordService.getHealthRecordDetails(patientId, params).subscribe({
       next: (response) => {
-        this.patient = response.data.patient;
+        const patientData = response.data.patient;
+        patientData.labReports = response.data.labReports ?? [];
+        patientData.medicalDocuments = response.data.medicalDocuments ?? [];
 
-        this.consultations = response.data.consultations ?? [];
+        this.patient.set(patientData);
+        this.consultations.set(response.data.consultations ?? []);
 
-        this.patient.labReports = response.data.labReports ?? [];
-
-        this.patient.medicalDocuments = response.data.medicalDocuments ?? [];
-
-        this.timelineMeta = response.data.meta.consultations;
-
-        this.labMeta = response.data.meta.labReports;
-
-        this.documentMeta = response.data.meta.medicalDocuments;
+        this.timelineMeta.set(response.data.meta.consultations);
+        this.labMeta.set(response.data.meta.labReports);
+        this.documentMeta.set(response.data.meta.medicalDocuments);
 
         if (this.correctEmptyPagesAfterLoad()) {
           return;
         }
 
-        this.isLoading = false;
-
-        this.cdr.markForCheck();
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.error(error);
 
-        this.isLoading = false;
-
-        this.cdr.markForCheck();
+        this.isLoading.set(false);
       }
     });
   }
@@ -180,46 +169,48 @@ export class HealthRecordDetails implements OnInit {
 
   /* Lab Report Modal */
   openLabModal(): void {
-    this.editingLabReportId = null;
+    this.editingLabReportId.set(null);
 
     this.labReportForm.reset();
 
     this.selectedLabFile = null;
     this.labFileError = '';
 
-    this.showLabReportModal = true;
+    this.showLabReportModal.set(true);
   }
+
   onTimelinePageChange(page: number): void {
-    if (page < 1 || page > this.timelineMeta?.totalPages) {
+    if (page < 1 || page > this.timelineMeta()?.totalPages) {
       return;
     }
 
-    this.timelinePage = page;
+    this.timelinePage.set(page);
 
-    this.loadHealthRecord(this.patient._id, false);
+    this.loadHealthRecord(this.patient()._id, false);
   }
 
   onLabPageChange(page: number): void {
-    if (page < 1 || page > this.labMeta?.totalPages) {
+    if (page < 1 || page > this.labMeta()?.totalPages) {
       return;
     }
 
-    this.labPage = page;
+    this.labPage.set(page);
 
-    this.loadHealthRecord(this.patient._id, false);
+    this.loadHealthRecord(this.patient()._id, false);
   }
 
   onDocumentPageChange(page: number): void {
-    if (page < 1 || page > this.documentMeta?.totalPages) {
+    if (page < 1 || page > this.documentMeta()?.totalPages) {
       return;
     }
 
-    this.documentPage = page;
+    this.documentPage.set(page);
 
-    this.loadHealthRecord(this.patient._id, false);
+    this.loadHealthRecord(this.patient()._id, false);
   }
+
   editLabReport(report: any): void {
-    this.editingLabReportId = report._id;
+    this.editingLabReportId.set(report._id);
 
     this.labReportForm.patchValue({
       title: report.title,
@@ -233,8 +224,9 @@ export class HealthRecordDetails implements OnInit {
     this.selectedLabFile = null;
     this.labFileError = '';
 
-    this.showLabReportModal = true;
+    this.showLabReportModal.set(true);
   }
+
   async deleteLabReport(reportId: string): Promise<void> {
     const confirmed = await this.confirmDialog.confirm({
       title: 'Delete lab report?',
@@ -247,13 +239,13 @@ export class HealthRecordDetails implements OnInit {
       return;
     }
 
-    this.healthRecordService.deleteLabReport(this.patient._id, reportId).subscribe({
+    this.healthRecordService.deleteLabReport(this.patient()._id, reportId).subscribe({
       next: () => {
         this.toast.success('Lab report deleted successfully');
 
-        this.labPage = this.getPageAfterDelete(this.labMeta);
+        this.labPage.set(this.getPageAfterDelete(this.labMeta()));
 
-        this.loadHealthRecord(this.patient._id, false);
+        this.loadHealthRecord(this.patient()._id, false);
       },
       error: (error) => {
         console.error(error);
@@ -264,23 +256,23 @@ export class HealthRecordDetails implements OnInit {
   }
 
   closeLabModal(): void {
-    this.showLabReportModal = false;
+    this.showLabReportModal.set(false);
 
     this.labReportForm.reset();
 
     this.selectedLabFile = null;
     this.labFileError = '';
   }
+
   saveLabReport(): void {
     this.labFileError = this.getFileValidationError(
       this.selectedLabFile,
-      !this.editingLabReportId,
+      !this.editingLabReportId(),
       'Report file is required'
     );
 
     if (this.labReportForm.invalid || this.labFileError) {
       this.labReportForm.markAllAsTouched();
-      this.cdr.markForCheck();
       return;
     }
 
@@ -288,67 +280,64 @@ export class HealthRecordDetails implements OnInit {
     const value = this.labReportForm.value;
 
     formData.append('title', value.title);
-
     formData.append('reportType', value.reportType);
-
     formData.append('reportDate', value.reportDate);
-
     formData.append('labName', value.labName || '');
-
     formData.append('doctorName', value.doctorName || '');
-
     formData.append('notes', value.notes || '');
 
     if (this.selectedLabFile) {
       formData.append('document', this.selectedLabFile);
     }
 
-    this.isUploadingLabReport = true;
-    const request$ = this.editingLabReportId
-      ? this.healthRecordService.updateLabReport(this.patient._id, this.editingLabReportId, formData)
-      : this.healthRecordService.addLabReport(this.patient._id, formData);
+    this.isUploadingLabReport.set(true);
+
+    const currentEditingId = this.editingLabReportId();
+    const request$ = currentEditingId
+      ? this.healthRecordService.updateLabReport(this.patient()._id, currentEditingId, formData)
+      : this.healthRecordService.addLabReport(this.patient()._id, formData);
 
     request$.subscribe({
-      next: (response) => {
+      next: () => {
         this.toast.success(
-          this.editingLabReportId ? 'Lab report updated successfully' : 'Lab report added successfully'
+          currentEditingId ? 'Lab report updated successfully' : 'Lab report added successfully'
         );
 
         this.closeLabModal();
 
-        this.isUploadingLabReport = false;
+        this.isUploadingLabReport.set(false);
 
-        this.loadHealthRecord(this.patient._id);
+        this.loadHealthRecord(this.patient()._id);
       },
       error: (error) => {
         console.error(error);
 
-        this.isUploadingLabReport = false;
-
-        this.cdr.markForCheck();
+        this.isUploadingLabReport.set(false);
 
         this.toast.error(
           this.getHttpErrorMessage(
             error,
-            this.editingLabReportId ? 'Unable to update lab report' : 'Unable to add lab report'
+            currentEditingId ? 'Unable to update lab report' : 'Unable to add lab report'
           )
         );
       }
     });
   }
+
   /* Medical Document Modal */
   openDocumentModal(): void {
-    this.editingMedicalDocumentId = null;
+    this.editingMedicalDocumentId.set(null);
 
     this.medicalDocumentForm.reset();
 
     this.selectedMedicalFile = null;
     this.medicalFileError = '';
 
-    this.showMedicalDocumentModal = true;
+    this.showMedicalDocumentModal.set(true);
   }
+
   editMedicalDocument(document: any): void {
-    this.editingMedicalDocumentId = document._id;
+    this.editingMedicalDocumentId.set(document._id);
 
     this.medicalDocumentForm.patchValue({
       title: document.title,
@@ -362,8 +351,9 @@ export class HealthRecordDetails implements OnInit {
     this.selectedMedicalFile = null;
     this.medicalFileError = '';
 
-    this.showMedicalDocumentModal = true;
+    this.showMedicalDocumentModal.set(true);
   }
+
   async deleteMedicalDocument(documentId: string): Promise<void> {
     const confirmed = await this.confirmDialog.confirm({
       title: 'Delete medical document?',
@@ -376,13 +366,13 @@ export class HealthRecordDetails implements OnInit {
       return;
     }
 
-    this.healthRecordService.deleteMedicalDocument(this.patient._id, documentId).subscribe({
+    this.healthRecordService.deleteMedicalDocument(this.patient()._id, documentId).subscribe({
       next: () => {
         this.toast.success('Medical document deleted successfully');
 
-        this.documentPage = this.getPageAfterDelete(this.documentMeta);
+        this.documentPage.set(this.getPageAfterDelete(this.documentMeta()));
 
-        this.loadHealthRecord(this.patient._id, false);
+        this.loadHealthRecord(this.patient()._id, false);
       },
       error: (error) => {
         console.error(error);
@@ -393,66 +383,60 @@ export class HealthRecordDetails implements OnInit {
   }
 
   closeDocumentModal(): void {
-    this.showMedicalDocumentModal = false;
+    this.showMedicalDocumentModal.set(false);
 
     this.medicalDocumentForm.reset();
 
     this.selectedMedicalFile = null;
     this.medicalFileError = '';
   }
+
   saveMedicalDocument(): void {
     this.medicalFileError = this.getFileValidationError(
       this.selectedMedicalFile,
-      !this.editingMedicalDocumentId,
+      !this.editingMedicalDocumentId(),
       'Document file is required'
     );
 
     if (this.medicalDocumentForm.invalid || this.medicalFileError) {
       this.medicalDocumentForm.markAllAsTouched();
-
-      this.cdr.markForCheck();
       return;
     }
 
     const formData = new FormData();
-
     const value = this.medicalDocumentForm.value;
 
     formData.append('title', value.title);
-
     formData.append('documentType', value.documentType);
-
     formData.append('hospitalName', value.hospitalName || '');
-
     formData.append('doctorName', value.doctorName || '');
-
     formData.append('recordDate', value.recordDate);
-
     formData.append('notes', value.notes || '');
 
     if (this.selectedMedicalFile) {
       formData.append('document', this.selectedMedicalFile);
     }
 
-    this.isUploadingDocument = true;
+    this.isUploadingDocument.set(true);
 
-    const request$ = this.editingMedicalDocumentId
-      ? this.healthRecordService.updateMedicalDocument(this.patient._id, this.editingMedicalDocumentId, formData)
-      : this.healthRecordService.addMedicalDocument(this.patient._id, formData);
+    const currentEditingId = this.editingMedicalDocumentId();
+    const request$ = currentEditingId
+      ? this.healthRecordService.updateMedicalDocument(this.patient()._id, currentEditingId, formData)
+      : this.healthRecordService.addMedicalDocument(this.patient()._id, formData);
 
     request$.subscribe({
-      next: (response) => {
+      next: () => {
         this.toast.success(
-          this.editingMedicalDocumentId
+          currentEditingId
             ? 'Medical document updated successfully'
             : 'Medical document added successfully'
         );
 
         this.closeDocumentModal();
 
-        this.isUploadingDocument = false;
+        this.isUploadingDocument.set(false);
 
-        this.loadHealthRecord(this.patient._id);
+        this.loadHealthRecord(this.patient()._id);
       },
       error: (error) => {
         console.error(error);
@@ -460,15 +444,15 @@ export class HealthRecordDetails implements OnInit {
         this.toast.error(
           this.getHttpErrorMessage(
             error,
-            this.editingMedicalDocumentId ? 'Unable to update document' : 'Unable to add document'
+            currentEditingId ? 'Unable to update document' : 'Unable to add document'
           )
         );
 
-        this.isUploadingDocument = false;
-        this.cdr.markForCheck();
+        this.isUploadingDocument.set(false);
       }
     });
   }
+
   viewFile(url: string): void {
     window.open(`http://localhost:5000${url}`, '_blank');
   }
@@ -482,6 +466,7 @@ export class HealthRecordDetails implements OnInit {
 
     link.click();
   }
+
   downloadPdf(consultationId: string): void {
     this.consultationService.downloadPrescriptionPdf(consultationId).subscribe({
       next: (response: Blob) => {
@@ -496,14 +481,14 @@ export class HealthRecordDetails implements OnInit {
   }
 
   downloadCompleteRecord(): void {
-    if (!this.patient?._id || this.isDownloadingRecord) {
+    if (!this.patient()?._id || this.isDownloadingRecord()) {
       return;
     }
 
-    this.isDownloadingRecord = true;
+    this.isDownloadingRecord.set(true);
 
     this.healthRecordService
-      .getHealthRecordDetails(this.patient._id, {
+      .getHealthRecordDetails(this.patient()._id, {
         timelinePage: 1,
         labPage: 1,
         documentPage: 1,
@@ -515,14 +500,12 @@ export class HealthRecordDetails implements OnInit {
           this.printCompleteHealthRecord(record);
 
           this.toast.success('Complete health record opened for PDF printing');
-          this.isDownloadingRecord = false;
-          this.cdr.markForCheck();
+          this.isDownloadingRecord.set(false);
         },
         error: (error) => {
           console.error(error);
           this.toast.error('Unable to download complete health record');
-          this.isDownloadingRecord = false;
-          this.cdr.markForCheck();
+          this.isDownloadingRecord.set(false);
         }
       });
   }
@@ -739,13 +722,14 @@ export class HealthRecordDetails implements OnInit {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
   }
+
   onLabFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     this.selectedLabFile = input.files?.[0] ?? null;
     this.labFileError = this.getFileValidationError(
       this.selectedLabFile,
-      !this.editingLabReportId,
+      !this.editingLabReportId(),
       'Report file is required'
     );
 
@@ -754,13 +738,14 @@ export class HealthRecordDetails implements OnInit {
       input.value = '';
     }
   }
+
   onMedicalFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     this.selectedMedicalFile = input.files?.[0] ?? null;
     this.medicalFileError = this.getFileValidationError(
       this.selectedMedicalFile,
-      !this.editingMedicalDocumentId,
+      !this.editingMedicalDocumentId(),
       'Document file is required'
     );
 
@@ -794,26 +779,29 @@ export class HealthRecordDetails implements OnInit {
   }
 
   private correctEmptyPagesAfterLoad(): boolean {
-    if (this.timelinePage > 1 && !this.consultations.length) {
-      this.timelinePage = Math.max(this.timelineMeta?.totalPages || 1, 1);
-      this.loadHealthRecord(this.patient._id, false);
+    const patientData = this.patient();
+
+    if (this.timelinePage() > 1 && !this.consultations().length) {
+      this.timelinePage.set(Math.max(this.timelineMeta()?.totalPages || 1, 1));
+      this.loadHealthRecord(patientData._id, false);
       return true;
     }
 
-    if (this.labPage > 1 && !this.patient.labReports?.length) {
-      this.labPage = Math.max(this.labMeta?.totalPages || 1, 1);
-      this.loadHealthRecord(this.patient._id, false);
+    if (this.labPage() > 1 && !patientData.labReports?.length) {
+      this.labPage.set(Math.max(this.labMeta()?.totalPages || 1, 1));
+      this.loadHealthRecord(patientData._id, false);
       return true;
     }
 
-    if (this.documentPage > 1 && !this.patient.medicalDocuments?.length) {
-      this.documentPage = Math.max(this.documentMeta?.totalPages || 1, 1);
-      this.loadHealthRecord(this.patient._id, false);
+    if (this.documentPage() > 1 && !patientData.medicalDocuments?.length) {
+      this.documentPage.set(Math.max(this.documentMeta()?.totalPages || 1, 1));
+      this.loadHealthRecord(patientData._id, false);
       return true;
     }
 
     return false;
   }
+
   printPage(): void {
     globalThis.print();
   }

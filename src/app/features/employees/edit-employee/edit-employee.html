@@ -114,18 +114,18 @@
       </div>
     </div>
 
-    @if(errorMessage){
-    <div class="error-text">{{ errorMessage }}</div>
+    @if(errorMessage()){
+    <div class="error-text">{{ errorMessage() }}</div>
 
-    } @if(successMessage){
-    <div class="success-box">{{ successMessage }}</div>
+    } @if(successMessage()){
+    <div class="success-box">{{ successMessage() }}</div>
     }
 
     <div class="button-group">
       <button type="button" class="cancel-btn" routerLink="/employees">Cancel</button>
 
-      <button type="submit" class="update-btn" [disabled]="isSubmitting">
-        @if(isSubmitting){ Updating... } @else{ Update Employee }
+      <button type="submit" class="update-btn" [disabled]="isSubmitting()">
+        @if(isSubmitting()){ Updating... } @else{ Update Employee }
       </button>
     </div>
   </form>

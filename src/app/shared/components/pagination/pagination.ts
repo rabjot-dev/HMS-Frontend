@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,34 +10,17 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginationComponent {
-  @Input()
-  page = 1;
+  readonly page = input(1);
+  readonly totalPages = input(1);
+  readonly totalRecords = input(0);
+  readonly limit = input(10);
+  readonly showPageSize = input(true);
+  readonly cursorMode = input(false);
+  readonly hasNextPage = input(false);
 
-  @Input()
-  totalPages = 1;
-
-  @Input()
-  totalRecords = 0;
-
-  @Input()
-  limit = 10;
-  @Input()
-  showPageSize = true;
-
-  @Input()
-  cursorMode = false;
-
-  @Input()
-  hasNextPage = false;
-
-  @Output()
-  previous = new EventEmitter<void>();
-
-  @Output()
-  next = new EventEmitter<void>();
-
-  @Output()
-  pageSizeChange = new EventEmitter<number>();
+  readonly previous = output<void>();
+  readonly next = output<void>();
+  readonly pageSizeChange = output<number>();
 
   changePageSize(event: Event): void {
     const select = event.target as HTMLSelectElement;

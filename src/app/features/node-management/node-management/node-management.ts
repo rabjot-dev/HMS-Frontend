@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NodeService } from '../../../core/services/node';
@@ -34,10 +34,10 @@ type NodeDraft = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NodeManagement implements OnInit {
-  nodes: any[] = [];
-  selectedNodeId = '';
-  isLoading = false;
-  isSaving = false;
+  readonly nodes = signal<any[]>([]);
+  readonly selectedNodeId = signal('');
+  readonly isLoading = signal(false);
+  readonly isSaving = signal(false);
 
   readonly roles = [
     'SUPER_ADMIN',
@@ -58,8 +58,7 @@ export class NodeManagement implements OnInit {
   constructor(
     private readonly nodeService: NodeService,
     private readonly toast: ToastService,
-    private readonly confirmDialog: ConfirmDialogService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly confirmDialog: ConfirmDialogService
   ) {}
 
   ngOnInit(): void {
@@ -67,37 +66,35 @@ export class NodeManagement implements OnInit {
   }
 
   get flatNodes(): any[] {
-    return this.nodes.flatMap((node) => [node, ...(node.children || [])]);
+    return this.nodes().flatMap((node) => [node, ...(node.children || [])]);
   }
 
   get parentOptions(): any[] {
-    return this.nodes.filter((node) => node._id !== this.form._id);
+    return this.nodes().filter((node) => node._id !== this.form._id);
   }
 
   loadNodes(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     this.nodeService.getManagementNodes().subscribe({
       next: (response) => {
-        this.nodes = response.data || [];
-        this.isLoading = false;
-        this.cdr.markForCheck();
+        this.nodes.set(response.data || []);
+        this.isLoading.set(false);
       },
       error: (error) => {
         this.toast.error(error?.error?.message || 'Unable to load nodes');
-        this.isLoading = false;
-        this.cdr.markForCheck();
+        this.isLoading.set(false);
       }
     });
   }
 
   startCreate(): void {
-    this.selectedNodeId = '';
+    this.selectedNodeId.set('');
     this.form = this.getBlankForm();
   }
 
   editNode(node: any): void {
-    this.selectedNodeId = node._id;
+    this.selectedNodeId.set(node._id);
     this.form = {
       _id: node._id,
       name: node.name || '',
@@ -136,11 +133,11 @@ export class NodeManagement implements OnInit {
       return;
     }
 
-    if (this.isSaving) {
+    if (this.isSaving()) {
       return;
     }
 
-    this.isSaving = true;
+    this.isSaving.set(true);
 
     const payload = {
       name: this.form.name.trim(),
@@ -166,15 +163,14 @@ export class NodeManagement implements OnInit {
     request$.subscribe({
       next: () => {
         this.toast.success(this.form._id ? 'Node updated successfully' : 'Node created successfully');
-        this.isSaving = false;
+        this.isSaving.set(false);
         this.startCreate();
         this.loadNodes();
         this.nodeService.loadNodes();
       },
       error: (error) => {
         this.toast.error(error?.error?.message || 'Unable to save node');
-        this.isSaving = false;
-        this.cdr.markForCheck();
+        this.isSaving.set(false);
       }
     });
   }

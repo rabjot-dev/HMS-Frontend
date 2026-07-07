@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
@@ -13,14 +13,12 @@ import { InputDialogService } from '../../../core/services/input-dialog';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PendingEmployees implements OnInit {
-  pendingEmployees: any[] = [];
-  generatedPassword = '';
+  readonly pendingEmployees = signal<any[]>([]);
 
   constructor(
     private readonly employeeService: EmployeeService,
     private readonly toastService: ToastService,
     public readonly nodeService: NodeService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly inputDialog: InputDialogService
   ) {}
 
@@ -35,9 +33,7 @@ export class PendingEmployees implements OnInit {
       next: (response: any) => {
         console.log(response);
 
-        this.pendingEmployees = response.data;
-
-        this.cdr.detectChanges();
+        this.pendingEmployees.set(response.data);
       },
       error: (error) => {
         console.log(error);

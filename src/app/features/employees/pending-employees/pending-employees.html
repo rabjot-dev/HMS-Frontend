@@ -10,12 +10,12 @@
       <p class="page-subtitle">Review and approve employee registration requests.</p>
     </div>
 
-    <div class="pending-count">{{ pendingEmployees.length }} Pending</div>
+    <div class="pending-count">{{ pendingEmployees().length }} Pending</div>
   </div>
 
   <!-- Empty State -->
 
-  @if( pendingEmployees.length === 0 ){
+  @if( pendingEmployees().length === 0 ){
   <div class="empty-state glass-card">
     <div class="empty-icon">📄</div>
 
@@ -28,7 +28,7 @@
   <!-- Employee Grid -->
 
   <div class="employee-grid">
-    @for( employee of pendingEmployees; track employee._id ){
+    @for( employee of pendingEmployees(); track employee._id ){
     <div class="employee-card glass-card">
       <!-- Top -->
 

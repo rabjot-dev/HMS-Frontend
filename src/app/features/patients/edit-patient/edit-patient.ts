@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,10 +14,10 @@ import { ToastService } from '../../../core/services/toast';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditPatient implements OnInit {
-  patientId = '';
-  isSubmitting = false;
+  private patientId = '';
+  readonly isSubmitting = signal(false);
+  readonly doctors = signal<any[]>([]);
 
-  doctors: any[] = [];
   patientForm: any;
 
   constructor(
@@ -25,7 +25,6 @@ export class EditPatient implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly patientService: PatientService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toast: ToastService
   ) {
     this.patientForm = this.fb.group({
@@ -55,12 +54,10 @@ export class EditPatient implements OnInit {
   loadDoctors(): void {
     this.patientService.getDoctors().subscribe({
       next: (response) => {
-        this.doctors = response.data;
-        this.cdr.markForCheck();
+        this.doctors.set(response.data);
       },
       error: (error) => {
         console.log(error);
-        this.cdr.markForCheck();
       }
     });
   }
@@ -86,12 +83,9 @@ export class EditPatient implements OnInit {
           patientType: patient.patientType,
           assignedDoctor: patient?.assignedDoctor?._id
         });
-
-        this.cdr.markForCheck();
       },
       error: (error) => {
         console.log(error);
-        this.cdr.markForCheck();
       }
     });
   }
@@ -102,8 +96,7 @@ export class EditPatient implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
-    this.cdr.markForCheck();
+    this.isSubmitting.set(true);
 
     this.patientService.updatePatient(this.patientId, this.patientForm.value).subscribe({
       next: (response) => {
@@ -111,8 +104,7 @@ export class EditPatient implements OnInit {
 
         this.toast.success('Patient updated successfully');
 
-        this.isSubmitting = false;
-        this.cdr.markForCheck();
+        this.isSubmitting.set(false);
 
         this.router.navigate(['/patients']);
       },
@@ -120,8 +112,7 @@ export class EditPatient implements OnInit {
         console.log(error);
 
         this.toast.error(error?.error?.message || 'Unable to update patient');
-        this.isSubmitting = false;
-        this.cdr.markForCheck();
+        this.isSubmitting.set(false);
       }
     });
   }

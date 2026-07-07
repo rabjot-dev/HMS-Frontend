@@ -10,7 +10,7 @@
       <p class="section-subtitle">Complete medical history and consultation records of patients.</p>
     </div>
 
-    <div class="record-count">Total: {{ meta.total || 0 }}</div>
+    <div class="record-count">Total: {{ meta().total || 0 }}</div>
   </div>
 
   <!-- Search -->
@@ -19,7 +19,8 @@
     <input
       type="text"
       placeholder="Search by patient name or UHID..."
-      [(ngModel)]="search"
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event)"
       (keyup.enter)="onSearch()"
     />
 
@@ -32,13 +33,13 @@
 
   <!-- Loading -->
 
-  @if (isLoading) {
+  @if (isLoading()) {
   <app-skeleton-loader [rows]="5"></app-skeleton-loader>
 
   } @else {
   <!-- Empty State -->
 
-  @if (healthRecords.length === 0) {
+  @if (healthRecords().length === 0) {
   <div class="empty-state">
     <div class="empty-icon">🩺</div>
 
@@ -64,7 +65,7 @@
       </thead>
 
       <tbody>
-        @for ( record of healthRecords; track record.patient._id ) {
+        @for ( record of healthRecords(); track record.patient._id ) {
         <tr>
           <!-- Patient -->
 
@@ -126,19 +127,13 @@
   <!-- Pagination -->
 
   <app-pagination
-    [page]="page"
-    [totalPages]="
-      page + (meta.hasNextPage ? 1 : 0)
-    "
-    [totalRecords]="
-      meta.total || 0
-    "
-    [limit]="limit"
+    [page]="page()"
+    [totalPages]="page() + (meta().hasNextPage ? 1 : 0)"
+    [totalRecords]="meta().total || 0"
+    [limit]="limit()"
     [cursorMode]="true"
-    [hasNextPage]="meta.hasNextPage"
-    (previous)="
-      previousPage()
-    "
+    [hasNextPage]="meta().hasNextPage"
+    (previous)="previousPage()"
     (next)="nextPage()"
     (pageSizeChange)="onPageSizeChange($event)"
   ></app-pagination>

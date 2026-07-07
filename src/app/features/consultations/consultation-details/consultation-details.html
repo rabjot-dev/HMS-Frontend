@@ -1,5 +1,5 @@
 <div class="consultation-details-page">
-  @if(isLoading){
+  @if(isLoading()){
   <div class="loading-card">Loading Consultation...</div>
 
   } @else {
@@ -37,22 +37,22 @@
 
           <p>
             <strong>Name:</strong>
-            {{ consultation?.patientId?.firstName }} {{ consultation?.patientId?.lastName }}
+            {{ consultation()?.patientId?.firstName }} {{ consultation()?.patientId?.lastName }}
           </p>
 
           <p>
             <strong>Gender:</strong>
-            {{ consultation?.patientId?.gender }}
+            {{ consultation()?.patientId?.gender }}
           </p>
 
           <p>
             <strong>Blood Group:</strong>
-            {{ consultation?.patientId?.bloodGroup || 'N/A' }}
+            {{ consultation()?.patientId?.bloodGroup || 'N/A' }}
           </p>
 
           <p>
             <strong>Phone:</strong>
-            {{ consultation?.patientId?.countryCode }} {{ consultation?.patientId?.phone }}
+            {{ consultation()?.patientId?.countryCode }} {{ consultation()?.patientId?.phone }}
           </p>
         </div>
 
@@ -63,22 +63,22 @@
 
           <p>
             <strong>Doctor:</strong>
-            Dr. {{ consultation?.doctorEmployeeId?.name }}
+            Dr. {{ consultation()?.doctorEmployeeId?.name }}
           </p>
 
           <p>
             <strong>Department:</strong>
-            {{ consultation?.doctorEmployeeId?.department }}
+            {{ consultation()?.doctorEmployeeId?.department }}
           </p>
 
           <p>
             <strong>Specialization:</strong>
-            {{ consultation?.doctorEmployeeId?.specialization || 'General' }}
+            {{ consultation()?.doctorEmployeeId?.specialization || 'General' }}
           </p>
 
           <p>
             <strong>Consultation Date:</strong>
-            {{ consultation?.createdAt | date:'medium' }}
+            {{ consultation()?.createdAt | date:'medium' }}
           </p>
         </div>
       </div>
@@ -88,7 +88,7 @@
       <div class="section-box">
         <h2>Symptoms</h2>
 
-        <p>{{ consultation?.symptoms || 'No symptoms added' }}</p>
+        <p>{{ consultation()?.symptoms || 'No symptoms added' }}</p>
       </div>
 
       <!-- Diagnosis -->
@@ -96,7 +96,7 @@
       <div class="section-box">
         <h2>Diagnosis</h2>
 
-        <p>{{ consultation?.diagnosis || 'No diagnosis added' }}</p>
+        <p>{{ consultation()?.diagnosis || 'No diagnosis added' }}</p>
       </div>
 
       <!-- Vitals -->
@@ -107,22 +107,22 @@
         <div class="vitals-grid">
           <div class="vital-card">
             <span>Blood Pressure</span>
-            <h3>{{ consultation?.vitals?.bloodPressure || 'N/A' }}</h3>
+            <h3>{{ consultation()?.vitals?.bloodPressure || 'N/A' }}</h3>
           </div>
 
           <div class="vital-card">
             <span>Temperature</span>
-            <h3>{{ consultation?.vitals?.temperature || 'N/A' }}</h3>
+            <h3>{{ consultation()?.vitals?.temperature || 'N/A' }}</h3>
           </div>
 
           <div class="vital-card">
             <span>Heart Rate</span>
-            <h3>{{ consultation?.vitals?.pulseRate || 'N/A' }}</h3>
+            <h3>{{ consultation()?.vitals?.pulseRate || 'N/A' }}</h3>
           </div>
 
           <div class="vital-card">
             <span>Weight</span>
-            <h3>{{ consultation?.vitals?.weight || 'N/A' }}</h3>
+            <h3>{{ consultation()?.vitals?.weight || 'N/A' }}</h3>
           </div>
         </div>
       </div>
@@ -145,7 +145,7 @@
             </thead>
 
             <tbody>
-              @for(medicine of consultation?.prescriptions; track $index){
+              @for(medicine of consultation()?.prescriptions; track $index){
               <tr>
                 <td>{{ medicine?.medicineName }}</td>
                 <td>{{ medicine?.dosage }}</td>
@@ -164,7 +164,7 @@
       <div class="section-box">
         <h2>Doctor Notes</h2>
 
-        <p>{{ consultation?.doctorNotes || 'No notes added' }}</p>
+        <p>{{ consultation()?.doctorNotes || 'No notes added' }}</p>
       </div>
 
       <!-- Signature -->
@@ -173,7 +173,7 @@
         <div class="signature-section">
           <div class="signature-line"></div>
 
-          <p>Dr. {{ consultation?.doctorEmployeeId?.name }}</p>
+          <p>Dr. {{ consultation()?.doctorEmployeeId?.name }}</p>
 
           <span>Authorized Signature</span>
         </div>

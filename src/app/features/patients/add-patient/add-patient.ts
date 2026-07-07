@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ToastService } from '../../../core/services/toast';
 import { PatientService } from '../../../core/services/patient';
 
@@ -24,21 +24,26 @@ type PostOfficeArea = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddPatient implements OnInit {
-  currentStep = 1;
-  isSubmitting = false;
-  isLoadingStates = false;
-  isLoadingDistricts = false;
-  isLoadingTaluks = false;
-  isLoadingAreas = false;
-  today = new Date().toISOString().split('T')[0];
+  readonly currentStep = signal(1);
+  readonly isSubmitting = signal(false);
+  readonly isLoadingStates = signal(false);
+  readonly isLoadingDistricts = signal(false);
+  readonly isLoadingTaluks = signal(false);
+  readonly isLoadingAreas = signal(false);
+
+  // today, districtCache, talukCache, areaCache stay as plain properties
+  readonly today = new Date().toISOString().split('T')[0];
   patientForm!: FormGroup;
-  states: IndiaState[] = [];
-  districts: string[] = [];
-  taluks: string[] = [];
-  postOfficeAreas: PostOfficeArea[] = [];
-  filteredPostOfficeAreas: PostOfficeArea[] = [];
+
+  readonly states = signal<IndiaState[]>([]);
+  readonly districts = signal<string[]>([]);
+  readonly taluks = signal<string[]>([]);
+  readonly postOfficeAreas = signal<PostOfficeArea[]>([]);
+  readonly filteredPostOfficeAreas = signal<PostOfficeArea[]>([]);
+
   selectedStateId = '';
   selectedPostOfficeIndex = '';
+
   private readonly districtCache = new Map<string, string[]>();
   private readonly talukCache = new Map<string, string[]>();
   private readonly areaCache = new Map<string, PostOfficeArea[]>();
@@ -46,13 +51,12 @@ export class AddPatient implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly toastService: ToastService,
-    private readonly patientService: PatientService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly patientService: PatientService
   ) {
     this.patientForm = this.fb.group({
       // Basic Information
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s.'\-]+$/)]],
+      lastName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s.'\-]+$/)]],
       dateOfBirth: ['', [Validators.required, this.futureDateValidator]],
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
@@ -60,7 +64,7 @@ export class AddPatient implements OnInit {
       // Contact Information
       countryCode: ['+91', Validators.required],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       address: ['', Validators.required],
       city: ['', Validators.required],
       state: ['', Validators.required],
@@ -69,8 +73,8 @@ export class AddPatient implements OnInit {
       pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
       country: ['India'],
       // Emergency Contact
-      emergencyContactName: ['', Validators.required],
-      emergencyContactPhone: ['', Validators.required],
+      emergencyContactName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s.'\-]+$/)]],
+      emergencyContactPhone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       // Medical Information
       medicalHistory: [''],
       allergies: [''],
@@ -86,40 +90,46 @@ export class AddPatient implements OnInit {
       // Hospital Information
       department: [''],
       patientType: ['', Validators.required]
-    });
+    }, { validators: this.lastNameNotSameAsFirstName });
   }
+
+  lastNameNotSameAsFirstName = (group: AbstractControl) => {
+    const first = group.get('firstName')?.value?.trim().toLowerCase();
+    const last = group.get('lastName')?.value?.trim().toLowerCase();
+    if (first && last && first === last) {
+      return { lastNameSameAsFirst: true };
+    }
+    return null;
+  };
 
   ngOnInit(): void {
     this.loadStates();
   }
 
   loadStates(): void {
-    this.isLoadingStates = true;
-    this.cdr.markForCheck();
+    this.isLoadingStates.set(true);
 
     this.patientService.getIndiaStates().subscribe({
       next: (response) => {
-        this.states = response?.data || [];
-        this.isLoadingStates = false;
-        this.cdr.markForCheck();
+        this.states.set(response?.data || []);
+        this.isLoadingStates.set(false);
       },
       error: () => {
-        this.isLoadingStates = false;
+        this.isLoadingStates.set(false);
         this.toastService.show('Unable to load states', 'error');
-        this.cdr.markForCheck();
       }
     });
   }
 
   onStateChange(event: Event): void {
     const stateId = (event.target as HTMLSelectElement).value;
-    const selectedState = this.states.find((state) => state.id === stateId);
+    const selectedState = this.states().find((state) => state.id === stateId);
 
     this.selectedStateId = stateId;
-    this.districts = [];
-    this.taluks = [];
-    this.postOfficeAreas = [];
-    this.filteredPostOfficeAreas = [];
+    this.districts.set([]);
+    this.taluks.set([]);
+    this.postOfficeAreas.set([]);
+    this.filteredPostOfficeAreas.set([]);
     this.selectedPostOfficeIndex = '';
 
     this.patientForm.patchValue({
@@ -134,29 +144,27 @@ export class AddPatient implements OnInit {
       return;
     }
 
-    this.isLoadingDistricts = true;
+    this.isLoadingDistricts.set(true);
 
     const cachedDistricts = this.districtCache.get(stateId);
 
     if (cachedDistricts) {
-      this.districts = cachedDistricts;
-      this.isLoadingDistricts = false;
-      this.cdr.markForCheck();
+      this.districts.set(cachedDistricts);
+      this.isLoadingDistricts.set(false);
 
       return;
     }
 
     this.patientService.getIndiaDistricts(stateId).subscribe({
       next: (response) => {
-        this.districts = response?.data || [];
-        this.districtCache.set(stateId, this.districts);
-        this.isLoadingDistricts = false;
-        this.cdr.markForCheck();
+        const data = response?.data || [];
+        this.districts.set(data);
+        this.districtCache.set(stateId, data);
+        this.isLoadingDistricts.set(false);
       },
       error: () => {
-        this.isLoadingDistricts = false;
+        this.isLoadingDistricts.set(false);
         this.toastService.show('Unable to load districts', 'error');
-        this.cdr.markForCheck();
       }
     });
   }
@@ -165,9 +173,9 @@ export class AddPatient implements OnInit {
     const state = this.patientForm.get('state')?.value;
     const district = this.patientForm.get('city')?.value;
 
-    this.taluks = [];
-    this.postOfficeAreas = [];
-    this.filteredPostOfficeAreas = [];
+    this.taluks.set([]);
+    this.postOfficeAreas.set([]);
+    this.filteredPostOfficeAreas.set([]);
     this.selectedPostOfficeIndex = '';
     this.patientForm.patchValue({
       taluk: '',
@@ -193,7 +201,7 @@ export class AddPatient implements OnInit {
       return;
     }
 
-    this.isLoadingTaluks = true;
+    this.isLoadingTaluks.set(true);
 
     this.patientService.getIndiaTaluks(state, district).subscribe({
       next: (response) => {
@@ -201,23 +209,21 @@ export class AddPatient implements OnInit {
 
         this.talukCache.set(cacheKey, taluks);
         this.applyTaluks(taluks);
-        this.isLoadingTaluks = false;
-        this.cdr.markForCheck();
+        this.isLoadingTaluks.set(false);
       },
       error: () => {
-        this.isLoadingTaluks = false;
+        this.isLoadingTaluks.set(false);
         this.toastService.show('Unable to load taluks', 'error');
-        this.cdr.markForCheck();
       }
     });
   }
 
   private applyTaluks(taluks: string[]): void {
-    this.taluks = taluks;
+    this.taluks.set(taluks);
 
-    if (this.taluks.length === 1) {
+    if (taluks.length === 1) {
       this.patientForm.patchValue({
-        taluk: this.taluks[0]
+        taluk: taluks[0]
       });
 
       this.onTalukChange();
@@ -225,15 +231,14 @@ export class AddPatient implements OnInit {
   }
 
   private loadPostOfficeAreas(state: string, district: string): void {
-    this.isLoadingAreas = true;
+    this.isLoadingAreas.set(true);
 
     const cacheKey = `${state}:${district}`;
     const cachedAreas = this.areaCache.get(cacheKey);
 
     if (cachedAreas) {
       this.applyPostOfficeAreas(cachedAreas);
-      this.isLoadingAreas = false;
-      this.cdr.markForCheck();
+      this.isLoadingAreas.set(false);
 
       return;
     }
@@ -244,28 +249,26 @@ export class AddPatient implements OnInit {
 
         this.areaCache.set(cacheKey, areas);
         this.applyPostOfficeAreas(areas);
-        this.isLoadingAreas = false;
-        this.cdr.markForCheck();
+        this.isLoadingAreas.set(false);
       },
       error: () => {
-        this.isLoadingAreas = false;
+        this.isLoadingAreas.set(false);
         this.toastService.show('Unable to load post offices', 'error');
-        this.cdr.markForCheck();
       }
     });
   }
 
   private applyPostOfficeAreas(areas: PostOfficeArea[]): void {
-    this.postOfficeAreas = areas;
+    this.postOfficeAreas.set(areas);
     this.onTalukChange();
   }
 
   onTalukChange(): void {
     const taluk = this.patientForm.get('taluk')?.value;
 
-    const matchingAreas = this.postOfficeAreas.filter((area) => area.taluk === taluk);
+    const matchingAreas = this.postOfficeAreas().filter((area) => area.taluk === taluk);
 
-    this.filteredPostOfficeAreas = matchingAreas.length > 0 ? matchingAreas : this.postOfficeAreas;
+    this.filteredPostOfficeAreas.set(matchingAreas.length > 0 ? matchingAreas : this.postOfficeAreas());
     this.selectedPostOfficeIndex = '';
 
     this.patientForm.patchValue({
@@ -273,8 +276,9 @@ export class AddPatient implements OnInit {
       pincode: ''
     });
 
-    if (this.filteredPostOfficeAreas.length === 1) {
-      const area = this.filteredPostOfficeAreas[0];
+    const filtered = this.filteredPostOfficeAreas();
+    if (filtered.length === 1) {
+      const area = filtered[0];
 
       this.patientForm.patchValue({
         postOffice: area.name,
@@ -298,7 +302,7 @@ export class AddPatient implements OnInit {
     }
 
     const selectedIndex = Number(this.selectedPostOfficeIndex);
-    const area = this.filteredPostOfficeAreas[selectedIndex];
+    const area = this.filteredPostOfficeAreas()[selectedIndex];
 
     this.patientForm.patchValue({
       postOffice: area?.name || '',
@@ -338,7 +342,7 @@ export class AddPatient implements OnInit {
       4: ['patientType']
     };
 
-    const fieldsToValidate = stepFields[this.currentStep] || [];
+    const fieldsToValidate = stepFields[this.currentStep()] || [];
 
     fieldsToValidate.forEach((field) => {
       this.patientForm.get(field)?.markAsTouched();
@@ -350,15 +354,15 @@ export class AddPatient implements OnInit {
       return;
     }
 
-    if (this.currentStep < 4) {
-      this.currentStep++;
+    if (this.currentStep() < 4) {
+      this.currentStep.update(s => s + 1);
     }
   }
 
   // Go back to previous step
   previousStep(): void {
-    if (this.currentStep > 1) {
-      this.currentStep--;
+    if (this.currentStep() > 1) {
+      this.currentStep.update(s => s - 1);
     }
   }
 
@@ -389,8 +393,7 @@ export class AddPatient implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
-    this.cdr.markForCheck();
+    this.isSubmitting.set(true);
 
     this.patientService.createPatient(this.patientForm.value).subscribe({
       next: (response) => {
@@ -409,15 +412,14 @@ export class AddPatient implements OnInit {
         });
 
         // Reset UI state
-        this.currentStep = 1;
+        this.currentStep.set(1);
         this.selectedStateId = '';
-        this.districts = [];
-        this.taluks = [];
-        this.postOfficeAreas = [];
-        this.filteredPostOfficeAreas = [];
+        this.districts.set([]);
+        this.taluks.set([]);
+        this.postOfficeAreas.set([]);
+        this.filteredPostOfficeAreas.set([]);
         this.selectedPostOfficeIndex = '';
-        this.isSubmitting = false;
-        this.cdr.markForCheck();
+        this.isSubmitting.set(false);
       },
       error: (error) => {
         console.log('FULL ERROR =>', error);
@@ -432,8 +434,7 @@ export class AddPatient implements OnInit {
 
         this.toastService.error(validationMessage || 'Unable to register patient');
 
-        this.isSubmitting = false;
-        this.cdr.markForCheck();
+        this.isSubmitting.set(false);
       }
     });
   }

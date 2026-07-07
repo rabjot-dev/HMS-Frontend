@@ -8,7 +8,7 @@
       <h1>Welcome, {{ user?.employeeId?.name || 'Administrator' }} 👋</h1>
       }
 
-      <p class="hero-subtitle">Here’s what’s happening in your hospital today.</p>
+      <p class="hero-subtitle">Here's what's happening in your hospital today.</p>
     </div>
 
     <div class="hero-badge">
@@ -27,7 +27,7 @@
       <div class="stat-icon blue">👨‍⚕️</div>
 
       <div>
-        <h2>{{ stats?.totalEmployees || 0 }}</h2>
+        <h2>{{ stats()?.totalEmployees || 0 }}</h2>
 
         <p>Total Employees</p>
       </div>
@@ -39,7 +39,7 @@
       <div class="stat-icon purple">🩺</div>
 
       <div>
-        <h2>{{ stats?.totalDoctors || 0 }}</h2>
+        <h2>{{ stats()?.totalDoctors || 0 }}</h2>
 
         <p>Doctors</p>
       </div>
@@ -51,7 +51,7 @@
       <div class="stat-icon green">💉</div>
 
       <div>
-        <h2>{{ stats?.totalNurses || 0 }}</h2>
+        <h2>{{ stats()?.totalNurses || 0 }}</h2>
 
         <p>Nurses</p>
       </div>
@@ -63,7 +63,7 @@
       <div class="stat-icon orange">⏳</div>
 
       <div>
-        <h2>{{ stats?.pendingRequests || 0 }}</h2>
+        <h2>{{ stats()?.pendingRequests || 0 }}</h2>
 
         <p>Pending Requests</p>
       </div>
@@ -83,7 +83,7 @@
       </div>
 
       <div class="employee-list">
-        @for( employee of recentEmployees || []; track employee._id ){
+        @for( employee of recentEmployees() || []; track employee._id ){
         <div class="employee-card">
           <div class="employee-avatar">{{ employee.name ?.charAt(0) }}</div>
 

@@ -11,7 +11,7 @@
     </div>
 
     <div class="header-actions">
-      <div class="employee-count">{{ total }} Employees</div>
+      <div class="employee-count">{{ total() }} Employees</div>
     </div>
   </div>
 
@@ -22,10 +22,10 @@
       <div class="search-box">
         <span>🔍</span>
 
-        <input type="text" placeholder="Search employee..." [(ngModel)]="search" (input)="onSearch()" />
+        <input type="text" placeholder="Search employee..." [ngModel]="search()" (ngModelChange)="search.set($event); searchDebounce$.next()" />
       </div>
 
-      <select [(ngModel)]="status" (change)="onFilterChange()">
+      <select [ngModel]="status()" (ngModelChange)="status.set($event); onFilterChange()">
         <option value="">All Status</option>
 
         <option value="ACTIVE">Active</option>
@@ -38,40 +38,30 @@
       <input
         type="text"
         placeholder="Department"
-        [(ngModel)]="
-        department
-      "
-        (input)="
-        onFilterChange()
-      "
+        [ngModel]="department()"
+        (ngModelChange)="department.set($event); searchDebounce$.next()"
       />
 
       <input
         type="text"
         placeholder="Designation"
-        [(ngModel)]="
-        designation
-      "
-        (input)="
-        onFilterChange()
-      "
+        [ngModel]="designation()"
+        (ngModelChange)="designation.set($event); searchDebounce$.next()"
       />
 
       <button
         class="action-btn view"
-        (click)="
-        resetFilters()
-      "
+        (click)="resetFilters()"
       >
         Reset
       </button>
     </div>
   </div>
 
-  @if(isLoading){
+  @if(isLoading()){
   <app-skeleton-loader [rows]="5"></app-skeleton-loader>
 
-  } @else if(employees.length === 0) {
+  } @else if(employees().length === 0) {
   <app-empty-state
     icon="groups"
     title="No Employees Found"
@@ -100,12 +90,8 @@
       </thead>
 
       <tbody>
-        <tr
-          *ngFor="
-                  let employee
-                 of employees
-                  "
-        >
+        @for( employee of employees(); track employee._id ){
+        <tr>
           <!-- Employee -->
 
           <td>
@@ -195,23 +181,20 @@
             </div>
           </td>
         </tr>
+        }
       </tbody>
     </table>
   </div>
   <app-pagination
-    [page]="page"
-    [totalPages]="page + (nextCursor ? 1 : 0)"
-    [totalRecords]="total"
-    [limit]="limit"
+    [page]="page()"
+    [totalPages]="page() + (nextCursor() ? 1 : 0)"
+    [totalRecords]="total()"
+    [limit]="limit()"
     [cursorMode]="true"
-    [hasNextPage]="!!nextCursor"
+    [hasNextPage]="!!nextCursor()"
     (previous)="previousPage()"
     (next)="nextPage()"
-    (pageSizeChange)="
-    limit = $event;
-    page = 1;
-    loadEmployees(false)
-  "
+    (pageSizeChange)="onPageSizeChange($event)"
   ></app-pagination>
   }
 </div>

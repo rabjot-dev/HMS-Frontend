@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,9 +10,9 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkeletonLoaderComponent {
-  @Input() rows = 4;
+  readonly rows = input(4);
 
-  get placeholders(): number[] {
-    return Array.from({ length: this.rows }, (_, index) => index);
-  }
+  readonly placeholders = computed(() =>
+    Array.from({ length: this.rows() }, (_, index) => index)
+  );
 }

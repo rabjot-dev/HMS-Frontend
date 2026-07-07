@@ -8,7 +8,7 @@
         <label>Doctor</label>
         <select formControlName="doctorEmployeeId" (change)="fetchAvailableSlots()">
           <option value="">Select Doctor</option>
-          @for ( doctor of doctors; track doctor._id ) {
+          @for ( doctor of doctors(); track doctor._id ) {
           <option [value]="doctor._id">{{ doctor.name }}</option>
           }
         </select>
@@ -23,7 +23,7 @@
         <input type="date" formControlName="appointmentDate" (change)="fetchAvailableSlots()" />
         @if(appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched){
         <span class="error-text">Appointment Date is required</span>
-        } @if(noSlotsError){
+        } @if(noSlotsError()){
         <span class="error-text">Doctor is not available on this day</span>
         }
       </div>
@@ -107,7 +107,7 @@
     <div class="slots-section">
       <h2>Available Slots</h2>
       <div class="slots-container">
-        @for ( slot of availableSlots; track slot ) {
+        @for ( slot of availableSlots(); track slot ) {
         <button
           type="button"
           class="slot-btn"
@@ -143,8 +143,8 @@
     </div>
 
     <!-- Submit -->
-    <button type="submit" class="submit-btn" [disabled]="isSubmitting">
-      @if(isSubmitting){ Updating... } @else { Update Appointment }
+    <button type="submit" class="submit-btn" [disabled]="isSubmitting()">
+      @if(isSubmitting()){ Updating... } @else { Update Appointment }
     </button>
   </form>
 </div>

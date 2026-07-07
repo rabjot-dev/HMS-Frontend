@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth';
@@ -17,15 +17,14 @@ import { NodeService } from '../../../core/services/node';
 export class Login {
   loginForm: FormGroup;
 
-  isSubmitting = false;
-  errorMessage = '';
+  readonly isSubmitting = signal(false);
+  readonly errorMessage = signal('');
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
     private readonly router: Router,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toastService: ToastService,
     private readonly nodeService: NodeService
   ) {
@@ -44,7 +43,7 @@ export class Login {
       return;
     }
 
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (response: any) => {
@@ -68,7 +67,7 @@ export class Login {
         localStorage.setItem('loginId', this.loginForm.value.loginId);
 
         if (user.isFirstLogin) {
-          this.isSubmitting = false;
+          this.isSubmitting.set(false);
 
           this.toastService.show('Login successful', 'success');
 
@@ -84,7 +83,7 @@ export class Login {
 
             this.toastService.show('Login successful', 'success');
 
-            this.isSubmitting = false;
+            this.isSubmitting.set(false);
 
             const role = user.roles?.[0];
 
@@ -109,7 +108,7 @@ export class Login {
             }
           },
           error: () => {
-            this.isSubmitting = false;
+            this.isSubmitting.set(false);
 
             this.toastService.show('Failed to load menu permissions', 'error');
           }
@@ -118,9 +117,7 @@ export class Login {
       error: (error) => {
         this.toastService.show(error?.error?.message || 'Login failed', 'error');
 
-        this.isSubmitting = false;
-
-        this.cdr.detectChanges();
+        this.isSubmitting.set(false);
       }
     });
   }

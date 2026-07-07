@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth';
@@ -19,32 +20,25 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
   styleUrl: './employee-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EmployeeList implements OnInit {
-  employees: any[] = [];
+export class EmployeeList implements OnInit, OnDestroy {
+  readonly employees = signal<any[]>([]);
+  readonly search = signal('');
+  readonly status = signal('');
+  readonly department = signal('');
+  readonly designation = signal('');
+  readonly page = signal(1);
+  readonly cursorStack = signal<string[]>(['']);
+  readonly nextCursor = signal('');
+  readonly limit = signal(10);
+  readonly total = signal(0);
+  readonly totalPages = signal(1);
+  readonly isLoading = signal(false);
 
-  search = '';
-
-  status = '';
-
-  department = '';
-
-  designation = '';
-
-  page = 1;
-  cursorStack: string[] = [''];
-  nextCursor = '';
-
-  limit = 10;
-
-  total = 0;
-
-  totalPages = 1;
-
-  isLoading = false;
+  private readonly destroy$ = new Subject<void>();
+  protected readonly searchDebounce$ = new Subject<void>();
 
   constructor(
     private readonly employeeService: EmployeeService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toastService: ToastService,
     public readonly authService: AuthService,
     public readonly nodeService: NodeService,
@@ -53,107 +47,114 @@ export class EmployeeList implements OnInit {
 
   ngOnInit(): void {
     this.loadEmployees();
+    this.searchDebounce$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.onFilterChange());
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadEmployees(showPageLoader = true): void {
     if (showPageLoader) {
-      this.isLoading = true;
+      this.isLoading.set(true);
     }
 
     const params: any = {
-      page: this.page,
-      limit: this.limit,
+      page: this.page(),
+      limit: this.limit(),
       pagination: 'cursor',
-      cursor: this.cursorStack[this.page - 1] || ''
+      cursor: this.cursorStack()[this.page() - 1] || ''
     };
 
-    if (this.search) {
-      params.search = this.search;
+    if (this.search()) {
+      params.search = this.search();
     }
 
-    if (this.status) {
-      params.status = this.status;
+    if (this.status()) {
+      params.status = this.status();
     }
 
-    if (this.department) {
-      params.department = this.department;
+    if (this.department()) {
+      params.department = this.department();
     }
 
-    if (this.designation) {
-      params.designation = this.designation;
+    if (this.designation()) {
+      params.designation = this.designation();
     }
 
     this.employeeService.getEmployees(params).subscribe({
       next: (response) => {
-        this.employees = response.data;
+        this.employees.set(response.data);
 
-        this.total = response.meta?.totalRecords ?? response.meta?.total ?? 0;
+        this.total.set(response.meta?.totalRecords ?? response.meta?.total ?? 0);
 
-        this.totalPages = response.meta?.totalPages || Math.max(Math.ceil(this.total / this.limit), 1);
-        this.nextCursor = response.meta?.nextCursor || '';
+        this.totalPages.set(response.meta?.totalPages || Math.max(Math.ceil(this.total() / this.limit()), 1));
+        this.nextCursor.set(response.meta?.nextCursor || '');
 
-        if (this.page > 1 && this.employees.length === 0) {
-          this.page = Math.max(this.totalPages || 1, 1);
+        if (this.page() > 1 && this.employees().length === 0) {
+          this.page.set(Math.max(this.totalPages() || 1, 1));
           this.loadEmployees(false);
           return;
         }
 
-        this.isLoading = false;
-
-        this.cdr.detectChanges();
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.log(error);
 
-        this.isLoading = false;
+        this.isLoading.set(false);
       }
     });
   }
 
-  onSearch(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
-    this.loadEmployees(false);
-  }
-
   onFilterChange(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
     this.loadEmployees(false);
   }
 
   previousPage(): void {
-    if (this.page === 1) {
+    if (this.page() === 1) {
       return;
     }
 
-    this.page--;
+    this.page.update(p => p - 1);
 
     this.loadEmployees(false);
   }
 
   nextPage(): void {
-    if (!this.nextCursor) {
+    if (!this.nextCursor()) {
       return;
     }
 
-    this.cursorStack[this.page] = this.nextCursor;
-    this.page++;
+    const stack = [...this.cursorStack()];
+    stack[this.page()] = this.nextCursor();
+    this.cursorStack.set(stack);
+    this.page.update(p => p + 1);
 
     this.loadEmployees(false);
   }
 
-  resetFilters(): void {
-    this.search = '';
-    this.status = '';
-    this.department = '';
-    this.designation = '';
+  onPageSizeChange(newLimit: number): void {
+    this.limit.set(newLimit);
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
+    this.loadEmployees(false);
+  }
 
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
+  resetFilters(): void {
+    this.search.set('');
+    this.status.set('');
+    this.department.set('');
+    this.designation.set('');
+
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
 
     this.loadEmployees(false);
   }
@@ -173,6 +174,7 @@ export class EmployeeList implements OnInit {
       }
     });
   }
+
   async deleteEmployee(id: string): Promise<void> {
     const confirmed = await this.confirmDialog.confirm({
       title: 'Delete employee?',
@@ -187,7 +189,7 @@ export class EmployeeList implements OnInit {
 
     this.employeeService.deleteEmployee(id).subscribe({
       next: () => {
-        this.page = this.getPageAfterDelete();
+        this.page.set(this.getPageAfterDelete());
 
         this.toastService.show('Employee deleted successfully', 'success');
 
@@ -200,9 +202,9 @@ export class EmployeeList implements OnInit {
   }
 
   private getPageAfterDelete(): number {
-    const totalAfterDelete = Math.max(this.total - 1, 0);
-    const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
+    const totalAfterDelete = Math.max(this.total() - 1, 0);
+    const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit()), 1);
 
-    return Math.min(this.page, totalPagesAfterDelete);
+    return Math.min(this.page(), totalPagesAfterDelete);
   }
 }

@@ -28,7 +28,7 @@
       <div class="stat-icon blue">📅</div>
 
       <div>
-        <h2>{{ stats?.todayAppointments || 0 }}</h2>
+        <h2>{{ stats()?.todayAppointments || 0 }}</h2>
 
         <p>Today's Appointments</p>
       </div>
@@ -40,7 +40,7 @@
       <div class="stat-icon purple">🧑</div>
 
       <div>
-        <h2>{{ stats?.totalPatients || 0 }}</h2>
+        <h2>{{ stats()?.totalPatients || 0 }}</h2>
 
         <p>Total Patients</p>
       </div>
@@ -52,7 +52,7 @@
       <div class="stat-icon green">✅</div>
 
       <div>
-        <h2>{{ stats?.checkedInPatients || 0 }}</h2>
+        <h2>{{ stats()?.checkedInPatients || 0 }}</h2>
 
         <p>Checked In</p>
       </div>
@@ -64,7 +64,7 @@
       <div class="stat-icon orange">⏳</div>
 
       <div>
-        <h2>{{ stats?.pendingAppointments || 0 }}</h2>
+        <h2>{{ stats()?.pendingAppointments || 0 }}</h2>
 
         <p>Pending Appointments</p>
       </div>
@@ -84,7 +84,7 @@
       </div>
 
       <div class="employee-list">
-        @for( appointment of todayAppointments || []; track appointment._id ){
+        @for( appointment of todayAppointments() || []; track appointment._id ){
         <div class="employee-card">
           <div class="employee-avatar">{{ appointment ?.patientId ?.firstName ?.charAt(0) }}</div>
 

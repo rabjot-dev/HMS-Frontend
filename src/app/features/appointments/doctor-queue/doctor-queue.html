@@ -14,20 +14,20 @@
       <div class="stat-card">
         <span>Total Patients</span>
 
-        <h2>{{ appointments.length }}</h2>
+        <h2>{{ appointments().length }}</h2>
       </div>
     </div>
   </div>
 
   <!-- Loading -->
 
-  @if(isLoading){
+  @if(isLoading()){
   <app-skeleton-loader [rows]="4"></app-skeleton-loader>
 
   } @else {
   <!-- Empty State -->
 
-  @if(appointments.length === 0){
+  @if(appointments().length === 0){
   <div class="empty-card glass-card">
     <div class="empty-icon">🩺</div>
 
@@ -40,7 +40,7 @@
   <!-- Queue -->
 
   <div class="queue-grid">
-    @for ( appointment of appointments; track appointment._id ) {
+    @for ( appointment of appointments(); track appointment._id ) {
     <div class="queue-card glass-card">
       <!-- Top -->
 

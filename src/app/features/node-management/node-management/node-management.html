@@ -14,7 +14,7 @@
         <span>{{ flatNodes.length }} total</span>
       </div>
 
-      @if(isLoading) {
+      @if(isLoading()) {
       <app-skeleton-loader [rows]="5"></app-skeleton-loader>
       } @else if(flatNodes.length === 0) {
       <app-empty-state
@@ -24,9 +24,9 @@
       ></app-empty-state>
       } @else {
       <div class="tree">
-        @for(node of nodes; track node._id) {
+        @for(node of nodes(); track node._id) {
         <div class="node-group">
-          <button type="button" class="node-row" [class.active]="selectedNodeId === node._id" (click)="editNode(node)">
+          <button type="button" class="node-row" [class.active]="selectedNodeId() === node._id" (click)="editNode(node)">
             <span class="material-icons">{{ node.icon || 'radio_button_unchecked' }}</span>
             <span>
               <strong>{{ node.name }}</strong>
@@ -38,7 +38,7 @@
           <button
             type="button"
             class="node-row child"
-            [class.active]="selectedNodeId === child._id"
+            [class.active]="selectedNodeId() === child._id"
             (click)="editNode(child)"
           >
             <span class="material-icons">{{ child.icon || 'subdirectory_arrow_right' }}</span>
@@ -141,8 +141,8 @@
 
       <div class="form-actions">
         <button type="button" class="secondary-btn" (click)="startCreate()">Reset</button>
-        <button type="button" class="primary-btn" [disabled]="isSaving" (click)="saveNode()">
-          {{ isSaving ? 'Saving...' : form._id ? 'Update Node' : 'Create Node' }}
+        <button type="button" class="primary-btn" [disabled]="isSaving()" (click)="saveNode()">
+          {{ isSaving() ? 'Saving...' : form._id ? 'Update Node' : 'Create Node' }}
         </button>
       </div>
     </section>

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TokenService } from '../../../core/services/token';
@@ -14,7 +14,7 @@ import { ToastService } from '../../../core/services/toast';
 })
 export class CreatePassword {
   passwordForm: FormGroup;
-  isSubmitting = false;
+  readonly isSubmitting = signal(false);
 
   securityQuestions = [
     'What is your favourite color?',
@@ -29,7 +29,6 @@ export class CreatePassword {
     private readonly router: Router,
     private readonly tokenService: TokenService,
     private readonly authService: AuthService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toast: ToastService
   ) {
     this.passwordForm = this.fb.group({
@@ -61,12 +60,11 @@ export class CreatePassword {
       return;
     }
 
-    if (this.isSubmitting) {
+    if (this.isSubmitting()) {
       return;
     }
 
-    this.isSubmitting = true;
-    this.cdr.markForCheck();
+    this.isSubmitting.set(true);
 
     const payload = {
       loginId: localStorage.getItem('loginId'),
@@ -84,15 +82,13 @@ export class CreatePassword {
         this.toast.success('Password created successfully');
         this.tokenService.removeTokens();
         this.router.navigate(['/login']);
-        this.isSubmitting = false;
-        this.cdr.markForCheck();
+        this.isSubmitting.set(false);
       },
       error: (error) => {
         console.log(error);
         console.log(error.error.errors);
         this.toast.error(error?.error?.message || 'Unable to create password');
-        this.isSubmitting = false;
-        this.cdr.markForCheck();
+        this.isSubmitting.set(false);
       }
     });
   }

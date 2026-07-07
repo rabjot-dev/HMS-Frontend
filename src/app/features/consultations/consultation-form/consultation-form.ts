@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,9 +18,8 @@ import { AuthService } from '../../../core/services/auth';
 export class ConsultationForm implements OnInit {
   consultationForm!: FormGroup;
 
-  appointment: any;
-
-  isSubmitting = false;
+  readonly appointment = signal<any>(null);
+  readonly isSubmitting = signal(false);
 
   constructor(
     private readonly fb: FormBuilder,
@@ -29,7 +28,6 @@ export class ConsultationForm implements OnInit {
     private readonly consultationService: ConsultationService,
     private readonly appointmentService: AppointmentService,
     private readonly authService: AuthService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toastService: ToastService
   ) {}
 
@@ -92,7 +90,7 @@ export class ConsultationForm implements OnInit {
       next: (response) => {
         console.log(response);
 
-        this.appointment = response.data;
+        this.appointment.set(response.data);
       },
       error: (error) => {
         console.log(error);
@@ -107,13 +105,11 @@ export class ConsultationForm implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
-
-    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    this.isSubmitting.set(true);
 
     const consultationData = {
-      appointmentId: this.appointment?._id,
-      patientId: this.appointment?.patientId?._id,
+      appointmentId: this.appointment()?._id,
+      patientId: this.appointment()?.patientId?._id,
       diagnosis: this.consultationForm.value.diagnosis,
       symptoms: this.consultationForm.value.symptoms?.split(',').map((symptom: string) => symptom.trim()),
       doctorNotes: this.consultationForm.value.doctorNotes,
@@ -129,7 +125,7 @@ export class ConsultationForm implements OnInit {
 
         this.toastService.success('Consultation completed successfully');
 
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
 
         this.router.navigate(['/doctor-queue']);
       },
@@ -138,7 +134,7 @@ export class ConsultationForm implements OnInit {
 
         this.toastService.error(error?.error?.message ?? 'Failed to create consultation');
 
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
       }
     });
   }

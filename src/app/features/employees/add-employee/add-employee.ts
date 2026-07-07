@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../core/services/toast';
@@ -15,24 +15,20 @@ import { EmployeeService } from '../../../core/services/employee';
 export class AddEmployee implements OnInit {
   employeeForm: FormGroup;
 
-  successMessage = '';
-  errorMessage = '';
-
-  isSubmitting = false;
-  designations = ['ADMIN', 'DOCTOR', 'RECEPTIONIST', 'NURSE', 'LAB_TECH', 'PHARMACIST', 'CASHIER'];
+  readonly isSubmitting = signal(false);
+  readonly designations = signal(['ADMIN', 'DOCTOR', 'RECEPTIONIST', 'NURSE', 'LAB_TECH', 'PHARMACIST', 'CASHIER']);
 
   ngOnInit(): void {
     const role = localStorage.getItem('role');
 
     if (role !== 'SUPER_ADMIN') {
-      this.designations = this.designations.filter((designation) => designation !== 'ADMIN');
+      this.designations.update(list => list.filter((designation) => designation !== 'ADMIN'));
     }
   }
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly employeeService: EmployeeService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toastService: ToastService
   ) {
     this.employeeForm = this.fb.group({
@@ -149,10 +145,7 @@ export class AddEmployee implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
-
-    this.successMessage = '';
-    this.errorMessage = '';
+    this.isSubmitting.set(true);
 
     // Remove doctor-specific values for non-doctors
     if (this.designation !== 'DOCTOR') {
@@ -196,11 +189,9 @@ export class AddEmployee implements OnInit {
       next: (response) => {
         console.log(response);
 
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
 
         this.toastService.show('Employee created successfully', 'success');
-
-        this.cdr.detectChanges();
 
         this.employeeForm.reset();
 
@@ -219,11 +210,9 @@ export class AddEmployee implements OnInit {
         console.log('VALIDATION');
         console.log(error?.error?.errors);
 
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
 
         this.toastService.show(error?.error?.message || 'Failed to create employee', 'error');
-
-        this.cdr.detectChanges();
       }
     });
   }

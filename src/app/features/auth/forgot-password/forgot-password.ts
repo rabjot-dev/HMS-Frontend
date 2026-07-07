@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -13,15 +13,14 @@ import { AuthService } from '../../../core/services/auth';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ForgotPassword {
-  isSubmitting = false;
-  errorMessage = '';
+  readonly isSubmitting = signal(false);
+  readonly errorMessage = signal('');
   forgotForm: any;
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
-    private readonly router: Router,
-    private readonly cdr: ChangeDetectorRef
+    private readonly router: Router
   ) {
     this.forgotForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
@@ -35,9 +34,8 @@ export class ForgotPassword {
       return;
     }
 
-    this.isSubmitting = true;
-    this.errorMessage = '';
-    this.cdr.markForCheck();
+    this.isSubmitting.set(true);
+    this.errorMessage.set('');
 
     const email = this.forgotForm.value.email.trim().toLowerCase();
 
@@ -46,9 +44,8 @@ export class ForgotPassword {
         const securityQuestion = response?.data?.securityQuestion;
 
         if (!securityQuestion) {
-          this.errorMessage = 'Security question was not found for this account.';
-          this.isSubmitting = false;
-          this.cdr.markForCheck();
+          this.errorMessage.set('Security question was not found for this account.');
+          this.isSubmitting.set(false);
           return;
         }
 
@@ -67,13 +64,11 @@ export class ForgotPassword {
           }
         });
 
-        this.isSubmitting = false;
-        this.cdr.markForCheck();
+        this.isSubmitting.set(false);
       },
       error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to find an account with this email.';
-        this.isSubmitting = false;
-        this.cdr.markForCheck();
+        this.errorMessage.set(error?.error?.message || 'Unable to find an account with this email.');
+        this.isSubmitting.set(false);
       }
     });
   }

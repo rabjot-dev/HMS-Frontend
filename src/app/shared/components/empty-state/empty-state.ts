@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-empty-state',
@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmptyStateComponent {
-  @Input() icon = 'inbox';
-  @Input() title = 'No records found';
-  @Input() message = 'Try changing filters or add a new record.';
+  readonly icon = input('inbox');
+  readonly title = input('No records found');
+  readonly message = input('Try changing filters or add a new record.');
 }

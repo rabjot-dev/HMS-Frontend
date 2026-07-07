@@ -90,7 +90,7 @@
           <select formControlName="assignedDoctor">
             <option value="">Select Doctor</option>
 
-            @for ( doctor of doctors; track doctor._id ) {
+            @for ( doctor of doctors(); track doctor._id ) {
             <option [value]="doctor._id">{{ doctor.name }} - {{ doctor.department }}</option>
             }
           </select>
@@ -146,6 +146,6 @@
 
     <!-- Submit -->
 
-    <button type="submit" [disabled]="isSubmitting">@if(isSubmitting){ Updating... } @else { Update Patient }</button>
+    <button type="submit" [disabled]="isSubmitting()">@if(isSubmitting()){ Updating... } @else { Update Patient }</button>
   </form>
 </div>

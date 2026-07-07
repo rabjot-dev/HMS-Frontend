@@ -147,12 +147,3 @@ input:focus {
     width: 100%;
   }
 }
-/* Error Messages */
-
-.error-text {
-  color: #dc2626;
-  font-size: 13px;
-  font-weight: 500;
-  margin-top: 4px;
-  display: block;
-}

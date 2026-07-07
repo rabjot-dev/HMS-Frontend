@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -16,8 +16,8 @@ import { ToastService } from '../../../core/services/toast';
 export class Register {
   registerForm: FormGroup;
 
-  isSubmitting = false;
-  currentStep = 1;
+  readonly isSubmitting = signal(false);
+  readonly currentStep = signal(1);
 
   securityQuestions = [
     'What is your favourite color?',
@@ -31,7 +31,6 @@ export class Register {
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
     private readonly router: Router,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toastService: ToastService
   ) {
     this.registerForm = this.fb.group({
@@ -89,14 +88,14 @@ export class Register {
 
   // Go to previous step
   prevStep(): void {
-    if (this.currentStep > 1) {
-      this.currentStep--;
+    if (this.currentStep() > 1) {
+      this.currentStep.update(s => s - 1);
     }
   }
 
   // Move to next step after validation
   nextStep(): void {
-    if (this.currentStep === 1) {
+    if (this.currentStep() === 1) {
       const step1Fields = [
         'name',
         'email',
@@ -119,7 +118,7 @@ export class Register {
       }
     }
 
-    if (this.currentStep === 2 && this.isDoctor()) {
+    if (this.currentStep() === 2 && this.isDoctor()) {
       const doctorFields = ['specialization', 'qualification', 'medicalRegistrationNo'];
 
       doctorFields.forEach((field) => {
@@ -133,7 +132,7 @@ export class Register {
       }
     }
 
-    this.currentStep++;
+    this.currentStep.update(s => s + 1);
   }
 
   // Submit registration form
@@ -168,7 +167,7 @@ export class Register {
       return;
     }
 
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
 
     const payload = {
       ...this.registerForm.value
@@ -178,11 +177,9 @@ export class Register {
       next: (response: any) => {
         console.log(response);
 
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
 
         this.toastService.show('Registration submitted successfully. Wait for admin approval.', 'success');
-
-        this.cdr.detectChanges();
 
         this.registerForm.reset();
 
@@ -197,8 +194,7 @@ export class Register {
       error: (error) => {
         this.toastService.show(error?.error?.message || 'Registration failed', 'error');
 
-        this.isSubmitting = false;
-        this.cdr.detectChanges();
+        this.isSubmitting.set(false);
       }
     });
   }

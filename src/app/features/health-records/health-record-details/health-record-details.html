@@ -1,5 +1,5 @@
 <div class="health-record-details-page">
-  @if (isLoading) {
+  @if (isLoading()) {
   <app-skeleton-loader [rows]="5"></app-skeleton-loader>
 
   } @else {
@@ -12,40 +12,40 @@
       <div>
         <p class="section-label">Patient Information</p>
 
-        <h2>{{ patient?.firstName }} {{ patient?.lastName }}</h2>
+        <h2>{{ patient()?.firstName }} {{ patient()?.lastName }}</h2>
       </div>
 
-      <div class="avatar">{{ patient?.firstName?.charAt(0) }}</div>
+      <div class="avatar">{{ patient()?.firstName?.charAt(0) }}</div>
     </div>
 
-    <button type="button" class="secondary-btn" (click)="downloadCompleteRecord()" [disabled]="isDownloadingRecord">
-      {{ isDownloadingRecord ? 'Downloading...' : 'Download Complete Record' }}
+    <button type="button" class="secondary-btn" (click)="downloadCompleteRecord()" [disabled]="isDownloadingRecord()">
+      {{ isDownloadingRecord() ? 'Downloading...' : 'Download Complete Record' }}
     </button>
 
     <div class="patient-grid">
       <div class="info-item">
         <span>UHID</span>
-        <strong>{{ patient?.patientId }}</strong>
+        <strong>{{ patient()?.patientId }}</strong>
       </div>
 
       <div class="info-item">
         <span>Gender</span>
-        <strong>{{ patient?.gender }}</strong>
+        <strong>{{ patient()?.gender }}</strong>
       </div>
 
       <div class="info-item">
         <span>Blood Group</span>
-        <strong>{{ patient?.bloodGroup || 'N/A' }}</strong>
+        <strong>{{ patient()?.bloodGroup || 'N/A' }}</strong>
       </div>
 
       <div class="info-item">
         <span>Date Of Birth</span>
-        <strong>{{ patient?.dateOfBirth | date }}</strong>
+        <strong>{{ patient()?.dateOfBirth | date }}</strong>
       </div>
 
       <div class="info-item">
         <span>Phone</span>
-        <strong>{{ patient?.phone }}</strong>
+        <strong>{{ patient()?.phone }}</strong>
       </div>
     </div>
 
@@ -54,7 +54,7 @@
         <h4>Allergies</h4>
 
         <div class="chips">
-          @for ( item of patient?.allergies; track $index ) {
+          @for ( item of patient()?.allergies; track $index ) {
           <span class="chip">{{ item }}</span>
           }
         </div>
@@ -64,7 +64,7 @@
         <h4>Chronic Diseases</h4>
 
         <div class="chips">
-          @for ( item of patient?.chronicDiseases; track $index ) {
+          @for ( item of patient()?.chronicDiseases; track $index ) {
           <span class="chip">{{ item }}</span>
           }
         </div>
@@ -74,7 +74,7 @@
         <h4>Current Medications</h4>
 
         <div class="chips">
-          @for ( item of patient?.currentMedications; track $index ) {
+          @for ( item of patient()?.currentMedications; track $index ) {
           <span class="chip">{{ item }}</span>
           }
         </div>
@@ -92,7 +92,7 @@
     </div>
 
     <div class="timeline-container">
-      @if(consultations.length){ @for ( consultation of consultations; track consultation._id ) {
+      @if(consultations().length){ @for ( consultation of consultations(); track consultation._id ) {
       <div class="timeline-card">
         <div class="timeline-header">
           <div class="timeline-left">
@@ -112,22 +112,14 @@
           <div class="timeline-actions">
             <button
               class="secondary-btn"
-              (click)="
-              toggleTimeline(
-                consultation._id
-              )
-            "
+              (click)="toggleTimeline(consultation._id)"
             >
               {{ expandedTimeline[ consultation._id ] ? 'Hide Details' : 'View Details' }}
             </button>
 
             <button
               class="primary-btn"
-              (click)="
-              downloadPdf(
-                consultation._id
-              )
-            "
+              (click)="downloadPdf(consultation._id)"
             >
               PDF
             </button>
@@ -223,29 +215,15 @@
     </div>
   </div>
 
-  @if( timelineMeta?.totalPages > 1 ){
+  @if( timelineMeta()?.totalPages > 1 ){
   <app-pagination
-    [page]="
-    timelineMeta.page
-  "
-    [totalPages]="
-    timelineMeta.totalPages
-  "
-    [totalRecords]="
-    timelineMeta.totalRecords
-  "
+    [page]="timelineMeta().page"
+    [totalPages]="timelineMeta().totalPages"
+    [totalRecords]="timelineMeta().totalRecords"
     [limit]="5"
     [showPageSize]="false"
-    (previous)="
-    onTimelinePageChange(
-      timelinePage - 1
-    )
-  "
-    (next)="
-    onTimelinePageChange(
-      timelinePage + 1
-    )
-  "
+    (previous)="onTimelinePageChange(timelinePage() - 1)"
+    (next)="onTimelinePageChange(timelinePage() + 1)"
   ></app-pagination>
   }
   <!-- =========================
@@ -260,7 +238,7 @@
     </div>
 
     <div class="document-list">
-      @if(patient?.labReports?.length){ @for ( report of patient?.labReports; track report._id ) {
+      @if(patient()?.labReports?.length){ @for ( report of patient()?.labReports; track report._id ) {
       <div class="document-card">
         <h4>{{ report.title }}</h4>
 
@@ -270,27 +248,13 @@
 
         <div class="document-actions">
           @if(report.documentUrl){
-          <button
-            class="view-btn"
-            (click)="
-      viewFile(
-        report.documentUrl
-      )
-    "
-          >
+          <button class="view-btn" (click)="viewFile(report.documentUrl)">
             View
           </button>
           }
           <button class="view-btn" (click)="editLabReport(report)">Edit</button>
           @if(canDeleteHealthRecordDocuments){
-          <button
-            class="delete-btn"
-            (click)="
-      deleteLabReport(
-        report._id
-      )
-    "
-          >
+          <button class="delete-btn" (click)="deleteLabReport(report._id)">
             Delete
           </button>
           }
@@ -308,29 +272,15 @@
       }
     </div>
   </div>
-  @if( labMeta?.totalPages > 1 ){
+  @if( labMeta()?.totalPages > 1 ){
   <app-pagination
-    [page]="
-    labMeta.page
-  "
-    [totalPages]="
-    labMeta.totalPages
-  "
-    [totalRecords]="
-    labMeta.totalRecords
-  "
+    [page]="labMeta().page"
+    [totalPages]="labMeta().totalPages"
+    [totalRecords]="labMeta().totalRecords"
     [limit]="5"
     [showPageSize]="false"
-    (previous)="
-    onLabPageChange(
-      labPage - 1
-    )
-  "
-    (next)="
-    onLabPageChange(
-      labPage + 1
-    )
-  "
+    (previous)="onLabPageChange(labPage() - 1)"
+    (next)="onLabPageChange(labPage() + 1)"
   ></app-pagination>
   }
 
@@ -342,18 +292,13 @@
     <div class="title-row">
       <h2>Medical Documents</h2>
 
-      <button
-        class="primary-btn"
-        (click)="
-          openDocumentModal()
-        "
-      >
+      <button class="primary-btn" (click)="openDocumentModal()">
         + Add Document
       </button>
     </div>
 
     <div class="document-list">
-      @if( patient?.medicalDocuments?.length ){ @for ( document of patient?.medicalDocuments; track document._id ) {
+      @if( patient()?.medicalDocuments?.length ){ @for ( document of patient()?.medicalDocuments; track document._id ) {
       <div class="document-card">
         <h4>{{ document.title }}</h4>
 
@@ -362,28 +307,14 @@
         <span>{{ document.recordDate | date }}</span>
         <div class="document-actions">
           @if(document.documentUrl){
-          <button
-            class="view-btn"
-            (click)="
-      viewFile(
-        document.documentUrl
-      )
-    "
-          >
+          <button class="view-btn" (click)="viewFile(document.documentUrl)">
             View
           </button>
           }
           <button class="view-btn" (click)="editMedicalDocument(document)">Edit</button>
 
           @if(canDeleteHealthRecordDocuments){
-          <button
-            class="delete-btn"
-            (click)="
-      deleteMedicalDocument(
-        document._id
-      )
-    "
-          >
+          <button class="delete-btn" (click)="deleteMedicalDocument(document._id)">
             Delete
           </button>
           }
@@ -403,35 +334,21 @@
   </div>
   }
 </div>
-@if( documentMeta?.totalPages > 1 ){
+@if( documentMeta()?.totalPages > 1 ){
 <app-pagination
-  [page]="
-    documentMeta.page
-  "
-  [totalPages]="
-    documentMeta.totalPages
-  "
-  [totalRecords]="
-    documentMeta.totalRecords
-  "
+  [page]="documentMeta().page"
+  [totalPages]="documentMeta().totalPages"
+  [totalRecords]="documentMeta().totalRecords"
   [limit]="5"
   [showPageSize]="false"
-  (previous)="
-    onDocumentPageChange(
-      documentPage - 1
-    )
-  "
-  (next)="
-    onDocumentPageChange(
-      documentPage + 1
-    )
-  "
+  (previous)="onDocumentPageChange(documentPage() - 1)"
+  (next)="onDocumentPageChange(documentPage() + 1)"
 ></app-pagination>
 
-} @if(showLabReportModal){
+} @if(showLabReportModal()){
 <div class="modal-backdrop">
   <div class="modal-card">
-    <h2>{{ editingLabReportId ? 'Edit Lab Report' : 'Add Lab Report' }}</h2>
+    <h2>{{ editingLabReportId() ? 'Edit Lab Report' : 'Add Lab Report' }}</h2>
     <form [formGroup]="labReportForm">
       <input type="text" placeholder="Title" formControlName="title" />
       @if(labReportForm.get('title')?.invalid && labReportForm.get('title')?.touched){
@@ -458,7 +375,7 @@
       <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onLabFileChange($event)" />
       @if(labFileError){
       <span class="error-text">{{ labFileError }}</span>
-      } @if(editingLabReportId){
+      } @if(editingLabReportId()){
       <p class="file-name">Leave empty to keep the existing file.</p>
 
       } @if(selectedLabFile){
@@ -473,11 +390,9 @@
           type="button"
           class="primary-btn"
           (click)="saveLabReport()"
-          [disabled]="
-    isUploadingLabReport
-  "
+          [disabled]="isUploadingLabReport()"
         >
-          {{ isUploadingLabReport ? ( editingLabReportId ? 'Updating...' : 'Uploading...' ) : ( editingLabReportId ?
+          {{ isUploadingLabReport() ? ( editingLabReportId() ? 'Updating...' : 'Uploading...' ) : ( editingLabReportId() ?
           'Update Report' : 'Save Report' ) }}
         </button>
       </div>
@@ -485,10 +400,10 @@
   </div>
 </div>
 
-} @if(showMedicalDocumentModal){
+} @if(showMedicalDocumentModal()){
 <div class="modal-backdrop">
   <div class="modal-card">
-    <h2>{{ editingMedicalDocumentId ? 'Edit Medical Document' : 'Add Medical Document' }}</h2>
+    <h2>{{ editingMedicalDocumentId() ? 'Edit Medical Document' : 'Add Medical Document' }}</h2>
 
     <form [formGroup]="medicalDocumentForm">
       <input type="text" placeholder="Title" formControlName="title" />
@@ -515,7 +430,7 @@
       <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onMedicalFileChange($event)" />
       @if(medicalFileError){
       <span class="error-text">{{ medicalFileError }}</span>
-      } @if(editingMedicalDocumentId){
+      } @if(editingMedicalDocumentId()){
       <p class="file-name">Leave empty to keep the existing file.</p>
 
       } @if(selectedMedicalFile){
@@ -530,15 +445,11 @@
         <button
           type="button"
           class="primary-btn"
-          (click)="
-    saveMedicalDocument()
-  "
-          [disabled]="
-    isUploadingDocument
-  "
+          (click)="saveMedicalDocument()"
+          [disabled]="isUploadingDocument()"
         >
-          {{ isUploadingDocument ? ( editingMedicalDocumentId ? 'Updating...' : 'Uploading...' ) : (
-          editingMedicalDocumentId ? 'Update Document' : 'Save Document' ) }}
+          {{ isUploadingDocument() ? ( editingMedicalDocumentId() ? 'Updating...' : 'Uploading...' ) : (
+          editingMedicalDocumentId() ? 'Update Document' : 'Save Document' ) }}
         </button>
       </div>
     </form>

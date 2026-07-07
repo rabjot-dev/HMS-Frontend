@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -15,20 +15,17 @@ import { EmployeeService } from '../../../core/services/employee';
 export class EditEmployee implements OnInit {
   employeeForm: FormGroup;
 
-  employeeId = '';
+  private employeeId = '';
 
-  isSubmitting = false;
-
-  errorMessage = '';
-
-  successMessage = '';
+  readonly isSubmitting = signal(false);
+  readonly errorMessage = signal('');
+  readonly successMessage = signal('');
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly employeeService: EmployeeService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly employeeService: EmployeeService
   ) {
     this.employeeForm = this.fb.group({
       name: [
@@ -71,23 +68,19 @@ export class EditEmployee implements OnInit {
           designation: employee.designation,
           joiningDate: employee.joiningDate ? employee.joiningDate.split('T')[0] : ''
         });
-
-        this.cdr.markForCheck();
       },
       error: (error) => {
         console.error(error);
 
-        this.errorMessage = error?.error?.message || 'Failed to load employee';
-        this.cdr.markForCheck();
+        this.errorMessage.set(error?.error?.message || 'Failed to load employee');
       }
     });
   }
 
   // Update employee details
   onSubmit(): void {
-    this.errorMessage = '';
-    this.successMessage = '';
-    this.cdr.markForCheck();
+    this.errorMessage.set('');
+    this.successMessage.set('');
 
     if (this.employeeForm.invalid) {
       this.employeeForm.markAllAsTouched();
@@ -95,8 +88,7 @@ export class EditEmployee implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
-    this.cdr.markForCheck();
+    this.isSubmitting.set(true);
 
     const payload = {
       ...this.employeeForm.getRawValue()
@@ -106,10 +98,9 @@ export class EditEmployee implements OnInit {
 
     this.employeeService.updateEmployee(this.employeeId, payload).subscribe({
       next: () => {
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
 
-        this.successMessage = 'Employee updated successfully';
-        this.cdr.markForCheck();
+        this.successMessage.set('Employee updated successfully');
 
         setTimeout(() => {
           this.router.navigate(['/employees']);
@@ -118,10 +109,9 @@ export class EditEmployee implements OnInit {
       error: (error) => {
         console.error(error);
 
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
 
-        this.errorMessage = error?.error?.message || 'Failed to update employee';
-        this.cdr.markForCheck();
+        this.errorMessage.set(error?.error?.message || 'Failed to update employee');
       }
     });
   }

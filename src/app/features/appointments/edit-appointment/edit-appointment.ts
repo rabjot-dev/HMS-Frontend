@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,15 +15,12 @@ import { ToastService } from '../../../core/services/toast';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditAppointment implements OnInit {
-  appointmentId = '';
+  readonly doctors = signal<any[]>([]);
+  readonly availableSlots = signal<string[]>([]);
+  readonly isSubmitting = signal(false);
+  readonly noSlotsError = signal(false);
 
-  doctors: any[] = [];
-
-  availableSlots: string[] = [];
-
-  isSubmitting = false;
-
-  noSlotsError = false;
+  private appointmentId = '';
 
   appointmentForm: any;
 
@@ -33,8 +30,7 @@ export class EditAppointment implements OnInit {
     private readonly router: Router,
     private readonly appointmentService: AppointmentService,
     private readonly employeeService: EmployeeService,
-    private readonly toastService: ToastService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly toastService: ToastService
   ) {
     this.appointmentForm = this.fb.group({
       doctorEmployeeId: ['', Validators.required],
@@ -58,10 +54,9 @@ export class EditAppointment implements OnInit {
     this.appointmentForm.get('status')?.valueChanges.subscribe({
       next: (status: string) => {
         if (status === 'COMPLETED' || status === 'CANCELLED') {
-          this.availableSlots = [];
-          this.noSlotsError = false;
+          this.availableSlots.set([]);
+          this.noSlotsError.set(false);
           this.appointmentForm.patchValue({ timeSlot: '' });
-          this.cdr.markForCheck();
         } else {
           this.fetchAvailableSlots();
         }
@@ -79,12 +74,10 @@ export class EditAppointment implements OnInit {
   loadDoctors(): void {
     this.employeeService.getDoctors().subscribe({
       next: (response) => {
-        this.doctors = response.data;
-        this.cdr.markForCheck();
+        this.doctors.set(response.data);
       },
       error: (error) => {
         console.log(error);
-        this.cdr.markForCheck();
       }
     });
   }
@@ -124,12 +117,9 @@ export class EditAppointment implements OnInit {
         if (appointment?.status !== 'COMPLETED' && appointment?.status !== 'CANCELLED') {
           this.fetchAvailableSlots();
         }
-
-        this.cdr.markForCheck();
       },
       error: (error) => {
         console.log(error);
-        this.cdr.markForCheck();
       }
     });
   }
@@ -152,10 +142,8 @@ export class EditAppointment implements OnInit {
       return;
     }
 
-    this.noSlotsError = false;
-
-    this.availableSlots = [];
-    this.cdr.markForCheck();
+    this.noSlotsError.set(false);
+    this.availableSlots.set([]);
 
     this.appointmentService.getAvailableSlots(doctorEmployeeId, appointmentDate).subscribe({
       next: (response) => {
@@ -185,26 +173,23 @@ export class EditAppointment implements OnInit {
           });
         }
 
-        this.availableSlots = slots;
+        this.availableSlots.set(slots);
 
         // Show error if no slots are available
-        if (this.availableSlots.length === 0) {
-          this.noSlotsError = true;
+        if (this.availableSlots().length === 0) {
+          this.noSlotsError.set(true);
 
           this.toastService.show('No slots available for the selected date.', 'error');
         } else {
-          this.noSlotsError = false;
+          this.noSlotsError.set(false);
         }
-
-        this.cdr.markForCheck();
       },
       error: (error) => {
-        this.availableSlots = [];
+        this.availableSlots.set([]);
 
-        this.noSlotsError = true;
+        this.noSlotsError.set(true);
 
         this.toastService.show(error?.error?.message || 'Doctor is not available on this date.', 'error');
-        this.cdr.markForCheck();
       }
     });
   }
@@ -215,8 +200,8 @@ export class EditAppointment implements OnInit {
       this.appointmentForm.markAllAsTouched();
 
       // Show slot error if date is selected but no slot is available
-      if (this.appointmentForm.get('appointmentDate')?.valid && this.availableSlots.length === 0) {
-        this.noSlotsError = true;
+      if (this.appointmentForm.get('appointmentDate')?.valid && this.availableSlots().length === 0) {
+        this.noSlotsError.set(true);
       }
 
       return;
@@ -224,18 +209,16 @@ export class EditAppointment implements OnInit {
 
     // Prevent update when no slot is available
     if (
-      this.availableSlots.length === 0 &&
+      this.availableSlots().length === 0 &&
       this.appointmentForm.get('status')?.value !== 'COMPLETED' &&
       this.appointmentForm.get('status')?.value !== 'CANCELLED'
     ) {
-      this.noSlotsError = true;
-      this.cdr.markForCheck();
+      this.noSlotsError.set(true);
 
       return;
     }
 
-    this.isSubmitting = true;
-    this.cdr.markForCheck();
+    this.isSubmitting.set(true);
 
     // Convert symptoms text into array before sending to backend
     const formData = {
@@ -251,16 +234,14 @@ export class EditAppointment implements OnInit {
 
         this.router.navigate(['/appointments']);
 
-        this.isSubmitting = false;
-        this.cdr.markForCheck();
+        this.isSubmitting.set(false);
       },
       error: (error) => {
         console.log(error);
 
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
 
         this.toastService.show(error?.error?.message || 'Failed to update appointment.', 'error');
-        this.cdr.markForCheck();
       }
     });
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -14,10 +14,9 @@ import { ToastService } from '../../../core/services/toast';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResetPassword implements OnInit {
-  isSubmitting = false;
-
-  email = '';
-  securityQuestion = '';
+  readonly isSubmitting = signal(false);
+  readonly email = signal('');
+  readonly securityQuestion = signal('');
 
   resetForm: any;
 
@@ -25,7 +24,6 @@ export class ResetPassword implements OnInit {
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
     private readonly router: Router,
-    private readonly cdr: ChangeDetectorRef,
     private readonly toast: ToastService
   ) {
     this.resetForm = this.fb.group({
@@ -55,15 +53,13 @@ export class ResetPassword implements OnInit {
       sessionStorage.removeItem('passwordRecovery');
     }
 
-    this.email = navigation?.email || recoveryState?.email || '';
-    this.securityQuestion = navigation?.securityQuestion || recoveryState?.securityQuestion || '';
+    this.email.set(navigation?.email || recoveryState?.email || '');
+    this.securityQuestion.set(navigation?.securityQuestion || recoveryState?.securityQuestion || '');
 
     // Redirect if page is opened directly
-    if (!this.email || !this.securityQuestion) {
+    if (!this.email() || !this.securityQuestion()) {
       this.router.navigate(['/forgot-password']);
     }
-
-    this.cdr.markForCheck();
   }
 
   // Reset password
@@ -73,19 +69,17 @@ export class ResetPassword implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
-    this.cdr.markForCheck();
+    this.isSubmitting.set(true);
 
     if (this.resetForm.value.newPassword !== this.resetForm.value.confirmPassword) {
-      this.isSubmitting = false;
+      this.isSubmitting.set(false);
 
       this.toast.error('Passwords do not match');
-      this.cdr.markForCheck();
       return;
     }
 
     const payload = {
-      email: this.email,
+      email: this.email(),
       securityAnswer: this.resetForm.value.securityAnswer,
       newPassword: this.resetForm.value.newPassword,
       confirmPassword: this.resetForm.value.confirmPassword
@@ -101,8 +95,7 @@ export class ResetPassword implements OnInit {
 
         this.router.navigate(['/login']);
 
-        this.isSubmitting = false;
-        this.cdr.markForCheck();
+        this.isSubmitting.set(false);
       },
       error: (error) => {
         console.log('FULL ERROR');
@@ -111,9 +104,8 @@ export class ResetPassword implements OnInit {
         console.log('BACKEND ERRORS');
         console.log(error?.error?.errors);
 
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
         this.toast.error(error?.error?.message || 'Unable to reset password');
-        this.cdr.markForCheck();
       }
     });
   }

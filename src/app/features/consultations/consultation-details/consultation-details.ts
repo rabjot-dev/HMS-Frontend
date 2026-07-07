@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ConsultationService } from '../../../core/services/consultation';
@@ -12,14 +12,12 @@ import { ConsultationService } from '../../../core/services/consultation';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConsultationDetails implements OnInit {
-  consultation: any;
-
-  isLoading = true;
+  readonly consultation = signal<any>(null);
+  readonly isLoading = signal(true);
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly consultationService: ConsultationService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly consultationService: ConsultationService
   ) {}
 
   ngOnInit(): void {
@@ -36,15 +34,14 @@ export class ConsultationDetails implements OnInit {
       next: (response) => {
         console.log(response);
 
-        this.consultation = response.data;
+        this.consultation.set(response.data);
 
-        this.isLoading = false;
-        this.cdr.detectChanges();
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.log(error);
 
-        this.isLoading = false;
+        this.isLoading.set(false);
       }
     });
   }
@@ -57,7 +54,7 @@ export class ConsultationDetails implements OnInit {
 
   // Download prescription PDF
   downloadPdf(): void {
-    this.consultationService.downloadPrescriptionPdf(this.consultation._id).subscribe({
+    this.consultationService.downloadPrescriptionPdf(this.consultation()._id).subscribe({
       next: (response: Blob) => {
         const fileURL = globalThis.URL.createObjectURL(response);
 

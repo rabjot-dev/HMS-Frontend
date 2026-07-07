@@ -10,12 +10,12 @@
       <p class="page-subtitle">Review and approve patient appointment requests.</p>
     </div>
 
-    <div class="pending-count">{{ appointments.length }} Pending</div>
+    <div class="pending-count">{{ appointments().length }} Pending</div>
   </div>
 
   <!-- Empty State -->
 
-  @if( appointments.length === 0 ){
+  @if( appointments().length === 0 ){
   <div class="empty-state glass-card">
     <div class="empty-icon">📅</div>
 
@@ -26,7 +26,7 @@
 
   } @else {
   <div class="employee-grid">
-    @for( appointment of appointments; track appointment._id ){
+    @for( appointment of appointments(); track appointment._id ){
     <div class="employee-card glass-card">
       <!-- Patient -->
 
@@ -80,22 +80,14 @@
         @if(nodeService.canUseApi('PATCH', '/api/appointments/:id/approve')){
         <button
           class="approve-btn"
-          (click)="
-            approve(
-              appointment._id
-            )
-          "
+          (click)="approve(appointment._id)"
         >
           Approve
         </button>
         } @if(nodeService.canUseApi('PATCH', '/api/appointments/:id/reject')){
         <button
           class="reject-btn"
-          (click)="
-            reject(
-              appointment._id
-            )
-          "
+          (click)="reject(appointment._id)"
         >
           Reject
         </button>

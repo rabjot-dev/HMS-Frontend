@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -17,119 +18,119 @@ import { ToastService } from '../../../core/services/toast';
   styleUrls: ['./appointment-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppointmentList implements OnInit {
-  appointments: any[] = [];
+export class AppointmentList implements OnInit, OnDestroy {
+  readonly appointments = signal<any[]>([]);
+  readonly search = signal('');
+  readonly status = signal('');
+  readonly priority = signal('');
+  readonly startDate = signal('');
+  readonly endDate = signal('');
+  readonly page = signal(1);
+  readonly limit = signal(10);
+  readonly cursorStack = signal<string[]>(['']);
+  readonly nextCursor = signal('');
+  readonly totalRecords = signal(0);
+  readonly totalPages = signal(0);
 
-  search = '';
-  status = '';
-  priority = '';
-  startDate = '';
-  endDate = '';
-  page = 1;
-  limit = 10;
-  cursorStack: string[] = [''];
-  nextCursor = '';
-
-  totalRecords = 0;
-  totalPages = 0;
+  private readonly destroy$ = new Subject<void>();
+  protected readonly searchDebounce$ = new Subject<void>();
 
   constructor(
     private readonly appointmentService: AppointmentService,
     public readonly authService: AuthService,
     public readonly nodeService: NodeService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly confirmDialog: ConfirmDialogService,
     private readonly toast: ToastService
   ) {}
 
   ngOnInit(): void {
     this.loadAppointments();
+    this.searchDebounce$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.onFilterChange());
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadAppointments(): void {
     const params: any = {
-      page: this.page,
-      limit: this.limit,
+      page: this.page(),
+      limit: this.limit(),
       pagination: 'cursor',
-      cursor: this.cursorStack[this.page - 1] || ''
+      cursor: this.cursorStack()[this.page() - 1] || ''
     };
 
-    if (this.search.trim()) {
-      params.search = this.search;
+    if (this.search().trim()) {
+      params.search = this.search();
     }
 
-    if (this.status) {
-      params.status = this.status;
+    if (this.status()) {
+      params.status = this.status();
     }
 
-    if (this.priority) {
-      params.priority = this.priority;
+    if (this.priority()) {
+      params.priority = this.priority();
     }
 
-    if (this.startDate) {
-      params.startDate = this.startDate;
+    if (this.startDate()) {
+      params.startDate = this.startDate();
     }
 
-    if (this.endDate) {
-      params.endDate = this.endDate;
+    if (this.endDate()) {
+      params.endDate = this.endDate();
     }
 
     this.appointmentService.getAppointments(params).subscribe({
       next: (response) => {
-        this.appointments = response.data;
+        this.appointments.set(response.data);
 
-        this.totalRecords = response.meta?.totalRecords ?? response.meta?.total ?? 0;
+        this.totalRecords.set(response.meta?.totalRecords ?? response.meta?.total ?? 0);
 
-        this.totalPages = response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords / this.limit), 1);
-        this.nextCursor = response.meta?.nextCursor || '';
+        this.totalPages.set(response.meta?.totalPages || Math.max(Math.ceil(this.totalRecords() / this.limit()), 1));
+        this.nextCursor.set(response.meta?.nextCursor || '');
 
-        if (this.page > 1 && this.appointments.length === 0) {
-          this.page = Math.max(this.totalPages || 1, 1);
+        if (this.page() > 1 && this.appointments().length === 0) {
+          this.page.set(Math.max(this.totalPages() || 1, 1));
           this.loadAppointments();
           return;
         }
-
-        this.cdr.detectChanges();
       },
       error: (error) => {
         console.log(error);
       }
     });
   }
-  onFilterChange(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
 
+  onFilterChange(): void {
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
     this.loadAppointments();
   }
 
   previousPage(): void {
-    if (this.page > 1) {
-      this.page--;
-
+    if (this.page() > 1) {
+      this.page.update(p => p - 1);
       this.loadAppointments();
     }
   }
 
   nextPage(): void {
-    if (this.nextCursor) {
-      this.cursorStack[this.page] = this.nextCursor;
-      this.page++;
-
+    if (this.nextCursor()) {
+      const stack = [...this.cursorStack()];
+      stack[this.page()] = this.nextCursor();
+      this.cursorStack.set(stack);
+      this.page.update(p => p + 1);
       this.loadAppointments();
     }
   }
 
-  changePageSize(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-
-    this.limit = Number(select.value);
-
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
-
+  onPageSizeChange(newLimit: number): void {
+    this.limit.set(newLimit);
+    this.page.set(1);
+    this.cursorStack.set(['']);
+    this.nextCursor.set('');
     this.loadAppointments();
   }
 
@@ -147,9 +148,8 @@ export class AppointmentList implements OnInit {
 
     this.appointmentService.deleteAppointment(id).subscribe({
       next: () => {
-        this.page = this.getPageAfterDelete();
+        this.page.set(this.getPageAfterDelete());
         this.toast.success('Appointment deleted successfully');
-
         this.loadAppointments();
       },
       error: (error) => {
@@ -159,9 +159,8 @@ export class AppointmentList implements OnInit {
   }
 
   private getPageAfterDelete(): number {
-    const totalAfterDelete = Math.max(this.totalRecords - 1, 0);
-    const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit), 1);
-
-    return Math.min(this.page, totalPagesAfterDelete);
+    const totalAfterDelete = Math.max(this.totalRecords() - 1, 0);
+    const totalPagesAfterDelete = Math.max(Math.ceil(totalAfterDelete / this.limit()), 1);
+    return Math.min(this.page(), totalPagesAfterDelete);
   }
 }

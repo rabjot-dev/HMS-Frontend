@@ -73,20 +73,20 @@
 
       <!-- Error -->
 
-      @if(errorMessage){
-      <div class="error-box">{{ errorMessage }}</div>
+      @if(errorMessage()){
+      <div class="error-box">{{ errorMessage() }}</div>
       }
 
       <!-- Button -->
 
-      <button type="submit" class="login-btn" [disabled]="isSubmitting">
-        @if(isSubmitting){ Logging in... } @else { Login }
+      <button type="submit" class="login-btn" [disabled]="isSubmitting()">
+        @if(isSubmitting()){ Logging in... } @else { Login }
       </button>
 
       <!-- Register -->
 
       <div class="register-text">
-        Don’t have an account?
+        Don't have an account?
 
         <a routerLink="/register">Register</a>
       </div>
