@@ -21,6 +21,7 @@ jobs:
             cd hms_project/HMS-Frontend
             git fetch origin feature/visagan_sprint_5
             git reset --hard origin/feature/visagan_sprint_5
+            rm -rf dist
             npm ci
             sudo ng build --configuration production
             sudo mkdir -p /var/www/hms-frontend
