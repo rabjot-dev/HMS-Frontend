@@ -10,42 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Build Frontend
-        run: npm run build
-
-      - name: Upload Build to EC2
-        uses: appleboy/scp-action@master
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: dist/HMS-Frontend/browser/*
-          target: /tmp/hms-frontend
-          strip_components: 3
 
-      - name: Publish Frontend on EC2
-        uses: appleboy/ssh-action@master
-        env:
-          FRONTEND_DEPLOY_PATH: ${{ secrets.FRONTEND_DEPLOY_PATH || '/var/www/hms-frontend' }}
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          envs: FRONTEND_DEPLOY_PATH
           script: |
-            sudo mkdir -p "$FRONTEND_DEPLOY_PATH"
-            sudo rsync -av --delete /tmp/hms-frontend/ "$FRONTEND_DEPLOY_PATH"/
-            sudo rm -rf /tmp/hms-frontend
+            cd /home/ubuntu/hms_project/HMS_Frontend
+
+            git fetch origin
+            git reset --hard origin/feature/R_SP6
+
+            npm install
+
+            npm run build
+
+            sudo rm -rf /var/www/hms-admin/*
+
+            sudo cp -r dist/HMS-Frontend/browser/* /var/www/hms-admin/
+
             sudo systemctl reload nginx
