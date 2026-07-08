@@ -317,14 +317,6 @@ textarea {
   padding: 0;
   transition: opacity 0.2s;
 }
-
-.error-text {
-  color: #e53e3e;
-  font-size: 17px;
-  margin-top: 6px;
-  display: block;
-  padding-left: 4px;
-}
 .toast-close:hover {
   opacity: 1;
 }
@@ -350,3 +342,4 @@ textarea {
     transform: translateX(110%);
   }
 }
+

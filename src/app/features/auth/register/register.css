@@ -116,13 +116,6 @@
   grid-template-columns: 1fr 950px;
   background: linear-gradient(135deg, #eff6ff, #f8fafc);
 }
-.error-text {
-  display: block;
-  font-size: 0.82rem;
-  color: #dc2626;
-  margin-top: 4px;
-  font-weight: 500;
-}
 /* Left */
 
 .register-left {
@@ -308,22 +301,6 @@ select:focus {
   color: #15803d;
   font-weight: 600;
 }
-
-.error-message {
-  padding: 14px 16px;
-  border-radius: 14px;
-  margin-bottom: 20px;
-  background: rgba(239, 68, 68, 0.12);
-  color: #dc2626;
-  font-weight: 600;
-}
-
-.error-text {
-  color: #dc2626;
-  font-size: 13px;
-  font-weight: 500;
-}
-
 /* Login Link */
 
 .login-link {
@@ -356,16 +333,6 @@ select:focus {
     flex-direction: column;
   }
 }
-.error-message {
-  background: #fee2e2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
-  padding: 12px;
-  border-radius: 10px;
-  margin-bottom: 16px;
-  font-size: 14px;
-}
-
 .success-message {
   background: #dcfce7;
   color: #16a34a;
@@ -475,3 +442,4 @@ select {
 .step-circle {
   background: rgba(255, 255, 255, 0.72);
 }
+
