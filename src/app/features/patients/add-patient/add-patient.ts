@@ -330,6 +330,32 @@ export class AddPatient implements OnInit {
     return Boolean(control?.invalid && (control.touched || control.dirty));
   }
 
+  markFieldInteracted(fieldName: string): void {
+    this.patientForm.get(fieldName)?.markAsTouched();
+  }
+
+  nameErrorMessage(fieldName: string, label: string, maxLength: number): string {
+    const errors = this.patientForm.get(fieldName)?.errors;
+
+    if (!errors) {
+      return '';
+    }
+
+    if (errors['required']) {
+      return `${label} is required`;
+    }
+
+    if (errors['pattern']) {
+      return `${label} can contain only letters, spaces, apostrophes and hyphens`;
+    }
+
+    if (errors['minlength'] || errors['maxlength']) {
+      return `${label} must be 2 to ${maxLength} characters`;
+    }
+
+    return `Enter a valid ${label.toLowerCase()}`;
+  }
+
   // Move to next step after validating current step
   nextStep(): void {
     const stepFields: { [key: number]: string[] } = {

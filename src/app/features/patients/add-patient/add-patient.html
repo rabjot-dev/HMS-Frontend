@@ -41,25 +41,27 @@
       <div class="grid-2">
         <!-- First Name -->
         <div class="form-field">
-          <input type="text" placeholder="First Name" formControlName="firstName" />
+          <input
+            type="text"
+            placeholder="First Name"
+            formControlName="firstName"
+            (input)="markFieldInteracted('firstName')"
+          />
           @if(showFieldError('firstName')){
-          <span class="error-text">
-            @if(patientForm.get('firstName')?.errors?.['required']){ First Name is required }
-            @else if(patientForm.get('firstName')?.errors?.['pattern']){ First Name can contain only letters, spaces, apostrophes and hyphens }
-            @else { First Name must be 2 to 50 characters }
-          </span>
+          <span class="error-text">{{ nameErrorMessage('firstName', 'First Name', 50) }}</span>
           }
         </div>
 
         <!-- Last Name -->
         <div class="form-field">
-          <input type="text" placeholder="Last Name" formControlName="lastName" />
+          <input
+            type="text"
+            placeholder="Last Name"
+            formControlName="lastName"
+            (input)="markFieldInteracted('lastName')"
+          />
           @if(showFieldError('lastName')){
-          <span class="error-text">
-            @if(patientForm.get('lastName')?.errors?.['required']){ Last Name is required }
-            @else if(patientForm.get('lastName')?.errors?.['pattern']){ Last Name can contain only letters, spaces, apostrophes and hyphens }
-            @else { Last Name must be 2 to 50 characters }
-          </span>
+          <span class="error-text">{{ nameErrorMessage('lastName', 'Last Name', 50) }}</span>
           }
         </div>
 
