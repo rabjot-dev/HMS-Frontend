@@ -24,7 +24,7 @@ jobs:
             git fetch origin feature/visagan_sprint_5
             git reset --hard origin/feature/visagan_sprint_5
 
-            npm ci
+            npm install
             npm run build
 
             sudo mkdir -p /var/www/hms-frontend
