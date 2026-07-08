@@ -17,30 +17,10 @@ jobs:
           username: ${{ secrets.EC2_VISAGAN_USER }}
           key: ${{ secrets.EC2_VISAGAN_SSH }}
           script: |
-            set -e
-
-            cd ~/hms_project/HMS-Frontend
-
-            git update-ref -d refs/remotes/origin/feature/visagan_sprint_5 || true
-            git fetch origin feature/visagan_sprint_5
-            git reset --hard FETCH_HEAD
-
-            rm -rf node_modules package-lock.json
-            npm install
-
-            ./node_modules/.bin/ng build
-
-            sudo mkdir -p /var/www/hms-frontend
-            sudo rm -rf /var/www/hms-frontend/*
-
-            if [ -d "dist/hms-frontend/browser" ]; then
-              sudo cp -r dist/hms-frontend/browser/* /var/www/hms-frontend/
-            elif [ -d "dist/hms-frontend" ]; then
-              sudo cp -r dist/hms-frontend/* /var/www/hms-frontend/
-            else
-              echo "Build folder not found"
-              ls -R dist
-              exit 1
-            fi
-
+            cd hms_project/HMS-Frontend
+            git pull origin feature/visagan_sprint_5
+            npm ci
+            sudo ng build --configuration production
+            rm -rf /var/www/hms-frontend/*
+            cp -r dist/HMS-Frontend/browser/* /var/www/hms-frontend/
             sudo systemctl restart nginx
