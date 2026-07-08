@@ -20,7 +20,7 @@ jobs:
             cd HMS/HMS-Frontend
             git pull origin feature/AA_SP5
             npm ci
-            ng build --configuration production
+            sudo ng build --configuration production
             rm -rf /var/www/hms-frontend/*
             cp -r dist/HMS-Frontend/browser/* /var/www/hms-frontend/
             sudo systemctl restart nginx
