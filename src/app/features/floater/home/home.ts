@@ -11,8 +11,13 @@ import { Router } from '@angular/router';
 export class Home {
   constructor(private router: Router) {}
 
+   goToLogin(): void {
+    this.router.navigate(['/login']);
+  }
+
+
   @HostListener('window:keydown.space')
   handleSpacebar(): void {
-    this.router.navigate(['/login']);
+      this.goToLogin();
   }
 }
