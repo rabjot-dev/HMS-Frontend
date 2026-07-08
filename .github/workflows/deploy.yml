@@ -7,6 +7,7 @@ on:
 
 jobs:
   deploy:
+    name: Deploy Angular to EC2
     runs-on: ubuntu-latest
 
     steps:
@@ -16,19 +17,31 @@ jobs:
           host: ${{ secrets.EC2_RABJOT }}
           username: ${{ secrets.EC2_RABJOT_USER }}
           key: ${{ secrets.EC2_RABJOT_SSH }}
-
           script: |
+            set -e
+
+            echo "========== Frontend Deployment Started =========="
+
             cd /home/ubuntu/hms_project/HMS_Frontend
 
+            echo "Fetching latest code..."
             git fetch origin
             git reset --hard origin/feature/R_SP6
 
-            npm install
+            echo "Installing dependencies..."
+            npm ci
 
+            echo "Building Angular application..."
             npm run build
 
+            echo "Cleaning old deployment..."
             sudo rm -rf /var/www/hms-admin/*
 
+            echo "Copying new build..."
             sudo cp -r dist/HMS-Frontend/browser/* /var/www/hms-admin/
 
+            echo "Reloading Nginx..."
+            sudo nginx -t
             sudo systemctl reload nginx
+
+            echo "Deployment completed successfully."
