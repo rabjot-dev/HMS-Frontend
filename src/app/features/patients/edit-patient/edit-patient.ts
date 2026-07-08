@@ -5,6 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../../core/services/patient';
 import { ToastService } from '../../../core/services/toast';
 
+const NAME_PATTERN = /^[A-Za-z\s'-]+$/;
+const PHONE_PATTERN = /^\d{10}$/;
+
 @Component({
   selector: 'app-edit-patient',
   standalone: true,
@@ -29,12 +32,12 @@ export class EditPatient implements OnInit {
     private readonly toast: ToastService
   ) {
     this.patientForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern(NAME_PATTERN)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern(NAME_PATTERN)]],
       gender: [''],
       bloodGroup: [''],
-      phone: [''],
-      email: [''],
+      phone: ['', Validators.pattern(PHONE_PATTERN)],
+      email: ['', Validators.email],
       medicalHistory: [''],
       allergies: [''],
       insuranceProvider: [''],
@@ -99,6 +102,7 @@ export class EditPatient implements OnInit {
   // Update patient
   onSubmit(): void {
     if (this.patientForm.invalid) {
+      this.patientForm.markAllAsTouched();
       return;
     }
 

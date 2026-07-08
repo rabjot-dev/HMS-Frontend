@@ -13,6 +13,7 @@
 .input-card {
   position: fixed;
   inset: 88px 16px auto;
+  z-index: 99999;
   margin: 0 auto;
   width: min(440px, 100%);
   display: grid;

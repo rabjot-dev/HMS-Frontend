@@ -43,7 +43,11 @@
         <div class="form-field">
           <input type="text" placeholder="First Name" formControlName="firstName" />
           @if(patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched){
-          <span class="error-text">First Name is required</span>
+          <span class="error-text">
+            @if(patientForm.get('firstName')?.errors?.['required']){ First Name is required }
+            @else if(patientForm.get('firstName')?.errors?.['pattern']){ First Name can contain only letters, spaces, apostrophes and hyphens }
+            @else { First Name must be 2 to 50 characters }
+          </span>
           }
         </div>
 
@@ -51,7 +55,11 @@
         <div class="form-field">
           <input type="text" placeholder="Last Name" formControlName="lastName" />
           @if(patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched){
-          <span class="error-text">Last Name is required</span>
+          <span class="error-text">
+            @if(patientForm.get('lastName')?.errors?.['required']){ Last Name is required }
+            @else if(patientForm.get('lastName')?.errors?.['pattern']){ Last Name can contain only letters, spaces, apostrophes and hyphens }
+            @else { Last Name must be 2 to 50 characters }
+          </span>
           }
         </div>
 
@@ -258,7 +266,11 @@
         <div class="form-field">
           <input type="text" placeholder="Emergency Contact Name" formControlName="emergencyContactName" />
           @if(patientForm.get('emergencyContactName')?.invalid && patientForm.get('emergencyContactName')?.touched){
-          <span class="error-text">Emergency Contact Name is required</span>
+          <span class="error-text">
+            @if(patientForm.get('emergencyContactName')?.errors?.['required']){ Emergency Contact Name is required }
+            @else if(patientForm.get('emergencyContactName')?.errors?.['pattern']){ Emergency Contact Name can contain only letters, spaces, apostrophes and hyphens }
+            @else { Emergency Contact Name must be 2 to 100 characters }
+          </span>
           }
         </div>
 

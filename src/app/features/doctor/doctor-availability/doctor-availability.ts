@@ -29,10 +29,10 @@ export class DoctorAvailability implements OnInit {
       workingDays: [[]],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
-      slotDuration: [15, Validators.required],
+      slotDuration: [15, [Validators.required, Validators.min(5), Validators.max(240)]],
       breakStartTime: [''],
       breakEndTime: [''],
-      maxPatientsPerDay: [40, Validators.required],
+      maxPatientsPerDay: [40, [Validators.required, Validators.min(1), Validators.max(500)]],
       isAvailable: [true]
     });
   }
@@ -91,6 +91,28 @@ export class DoctorAvailability implements OnInit {
     if (this.availabilityForm.invalid) {
       this.availabilityForm.markAllAsTouched();
 
+      return;
+    }
+
+    const { startTime, endTime, breakStartTime, breakEndTime } = this.availabilityForm.value;
+
+    if (endTime <= startTime) {
+      this.toast.error('End time must be after start time');
+      return;
+    }
+
+    if (breakStartTime && breakEndTime && breakEndTime <= breakStartTime) {
+      this.toast.error('Break end time must be after break start time');
+      return;
+    }
+
+    if ((breakStartTime && !breakEndTime) || (!breakStartTime && breakEndTime)) {
+      this.toast.error('Both break start and end time are required');
+      return;
+    }
+
+    if (breakStartTime && (breakStartTime < startTime || breakEndTime > endTime)) {
+      this.toast.error('Break time must be inside working hours');
       return;
     }
 

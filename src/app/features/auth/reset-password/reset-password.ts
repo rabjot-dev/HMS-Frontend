@@ -29,7 +29,7 @@ export class ResetPassword implements OnInit {
     private readonly toast: ToastService
   ) {
     this.resetForm = this.fb.group({
-      securityAnswer: ['', Validators.required],
+      securityAnswer: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       newPassword: [
         '',
         [

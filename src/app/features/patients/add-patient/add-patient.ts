@@ -15,6 +15,9 @@ type PostOfficeArea = {
   pincode: string;
 };
 
+const NAME_PATTERN = /^[A-Za-z\s'-]+$/;
+const PHONE_PATTERN = /^\d{10}$/;
+
 @Component({
   selector: 'app-add-patient',
   standalone: true,
@@ -51,17 +54,17 @@ export class AddPatient implements OnInit {
   ) {
     this.patientForm = this.fb.group({
       // Basic Information
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern(NAME_PATTERN)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern(NAME_PATTERN)]],
       dateOfBirth: ['', [Validators.required, this.futureDateValidator]],
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
       maritalStatus: ['', Validators.required],
       // Contact Information
       countryCode: ['+91', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      email: ['', Validators.required],
-      address: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
+      email: ['', [Validators.required, Validators.email]],
+      address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(250)]],
       city: ['', Validators.required],
       state: ['', Validators.required],
       taluk: ['', Validators.required],
@@ -69,8 +72,11 @@ export class AddPatient implements OnInit {
       pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
       country: ['India'],
       // Emergency Contact
-      emergencyContactName: ['', Validators.required],
-      emergencyContactPhone: ['', Validators.required],
+      emergencyContactName: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(NAME_PATTERN)]
+      ],
+      emergencyContactPhone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN)]],
       // Medical Information
       medicalHistory: [''],
       allergies: [''],
