@@ -28,7 +28,7 @@
   height: 42px;
 }
 
-.line {
+.line:where(*) {
   height: 14px;
 }
 
@@ -47,7 +47,7 @@
 }
 
 @media (max-width: 720px) {
-  .skeleton-row {
+  .skeleton-row:where(*) {
     grid-template-columns: 42px 1fr;
   }
   .line.short {

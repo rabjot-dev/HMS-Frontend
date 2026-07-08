@@ -77,15 +77,15 @@
 }
 
 @media (max-width: 768px) {
-  .pagination-card {
+  .pagination-card:where(*) {
     grid-template-columns: 1fr;
     justify-items: center;
   }
   .total-records,
-  .page-size {
+  .page-size:where(*) {
     justify-self: center;
   }
-  .pagination-controls {
+  .pagination-controls:where(*) {
     justify-content: center;
   }
 }

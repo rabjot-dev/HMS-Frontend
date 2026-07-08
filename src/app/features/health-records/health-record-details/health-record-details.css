@@ -121,7 +121,7 @@
   color: white;
 }
 
-.secondary-btn {
+.secondary-btn:where(*) {
   background: #e2e8f0;
 }
 
@@ -242,27 +242,27 @@
 }
 
 @media (max-width: 992px) {
-  .patient-grid {
+  .patient-grid:where(*) {
     grid-template-columns: repeat(2, 1fr);
   }
-  .timeline-top {
+  .timeline-top:where(*) {
     flex-direction: column;
   }
 }
 
 @media (max-width: 600px) {
-  .patient-grid {
+  .patient-grid:where(*):where(*) {
     grid-template-columns: 1fr;
   }
-  .section-card {
+  .section-card:where(*) {
     padding: 22px;
   }
-  .section-header {
+  .section-header:where(*) {
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
   }
-  .title-row {
+  .title-row:where(*) {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
@@ -274,7 +274,7 @@
   gap: 24px;
 }
 
-.timeline-card {
+.timeline-card:where(*) {
   background: #f8fafc;
   border-radius: 24px;
   padding: 28px;
@@ -298,7 +298,7 @@
   gap: 14px;
 }
 
-.timeline-dot {
+.timeline-dot:where(*) {
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -328,7 +328,7 @@
   font-weight: 600;
 }
 
-.timeline-actions {
+.timeline-actions:where(*) {
   display: flex;
   gap: 12px;
   align-items: flex-start;
@@ -344,16 +344,16 @@
   font-weight: 600;
 }
 
-.primary-btn {
+.primary-btn:where(*) {
   background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
 }
 
-.secondary-btn {
+.secondary-btn:where(*):where(*) {
   background: #e2e8f0;
 }
 
-.followup-btn {
+.followup-btn:where(*) {
   background: #22c55e;
   color: white;
 }
@@ -364,22 +364,22 @@
   border-top: 1px solid #e2e8f0;
 }
 
-.detail-section {
+.detail-section:where(*) {
   margin-bottom: 30px;
 }
 
-.detail-section h4 {
+.detail-section h4:where(*) {
   margin-bottom: 16px;
   color: #0f172a;
 }
 
-.chips {
+.chips:where(*) {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
 }
 
-.chip {
+.chip:where(*) {
   background: #eff6ff;
   color: #2563eb;
   padding: 10px 16px;
@@ -411,13 +411,13 @@
   font-size: 18px;
 }
 
-.medicine-list {
+.medicine-list:where(*) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
 
-.medicine-card {
+.medicine-card:where(*) {
   background: white;
   padding: 22px;
   border-radius: 18px;
@@ -434,10 +434,10 @@
 }
 
 @media (max-width: 900px) {
-  .timeline-header {
+  .timeline-header:where(*) {
     flex-direction: column;
   }
-  .timeline-actions {
+  .timeline-actions:where(*):where(*) {
     flex-wrap: wrap;
   }
 }
@@ -518,7 +518,7 @@
   color: #15803d;
 }
 
-.delete-btn {
+.delete-btn:where(*) {
   background: #fee2e2;
   color: #dc2626;
 }

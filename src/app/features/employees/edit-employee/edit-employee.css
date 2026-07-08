@@ -122,7 +122,7 @@ input:focus {
 
 /* Update */
 
-.update-btn {
+.update-btn:where(*) {
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
   box-shadow: 0 18px 35px rgba(59, 130, 246, 0.22);
@@ -136,14 +136,14 @@ input:focus {
 
 @media (max-width: 768px) {
   .page-header,
-  .employee-form {
+  .employee-form:where(*) {
     padding: 22px;
   }
-  .button-group {
+  .button-group:where(*) {
     flex-direction: column;
   }
   .cancel-btn,
-  .update-btn {
+  .update-btn:where(*):where(*) {
     width: 100%;
   }
 }

@@ -94,7 +94,7 @@ textarea.ng-invalid.ng-touched {
   margin-top: -4px;
 }
 
-textarea {
+textarea:where(*) {
   min-height: 120px;
   resize: vertical;
 }
@@ -206,14 +206,14 @@ textarea {
 /* Responsive */
 
 @media (max-width: 768px) {
-  .consultation-container {
+  .consultation-container:where(*) {
     padding: 15px;
   }
-  .patient-info {
+  .patient-info:where(*) {
     flex-direction: column;
     gap: 10px;
   }
-  .prescription-top {
+  .prescription-top:where(*) {
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;

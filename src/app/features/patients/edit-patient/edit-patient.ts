@@ -14,6 +14,8 @@ import { ToastService } from '../../../core/services/toast';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditPatient implements OnInit {
+  private readonly namePattern = /^[A-Za-z]+$/;
+
   patientId = '';
   isSubmitting = false;
 
@@ -29,12 +31,18 @@ export class EditPatient implements OnInit {
     private readonly toast: ToastService
   ) {
     this.patientForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern(this.namePattern)]
+      ],
+      lastName: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern(this.namePattern)]
+      ],
       gender: [''],
       bloodGroup: [''],
-      phone: [''],
-      email: [''],
+      phone: ['', [Validators.pattern(/^\d{10}$/)]],
+      email: ['', [Validators.email]],
       medicalHistory: [''],
       allergies: [''],
       insuranceProvider: [''],
@@ -99,6 +107,7 @@ export class EditPatient implements OnInit {
   // Update patient
   onSubmit(): void {
     if (this.patientForm.invalid) {
+      this.patientForm.markAllAsTouched();
       return;
     }
 

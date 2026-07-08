@@ -215,13 +215,13 @@ button:disabled,
   .patients-header,
   .employees-header,
   .queue-header,
-  .page-header {
+  .page-header:where(*) {
     align-items: stretch;
     flex-direction: column;
   }
 }
 
-textarea {
+textarea:where(*) {
   resize: none;
   min-height: 120px;
 }
@@ -282,7 +282,7 @@ tbody td {
 
 @media (max-width: 768px) {
   .filter-toolbar,
-  .filters-wrapper {
+  .filters-wrapper:where(*) {
     flex-direction: column;
     align-items: stretch;
   }
@@ -318,7 +318,7 @@ tbody td {
   .availability-header,
   .top-section,
   .section-header
-) {
+):where(*) {
   width: 100% !important;
   display: flex !important;
   align-items: center !important;
@@ -351,7 +351,7 @@ tbody td {
     .top-section,
     .section-header
   )
-  h2 {
+  h2:where(*) {
   margin: 0 0 4px !important;
   color: #0f172a !important;
   font-size: 26px !important;
@@ -480,7 +480,7 @@ tbody td {
   .loading-card,
   .empty-state,
   .availability-form
-) {
+):where(*):where(*) {
   border-radius: 12px !important;
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
@@ -525,7 +525,7 @@ tbody td {
   .role-badge,
   .visit-badge,
   .uhid-badge
-) {
+):where(*):where(*):where(*) {
   display: inline-flex !important;
   align-items: center !important;
   min-height: 26px !important;
@@ -552,7 +552,7 @@ tbody td {
   .action-btn,
   .slot-btn,
   .day-btn
-) {
+):where(*):where(*):where(*):where(*) {
   min-height: 36px !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -614,11 +614,11 @@ tbody td {
     .availability-header,
     .top-section,
     .section-header
-  ) {
+  ):where(*):where(*):where(*):where(*):where(*) {
     align-items: flex-start !important;
     flex-direction: column !important;
   }
-  :where(.filters-wrapper, .filters-row, .filter-toolbar) {
+  :where(.filters-wrapper, .filters-row, .filter-toolbar):where(*) {
     align-items: stretch !important;
     flex-direction: column !important;
   }
@@ -707,7 +707,7 @@ canvas {
     .records-grid,
     .profile-grid,
     .availability-grid
-  ) {
+  ):where(*):where(*):where(*):where(*):where(*):where(*) {
     grid-template-columns: 1fr !important;
   }
 
@@ -722,16 +722,16 @@ canvas {
 }
 
 @media (max-width: 768px) {
-  h1 {
+  h1:where(*) {
     font-size: 24px;
     letter-spacing: 0;
   }
 
-  h2 {
+  h2:where(*):where(*) {
     font-size: 20px;
   }
 
-  h3 {
+  h3:where(*) {
     font-size: 17px;
   }
 
@@ -747,7 +747,7 @@ canvas {
     .node-page,
     .page-shell,
     .dashboard-wrapper
-  ) {
+  ):where(*):where(*):where(*):where(*):where(*):where(*):where(*) {
     gap: 12px !important;
   }
 
@@ -760,7 +760,7 @@ canvas {
     .top-section,
     .section-header,
     .page-header
-  ) {
+  ):where(*):where(*):where(*):where(*):where(*):where(*):where(*):where(*) {
     padding: 14px !important;
     border-radius: 12px !important;
   }
@@ -786,12 +786,12 @@ canvas {
       .section-header,
       .page-header
     )
-    h2 {
+    h2:where(*):where(*):where(*) {
     font-size: 22px !important;
     letter-spacing: 0 !important;
   }
 
-  :where(.page-subtitle, .section-subtitle) {
+  :where(.page-subtitle, .section-subtitle):where(*) {
     font-size: 13px !important;
   }
 
@@ -806,12 +806,12 @@ canvas {
     max-width: none !important;
   }
 
-  :where(input, select, textarea) {
+  :where(input, select, textarea):where(*) {
     min-width: 0 !important;
     font-size: 16px !important;
   }
 
-  :where(.table-wrapper, .table-container) {
+  :where(.table-wrapper, .table-container):where(*) {
     max-width: 100% !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
@@ -853,7 +853,7 @@ canvas {
     .top-section,
     .section-header,
     .page-header
-  ) {
+  ):where(*):where(*):where(*):where(*):where(*):where(*):where(*):where(*):where(*) {
     padding: 12px !important;
   }
 
@@ -878,15 +878,15 @@ canvas {
       .section-header,
       .page-header
     )
-    h2 {
+    h2:where(*):where(*):where(*):where(*) {
     font-size: 20px !important;
   }
 
-  :where(.book-btn, .request-btn, .add-btn, .submit-btn, .primary-btn, .search-btn, .view-btn, .download-btn) {
+  :where(.book-btn, .request-btn, .add-btn, .submit-btn, .primary-btn, .search-btn, .view-btn, .download-btn):where(*) {
     width: 100% !important;
   }
 
-  :where(.table-wrapper table, .table-container table) {
+  :where(.table-wrapper table, .table-container table):where(*) {
     min-width: 680px;
   }
 

@@ -35,7 +35,7 @@ h6 {
   font-size: 1rem;
 }
 
-body {
+body:where(*) {
   font-size: 16px;
 }
 
@@ -421,7 +421,7 @@ button {
   background: #f1f5f9;
 }
 
-.profile-dropdown button {
+.profile-dropdown button:where(*) {
   color: #dc2626;
 }
 
@@ -434,31 +434,31 @@ button {
 
 /* Responsive */
 @media (max-width: 992px) {
-  .sidebar {
+  .sidebar:where(*) {
     width: 100px; /* 90 → 100 */
   }
   .logo-section div,
   .profile-card div,
-  .top-user-info {
+  .top-user-info:where(*) {
     display: none;
   }
-  .nav-links a {
+  .nav-links a:where(*) {
     justify-content: center;
   }
-  .topbar {
+  .topbar:where(*) {
     padding: 22px; /* 20 → 22 */
   }
-  .topbar-right {
+  .topbar-right:where(*) {
     gap: 14px; /* 12 → 14 */
   }
 }
 
 /* Compact HMS Shell Overrides */
-.dashboard-shell {
+.dashboard-shell:where(*) {
   background: #f4f7fb;
 }
 
-.sidebar {
+.sidebar:where(*):where(*) {
   width: 260px;
   flex: 0 0 260px;
   padding: 22px 16px;
@@ -472,12 +472,12 @@ button {
     opacity 0.18s ease;
 }
 
-.logo-section {
+.logo-section:where(*) {
   gap: 12px;
   margin-bottom: 26px;
 }
 
-.logo-circle {
+.logo-circle:where(*) {
   width: 44px;
   height: 44px;
   border-radius: 12px;
@@ -485,49 +485,49 @@ button {
   font-size: 20px;
 }
 
-.logo-section h2 {
+.logo-section h2:where(*) {
   font-size: 18px;
 }
 
-.profile-card {
+.profile-card:where(*) {
   gap: 12px;
   margin-bottom: 18px;
   padding: 12px;
   border-radius: 12px;
 }
 
-.avatar {
+.avatar:where(*) {
   width: 42px;
   height: 42px;
   font-size: 17px;
 }
 
-.nav-links {
+.nav-links:where(*) {
   gap: 6px;
   margin-top: 10px;
 }
 
-.nav-links a {
+.nav-links a:where(*):where(*) {
   gap: 10px;
   padding: 10px 12px;
   border-radius: 10px;
 }
 
-.nav-links a:hover {
+.nav-links a:hover:where(*) {
   transform: none;
 }
 
-.active-link {
+.active-link:where(*) {
   background: rgba(37, 99, 235, 0.28);
   box-shadow: none;
 }
 
-.main-content {
+.main-content:where(*) {
   min-width: 0;
   padding: 18px 22px;
 }
 
-.topbar {
+.topbar:where(*):where(*) {
   margin-bottom: 18px;
   padding: 16px 20px;
   border-radius: 14px;
@@ -536,12 +536,12 @@ button {
   backdrop-filter: none;
 }
 
-.topbar h1 {
+.topbar h1:where(*) {
   font-size: 24px;
   margin-bottom: 4px;
 }
 
-.top-profile {
+.top-profile:where(*) {
   gap: 10px;
   padding: 8px 10px;
   border-radius: 12px;
@@ -549,7 +549,7 @@ button {
   border: 1px solid #e2e8f0;
 }
 
-.top-avatar {
+.top-avatar:where(*) {
   width: 38px;
   height: 38px;
   border-radius: 10px;
@@ -557,13 +557,13 @@ button {
   font-size: 16px;
 }
 
-.profile-dropdown {
+.profile-dropdown:where(*) {
   top: 62px;
   width: 220px;
   border-radius: 12px;
 }
 
-.page-content {
+.page-content:where(*) {
   min-height: calc(100vh - 94px);
 }
 
@@ -610,14 +610,14 @@ button {
 }
 
 @media (max-width: 768px) {
-  .dashboard-shell {
+  .dashboard-shell:where(*):where(*) {
     display: block;
     min-height: 100vh;
     overflow-x: hidden;
   }
 
   .sidebar,
-  .dashboard-shell.sidebar-collapsed .sidebar {
+  .dashboard-shell.sidebar-collapsed .sidebar:where(*) {
     position: fixed;
     inset: 0 auto 0 0;
     width: min(82vw, 300px);
@@ -636,7 +636,7 @@ button {
     transform: translateX(0);
   }
 
-  .sidebar-backdrop {
+  .sidebar-backdrop:where(*) {
     position: fixed;
     inset: 0;
     z-index: 999;
@@ -657,13 +657,13 @@ button {
     pointer-events: auto;
   }
 
-  .main-content {
+  .main-content:where(*):where(*) {
     width: 100%;
     min-width: 0;
     padding: 12px;
   }
 
-  .topbar {
+  .topbar:where(*):where(*):where(*) {
     align-items: center;
     gap: 12px;
     margin-bottom: 12px;
@@ -671,83 +671,83 @@ button {
     border-radius: 12px;
   }
 
-  .topbar-title {
+  .topbar-title:where(*) {
     flex: 1;
   }
 
-  .topbar h1 {
+  .topbar h1:where(*):where(*) {
     font-size: 18px;
     line-height: 1.2;
     margin-bottom: 2px;
   }
 
-  .topbar p {
+  .topbar p:where(*) {
     font-size: 12px;
   }
 
-  .topbar-right {
+  .topbar-right:where(*):where(*) {
     gap: 8px;
   }
 
   .system-status,
-  .top-user-info {
+  .top-user-info:where(*):where(*) {
     display: none;
   }
 
-  .top-profile {
+  .top-profile:where(*):where(*) {
     padding: 6px;
   }
 
-  .top-avatar {
+  .top-avatar:where(*):where(*) {
     width: 36px;
     height: 36px;
   }
 
-  .profile-dropdown {
+  .profile-dropdown:where(*):where(*) {
     position: fixed;
     top: 66px;
     right: 12px;
     width: min(220px, calc(100vw - 24px));
   }
 
-  .page-content {
+  .page-content:where(*):where(*) {
     min-height: calc(100dvh - 76px);
   }
 
-  .logo-section {
+  .logo-section:where(*):where(*) {
     margin-bottom: 18px;
   }
 
-  .profile-card {
+  .profile-card:where(*):where(*) {
     align-items: flex-start;
   }
 
-  .profile-card span {
+  .profile-card span:where(*) {
     overflow-wrap: anywhere;
   }
 }
 
 @media (max-width: 420px) {
-  .main-content {
+  .main-content:where(*):where(*):where(*) {
     padding: 10px;
   }
 
-  .topbar {
+  .topbar:where(*):where(*):where(*):where(*) {
     padding: 10px;
   }
 
-  .topbar h1 {
+  .topbar h1:where(*):where(*):where(*) {
     font-size: 16px;
   }
 }
 
 @media (min-width: 769px) {
-  .dashboard-shell {
+  .dashboard-shell:where(*):where(*):where(*) {
     display: block;
     min-height: 100vh;
   }
 
-  .sidebar {
+  .sidebar:where(*):where(*):where(*) {
     position: fixed;
     inset: 0 auto 0 0;
     width: 260px;
@@ -757,14 +757,14 @@ button {
     border-right: 1px solid #1e293b;
   }
 
-  .main-content {
+  .main-content:where(*):where(*):where(*):where(*) {
     width: auto;
     min-height: 100vh;
     margin-left: 260px;
     transition: margin-left 0.24s ease;
   }
 
-  .dashboard-shell.sidebar-collapsed .sidebar {
+  .dashboard-shell.sidebar-collapsed .sidebar:where(*):where(*) {
     width: 260px;
     padding: 22px 16px;
     opacity: 1;
@@ -772,7 +772,7 @@ button {
     pointer-events: none;
   }
 
-  .dashboard-shell.sidebar-collapsed .main-content {
+  .dashboard-shell.sidebar-collapsed .main-content:where(*) {
     width: auto;
     margin-left: 0;
   }

@@ -89,7 +89,7 @@ textarea:focus {
 
 /* Textarea */
 
-textarea {
+textarea:where(*) {
   min-height: 120px;
   resize: vertical;
 }
@@ -167,19 +167,19 @@ textarea {
 /* Responsive */
 
 @media (max-width: 768px) {
-  .edit-appointment-container {
+  .edit-appointment-container:where(*) {
     padding: 15px;
   }
-  form {
+  form:where(*) {
     padding: 20px;
   }
-  .grid {
+  .grid:where(*) {
     grid-template-columns: 1fr;
   }
-  .slots-container {
+  .slots-container:where(*) {
     gap: 10px;
   }
-  .slot-btn {
+  .slot-btn:where(*) {
     width: 100%;
   }
 }

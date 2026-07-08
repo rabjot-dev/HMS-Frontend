@@ -65,9 +65,17 @@ textarea {
 
 /* Textarea */
 
-textarea {
+textarea:where(*) {
   min-height: 120px;
   resize: vertical;
+}
+
+.error-text {
+  display: block;
+  margin-top: 6px;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 /* Focus State */
@@ -121,13 +129,13 @@ button:disabled {
 /* Responsive */
 
 @media (max-width: 768px) {
-  .edit-patient-container {
+  .edit-patient-container:where(*) {
     padding: 15px;
   }
-  .section {
+  .section:where(*) {
     padding: 20px;
   }
-  .grid {
+  .grid:where(*) {
     grid-template-columns: 1fr;
   }
 }

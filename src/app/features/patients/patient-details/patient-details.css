@@ -147,17 +147,17 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .profile-hero {
+  .profile-hero:where(*) {
     padding: 24px;
   }
-  .profile-left {
+  .profile-left:where(*) {
     flex-direction: column;
     align-items: flex-start;
   }
-  .details-card {
+  .details-card:where(*) {
     padding: 22px;
   }
-  .profile-hero h1 {
+  .profile-hero h1:where(*) {
     font-size: 30px;
   }
 }

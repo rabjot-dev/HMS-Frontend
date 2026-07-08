@@ -75,7 +75,9 @@
         <input id="edit-employee-department" type="text" formControlName="department" placeholder="Department" />
 
         @if(employeeForm.get('department')?.touched && employeeForm.get('department')?.invalid){
-        <span class="error-text">Department is required</span>
+        <span class="error-text">
+          @if(employeeForm.get('department')?.errors?.['required']){ Department is required } @else if(employeeForm.get('department')?.errors?.['minlength']){ Department must be at least 2 characters } @else if(employeeForm.get('department')?.errors?.['maxlength']){ Department cannot exceed 100 characters } @else if(employeeForm.get('department')?.errors?.['pattern']){ Department can contain only letters, spaces and underscores }
+        </span>
         }
       </div>
 

@@ -13,7 +13,7 @@
 }
 
 /* Parent menu */
-.parent-menu {
+.parent-menu:where(*) {
   justify-content: space-between;
   background: transparent;
   border: none;

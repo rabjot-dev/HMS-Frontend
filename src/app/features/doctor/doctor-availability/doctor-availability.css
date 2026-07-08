@@ -249,22 +249,22 @@ select:focus {
 /* Responsive */
 
 @media (max-width: 768px) {
-  .availability-header {
+  .availability-header:where(*) {
     flex-direction: column;
     align-items: flex-start;
   }
-  .availability-form {
+  .availability-form:where(*) {
     padding: 22px;
   }
-  .toggle-card {
+  .toggle-card:where(*) {
     flex-direction: column;
     align-items: flex-start;
   }
-  .day-btn {
+  .day-btn:where(*) {
     flex: 1 1 calc(50% - 14px);
     text-align: center;
   }
-  .grid {
+  .grid:where(*) {
     grid-template-columns: 1fr;
   }
 }

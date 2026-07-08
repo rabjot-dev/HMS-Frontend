@@ -93,7 +93,7 @@
   color: #2563eb;
 }
 
-.department-badge {
+.department-badge:where(*) {
   background: rgba(124, 58, 237, 0.12);
   color: #7c3aed;
 }
@@ -185,43 +185,43 @@
 }
 
 @media (max-width: 900px) {
-  .profile-hero {
+  .profile-hero:where(*) {
     flex-direction: column;
     align-items: flex-start;
     gap: 18px;
   }
 
-  .profile-left {
+  .profile-left:where(*) {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .profile-hero h1 {
+  .profile-hero h1:where(*) {
     font-size: 30px;
   }
 
-  .profile-grid {
+  .profile-grid:where(*) {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 600px) {
   .profile-hero,
-  .profile-card {
+  .profile-card:where(*) {
     padding: 20px;
   }
 
-  .profile-card h2 {
+  .profile-card h2:where(*) {
     font-size: 28px;
   }
 
-  .profile-avatar {
+  .profile-avatar:where(*) {
     width: 74px;
     height: 74px;
     font-size: 28px;
   }
 
-  .status-card {
+  .status-card:where(*) {
     width: 100%;
   }
 }

@@ -81,7 +81,7 @@
   color: #2563eb;
 }
 
-.department-badge {
+.department-badge:where(*) {
   background: rgba(139, 92, 246, 0.14);
   color: #7c3aed;
 }
@@ -167,22 +167,22 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .employee-hero {
+  .employee-hero:where(*) {
     padding: 28px;
   }
-  .employee-profile {
+  .employee-profile:where(*) {
     flex-direction: column;
     align-items: flex-start;
   }
-  .employee-profile h1 {
+  .employee-profile h1:where(*) {
     font-size: 32px;
   }
-  .avatar {
+  .avatar:where(*) {
     width: 80px;
     height: 80px;
     font-size: 28px;
   }
-  .status-card {
+  .status-card:where(*) {
     width: 100%;
   }
 }

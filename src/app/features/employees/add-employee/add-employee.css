@@ -192,13 +192,13 @@ select:focus {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .employee-form {
+  .employee-form:where(*) {
     padding: 22px;
   }
-  .phone-group {
+  .phone-group:where(*) {
     flex-direction: column;
   }
-  .phone-group select {
+  .phone-group select:where(*) {
     width: 100%;
   }
 }

@@ -62,7 +62,7 @@
   color: #0f172a;
 }
 
-.pdf-btn {
+.pdf-btn:where(*) {
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
 }
@@ -179,13 +179,13 @@
 
 /* Responsive */
 @media (max-width: 992px) {
-  .top-grid {
+  .top-grid:where(*) {
     grid-template-columns: 1fr;
   }
-  .vitals-grid {
+  .vitals-grid:where(*) {
     grid-template-columns: repeat(2, 1fr);
   }
-  .details-header {
+  .details-header:where(*) {
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
@@ -193,26 +193,26 @@
 }
 
 @media (max-width: 600px) {
-  .vitals-grid {
+  .vitals-grid:where(*):where(*) {
     grid-template-columns: 1fr;
   }
-  .consultation-card {
+  .consultation-card:where(*) {
     padding: 20px;
   }
-  .details-header {
+  .details-header:where(*):where(*) {
     padding: 24px;
   }
 }
 
 /* Print */
 @media print {
-  .header-actions {
+  .header-actions:where(*) {
     display: none;
   }
   body {
     background: white;
   }
-  .glass-card {
+  .glass-card:where(*) {
     box-shadow: none;
     border: none;
   }
@@ -273,23 +273,23 @@
 
 /* Print Optimization */
 @media print {
-  body {
+  body:where(*) {
     background: white;
   }
-  .details-header {
+  .details-header:where(*):where(*):where(*) {
     margin-bottom: 10px;
   }
-  .consultation-card {
+  .consultation-card:where(*):where(*) {
     padding: 0;
   }
-  .section-box {
+  .section-box:where(*) {
     break-inside: avoid;
   }
-  .medicine-table th {
+  .medicine-table th:where(*) {
     background: #f1f5f9 !important;
   }
   .pdf-btn,
-  .print-btn {
+  .print-btn:where(*) {
     display: none;
   }
 }
@@ -331,16 +331,16 @@
   .consultation-card,
   .info-box,
   .section-box,
-  .vital-card {
+  .vital-card:where(*) {
     background: white !important;
     box-shadow: none !important;
     border: 1px solid #ddd !important;
     backdrop-filter: none !important;
   }
-  .consultation-details-page {
+  .consultation-details-page:where(*) {
     padding: 0 !important;
   }
-  .consultation-card {
+  .consultation-card:where(*):where(*):where(*) {
     padding: 10px !important;
   }
   /* Prevent awkward page breaks */
@@ -349,25 +349,25 @@
   .table-wrapper,
   .medicine-table,
   .vitals-grid,
-  .prescription-footer {
+  .prescription-footer:where(*) {
     page-break-inside: avoid;
     break-inside: avoid;
   }
   /* Better print table */
-  .medicine-table {
+  .medicine-table:where(*) {
     width: 100%;
     font-size: 12px;
   }
   .medicine-table th,
-  .medicine-table td {
+  .medicine-table td:where(*) {
     padding: 8px;
     border: 1px solid #ccc;
   }
-  .medicine-table th {
+  .medicine-table th:where(*):where(*) {
     background: #f3f4f6 !important;
     color: black !important;
   }
-  .signature-section {
+  .signature-section:where(*) {
     margin-top: 40px;
   }
 }

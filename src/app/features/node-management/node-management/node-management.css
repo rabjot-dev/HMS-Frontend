@@ -57,7 +57,7 @@ small {
 }
 
 .node-list,
-.node-form {
+.node-form:where(*) {
   min-width: 0;
   padding: 16px;
 }
@@ -157,7 +157,7 @@ select {
   background: #ffffff;
 }
 
-.full-field {
+.full-field:where(*) {
   margin-top: 12px;
 }
 
@@ -218,7 +218,7 @@ button {
   cursor: not-allowed;
 }
 
-.secondary-btn {
+.secondary-btn:where(*) {
   color: #334155;
   background: #f1f5f9;
 }
@@ -238,12 +238,12 @@ button {
   background: #fee2e2;
 }
 
-.form-actions {
+.form-actions:where(*) {
   margin-top: 18px;
 }
 
 @media (max-width: 1180px) {
-  .permission-row {
+  .permission-row:where(*) {
     grid-template-columns: repeat(2, minmax(0, 1fr)) 40px;
   }
 
@@ -254,19 +254,19 @@ button {
 
 @media (max-width: 980px) {
   .node-layout,
-  .form-grid {
+  .form-grid:where(*) {
     grid-template-columns: 1fr;
   }
 
-  .permission-row {
+  .permission-row:where(*):where(*) {
     grid-template-columns: 1fr;
   }
 
-  .permission-row .field-control:last-of-type {
+  .permission-row .field-control:last-of-type:where(*) {
     grid-column: auto;
   }
 
-  .permission-row .icon-btn {
+  .permission-row .icon-btn:where(*) {
     width: 40px;
     margin-top: 0;
   }

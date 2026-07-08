@@ -111,14 +111,14 @@
   background: transparent;
 }
 
-.filters-wrapper select {
+.filters-wrapper select:where(*) {
   padding: 0 12px;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
   background: #ffffff;
 }
 
-.table-wrapper {
+.table-wrapper:where(*) {
   width: 100%;
   min-width: 0;
   overflow-x: auto;
@@ -276,7 +276,7 @@ tbody td {
   color: #dc2626;
 }
 
-.status-badge {
+.status-badge:where(*) {
   background: rgba(34, 197, 94, 0.12);
   color: #15803d;
 }
@@ -323,12 +323,12 @@ tbody td {
 }
 
 @media (max-width: 900px) {
-  .patients-header {
+  .patients-header:where(*) {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .filters-wrapper {
+  .filters-wrapper:where(*) {
     grid-template-columns: 1fr;
   }
 }

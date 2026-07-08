@@ -215,14 +215,14 @@
 /* Responsive */
 
 @media (max-width: 768px) {
-  .pending-header {
+  .pending-header:where(*) {
     flex-direction: column;
     align-items: flex-start;
   }
-  .employee-grid {
+  .employee-grid:where(*) {
     grid-template-columns: 1fr;
   }
-  .actions {
+  .actions:where(*) {
     flex-direction: column;
   }
 }

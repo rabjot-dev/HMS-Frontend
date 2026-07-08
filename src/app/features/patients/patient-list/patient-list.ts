@@ -52,6 +52,14 @@ export class PatientList implements OnInit {
     this.userRole = localStorage.getItem('role') || '';
 
     this.applyPatientsResponse(this.route.snapshot.data['patients']);
+
+    this.route.queryParamMap.subscribe((params) => {
+      if (!params.has('navReset')) {
+        return;
+      }
+
+      this.resetFilters();
+    });
   }
 
   loadPatients(): void {
@@ -146,6 +154,20 @@ export class PatientList implements OnInit {
 
     this.loadPatients();
   }
+
+  resetFilters(): void {
+    this.search = '';
+    this.gender = '';
+    this.bloodGroup = '';
+    this.startDate = '';
+    this.endDate = '';
+    this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
+
+    this.loadPatients();
+  }
+
   async deletePatient(id: string): Promise<void> {
     const confirmed = await this.confirmDialog.confirm({
       title: 'Delete patient?',

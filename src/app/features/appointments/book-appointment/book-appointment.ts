@@ -48,9 +48,9 @@ export class BookAppointment implements OnInit {
       doctorId: ['', Validators.required],
       appointmentDate: ['', Validators.required],
       appointmentTime: ['', Validators.required],
-      reason: [''],
-      notes: [''],
-      symptoms: [''],
+      reason: ['', Validators.maxLength(500)],
+      notes: ['', Validators.maxLength(500)],
+      symptoms: ['', Validators.maxLength(500)],
       appointmentType: ['', Validators.required],
       priority: ['', Validators.required],
       paymentStatus: ['', Validators.required],
@@ -323,6 +323,7 @@ export class BookAppointment implements OnInit {
         this.isSubmitting = false;
 
         this.toastService.show(error?.error?.message || 'Failed to book appointment.', 'error');
+        this.cdr.detectChanges();
       }
     });
   }

@@ -24,6 +24,8 @@ type PostOfficeArea = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddPatient implements OnInit {
+  private readonly namePattern = /^[A-Za-z]+$/;
+
   currentStep = 1;
   isSubmitting = false;
   isLoadingStates = false;
@@ -51,8 +53,14 @@ export class AddPatient implements OnInit {
   ) {
     this.patientForm = this.fb.group({
       // Basic Information
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern(this.namePattern)]
+      ],
+      lastName: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern(this.namePattern)]
+      ],
       dateOfBirth: ['', [Validators.required, this.futureDateValidator]],
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
@@ -60,8 +68,8 @@ export class AddPatient implements OnInit {
       // Contact Information
       countryCode: ['+91', Validators.required],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      email: ['', Validators.required],
-      address: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(250)]],
       city: ['', Validators.required],
       state: ['', Validators.required],
       taluk: ['', Validators.required],
@@ -69,8 +77,11 @@ export class AddPatient implements OnInit {
       pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
       country: ['India'],
       // Emergency Contact
-      emergencyContactName: ['', Validators.required],
-      emergencyContactPhone: ['', Validators.required],
+      emergencyContactName: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(this.namePattern)]
+      ],
+      emergencyContactPhone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       // Medical Information
       medicalHistory: [''],
       allergies: [''],
@@ -82,7 +93,7 @@ export class AddPatient implements OnInit {
       insuranceProvider: [''],
       insurancePolicyNumber: [''],
       insuranceExpiryDate: [''],
-      insuranceCoverageAmount: [''],
+      insuranceCoverageAmount: ['', [Validators.min(0)]],
       // Hospital Information
       department: [''],
       patientType: ['', Validators.required]
@@ -225,8 +236,6 @@ export class AddPatient implements OnInit {
   }
 
   private loadPostOfficeAreas(state: string, district: string): void {
-    this.isLoadingAreas = true;
-
     const cacheKey = `${state}:${district}`;
     const cachedAreas = this.areaCache.get(cacheKey);
 
@@ -237,6 +246,8 @@ export class AddPatient implements OnInit {
 
       return;
     }
+
+    this.isLoadingAreas = true;
 
     this.patientService.getIndiaPostOffices(state, district).subscribe({
       next: (response) => {

@@ -134,7 +134,7 @@
 }
 
 .filters-wrapper select,
-.date-range input {
+.date-range input:where(*) {
   padding: 0 12px;
 }
 
@@ -400,32 +400,32 @@ tbody td {
 }
 
 @media (max-width: 1180px) {
-  .filters-wrapper {
+  .filters-wrapper:where(*) {
     grid-template-columns: minmax(240px, 1fr) minmax(145px, 0.65fr) minmax(145px, 0.65fr);
   }
 
-  .date-range {
+  .date-range:where(*) {
     grid-column: 1 / -1;
   }
 }
 
 @media (max-width: 760px) {
-  .appointments-header {
+  .appointments-header:where(*) {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .appointment-count {
+  .appointment-count:where(*) {
     width: 100%;
     text-align: center;
   }
 
   .filters-wrapper,
-  .date-range {
+  .date-range:where(*):where(*) {
     grid-template-columns: 1fr;
   }
 
-  .date-range {
+  .date-range:where(*):where(*):where(*) {
     grid-column: auto;
   }
 }

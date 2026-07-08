@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from '../../../core/services/employee';
+import { ToastService } from '../../../core/services/toast';
 
 @Component({
   selector: 'app-edit-employee',
@@ -28,6 +29,7 @@ export class EditEmployee implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly employeeService: EmployeeService,
+    private readonly toastService: ToastService,
     private readonly cdr: ChangeDetectorRef
   ) {
     this.employeeForm = this.fb.group({
@@ -43,7 +45,10 @@ export class EditEmployee implements OnInit {
       ],
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       gender: ['', Validators.required],
-      department: ['', Validators.required],
+      department: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(100), Validators.pattern(/^[A-Za-z_\s]+$/)]
+      ],
       designation: ['', Validators.required],
       joiningDate: ['', Validators.required]
     });
@@ -108,7 +113,7 @@ export class EditEmployee implements OnInit {
       next: () => {
         this.isSubmitting = false;
 
-        this.successMessage = 'Employee updated successfully';
+        this.toastService.success('Employee updated successfully');
         this.cdr.markForCheck();
 
         setTimeout(() => {
@@ -121,6 +126,7 @@ export class EditEmployee implements OnInit {
         this.isSubmitting = false;
 
         this.errorMessage = error?.error?.message || 'Failed to update employee';
+        this.toastService.error(this.errorMessage);
         this.cdr.markForCheck();
       }
     });

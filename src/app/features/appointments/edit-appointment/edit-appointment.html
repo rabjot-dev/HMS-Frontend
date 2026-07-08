@@ -20,7 +20,7 @@
       <!-- Appointment Date -->
       <div class="form-group">
         <label for="edit-appointment-date">Appointment Date</label>
-        <input id="edit-appointment-date" type="date" formControlName="appointmentDate" (change)="fetchAvailableSlots()" />
+        <input id="edit-appointment-date" type="date" formControlName="appointmentDate" [min]="minDate" (change)="fetchAvailableSlots()" />
         @if(appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched){
         <span class="error-text">Appointment Date is required</span>
         } @if(noSlotsError){
@@ -128,18 +128,27 @@
     <div class="form-group full-width">
       <label for="edit-appointment-symptoms">Symptoms</label>
       <textarea id="edit-appointment-symptoms" formControlName="symptoms" placeholder="Enter symptoms"></textarea>
+      @if(appointmentForm.get('symptoms')?.errors?.['maxlength'] && appointmentForm.get('symptoms')?.touched){
+      <span class="error-text">Symptoms cannot exceed 500 characters</span>
+      }
     </div>
 
     <!-- Reason -->
     <div class="form-group full-width">
       <label for="edit-appointment-reason">Reason</label>
       <textarea id="edit-appointment-reason" formControlName="reason"></textarea>
+      @if(appointmentForm.get('reason')?.errors?.['maxlength'] && appointmentForm.get('reason')?.touched){
+      <span class="error-text">Reason cannot exceed 500 characters</span>
+      }
     </div>
 
     <!-- Notes -->
     <div class="form-group full-width">
       <label for="edit-appointment-notes">Notes</label>
       <textarea id="edit-appointment-notes" formControlName="notes"></textarea>
+      @if(appointmentForm.get('notes')?.errors?.['maxlength'] && appointmentForm.get('notes')?.touched){
+      <span class="error-text">Notes cannot exceed 500 characters</span>
+      }
     </div>
 
     <!-- Submit -->

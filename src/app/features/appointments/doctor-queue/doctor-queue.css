@@ -302,14 +302,14 @@
   gap: 8px;
 }
 
-.symptom-tag {
+.symptom-tag:where(*) {
   padding: 6px 10px;
   background: rgba(37, 99, 235, 0.12);
   color: #2563eb;
   font-size: 12px;
 }
 
-.notes-box {
+.notes-box:where(*) {
   padding: 12px;
   border-radius: 12px;
   background: rgba(248, 250, 252, 0.95);
@@ -345,27 +345,27 @@
   background: #2563eb;
 }
 
-.complete-btn {
+.complete-btn:where(*) {
   background: #16a34a;
 }
 
 @media (max-width: 768px) {
-  .queue-header {
+  .queue-header:where(*) {
     flex-direction: column;
     align-items: flex-start;
   }
 
   .queue-stats,
-  .stat-card {
+  .stat-card:where(*) {
     width: 100%;
   }
 
   .queue-grid,
-  .info-grid {
+  .info-grid:where(*) {
     grid-template-columns: 1fr;
   }
 
-  .actions {
+  .actions:where(*) {
     flex-direction: column;
   }
 }

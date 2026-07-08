@@ -45,6 +45,14 @@ export class AppointmentList implements OnInit {
 
   ngOnInit(): void {
     this.applyAppointmentsResponse(this.route.snapshot.data['appointments']);
+
+    this.route.queryParamMap.subscribe((params) => {
+      if (!params.has('navReset')) {
+        return;
+      }
+
+      this.resetFilters();
+    });
   }
 
   loadAppointments(): void {
@@ -123,6 +131,19 @@ export class AppointmentList implements OnInit {
 
     this.limit = Number(select.value);
 
+    this.page = 1;
+    this.cursorStack = [''];
+    this.nextCursor = '';
+
+    this.loadAppointments();
+  }
+
+  resetFilters(): void {
+    this.search = '';
+    this.status = '';
+    this.priority = '';
+    this.startDate = '';
+    this.endDate = '';
     this.page = 1;
     this.cursorStack = [''];
     this.nextCursor = '';

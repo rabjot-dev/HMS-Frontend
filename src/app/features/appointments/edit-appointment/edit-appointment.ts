@@ -25,6 +25,8 @@ export class EditAppointment implements OnInit {
 
   noSlotsError = false;
 
+  minDate = '';
+
   appointmentForm: any;
 
   constructor(
@@ -45,14 +47,16 @@ export class EditAppointment implements OnInit {
       paymentStatus: ['PENDING', Validators.required],
       visitMode: ['OFFLINE', Validators.required],
       status: ['BOOKED', Validators.required],
-      reason: [''],
-      notes: [''],
-      symptoms: ['']
+      reason: ['', Validators.maxLength(500)],
+      notes: ['', Validators.maxLength(500)],
+      symptoms: ['', Validators.maxLength(500)]
     });
   }
 
   // Load doctors and appointment details when page opens
   ngOnInit(): void {
+    this.minDate = new Date().toISOString().split('T')[0];
+
     this.loadDoctors();
 
     this.appointmentForm.get('status')?.valueChanges.subscribe({

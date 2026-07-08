@@ -144,13 +144,13 @@
 /* Mobile */
 
 @media (max-width: 600px) {
-  .global-toast {
+  .global-toast:where(*) {
     width: calc(100% - 24px);
     min-width: unset;
     max-width: unset;
     top: 16px;
   }
-  .toast-message {
+  .toast-message:where(*) {
     font-size: 13px;
   }
 }

@@ -55,7 +55,7 @@ export class Register {
       consultationFee: [''],
       // Security details
       securityQuestion: ['', Validators.required],
-      securityAnswer: ['', Validators.required],
+      securityAnswer: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       // Password fields
       password: [
         '',

@@ -14,6 +14,11 @@
           <label for="edit-patient-first-name">First Name</label>
 
           <input id="edit-patient-first-name" type="text" placeholder="Enter first name" formControlName="firstName" />
+          @if(patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched){
+          <span class="error-text">
+            @if(patientForm.get('firstName')?.errors?.['required']){ First Name is required } @else if(patientForm.get('firstName')?.errors?.['minlength']){ First Name must be at least 2 characters } @else if(patientForm.get('firstName')?.errors?.['maxlength']){ First Name cannot exceed 50 characters } @else if(patientForm.get('firstName')?.errors?.['pattern']){ First Name can contain only letters }
+          </span>
+          }
         </div>
 
         <!-- Last Name -->
@@ -22,6 +27,11 @@
           <label for="edit-patient-last-name">Last Name</label>
 
           <input id="edit-patient-last-name" type="text" placeholder="Enter last name" formControlName="lastName" />
+          @if(patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched){
+          <span class="error-text">
+            @if(patientForm.get('lastName')?.errors?.['required']){ Last Name is required } @else if(patientForm.get('lastName')?.errors?.['minlength']){ Last Name must be at least 2 characters } @else if(patientForm.get('lastName')?.errors?.['maxlength']){ Last Name cannot exceed 50 characters } @else if(patientForm.get('lastName')?.errors?.['pattern']){ Last Name can contain only letters }
+          </span>
+          }
         </div>
 
         <!-- Gender -->
@@ -71,7 +81,18 @@
         <div class="form-group">
           <label for="edit-patient-phone">Phone Number</label>
 
-          <input id="edit-patient-phone" type="text" placeholder="Enter phone number" formControlName="phone" />
+          <input
+            id="edit-patient-phone"
+            type="text"
+            placeholder="Enter phone number"
+            maxlength="10"
+            inputmode="numeric"
+            formControlName="phone"
+            (input)="$any($event.target).value = $any($event.target).value.replaceAll(/[^0-9]/g,'')"
+          />
+          @if(patientForm.get('phone')?.invalid && patientForm.get('phone')?.touched){
+          <span class="error-text">Enter valid 10-digit phone number</span>
+          }
         </div>
 
         <!-- Email -->
@@ -80,6 +101,9 @@
           <label for="edit-patient-email">Email Address</label>
 
           <input id="edit-patient-email" type="email" placeholder="Enter email" formControlName="email" />
+          @if(patientForm.get('email')?.invalid && patientForm.get('email')?.touched){
+          <span class="error-text">Enter a valid email address</span>
+          }
         </div>
 
         <!-- Assigned Doctor -->

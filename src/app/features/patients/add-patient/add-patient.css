@@ -173,7 +173,7 @@ select.ng-invalid.ng-touched {
   border-color: #e53e3e;
 }
 
-textarea {
+textarea:where(*) {
   height: auto;
   min-height: 130px;
   padding: 16px 18px;
@@ -249,22 +249,22 @@ button:disabled {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .steps-wrapper {
+  .steps-wrapper:where(*) {
     flex-direction: column;
   }
-  .patient-form {
+  .patient-form:where(*) {
     padding: 22px;
   }
-  .button-group {
+  .button-group:where(*) {
     flex-direction: column;
   }
-  button {
+  button:where(*) {
     width: 100%;
   }
-  .phone-group {
+  .phone-group:where(*) {
     flex-direction: column;
   }
-  .phone-group select {
+  .phone-group select:where(*) {
     width: 100%;
   }
 }

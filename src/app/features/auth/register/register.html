@@ -151,7 +151,7 @@
 
               <option value="PHARMACIST">Pharmacist</option>
 
-              <option value="ACCOUNTANT">Accountant</option>
+              <option value="CASHIER">Cashier</option>
             </select>
             @if(registerForm.get('designation')?.invalid && registerForm.get('designation')?.touched){
             <span class="error-text">Designation is required</span>
@@ -391,7 +391,9 @@
             <input id="register-security-answer" type="text" formControlName="securityAnswer" placeholder="Enter answer" />
 
             @if(registerForm.get('securityAnswer')?.invalid && registerForm.get('securityAnswer')?.touched){
-            <span class="error-text">Security Answer is required</span>
+            <span class="error-text">
+              @if(registerForm.get('securityAnswer')?.errors?.['required']){ Security Answer is required } @else if(registerForm.get('securityAnswer')?.errors?.['minlength']){ Security Answer must be at least 2 characters } @else if(registerForm.get('securityAnswer')?.errors?.['maxlength']){ Security Answer cannot exceed 100 characters }
+            </span>
             }
           </div>
         </div>
