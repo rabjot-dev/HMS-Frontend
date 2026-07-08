@@ -324,6 +324,12 @@ export class AddPatient implements OnInit {
       : null;
   };
 
+  showFieldError(fieldName: string): boolean {
+    const control = this.patientForm.get(fieldName);
+
+    return Boolean(control?.invalid && (control.touched || control.dirty));
+  }
+
   // Move to next step after validating current step
   nextStep(): void {
     const stepFields: { [key: number]: string[] } = {
