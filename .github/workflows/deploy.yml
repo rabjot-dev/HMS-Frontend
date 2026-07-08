@@ -18,7 +18,8 @@ jobs:
           key: ${{ secrets.EC2_VISAGAN_SSH }}
           script: |
             cd hms_project/HMS-Frontend
-            git pull origin feature/visagan_sprint_5
+            git fetch origin feature/visagan_sprint_5
+            git reset --hard origin/feature/visagan_sprint_5
             npm ci
             sudo ng build --configuration production
             rm -rf /var/www/hms-frontend/*
