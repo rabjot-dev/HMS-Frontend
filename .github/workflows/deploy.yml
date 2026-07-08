@@ -21,7 +21,6 @@ jobs:
             git pull origin feature/selma-sprint5
             npm ci
             sudo ng build --configuration production
-            sudo su root
             rm -rf /var/www/hms-frontend/*
             cp -r dist/HMS-Frontend/browser/* /var/www/hms-frontend/
             sudo systemctl restart nginx
