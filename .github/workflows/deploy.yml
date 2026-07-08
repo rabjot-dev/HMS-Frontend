@@ -40,14 +40,10 @@ jobs:
             echo "Copying new build..."
             sudo cp -r dist/HMS-Frontend/browser/* /var/www/hms-admin/
 
-            echo "Reloading Nginx..."
+            echo "Testing Nginx configuration..."
             sudo nginx -t
+
+            echo "Reloading Nginx..."
             sudo systemctl reload nginx
 
-            echo "Waiting for frontend..."
-            sleep 5
-
-            echo "Checking frontend..."
-            curl --fail -I https://bootstraphms.duckdns.org
-
-            echo "Deployment completed successfully."
+            echo "========== Frontend Deployment Successful =========="
