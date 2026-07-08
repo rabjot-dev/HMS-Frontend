@@ -54,6 +54,14 @@ export class EmployeeList implements OnInit {
 
   ngOnInit(): void {
     this.applyEmployeesResponse(this.route.snapshot.data['employees']);
+
+    this.route.queryParamMap.subscribe((params) => {
+      if (!params.has('navReset')) {
+        return;
+      }
+
+      this.resetFilters();
+    });
   }
 
   loadEmployees(showPageLoader = true): void {
