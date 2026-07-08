@@ -44,4 +44,10 @@ jobs:
             sudo nginx -t
             sudo systemctl reload nginx
 
+            echo "Waiting for frontend..."
+            sleep 5
+
+            echo "Checking frontend..."
+            curl --fail -I https://bootstraphms.duckdns.org
+
             echo "Deployment completed successfully."
