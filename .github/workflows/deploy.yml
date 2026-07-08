@@ -21,8 +21,9 @@ jobs:
 
             cd ~/hms_project/HMS-Frontend
 
+            git update-ref -d refs/remotes/origin/feature/visagan_sprint_5 || true
             git fetch origin feature/visagan_sprint_5
-            git reset --hard origin/feature/visagan_sprint_5
+            git reset --hard FETCH_HEAD
 
             npm install
             npm run build
