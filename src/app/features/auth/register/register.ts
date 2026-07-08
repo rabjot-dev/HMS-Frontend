@@ -18,6 +18,7 @@ export class Register {
 
   isSubmitting = false;
   currentStep = 1;
+  securityStepSubmitted = false;
 
   securityQuestions = [
     'What is your favourite color?',
@@ -91,6 +92,7 @@ export class Register {
   prevStep(): void {
     if (this.currentStep > 1) {
       this.currentStep--;
+      this.securityStepSubmitted = false;
     }
   }
 
@@ -134,10 +136,13 @@ export class Register {
     }
 
     this.currentStep++;
+    this.securityStepSubmitted = false;
   }
 
   // Submit registration form
   onSubmit(): void {
+    this.securityStepSubmitted = true;
+
     console.log('REGISTER BUTTON CLICKED');
     console.log('FORM VALID', this.registerForm.valid);
     console.log('Designation Value:', this.registerForm.get('designation')?.value);

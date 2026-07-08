@@ -165,7 +165,8 @@ export class PatientList implements OnInit {
         this.loadPatients();
       },
       error: (error) => {
-        console.log(error);
+        this.toast.error(error?.error?.message || 'Failed to delete patient');
+        this.cdr.detectChanges();
       }
     });
   }

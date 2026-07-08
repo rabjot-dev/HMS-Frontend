@@ -88,7 +88,8 @@ export class AppointmentList implements OnInit {
         this.cdr.detectChanges();
       },
       error: (error) => {
-        console.log(error);
+        this.toast.error(error?.error?.message || 'Failed to delete appointment');
+        this.cdr.detectChanges();
       }
     });
   }

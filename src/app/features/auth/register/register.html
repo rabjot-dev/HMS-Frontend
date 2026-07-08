@@ -345,9 +345,9 @@
 
             <input id="register-password" type="password" formControlName="password" placeholder="Enter password" />
 
-            @if(registerForm.get('password')?.errors?.['required']){
+            @if(securityStepSubmitted && registerForm.get('password')?.errors?.['required']){
             <span class="error-text">Password is required</span>
-            } @if(registerForm.get('password')?.errors?.['pattern']){
+            } @if((securityStepSubmitted || registerForm.get('password')?.touched) && registerForm.get('password')?.errors?.['pattern']){
             <span class="error-text">Password must contain uppercase, lowercase, number and special character</span>
             }
           </div>
@@ -378,7 +378,7 @@
               }
             </select>
 
-            @if(registerForm.get('securityQuestion')?.errors?.['required']){
+            @if(securityStepSubmitted && registerForm.get('securityQuestion')?.errors?.['required']){
             <span class="error-text">Security Question is required</span>
             }
           </div>
