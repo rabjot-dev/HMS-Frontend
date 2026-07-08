@@ -342,7 +342,7 @@ export class AddPatient implements OnInit {
     }
 
     if (errors['required']) {
-      return `${label} is fucked ....required`;
+      return `${label} is required`;
     }
 
     if (errors['pattern']) {
