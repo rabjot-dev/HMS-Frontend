@@ -146,17 +146,17 @@ export class ConsultationList implements OnInit, OnDestroy {
   }
 
   onFilterChange(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
-
-    this.loadConsultations(false);
+    this.reloadFromFirstPage();
   }
   private reloadFromFirstPage(): void {
+    this.resetPagination();
+    this.loadConsultations(false);
+  }
+
+  private resetPagination(): void {
     this.page = 1;
     this.cursorStack = [''];
     this.nextCursor = '';
-    this.loadConsultations(false);
   }
 
   previousPage(): void {
@@ -193,5 +193,6 @@ export class ConsultationList implements OnInit, OnDestroy {
     });
   }
 }
+
 
 

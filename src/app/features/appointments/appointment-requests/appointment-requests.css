@@ -19,7 +19,7 @@
 }
 
 .page-label {
-  color: #3b82f6;
+  color: #1d4ed8;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -41,8 +41,8 @@
 .pending-count {
   padding: 14px 24px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+  color: #ffffff;
   font-weight: 700;
   box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
 }
@@ -83,7 +83,7 @@
 .employee-card {
   padding: 28px;
   border-radius: 28px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .employee-card:hover {
@@ -104,11 +104,11 @@
   width: 58px;
   height: 58px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #ffffff;
   font-size: 22px;
   font-weight: 700;
 }
@@ -124,8 +124,8 @@
   display: inline-block;
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(59, 130, 246, 0.12);
-  color: #2563eb;
+  background: #dbeafe;
+  color: #1e3a8a;
   font-size: 12px;
   font-weight: 700;
 }
@@ -134,8 +134,8 @@
   display: inline-block;
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(245, 158, 11, 0.14);
-  color: #b45309;
+  background: #fef3c7;
+  color: #92400e;
   font-size: 12px;
   font-weight: 700;
 }
@@ -183,32 +183,32 @@
   border-radius: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 /* Approve */
 
 .approve-btn {
-  background: rgba(34, 197, 94, 0.14);
-  color: #15803d;
+  background: #dcfce7;
+  color: #14532d;
 }
 
 .approve-btn:hover {
-  background: #22c55e;
-  color: white;
+  background: #15803d;
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
 /* Reject */
 
 .reject-btn {
-  background: rgba(239, 68, 68, 0.14);
-  color: #dc2626;
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 .reject-btn:hover {
-  background: #ef4444;
-  color: white;
+  background: #991b1b;
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -226,4 +226,6 @@
     flex-direction: column;
   }
 }
+
+
 

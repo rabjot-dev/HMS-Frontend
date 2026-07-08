@@ -111,11 +111,7 @@ export class AppointmentList implements OnInit, OnDestroy {
   }
 
   onFilterChange(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
-
-    this.loadAppointments();
+    this.reloadFromFirstPage();
   }
 
   previousPage(): void {
@@ -173,10 +169,14 @@ export class AppointmentList implements OnInit, OnDestroy {
   }
 
   private reloadFromFirstPage(): void {
+    this.resetPagination();
+    this.loadAppointments();
+  }
+
+  private resetPagination(): void {
     this.page = 1;
     this.cursorStack = [''];
     this.nextCursor = '';
-    this.loadAppointments();
   }
 
   private getPageAfterDelete(): number {
@@ -193,5 +193,6 @@ export class AppointmentList implements OnInit, OnDestroy {
     this.nextCursor = response?.meta?.nextCursor || '';
   }
 }
+
 
 

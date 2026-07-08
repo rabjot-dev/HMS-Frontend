@@ -109,7 +109,6 @@ export class ConsultationForm implements OnInit {
 
     this.isSubmitting = true;
 
-    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
 
     const consultationData = {
       appointmentId: this.appointment?._id,
@@ -143,3 +142,4 @@ export class ConsultationForm implements OnInit {
     });
   }
 }
+

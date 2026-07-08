@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Home {
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
    goToLogin(): void {
     this.router.navigate(['/login']);

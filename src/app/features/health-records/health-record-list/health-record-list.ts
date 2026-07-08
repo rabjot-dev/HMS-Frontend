@@ -95,11 +95,7 @@ export class HealthRecordList implements OnInit, OnDestroy {
   }
 
   onSearch(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
-
-    this.loadHealthRecords(false);
+    this.reloadFromFirstPage();
   }
 
   nextPage(): void {
@@ -122,17 +118,18 @@ export class HealthRecordList implements OnInit, OnDestroy {
 
   onPageSizeChange(nextLimit: number): void {
     this.limit = nextLimit;
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
-    this.loadHealthRecords(false);
+    this.reloadFromFirstPage();
   }
 
   private reloadFromFirstPage(): void {
+    this.resetPagination();
+    this.loadHealthRecords(false);
+  }
+
+  private resetPagination(): void {
     this.page = 1;
     this.cursorStack = [''];
     this.nextCursor = '';
-    this.loadHealthRecords(false);
   }
 
   private applyHealthRecordsResponse(response: any): void {
@@ -142,5 +139,6 @@ export class HealthRecordList implements OnInit, OnDestroy {
     this.isLoading = false;
   }
 }
+
 
 

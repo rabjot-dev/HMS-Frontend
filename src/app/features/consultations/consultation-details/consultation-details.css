@@ -21,7 +21,7 @@
 }
 
 .page-label {
-  color: #3b82f6;
+  color: #1d4ed8;
   font-size: 13px;
   font-weight: 700;
   margin-bottom: 8px;
@@ -54,7 +54,7 @@
   border-radius: 16px;
   cursor: pointer;
   font-weight: 600;
-  transition: 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .print-btn {
@@ -63,8 +63,8 @@
 }
 
 .pdf-btn {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+  color: #ffffff;
 }
 
 .print-btn:hover,
@@ -128,7 +128,7 @@
 }
 
 .vital-card {
-  background: white;
+  background: #ffffff;
   border-radius: 18px;
   padding: 20px;
   text-align: center;
@@ -153,7 +153,7 @@
 }
 
 .medicine-card {
-  background: white;
+  background: #ffffff;
   border-radius: 20px;
   padding: 22px;
 }
@@ -169,7 +169,7 @@
 
 /* Loading */
 .loading-card {
-  background: white;
+  background: #ffffff;
   padding: 40px;
   border-radius: 24px;
   text-align: center;
@@ -210,7 +210,7 @@
     display: none;
   }
   body {
-    background: white;
+    background: #ffffff;
   }
   .glass-card {
     box-shadow: none;
@@ -274,7 +274,7 @@
 /* Print Optimization */
 @media print {
   body {
-    background: white;
+    background: #ffffff;
   }
   .details-header {
     margin-bottom: 10px;
@@ -332,7 +332,7 @@
   .info-box,
   .section-box,
   .vital-card {
-    background: white !important;
+    background: #ffffff !important;
     box-shadow: none !important;
     border: 1px solid #ddd !important;
     backdrop-filter: none !important;
@@ -371,4 +371,7 @@
     margin-top: 40px;
   }
 }
+
+
+
 

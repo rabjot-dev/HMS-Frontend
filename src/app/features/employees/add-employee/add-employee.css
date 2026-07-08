@@ -10,7 +10,7 @@
   border-radius: 30px;
 }
 .page-label {
-  color: #3b82f6;
+  color: #1d4ed8;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -86,14 +86,14 @@ select {
   border: 1px solid rgba(148, 163, 184, 0.25);
   background: rgba(255, 255, 255, 0.65);
   font-size: 15px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   box-sizing: border-box;
 }
 
 input:focus,
 select:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #1d4ed8;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
 }
 
@@ -133,20 +133,20 @@ select:focus {
 .day-pill {
   padding: 12px 18px;
   border-radius: 999px;
-  background: rgba(59, 130, 246, 0.08);
-  color: #2563eb;
+  background: #dbeafe;
+  color: #1e3a8a;
   font-size: 14px;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .day-pill:hover {
   transform: translateY(-2px);
-  background: rgba(59, 130, 246, 0.14);
+  background: #bfdbfe;
 }
 
 .day-pill input {
@@ -158,12 +158,12 @@ select:focus {
   border: none;
   padding: 18px;
   border-radius: 20px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+  color: #ffffff;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   box-shadow: 0 20px 40px rgba(59, 130, 246, 0.22);
 }
 
@@ -178,7 +178,7 @@ select:focus {
   border-radius: 12px;
   background: #dcfce7;
   border: 1px solid #22c55e;
-  color: #15803d;
+  color: #14532d;
   font-weight: 600;
 }
 
@@ -203,4 +203,6 @@ select:focus {
   color: #b91c1c;
   font-weight: 600;
 }
+
+
 

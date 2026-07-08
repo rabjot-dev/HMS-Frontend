@@ -1,0 +1,26 @@
+name: Deploy HMS Frontend
+ 
+on:
+  push:
+    branches:
+      - feature/selma-sprint5
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Deploy EC2 Frontend
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_SELMA_HOST }}
+          username: ${{ secrets.EC2_SELMA_USER }}
+          key: ${{ secrets.EC2_SELMA_SSH }}
+          script: |
+            cd HMS/HMS-Frontend
+            git pull origin feature/selma-sprint5
+            npm ci
+            sudo ng build --configuration production
+            rm -rf /var/www/hms-frontend/*
+            cp -r dist/HMS-Frontend/browser/* /var/www/hms-frontend/
+            sudo systemctl restart nginx

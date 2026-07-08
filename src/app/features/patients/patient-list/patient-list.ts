@@ -129,11 +129,7 @@ export class PatientList implements OnInit, OnDestroy {
   }
 
   onFilterChange(): void {
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
-
-    this.loadPatients();
+    this.reloadFromFirstPage();
   }
 
   previousPage(): void {
@@ -158,11 +154,7 @@ export class PatientList implements OnInit, OnDestroy {
 
     this.limit = Number(select.value);
 
-    this.page = 1;
-    this.cursorStack = [''];
-    this.nextCursor = '';
-
-    this.loadPatients();
+    this.reloadFromFirstPage();
   }
   async deletePatient(id: string): Promise<void> {
     const confirmed = await this.confirmDialog.confirm({
@@ -189,10 +181,14 @@ export class PatientList implements OnInit, OnDestroy {
   }
 
   private reloadFromFirstPage(): void {
+    this.resetPagination();
+    this.loadPatients();
+  }
+
+  private resetPagination(): void {
     this.page = 1;
     this.cursorStack = [''];
     this.nextCursor = '';
-    this.loadPatients();
   }
 
   private getPageAfterDelete(): number {
@@ -210,5 +206,6 @@ export class PatientList implements OnInit, OnDestroy {
     this.isLoading = false;
   }
 }
+
 
 

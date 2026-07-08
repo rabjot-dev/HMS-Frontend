@@ -20,7 +20,7 @@
 }
 
 .page-label {
-  color: #3b82f6;
+  color: #1d4ed8;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -56,12 +56,12 @@
   padding: 18px;
   border-radius: 22px;
   background: rgba(248, 250, 252, 0.8);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .step.active {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+  color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 15px 30px rgba(59, 130, 246, 0.22);
 }
@@ -134,7 +134,7 @@ textarea {
   border: 1px solid rgba(148, 163, 184, 0.25);
   background: rgba(255, 255, 255, 0.7);
   font-size: 15px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   box-sizing: border-box;
   font-family: inherit;
   line-height: 1.2;
@@ -155,7 +155,7 @@ input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #1d4ed8;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
 }
 
@@ -210,13 +210,13 @@ button {
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .primary-btn,
 .submit-btn {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+  color: #ffffff;
   box-shadow: 0 15px 30px rgba(59, 130, 246, 0.22);
 }
 
@@ -266,4 +266,6 @@ textarea.ng-invalid.ng-touched {
   border: 1px solid #ef4444 !important;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
+
+
 

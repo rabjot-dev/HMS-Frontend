@@ -133,7 +133,7 @@ textarea {
   border: 1px solid rgba(148, 163, 184, 0.25);
   background: rgba(255, 255, 255, 0.65);
   font-size: 15px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   box-sizing: border-box;
 }
 
@@ -181,21 +181,21 @@ textarea {
   border: none;
   padding: 14px 20px;
   border-radius: 16px;
-  background: rgba(59, 130, 246, 0.08);
-  color: #2563eb;
+  background: #dbeafe;
+  color: #1e3a8a;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .slot-btn:hover {
   transform: translateY(-2px);
-  background: rgba(59, 130, 246, 0.14);
+  background: #bfdbfe;
 }
 
 .slot-btn.active {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+  color: #ffffff;
   box-shadow: 0 15px 30px rgba(59, 130, 246, 0.25);
 }
 
@@ -204,12 +204,12 @@ textarea {
   border: none;
   padding: 18px;
   border-radius: 20px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+  color: #ffffff;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   box-shadow: 0 20px 40px rgba(59, 130, 246, 0.22);
 }
 
@@ -342,4 +342,6 @@ textarea {
     transform: translateX(110%);
   }
 }
+
+
 

@@ -1,18 +1,27 @@
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+}
+
 .confirm-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 99998;
+  z-index: 1;
   min-height: 0;
   padding: 0;
   border: 0;
   border-radius: 0;
   background: rgba(15, 23, 42, 0.34);
   cursor: pointer;
+  pointer-events: auto;
 }
 
 .confirm-card {
   position: fixed;
   inset: 88px 16px auto;
+  z-index: 2;
   margin: 0 auto;
   width: min(440px, 100%);
   display: grid;
@@ -23,6 +32,7 @@
   background: #ffffff;
   box-shadow: 0 22px 60px rgba(15, 23, 42, 0.24);
   animation: confirmIn 0.2s ease;
+  pointer-events: auto;
 }
 
 .confirm-icon {
@@ -69,6 +79,7 @@ button {
   border: 0;
   font-weight: 700;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 .cancel-btn {
@@ -96,4 +107,6 @@ button {
     transform: translateY(0);
   }
 }
+
+
 
