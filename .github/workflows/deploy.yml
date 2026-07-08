@@ -31,13 +31,13 @@ jobs:
             npm install
             ./node_modules/.bin/ng build --configuration production
 
-            sudo mkdir -p /var/www/hms-frontend
-            sudo rm -rf /var/www/hms-frontend/*
+            sudo mkdir -p /var/www/html
+            sudo rm -rf /var/www/html/* 
 
             if [ -d "dist/hms-frontend/browser" ]; then
-              sudo cp -r dist/hms-frontend/browser/* /var/www/hms-frontend/
+              sudo cp -r dist/hms-frontend/browser/* /var/www/html/
             elif [ -d "dist/HMS-Frontend/browser" ]; then
-              sudo cp -r dist/HMS-Frontend/browser/* /var/www/hms-frontend/
+              sudo cp -r dist/HMS-Frontend/browser/* /var/www/html/
             else
               echo "Build folder not found"
               ls -R dist
