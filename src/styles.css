@@ -980,19 +980,21 @@ canvas {
 
 :where(.error-text, .error-message, .field-error, .validation-error),
 :where(.form-field, .form-group, .input-group, .field-group) > .error {
-  display: block;
-  width: 100%;
-  margin-top: 6px;
-  color: var(--danger);
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.35;
-  letter-spacing: 0;
+  display: block !important;
+  width: 100% !important;
+  margin-top: 6px !important;
+  color: var(--danger) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0 !important;
 }
 
 :where(.error-text, .error-message, .field-error, .validation-error):empty,
 :where(.form-field, .form-group, .input-group, .field-group) > .error:empty {
-  display: none;
+  display: none !important;
 }
+
+
 
 
