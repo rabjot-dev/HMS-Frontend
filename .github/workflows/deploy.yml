@@ -23,7 +23,7 @@ jobs:
             git reset --hard origin/feature/visagan_sprint_5
             rm -rf dist
             npm ci
-            sudo ng build --configuration production
+            npx ng build --configuration production
             sudo mkdir -p /var/www/hms-frontend
             sudo rm -rf /var/www/hms-frontend/*
             sudo cp -r dist/HMS-Frontend/browser/* /var/www/hms-frontend/
