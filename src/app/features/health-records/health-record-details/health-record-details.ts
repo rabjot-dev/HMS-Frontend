@@ -128,6 +128,20 @@ export class HealthRecordDetails implements OnInit {
 
     return `${year}-${month}-${day}`;
   }
+  private normalizePaginationMeta(meta: any = {}): any {
+    const limit = Number(meta.limit || this.pageSize);
+    const totalRecords = Number(meta.totalRecords ?? meta.total ?? 0);
+
+    return {
+      ...meta,
+      page: Number(meta.page || 1),
+      limit,
+      total: Number(meta.total ?? totalRecords),
+      totalRecords,
+      totalPages: Number(meta.totalPages || Math.max(Math.ceil(totalRecords / limit), 1))
+    };
+  }
+
   loadHealthRecord(patientId: string, showPageLoader = true): void {
     if (showPageLoader) {
       this.isLoading = true;
@@ -150,11 +164,11 @@ export class HealthRecordDetails implements OnInit {
 
         this.patient.medicalDocuments = response.data.medicalDocuments ?? [];
 
-        this.timelineMeta = response.data.meta.consultations;
+        this.timelineMeta = this.normalizePaginationMeta(response.data.meta?.consultations);
 
-        this.labMeta = response.data.meta.labReports;
+        this.labMeta = this.normalizePaginationMeta(response.data.meta?.labReports);
 
-        this.documentMeta = response.data.meta.medicalDocuments;
+        this.documentMeta = this.normalizePaginationMeta(response.data.meta?.medicalDocuments);
 
         if (this.correctEmptyPagesAfterLoad()) {
           return;
