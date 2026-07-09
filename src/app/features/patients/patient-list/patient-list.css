@@ -132,6 +132,7 @@
 /* Table */
 .table-wrapper {
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 0;
   border-radius: 12px;
   background: #ffffff;
@@ -140,6 +141,7 @@
 
 table {
   width: 100%;
+  min-width: 1180px;
   table-layout: fixed;
   border-collapse: collapse;
   border-spacing: 0;
@@ -150,6 +152,7 @@ thead {
 }
 
 thead th {
+  white-space: nowrap;
   padding: 12px 14px;
   color: #475569;
   font-size: 12px;
@@ -160,6 +163,7 @@ thead th {
 }
 
 tbody tr {
+  height: 64px;
   background: #ffffff;
   transition: background-color 0.3s ease;
 }
@@ -171,9 +175,11 @@ tbody tr:hover {
 }
 
 tbody td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   padding: 12px 14px;
   vertical-align: middle;
-  white-space: nowrap;
   border-top: 1px solid #e2e8f0;
 }
 
@@ -184,7 +190,7 @@ tbody td:last-child {
 
 .table-wrapper th:nth-child(1),
 .table-wrapper td:nth-child(1) {
-  width: 27%;
+  width: 25%;
 }
 
 .table-wrapper th:nth-child(2),
@@ -199,12 +205,12 @@ tbody td:last-child {
 
 .table-wrapper th:nth-child(4),
 .table-wrapper td:nth-child(4) {
-  width: 15%;
+  width: 14%;
 }
 
 .table-wrapper th:nth-child(5),
 .table-wrapper td:nth-child(5) {
-  width: 12%;
+  width: 11%;
 }
 
 .table-wrapper th:nth-child(6),
@@ -214,7 +220,8 @@ tbody td:last-child {
 
 .table-wrapper th:nth-child(7),
 .table-wrapper td:nth-child(7) {
-  width: 12%;
+  width: 18%;
+  overflow: visible;
 }
 
 .table-wrapper th,
@@ -224,10 +231,10 @@ tbody td:last-child {
 
 /* Patient Info */
 .patient-info {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 16px;
-  min-width: 0;
 }
 
 .avatar {
@@ -245,6 +252,9 @@ tbody td:last-child {
 }
 
 .patient-info h4 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   margin: 0 0 3px;
   color: #0f172a;
   font-size: 14px;
@@ -296,13 +306,17 @@ tbody td:last-child {
 
 /* Actions */
 .actions {
+  min-width: 210px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
+  flex-wrap: nowrap;
 }
 
 .action-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -336,6 +350,18 @@ tbody td:last-child {
   background: #fde68a;
 }
 
+.action-btn.delete {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  cursor: pointer;
+}
+
+.action-btn.delete:hover {
+  background: #991b1b;
+  color: #ffffff;
+}
+
 /* Pagination */
 .pagination-footer {
   margin-top: 12px;
@@ -347,7 +373,7 @@ tbody td:last-child {
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .total-records {
@@ -360,7 +386,7 @@ tbody td:last-child {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .pagination-controls span {
@@ -424,7 +450,7 @@ tbody td:last-child {
   }
 
   table {
-    min-width: 1000px;
+    min-width: 1180px;
   }
 }
 
@@ -434,7 +460,7 @@ tbody td:last-child {
   }
 
   .table-wrapper table {
-    min-width: 980px;
+    min-width: 1180px;
   }
 }
 
@@ -459,3 +485,7 @@ tbody td:last-child {
     padding: 16px 0;
   }
 }
+
+
+
+

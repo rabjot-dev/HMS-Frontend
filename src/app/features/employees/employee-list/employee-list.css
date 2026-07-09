@@ -187,6 +187,7 @@ button {
 
 .table-wrapper {
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 0;
   border-radius: 12px;
   background: #ffffff;
@@ -195,6 +196,7 @@ button {
 
 table {
   width: 100%;
+  min-width: 1380px;
   table-layout: fixed;
   border-collapse: collapse;
   border-spacing: 0;
@@ -205,6 +207,7 @@ thead {
 }
 
 thead th {
+  white-space: nowrap;
   padding: 12px 14px;
   color: #475569;
   font-size: 12px;
@@ -213,6 +216,7 @@ thead th {
 }
 
 tbody tr {
+  height: 64px;
   background: #ffffff;
   transition: background-color 0.3s ease;
 }
@@ -224,6 +228,9 @@ tbody tr:hover {
 }
 
 tbody td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   padding: 12px 14px;
   vertical-align: middle;
   border-top: 1px solid #e2e8f0;
@@ -236,26 +243,32 @@ tbody td:last-child {
 
 .table-wrapper th:nth-child(1),
 .table-wrapper td:nth-child(1) {
-  width: 26%;
+  width: 24%;
 }
 
 .table-wrapper th:nth-child(2),
 .table-wrapper td:nth-child(2) {
-  width: 14%;
+  width: 13%;
 }
 
 .table-wrapper th:nth-child(3),
-.table-wrapper td:nth-child(3),
+.table-wrapper td:nth-child(3) {
+  width: 13%;
+}
+
 .table-wrapper th:nth-child(4),
-.table-wrapper td:nth-child(4),
+.table-wrapper td:nth-child(4) {
+  width: 15%;
+}
+
 .table-wrapper th:nth-child(5),
 .table-wrapper td:nth-child(5) {
-  width: 14%;
+  width: 10%;
 }
 
 .table-wrapper th:nth-child(6),
 .table-wrapper td:nth-child(6) {
-  width: 18%;
+  width: 25%;
 }
 
 .table-wrapper th,
@@ -264,10 +277,10 @@ tbody td:last-child {
 }
 
 .employee-info {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 14px;
-  min-width: 0;
 }
 
 .avatar {
@@ -284,6 +297,9 @@ tbody td:last-child {
 }
 
 .employee-info h4 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   margin: 0 0 3px;
   color: #0f172a;
   font-size: 14px;
@@ -346,13 +362,16 @@ tbody td:last-child {
 }
 
 .actions {
+  min-width: 320px;
   display: flex;
   justify-content: flex-start;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .action-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
   border: none;
   padding: 7px 10px;
   border-radius: 8px;
@@ -437,7 +456,7 @@ tbody td:last-child {
   }
 
   table {
-    min-width: 1100px;
+    min-width: 1380px;
   }
 }
 
@@ -447,7 +466,10 @@ tbody td:last-child {
   }
 
   .table-wrapper table {
-    min-width: 980px;
+    min-width: 1380px;
   }
 }
+
+
+
 

@@ -198,6 +198,7 @@ button {
 
 .table-wrapper {
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 0;
   border-radius: 12px;
   background: #ffffff;
@@ -206,6 +207,7 @@ button {
 
 table {
   width: 100%;
+  min-width: 1280px;
   table-layout: fixed;
   border-collapse: collapse;
   border-spacing: 0;
@@ -216,6 +218,7 @@ thead {
 }
 
 thead th {
+  white-space: nowrap;
   padding: 12px 14px;
   color: #475569;
   font-size: 12px;
@@ -224,6 +227,7 @@ thead th {
 }
 
 tbody tr {
+  height: 64px;
   background: #ffffff;
   transition: background-color 0.3s ease;
 }
@@ -233,6 +237,9 @@ tbody tr:hover {
 }
 
 tbody td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   padding: 12px 14px;
   vertical-align: middle;
   border-top: 1px solid #e2e8f0;
@@ -274,7 +281,7 @@ tbody td {
 
 .table-wrapper th:nth-child(8),
 .table-wrapper td:nth-child(8) {
-  width: 20%;
+  width: 24%;
 }
 
 .appointment-id h4,
@@ -297,6 +304,7 @@ tbody td {
 }
 
 .patient-info {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -365,12 +373,15 @@ tbody td {
 }
 
 .actions {
+  min-width: 260px;
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .action-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
   border: none;
   padding: 7px 10px;
   border-radius: 8px;
@@ -410,7 +421,7 @@ tbody td {
   }
 
   table {
-    min-width: 1100px;
+    min-width: 1280px;
   }
 }
 
@@ -422,8 +433,12 @@ tbody td {
 
 @media (max-width: 900px) {
   table {
-    min-width: 1120px;
+    min-width: 1280px;
   }
 }
+
+
+
+
 
 
