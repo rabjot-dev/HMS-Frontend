@@ -82,7 +82,7 @@
 }
 
 .department-badge {
-  background: rgba(139, 92, 246, 0.14);
+  background: #ede9fe;
   color: #4c1d95;
 }
 
@@ -186,6 +186,7 @@
     width: 100%;
   }
 }
+
 
 
 

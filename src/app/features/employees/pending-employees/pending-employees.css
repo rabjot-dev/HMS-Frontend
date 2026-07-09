@@ -134,8 +134,8 @@
   display: inline-block;
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(245, 158, 11, 0.14);
-  color: #b45309;
+  background: #fef3c7;
+  color: #78350f;
   font-size: 12px;
   font-weight: 700;
 }
@@ -207,7 +207,7 @@
 }
 
 .reject-btn:hover {
-  background: #ef4444;
+  background: #991b1b;
   color: #ffffff;
   transform: translateY(-2px);
 }
@@ -226,6 +226,7 @@
     flex-direction: column;
   }
 }
+
 
 
 
