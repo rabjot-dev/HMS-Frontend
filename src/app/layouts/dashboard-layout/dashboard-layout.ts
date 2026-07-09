@@ -6,6 +6,7 @@ import { NodeService } from '../../core/services/node';
 import { AuthService } from '../../core/services/auth';
 import { TokenService } from '../../core/services/token';
 import { ToastService } from '../../core/services/toast';
+import { SystemHealthService } from '../../core/services/system-health';
 import { Sidebar } from '../../shared/components/sidebar/sidebar';
 
 @Component({
@@ -26,6 +27,7 @@ export class DashboardLayout implements OnInit {
     private readonly tokenService: TokenService,
     private readonly router: Router,
     private readonly toastService: ToastService,
+    public readonly systemHealth: SystemHealthService,
     private readonly cdr: ChangeDetectorRef,
     private readonly elementRef: ElementRef,
     private readonly destroyRef: DestroyRef
@@ -33,6 +35,8 @@ export class DashboardLayout implements OnInit {
 
   // Load current user details
   ngOnInit(): void {
+    this.systemHealth.startMonitoring();
+
     const token = this.tokenService.getAccessToken();
 
     if (token) {

@@ -321,6 +321,15 @@ button {
   font-size: 15px; /* added explicit size */
 }
 
+.system-status.inactive {
+  color: #991b1b;
+}
+
+.system-status.inactive .status-dot {
+  background: #ef4444;
+  box-shadow: 0 0 12px #ef4444;
+}
+
 .status-dot {
   width: 12px; /* 10 → 12 */
   height: 12px;
