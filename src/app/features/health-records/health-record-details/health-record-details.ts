@@ -635,7 +635,7 @@ export class HealthRecordDetails implements OnInit {
           </section>
 
           <p class="print-note">
-            Uploaded images and PDFs are embedded in this print view. Other file types are included as download links.
+            Uploaded images and PDFs are embedded in this print view. Unsupported file types are noted without printing raw file links.
           </p>
         </body>
       </html>
@@ -690,7 +690,6 @@ export class HealthRecordDetails implements OnInit {
 
     return `
       <div class="card file-card">
-        <h3>${this.escapeHtml(item.title)}</h3>
         <p><strong>Type:</strong> ${this.escapeHtml(item[typeField])}</p>
         <p><strong>Date:</strong> ${this.formatDisplayDate(item[dateField])}</p>
         <p><strong>Doctor:</strong> ${this.escapeHtml(item.doctorName)}</p>
@@ -699,7 +698,6 @@ export class HealthRecordDetails implements OnInit {
         ${
           fileUrl
             ? `
-              <p><strong>Uploaded File:</strong> <a href="${fileUrl}" target="_blank">${fileUrl}</a></p>
               ${this.renderPrintableUploadedFile(fileUrl, item.title)}
             `
             : '<p class="muted">No uploaded file attached.</p>'
@@ -754,13 +752,13 @@ export class HealthRecordDetails implements OnInit {
         <div class="file-page">
           <iframe class="file-frame" src="${safeUrl}#toolbar=0&navpanes=0" title="${safeTitle}"></iframe>
           <object class="file-frame" data="${safeUrl}" type="application/pdf">
-            <p class="muted">PDF preview could not be embedded. Open file: <a href="${safeUrl}" target="_blank">${safeUrl}</a></p>
+            <p class="muted">PDF preview could not be embedded by this browser print engine.</p>
           </object>
         </div>
       `;
     }
 
-    return '<p class="muted">This uploaded file type cannot be embedded in the print view. Use the file link above.</p>';
+    return '<p class="muted">This uploaded file type cannot be embedded in the print view.</p>';
   }
 
   private formatDisplayDate(value?: string): string {
