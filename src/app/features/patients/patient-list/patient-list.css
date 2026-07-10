@@ -159,7 +159,6 @@ thead th {
   text-transform: uppercase;
   letter-spacing: 0.4px;
   font-weight: 700;
-  white-space: nowrap;
 }
 
 tbody tr {
@@ -485,6 +484,7 @@ tbody td:last-child {
     padding: 16px 0;
   }
 }
+
 
 
 

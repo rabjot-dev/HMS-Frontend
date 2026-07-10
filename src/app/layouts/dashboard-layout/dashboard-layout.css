@@ -263,7 +263,7 @@ button {
 }
 
 .nav-links a:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: #1e293b;
   color: #ffffff;
   transform: none;
 }
@@ -621,6 +621,7 @@ button {
     font-size: 16px;
   }
 }
+
 
 
 
