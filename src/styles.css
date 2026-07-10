@@ -605,6 +605,34 @@ tbody td {
   border-radius: 8px !important;
 }
 
+/* List filter sizing overrides
+ * The normalization layer above uses flex for common filter rows. These list
+ * pages need grid tracks so the search field can take most of the width while
+ * secondary filters stay compact.
+ */
+.appointments-page > .filters-wrapper {
+  display: grid !important;
+  grid-template-columns: minmax(420px, 2.4fr) minmax(130px, 150px) minmax(130px, 150px) minmax(240px, 0.9fr) !important;
+  align-items: end !important;
+}
+
+.patients-page > .filters-wrapper {
+  display: grid !important;
+  grid-template-columns: minmax(420px, 1fr) minmax(130px, 160px) !important;
+}
+
+.employees-page .filters-row {
+  display: grid !important;
+  grid-template-columns: minmax(420px, 2.2fr) minmax(130px, 150px) minmax(130px, 160px) minmax(130px, 160px) auto !important;
+}
+
+.appointments-page .search-box,
+.patients-page .search-box,
+.employees-page .search-box {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
 @media (max-width: 640px) {
   :where(
     .appointments-header,
@@ -621,6 +649,22 @@ tbody td {
   :where(.filters-wrapper, .filters-row, .filter-toolbar) {
     align-items: stretch !important;
     flex-direction: column !important;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 641px) {
+  .appointments-page > .filters-wrapper {
+    grid-template-columns: minmax(360px, 1fr) minmax(130px, 150px) minmax(130px, 150px) !important;
+  }
+
+  .appointments-page .date-range {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+@media (max-width: 980px) and (min-width: 641px) {
+  .employees-page .filters-row {
+    grid-template-columns: minmax(360px, 1fr) minmax(130px, 150px) minmax(130px, 160px) !important;
   }
 }
 
