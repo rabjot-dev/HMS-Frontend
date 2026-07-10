@@ -20,40 +20,51 @@ jobs:
           script: |
             set -e
 
-            echo "========== Frontend Deployment Started =========="
-
             cd /home/ubuntu/hms_project/HMS_Frontend
 
-            echo "Fetching latest code..."
+            LAST_GOOD_FILE=~/hms_project/.frontend_last_good_sha
+            PREV_SHA=$(git rev-parse HEAD)
+            echo "Currently deployed SHA: $PREV_SHA"
+
+            deploy_sha () {
+              TARGET_SHA=$1
+              echo "Deploying $TARGET_SHA..."
+              git fetch origin
+              git reset --hard "$TARGET_SHA"
+              npm ci
+              npm run build
+              sudo rm -rf /var/www/hms-admin/*
+              sudo cp -r dist/HMS-Frontend/browser/* /var/www/hms-admin/
+              sudo nginx -t
+              sudo systemctl reload nginx
+              echo "Waiting for services..."
+              sleep 5
+            }
+
+            health_check () {
+              curl --fail --silent --show-error https://bootstraphms.duckdns.org/health
+              curl --fail --silent --show-error https://bootstraphms.duckdns.org/
+            }
+
+            echo "========== Frontend Deployment Started =========="
             git fetch origin
-            git reset --hard origin/feature/R_SP6
+            NEW_SHA=$(git rev-parse origin/feature/R_SP6)
+            deploy_sha "$NEW_SHA"
 
-            echo "Installing dependencies..."
-            npm ci
+            echo "Checking backend + frontend health..."
+            if health_check; then
+              echo "$NEW_SHA" > "$LAST_GOOD_FILE"
+              echo "========== Frontend Deployment Successful ($NEW_SHA) =========="
+            else
+              echo "Health check FAILED for $NEW_SHA. Rolling back to $PREV_SHA..."
+              deploy_sha "$PREV_SHA"
 
-            echo "Building Angular application..."
-            npm run build
+              if health_check; then
+                echo "$PREV_SHA" > "$LAST_GOOD_FILE"
+                echo "Rollback to $PREV_SHA succeeded. Failing this job so the bad deploy gets attention."
+              else
+                echo "Rollback ALSO failed health check. Manual intervention required immediately."
+              fi
 
-            echo "Cleaning old deployment..."
-            sudo rm -rf /var/www/hms-admin/*
-
-            echo "Copying build to Nginx..."
-            sudo cp -r dist/HMS-Frontend/browser/* /var/www/hms-admin/
-
-            echo "Testing Nginx configuration..."
-            sudo nginx -t
-
-            echo "Reloading Nginx..."
-            sudo systemctl reload nginx
-
-            echo "Waiting for services..."
-            sleep 5
-
-            echo "Checking Backend Health..."
-            curl --fail https://bootstraphms.duckdns.org/health
-
-            echo "Checking Frontend..."
-            curl --fail https://bootstraphms.duckdns.org/
-
-            echo ""
-            echo "========== Frontend Deployment Successful =========="
+              exit 1
+            fi

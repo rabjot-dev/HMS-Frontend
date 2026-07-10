@@ -1,0 +1,61 @@
+name: Rollback Frontend
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: "Git SHA to roll back to (leave empty to use last known-good deploy)"
+        required: false
+
+jobs:
+  rollback:
+    name: Rollback Angular on EC2
+    runs-on: ubuntu-latest
+    env:
+      TARGET_SHA: ${{ github.event.inputs.sha }}
+
+    steps:
+      - name: Rollback via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_RABJOT }}
+          username: ${{ secrets.EC2_RABJOT_USER }}
+          key: ${{ secrets.EC2_RABJOT_SSH }}
+          envs: TARGET_SHA
+          script: |
+            set -e
+
+            cd /home/ubuntu/hms_project/HMS_Frontend
+
+            LAST_GOOD_FILE=~/hms_project/.frontend_last_good_sha
+
+            if [ -n "$TARGET_SHA" ]; then
+              ROLLBACK_TARGET="$TARGET_SHA"
+            elif [ -f "$LAST_GOOD_FILE" ]; then
+              ROLLBACK_TARGET=$(cat "$LAST_GOOD_FILE")
+            else
+              echo "No target SHA provided and no last-known-good file found. Aborting."
+              exit 1
+            fi
+
+            echo "Rolling back frontend to $ROLLBACK_TARGET..."
+
+            git fetch origin
+            git reset --hard "$ROLLBACK_TARGET"
+            npm ci
+            npm run build
+
+            sudo rm -rf /var/www/hms-admin/*
+            sudo cp -r dist/HMS-Frontend/browser/* /var/www/hms-admin/
+            sudo nginx -t
+            sudo systemctl reload nginx
+
+            echo "Waiting for services..."
+            sleep 5
+
+            echo "Running health checks..."
+            curl --fail --silent --show-error https://bootstraphms.duckdns.org/health
+            curl --fail --silent --show-error https://bootstraphms.duckdns.org/
+
+            echo "$ROLLBACK_TARGET" > "$LAST_GOOD_FILE"
+            echo "Rollback to $ROLLBACK_TARGET completed successfully."
