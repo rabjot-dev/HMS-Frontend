@@ -2,6 +2,9 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PatientService } from '../../../core/services/patient';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { NodeService } from '../../../core/services/node';
@@ -9,6 +12,8 @@ import { ConfirmDialogService } from '../../../core/services/confirm-dialog';
 import { ToastService } from '../../../core/services/toast';
 import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state';
+
+const SEARCH_DEBOUNCE_MS = 350;
 
 @Component({
   selector: 'app-patient-list',
@@ -39,6 +44,8 @@ export class PatientList implements OnInit {
   totalPages = 0;
   isLoading = false;
 
+  private readonly searchChanged$ = new Subject<void>();
+
   constructor(
     private readonly patientService: PatientService,
     public readonly nodeService: NodeService,
@@ -46,12 +53,20 @@ export class PatientList implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly confirmDialog: ConfirmDialogService,
     private readonly toast: ToastService
-  ) {}
+  ) {
+    this.searchChanged$
+      .pipe(debounceTime(SEARCH_DEBOUNCE_MS), takeUntilDestroyed())
+      .subscribe(() => this.onFilterChange());
+  }
 
   ngOnInit(): void {
     this.userRole = localStorage.getItem('role') || '';
 
     this.applyPatientsResponse(this.route.snapshot.data['patients']);
+  }
+
+  onSearchInput(): void {
+    this.searchChanged$.next();
   }
 
   loadPatients(): void {

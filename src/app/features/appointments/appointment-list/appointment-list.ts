@@ -2,12 +2,17 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AppointmentService } from '../../../core/services/appointment';
 import { AuthService } from '../../../core/services/auth';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { NodeService } from '../../../core/services/node';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog';
 import { ToastService } from '../../../core/services/toast';
+
+const SEARCH_DEBOUNCE_MS = 350;
 
 @Component({
   selector: 'app-appointment-list',
@@ -33,6 +38,8 @@ export class AppointmentList implements OnInit {
   totalRecords = 0;
   totalPages = 0;
 
+  private readonly searchChanged$ = new Subject<void>();
+
   constructor(
     private readonly appointmentService: AppointmentService,
     public readonly authService: AuthService,
@@ -41,7 +48,11 @@ export class AppointmentList implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly confirmDialog: ConfirmDialogService,
     private readonly toast: ToastService
-  ) {}
+  ) {
+    this.searchChanged$
+      .pipe(debounceTime(SEARCH_DEBOUNCE_MS), takeUntilDestroyed())
+      .subscribe(() => this.onFilterChange());
+  }
 
   ngOnInit(): void {
     this.applyAppointmentsResponse(this.route.snapshot.data['appointments']);
@@ -53,6 +64,10 @@ export class AppointmentList implements OnInit {
 
       this.resetFilters();
     });
+  }
+
+  onSearchInput(): void {
+    this.searchChanged$.next();
   }
 
   loadAppointments(): void {

@@ -22,7 +22,7 @@
       <div class="search-box">
         <span>🔍</span>
 
-        <input type="text" placeholder="Search employee..." [(ngModel)]="search" (input)="onSearch()" />
+        <input type="text" placeholder="Search employee..." [(ngModel)]="search" (input)="onFilterTextInput()" />
       </div>
 
       <select [(ngModel)]="status" (change)="onFilterChange()">
@@ -42,7 +42,7 @@
         department
       "
         (input)="
-        onFilterChange()
+        onFilterTextInput()
       "
       />
 
@@ -53,7 +53,7 @@
         designation
       "
         (input)="
-        onFilterChange()
+        onFilterTextInput()
       "
       />
 
@@ -100,12 +100,8 @@
       </thead>
 
       <tbody>
-        <tr
-          *ngFor="
-                  let employee
-                 of employees
-                  "
-        >
+        @for (employee of employees; track employee._id) {
+        <tr>
           <!-- Employee -->
 
           <td>
@@ -195,6 +191,7 @@
             </div>
           </td>
         </tr>
+        }
       </tbody>
     </table>
   </div>

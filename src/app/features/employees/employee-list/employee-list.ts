@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastService } from '../../../core/services/toast';
 import { EmployeeService } from '../../../core/services/employee';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
@@ -10,6 +13,8 @@ import { NodeService } from '../../../core/services/node';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog';
 import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state';
+
+const FILTER_DEBOUNCE_MS = 350;
 
 @Component({
   selector: 'app-employee-list',
@@ -42,6 +47,8 @@ export class EmployeeList implements OnInit {
 
   isLoading = false;
 
+  private readonly filterTextChanged$ = new Subject<void>();
+
   constructor(
     private readonly employeeService: EmployeeService,
     private readonly route: ActivatedRoute,
@@ -50,7 +57,11 @@ export class EmployeeList implements OnInit {
     public readonly authService: AuthService,
     public readonly nodeService: NodeService,
     private readonly confirmDialog: ConfirmDialogService
-  ) {}
+  ) {
+    this.filterTextChanged$
+      .pipe(debounceTime(FILTER_DEBOUNCE_MS), takeUntilDestroyed())
+      .subscribe(() => this.onFilterChange());
+  }
 
   ngOnInit(): void {
     this.applyEmployeesResponse(this.route.snapshot.data['employees']);
@@ -62,6 +73,10 @@ export class EmployeeList implements OnInit {
 
       this.resetFilters();
     });
+  }
+
+  onFilterTextInput(): void {
+    this.filterTextChanged$.next();
   }
 
   loadEmployees(showPageLoader = true): void {
@@ -112,11 +127,6 @@ export class EmployeeList implements OnInit {
         this.isLoading = false;
       }
     });
-  }
-
-  onSearch(): void {
-    this.resetPagination();
-    this.loadEmployees(false);
   }
 
   onFilterChange(): void {
