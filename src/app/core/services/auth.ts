@@ -7,7 +7,7 @@ import { API_BASE_URL } from '../constants/api.constants';
   providedIn: 'root'
 })
 export class AuthService {
-  readonly currentUser = signal<any | null>(null);
+  readonly currentUser = signal<any>(null);
 
   constructor(private readonly http: HttpClient) {}
 
@@ -32,7 +32,7 @@ export class AuthService {
     });
   }
 
-  setCurrentUser(user: any | null): void {
+  setCurrentUser(user: any): void {
     this.currentUser.set(user);
   }
 

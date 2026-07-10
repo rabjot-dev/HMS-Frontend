@@ -55,8 +55,8 @@ export class AddPatient implements OnInit {
   ) {
     this.patientForm = this.fb.group({
       // Basic Information
-      firstName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s.'\-]+$/)]],
-      lastName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s.'\-]+$/)]],
+      firstName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s.'-]+$/)]],
+      lastName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s.'-]+$/)]],
       dateOfBirth: ['', [Validators.required, this.futureDateValidator]],
       gender: ['', Validators.required],
       bloodGroup: ['', Validators.required],
@@ -73,7 +73,7 @@ export class AddPatient implements OnInit {
       pincode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
       country: ['India'],
       // Emergency Contact
-      emergencyContactName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s.'\-]+$/)]],
+      emergencyContactName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s.'-]+$/)]],
       emergencyContactPhone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       // Medical Information
       medicalHistory: [''],

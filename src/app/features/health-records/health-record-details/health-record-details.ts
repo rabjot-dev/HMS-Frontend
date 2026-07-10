@@ -518,14 +518,16 @@ export class HealthRecordDetails implements OnInit {
       return;
     }
 
-    printWindow.document.open();
-    printWindow.document.write(this.buildCompleteHealthRecordHtml(record));
-    printWindow.document.close();
+    const html = this.buildCompleteHealthRecordHtml(record);
+    const blob = new Blob([html], { type: 'text/html' });
+    const blobUrl = URL.createObjectURL(blob);
 
-    printWindow.onload = () => {
+    printWindow.addEventListener('load', () => {
+      URL.revokeObjectURL(blobUrl);
       printWindow.focus();
       printWindow.print();
-    };
+    });
+    printWindow.location.replace(blobUrl);
   }
 
   private buildCompleteHealthRecordHtml(record: any): string {
@@ -658,6 +660,9 @@ export class HealthRecordDetails implements OnInit {
 
   private renderUploadedRecordForPrint(item: any, dateField: string, typeField: string): string {
     const fileUrl = this.getAbsoluteFileUrl(item.documentUrl);
+    const imageHtml = fileUrl && this.isPrintableImage(fileUrl)
+      ? `<img class="file-preview" src="${fileUrl}" alt="${this.escapeHtml(item.title)}" />`
+      : '';
 
     return `
       <div class="card">
@@ -671,7 +676,7 @@ export class HealthRecordDetails implements OnInit {
           fileUrl
             ? `
               <p><strong>Uploaded File:</strong> <a href="${fileUrl}" target="_blank">${fileUrl}</a></p>
-              ${this.isPrintableImage(fileUrl) ? `<img class="file-preview" src="${fileUrl}" alt="${this.escapeHtml(item.title)}" />` : ''}
+              ${imageHtml}
             `
             : '<p class="muted">No uploaded file attached.</p>'
         }
@@ -716,11 +721,11 @@ export class HealthRecordDetails implements OnInit {
 
   private escapeHtml(value: any): string {
     return String(value ?? 'N/A')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
   }
 
   onLabFileChange(event: Event): void {

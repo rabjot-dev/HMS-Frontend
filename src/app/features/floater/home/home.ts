@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Home {
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   @HostListener('window:keydown.space')
   handleSpacebar(): void {

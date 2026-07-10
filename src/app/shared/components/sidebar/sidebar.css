@@ -6,7 +6,8 @@
   width: 100%;
   padding: 14px 18px;
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.75);
+  background-color: #1e293b;
+  color: #f1f5f9;
   text-decoration: none;
   transition: all 0.3s ease;
   box-sizing: border-box;
@@ -15,7 +16,7 @@
 /* Parent menu */
 .parent-menu {
   justify-content: space-between;
-  background: transparent;
+  background-color: #1e293b;
   border: none;
   cursor: pointer;
 }
@@ -57,13 +58,13 @@
 /* Hover */
 .nav-links a:hover,
 .parent-menu:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: #334155;
   color: white;
 }
 
 /* Active */
 .active-link {
-  background: rgba(59, 130, 246, 0.25);
+  background: #1e40af;
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: white !important;
 }

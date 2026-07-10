@@ -21,7 +21,7 @@
 }
 
 .page-label {
-  color: #3b82f6;
+  color: #1d4ed8;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -35,7 +35,7 @@
 }
 
 .page-subtitle {
-  color: #64748b;
+  color: #475569;
 }
 
 /* Steps */
@@ -61,7 +61,7 @@
 }
 
 .step.active {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 15px 30px rgba(59, 130, 246, 0.22);
@@ -96,7 +96,7 @@
 }
 
 .section-title p {
-  color: #64748b;
+  color: #475569;
 }
 
 /* Grid — align-items: start prevents height stretching when errors appear */
@@ -116,7 +116,7 @@
 
 .field-label {
   font-size: 16px;
-  color: #64748b;
+  color: #475569;
   position: relative;
   bottom: 25px;
   left: 10px;
@@ -176,7 +176,7 @@ textarea {
 /* Date input label spacing */
 .form-field input[type='date'] {
   padding: 0 18px;
-  color: #64748b;
+  color: #475569;
 }
 
 /* Phone Group */
@@ -216,7 +216,7 @@ button {
 
 .primary-btn,
 .submit-btn {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
   color: white;
   box-shadow: 0 15px 30px rgba(59, 130, 246, 0.22);
 }

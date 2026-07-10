@@ -93,7 +93,6 @@ export class AppointmentList implements OnInit, OnDestroy {
         if (this.page() > 1 && this.appointments().length === 0) {
           this.page.set(Math.max(this.totalPages() || 1, 1));
           this.loadAppointments();
-          return;
         }
       },
       error: (error) => {

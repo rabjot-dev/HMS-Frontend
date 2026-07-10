@@ -35,7 +35,7 @@
   width: 95px;
   height: 95px;
   border-radius: 28px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,20 +77,20 @@
 }
 
 .designation-badge {
-  background: rgba(59, 130, 246, 0.12);
-  color: #2563eb;
+  background: #dbeafe;
+  color: #1e40af;
 }
 
 .department-badge {
-  background: rgba(139, 92, 246, 0.14);
-  color: #7c3aed;
+  background: #ede9fe;
+  color: #5b21b6;
 }
 
 /* Status */
 .status-card {
   padding: 22px 28px;
   border-radius: 24px;
-  background: linear-gradient(135deg, #c58e29, #8f8126);
+  background: linear-gradient(135deg, #92400e, #78350f);
   color: white;
   min-width: 180px;
   text-align: center;
@@ -143,7 +143,7 @@
   padding-bottom: 0;
 }
 
-.info-item label {
+.info-item span {
   display: block;
   margin-bottom: 8px;
   font-size: 13px;

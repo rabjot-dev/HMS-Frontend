@@ -66,8 +66,8 @@
 
         <!-- Date of Birth -->
         <div class="form-field">
-          <label class="field-label">Date of Birth</label>
-          <input type="date" formControlName="dateOfBirth" [max]="today" />
+          <label class="field-label" for="dateOfBirth">Date of Birth</label>
+          <input id="dateOfBirth" type="date" formControlName="dateOfBirth" [max]="today" />
           @if(patientForm.get('dateOfBirth')?.invalid && patientForm.get('dateOfBirth')?.touched){
           <span class="error-text">Date of Birth is required</span>
           @if (patientForm.get('dateOfBirth')?.errors?.['futureDate']) {
@@ -335,8 +335,8 @@
 
         <!-- Insurance Expiry Date (optional) -->
         <div class="form-field">
-          <label class="field-label">Insurance Expiry Date (optional)</label>
-          <input type="date" formControlName="insuranceExpiryDate" />
+          <label class="field-label" for="insuranceExpiryDate">Insurance Expiry Date (optional)</label>
+          <input id="insuranceExpiryDate" type="date" formControlName="insuranceExpiryDate" />
         </div>
 
         <!-- Coverage Amount (optional) -->

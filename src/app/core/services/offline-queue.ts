@@ -23,7 +23,7 @@ export class OfflineQueueService {
     private readonly toast: ToastService,
     private readonly zone: NgZone
   ) {
-    window.addEventListener('online', () => {
+    globalThis.addEventListener('online', () => {
       this.zone.run(() => this.flushQueue());
     });
   }
@@ -33,12 +33,15 @@ export class OfflineQueueService {
 
     queue.push({
       ...request,
-      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      id: crypto.randomUUID(),
       createdAt: new Date().toISOString()
     });
 
     localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
-    this.toast.show('You are offline. This change was queued and will retry automatically.', 'success');
+    this.toast.show(
+      'You are offline. This change was queued and will retry automatically.',
+      'success'
+    );
   }
 
   getQueue(): QueuedRequest[] {
@@ -85,9 +88,14 @@ export class OfflineQueueService {
           this.flushNext(remaining);
         },
         error: () => {
-          localStorage.setItem(QUEUE_KEY, JSON.stringify([nextRequest, ...remaining]));
+          localStorage.setItem(
+            QUEUE_KEY,
+            JSON.stringify([nextRequest, ...remaining])
+          );
           this.isFlushing = false;
-          this.toast.error('Some offline changes could not sync yet. They will retry later.');
+          this.toast.error(
+            'Some offline changes could not sync yet. They will retry later.'
+          );
         }
       });
   }

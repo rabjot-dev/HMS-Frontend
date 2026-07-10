@@ -134,8 +134,8 @@ select:focus {
 .day-pill {
   padding: 12px 18px;
   border-radius: 999px;
-  background: rgba(59, 130, 246, 0.08);
-  color: #2563eb;
+  background: #dbeafe;
+  color: #1e40af;
   font-size: 14px;
   font-weight: 600;
   display: flex;
@@ -159,7 +159,7 @@ select:focus {
   border: none;
   padding: 18px;
   border-radius: 20px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
   color: white;
   font-size: 16px;
   font-weight: 700;

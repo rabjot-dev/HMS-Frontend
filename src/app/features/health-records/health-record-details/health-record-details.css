@@ -21,11 +21,11 @@
   text-align: center;
   background: white;
   border-radius: 28px;
-  color: #64748b;
+  color: #475569;
 }
 
 .section-label {
-  color: #3b82f6;
+  color: #1d4ed8;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -43,7 +43,7 @@
   width: 72px;
   height: 72px;
   border-radius: 20px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,7 +67,7 @@
 
 .info-item span {
   display: block;
-  color: #64748b;
+  color: #475569;
   margin-bottom: 8px;
 }
 
@@ -86,43 +86,11 @@
   color: #0f172a;
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.chip {
-  padding: 10px 16px;
-  border-radius: 14px;
-  background: #eff6ff;
-  color: #2563eb;
-  font-weight: 600;
-}
-
 .title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-}
-
-.primary-btn,
-.secondary-btn {
-  border: none;
-  padding: 12px 18px;
-  border-radius: 14px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.primary-btn {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-}
-
-.secondary-btn {
-  background: #e2e8f0;
 }
 
 .timeline {
@@ -143,22 +111,6 @@
   position: relative;
   padding-left: 60px;
   margin-bottom: 30px;
-}
-
-.timeline-dot {
-  position: absolute;
-  left: 9px;
-  top: 8px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #3b82f6;
-}
-
-.timeline-card {
-  background: #f8fafc;
-  padding: 24px;
-  border-radius: 22px;
 }
 
 .timeline-top {
@@ -182,36 +134,10 @@
   font-weight: 600;
 }
 
-.timeline-actions {
-  display: flex;
-  gap: 12px;
-}
-
 .prescription-box {
   margin-top: 30px;
   border-top: 1px solid #e2e8f0;
   padding-top: 30px;
-}
-
-.detail-section {
-  margin-bottom: 24px;
-}
-
-.detail-section h4 {
-  margin-bottom: 10px;
-  color: #0f172a;
-}
-
-.medicine-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.medicine-card {
-  background: white;
-  padding: 20px;
-  border-radius: 18px;
 }
 
 .document-list {
@@ -232,7 +158,7 @@
 }
 
 .document-card p {
-  color: #64748b;
+  color: #475569;
   margin-bottom: 8px;
 }
 
@@ -268,6 +194,9 @@
     gap: 16px;
   }
 }
+
+/* Redesigned timeline */
+
 .timeline-container {
   display: flex;
   flex-direction: column;
@@ -316,15 +245,15 @@
 }
 
 .timeline-left p {
-  color: #64748b;
+  color: #475569;
 }
 
 .diagnosis-chip {
   width: fit-content;
   padding: 10px 16px;
   border-radius: 14px;
-  background: #eff6ff;
-  color: #2563eb;
+  background: #dbeafe;
+  color: #1e40af;
   font-weight: 600;
 }
 
@@ -332,29 +261,35 @@
   display: flex;
   gap: 12px;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
 
-.primary-btn,
-.secondary-btn,
+.primary-btn {
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  cursor: pointer;
+  font-weight: 600;
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+  color: white;
+}
+
+.secondary-btn {
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  cursor: pointer;
+  font-weight: 600;
+  background: #e2e8f0;
+}
+
 .followup-btn {
   border: none;
   border-radius: 14px;
   padding: 12px 18px;
   cursor: pointer;
   font-weight: 600;
-}
-
-.primary-btn {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-}
-
-.secondary-btn {
-  background: #e2e8f0;
-}
-
-.followup-btn {
-  background: #22c55e;
+  background: #15803d;
   color: white;
 }
 
@@ -380,8 +315,8 @@
 }
 
 .chip {
-  background: #eff6ff;
-  color: #2563eb;
+  background: #dbeafe;
+  color: #1e40af;
   padding: 10px 16px;
   border-radius: 14px;
   font-weight: 600;
@@ -402,7 +337,7 @@
 
 .vital-card span {
   display: block;
-  color: #64748b;
+  color: #475569;
   margin-bottom: 10px;
 }
 
@@ -437,10 +372,8 @@
   .timeline-header {
     flex-direction: column;
   }
-  .timeline-actions {
-    flex-wrap: wrap;
-  }
 }
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -479,6 +412,7 @@
   justify-content: flex-end;
   gap: 14px;
 }
+
 .file-name {
   color: #2563eb;
   font-size: 14px;
@@ -506,23 +440,25 @@
 }
 
 .view-btn {
-  background: #eff6ff;
-  color: #2563eb;
+  background: #dbeafe;
+  color: #1e40af;
 }
 
 .download-btn {
   background: #dcfce7;
-  color: #15803d;
+  color: #14532d;
 }
 
 .delete-btn {
   background: #fee2e2;
-  color: #dc2626;
+  color: #b91c1c;
 }
+
 .primary-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
 .empty-state {
   width: 100%;
   min-height: 250px;
@@ -548,7 +484,7 @@
 }
 
 .empty-state p {
-  color: #64748b;
+  color: #475569;
   max-width: 420px;
   line-height: 1.6;
   margin: 0;

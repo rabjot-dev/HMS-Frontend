@@ -27,9 +27,9 @@
         <!-- Patient -->
 
         <div class="form-group">
-          <label>Patient</label>
+          <label for="patientId">Patient</label>
 
-          <select formControlName="patientId">
+          <select id="patientId" formControlName="patientId">
             <option value="">Select Patient</option>
 
             @for( patient of patients(); track patient._id ){
@@ -46,9 +46,9 @@
         <!-- Department -->
 
         <div class="form-group">
-          <label>Department</label>
+          <label for="department">Department</label>
 
-          <select formControlName="department" (change)="filterDoctors()">
+          <select id="department" formControlName="department" (change)="filterDoctors()">
             <option value="">Select Department</option>
 
             <option value="CARDIOLOGY">Cardiology</option>
@@ -194,9 +194,9 @@
         <!-- Appointment Type -->
 
         <div class="form-group">
-          <label>Appointment Type</label>
+          <label for="appointmentType">Appointment Type</label>
 
-          <select formControlName="appointmentType">
+          <select id="appointmentType" formControlName="appointmentType">
             <option value="">Select appointment type</option>
             <option value="CONSULTATION">Consultation</option>
 
@@ -216,9 +216,9 @@
         <!-- Priority -->
 
         <div class="form-group">
-          <label>Priority</label>
+          <label for="priority">Priority</label>
 
-          <select formControlName="priority">
+          <select id="priority" formControlName="priority">
             <option value="">Select Priority</option>
             <option value="NORMAL">Normal</option>
 
@@ -234,9 +234,9 @@
         <!-- Payment Status -->
 
         <div class="form-group">
-          <label>Payment Status</label>
+          <label for="paymentStatus">Payment Status</label>
 
-          <select formControlName="paymentStatus">
+          <select id="paymentStatus" formControlName="paymentStatus">
             <option value="">Select Payment Status</option>
             <option value="PENDING">Pending</option>
 
@@ -252,9 +252,9 @@
         <!-- Visit Mode -->
 
         <div class="form-group">
-          <label>Visit Mode</label>
+          <label for="visitMode">Visit Mode</label>
 
-          <select formControlName="visitMode">
+          <select id="visitMode" formControlName="visitMode">
             <option value="">Select visit Mode</option>
             <option value="OFFLINE">Offline</option>
 
@@ -271,25 +271,25 @@
       <!-- Symptoms -->
 
       <div class="form-group full-width">
-        <label>Symptoms</label>
+        <label for="symptoms">Symptoms</label>
 
-        <textarea formControlName="symptoms" placeholder="Enter symptoms"></textarea>
+        <textarea id="symptoms" formControlName="symptoms" placeholder="Enter symptoms"></textarea>
       </div>
 
       <!-- Reason -->
 
       <div class="form-group full-width">
-        <label>Reason</label>
+        <label for="reason">Reason</label>
 
-        <textarea formControlName="reason" placeholder="Reason for appointment"></textarea>
+        <textarea id="reason" formControlName="reason" placeholder="Reason for appointment"></textarea>
       </div>
 
       <!-- Notes -->
 
       <div class="form-group full-width">
-        <label>Notes</label>
+        <label for="notes">Notes</label>
 
-        <textarea formControlName="notes" placeholder="Additional notes"></textarea>
+        <textarea id="notes" formControlName="notes" placeholder="Additional notes"></textarea>
       </div>
     </div>
 

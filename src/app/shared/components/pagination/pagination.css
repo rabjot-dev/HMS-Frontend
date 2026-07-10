@@ -38,15 +38,15 @@
   border: none;
   padding: 8px 12px;
   border-radius: 8px;
-  background: rgba(59, 130, 246, 0.12);
-  color: #2563eb;
+  background: #dbeafe;
+  color: #1d4ed8;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .pagination-controls button:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 0.18);
+  background: #bfdbfe;
 }
 
 .pagination-controls button:disabled {

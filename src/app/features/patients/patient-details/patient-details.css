@@ -33,7 +33,7 @@
   width: 84px;
   height: 84px;
   border-radius: 26px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,7 +44,7 @@
 }
 
 .profile-label {
-  color: #3b82f6;
+  color: #1d4ed8;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -58,14 +58,14 @@
 }
 
 .patient-subtitle {
-  color: #64748b;
+  color: #475569;
 }
 
 .patient-id-badge {
   padding: 14px 22px;
   border-radius: 999px;
-  background: rgba(59, 130, 246, 0.12);
-  color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
   font-weight: 700;
 }
 
@@ -85,7 +85,7 @@
 }
 
 .section-header p {
-  color: #64748b;
+  color: #475569;
 }
 
 /* Grids */
@@ -106,7 +106,7 @@
 
 .info-box span {
   display: block;
-  color: #64748b;
+  color: #475569;
   font-size: 13px;
   margin-bottom: 10px;
 }
@@ -139,8 +139,8 @@
   display: inline-flex;
   padding: 10px 16px;
   border-radius: 999px;
-  background: rgba(34, 197, 94, 0.14);
-  color: #15803d;
+  background: #dcfce7;
+  color: #14532d;
   font-size: 13px;
   font-weight: 700;
 }

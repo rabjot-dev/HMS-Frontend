@@ -32,8 +32,8 @@
         <p>Enable or disable appointment booking.</p>
       </div>
 
-      <label class="switch">
-        <input type="checkbox" formControlName="isAvailable" />
+      <label class="switch" for="isAvailable" aria-label="Toggle doctor availability">
+        <input id="isAvailable" type="checkbox" formControlName="isAvailable" />
 
         <span class="slider"></span>
       </label>
@@ -74,41 +74,41 @@
         <!-- Start -->
 
         <div class="form-group">
-          <label>Start Time</label>
+          <label for="da-startTime">Start Time</label>
 
-          <input type="time" formControlName="startTime" />
+          <input id="da-startTime" type="time" formControlName="startTime" />
         </div>
 
         <!-- End -->
 
         <div class="form-group">
-          <label>End Time</label>
+          <label for="da-endTime">End Time</label>
 
-          <input type="time" formControlName="endTime" />
+          <input id="da-endTime" type="time" formControlName="endTime" />
         </div>
 
         <!-- Break Start -->
 
         <div class="form-group">
-          <label>Break Start</label>
+          <label for="da-breakStartTime">Break Start</label>
 
-          <input type="time" formControlName="breakStartTime" />
+          <input id="da-breakStartTime" type="time" formControlName="breakStartTime" />
         </div>
 
         <!-- Break End -->
 
         <div class="form-group">
-          <label>Break End</label>
+          <label for="da-breakEndTime">Break End</label>
 
-          <input type="time" formControlName="breakEndTime" />
+          <input id="da-breakEndTime" type="time" formControlName="breakEndTime" />
         </div>
 
         <!-- Slot Duration -->
 
         <div class="form-group">
-          <label>Slot Duration</label>
+          <label for="da-slotDuration">Slot Duration</label>
 
-          <select formControlName="slotDuration">
+          <select id="da-slotDuration" formControlName="slotDuration">
             <option value="15">15 Minutes</option>
 
             <option value="30">30 Minutes</option>
@@ -122,9 +122,9 @@
         <!-- Max Patients -->
 
         <div class="form-group">
-          <label>Max Patients Per Day</label>
+          <label for="da-maxPatientsPerDay">Max Patients Per Day</label>
 
-          <input type="number" formControlName="maxPatientsPerDay" />
+          <input id="da-maxPatientsPerDay" type="number" formControlName="maxPatientsPerDay" />
         </div>
       </div>
     </div>

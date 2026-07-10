@@ -86,7 +86,7 @@ button {
   width: 90px;
   height: 90px;
   border-radius: 28px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,7 +97,7 @@ button {
 }
 
 .profile-label {
-  color: #3b82f6;
+  color: #1d4ed8;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
@@ -127,13 +127,13 @@ button {
 }
 
 .role-badge {
-  background: rgba(59, 130, 246, 0.12);
-  color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
 }
 
 .department-badge {
-  background: rgba(139, 92, 246, 0.12);
-  color: #7c3aed;
+  background: #f5f3ff;
+  color: #6d28d9;
 }
 
 /* Status */
@@ -147,13 +147,13 @@ button {
 }
 
 .status-card span {
-  color: #64748b;
+  color: #475569;
   font-size: 14px;
 }
 
 .status-card h3 {
   margin-top: 10px;
-  color: #16a34a;
+  color: #14532d;
   font-size: 24px;
 }
 
@@ -195,7 +195,7 @@ button {
 .info-item label {
   display: block;
   margin-bottom: 8px;
-  color: #64748b;
+  color: #475569;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;

@@ -45,13 +45,13 @@
 }
 
 .status.active {
-  background: rgba(34, 197, 94, 0.14);
-  color: #15803d;
+  background: #dcfce7;
+  color: #14532d;
 }
 
 .status.inactive {
-  background: rgba(239, 68, 68, 0.14);
-  color: #dc2626;
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 /* Form */
@@ -162,7 +162,7 @@
 }
 
 .day-btn.active {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
   color: white;
   box-shadow: 0 10px 24px rgba(59, 130, 246, 0.25);
 }
