@@ -8,7 +8,7 @@
       <h1>Consultations</h1>
     </div>
 
-    <div class="consultation-count">Total: {{ consultations.length }}</div>
+    <div class="consultation-count">Total: {{ meta.totalRecords ?? meta.total ?? 0 }}</div>
   </div>
   <div class="filters-wrapper">
     <input type="text" placeholder="Search consultation" [(ngModel)]="search" (input)="onFilterChange()" />
@@ -161,7 +161,7 @@
   <app-pagination
     [page]="page"
     [totalPages]="page + (nextCursor ? 1 : 0)"
-    [totalRecords]="meta.total || 0"
+    [totalRecords]="meta.totalRecords ?? meta.total ?? 0"
     [limit]="limit"
     [cursorMode]="true"
     [hasNextPage]="!!nextCursor"

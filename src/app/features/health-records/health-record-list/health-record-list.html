@@ -10,7 +10,7 @@
       <p class="section-subtitle">Complete medical history and consultation records of patients.</p>
     </div>
 
-    <div class="record-count">Total: {{ meta.total || 0 }}</div>
+    <div class="record-count">Total: {{ meta.totalRecords ?? meta.total ?? 0 }}</div>
   </div>
 
   <!-- Search -->
@@ -131,7 +131,7 @@
       page + (meta.hasNextPage ? 1 : 0)
     "
     [totalRecords]="
-      meta.total || 0
+      meta.totalRecords ?? meta.total ?? 0
     "
     [limit]="limit"
     [cursorMode]="true"

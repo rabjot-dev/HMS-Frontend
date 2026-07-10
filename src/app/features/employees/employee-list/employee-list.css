@@ -75,7 +75,7 @@
 
 .filters-row {
   display: grid;
-  grid-template-columns: minmax(240px, 1.25fr) minmax(140px, 0.7fr) minmax(150px, 0.8fr) minmax(150px, 0.8fr) auto;
+  grid-template-columns: minmax(420px, 2.2fr) minmax(130px, 150px) minmax(130px, 160px) minmax(130px, 160px) auto;
   align-items: center;
   gap: 10px;
   min-width: 0;

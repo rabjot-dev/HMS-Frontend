@@ -71,7 +71,7 @@
 
 .filters-wrapper {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(160px, 220px);
+  grid-template-columns: minmax(420px, 1fr) minmax(130px, 160px);
   align-items: center;
   gap: 10px;
   min-width: 0;
