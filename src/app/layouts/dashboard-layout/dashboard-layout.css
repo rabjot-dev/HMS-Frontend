@@ -777,3 +777,97 @@ button {
     margin-left: 0;
   }
 }
+
+/* Professional shell refinements */
+.dashboard-shell:where(*) {
+  background: #f4f7fb;
+  color: #0f172a;
+}
+
+.sidebar:where(*):where(*) {
+  background: #0f172a;
+}
+
+.logo-circle:where(*) {
+  background: #2563eb;
+  box-shadow: none;
+}
+
+.logo-circle .material-icons {
+  font-size: 24px;
+}
+
+.profile-card:where(*) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+.topbar:where(*):where(*) {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+}
+
+.topbar h1:where(*) {
+  font-size: 22px;
+}
+
+.topbar p:where(*) {
+  font-size: 13px;
+}
+
+.system-status:where(*) {
+  padding: 8px 12px;
+  border: 1px solid #dcfce7;
+  border-radius: 999px;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+#active:where(*) {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.top-profile:where(*) {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.top-profile:hover:where(*) {
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.top-avatar:where(*) {
+  background: #2563eb;
+}
+
+.profile-dropdown:where(*) {
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 16px 38px rgba(15, 23, 42, 0.13);
+}
+
+.profile-dropdown a:where(*),
+.profile-dropdown button:where(*) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-dropdown .material-icons {
+  font-size: 20px;
+}
+
+.mobile-menu-btn:where(*) {
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.mobile-menu-btn:hover:where(*) {
+  background: #e0ecff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}

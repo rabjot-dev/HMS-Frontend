@@ -18,7 +18,9 @@
     <!-- Logo -->
 
     <div class="logo-section">
-      <div class="logo-circle">B</div>
+      <div class="logo-circle">
+        <span class="material-icons">local_hospital</span>
+      </div>
 
       <div>
         <h2>BootStrap HMS</h2>
@@ -89,8 +91,6 @@
                   $event.stopPropagation()
                   "
         >
-          <!-- Avatar -->
-
           <span class="top-avatar">{{ user?.email ?.charAt(0) ?.toUpperCase() }}</span>
 
           <!-- Info -->
@@ -106,9 +106,15 @@
 
           @if(isProfileOpen){
           <div class="profile-dropdown">
-            <a routerLink="/my-profile">My Profile</a>
+            <a routerLink="/my-profile">
+              <span class="material-icons">account_circle</span>
+              My Profile
+            </a>
 
-            <button (click)="logout()">Logout</button>
+            <button (click)="logout()">
+              <span class="material-icons">logout</span>
+              Logout
+            </button>
           </div>
           }
         </div>
